@@ -1,0 +1,25 @@
+
+> dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.100.5:3000
+- Environments: .env
+✓ Ready in 1034ms
+
+ GET / 200 in 514ms (next.js: 439ms, application-code: 75ms)
+ GET / 200 in 65ms (next.js: 9ms, application-code: 56ms)
+ GET / 304 in 82ms (next.js: 18ms, application-code: 64ms)
+ GET / 304 in 77ms (next.js: 14ms, application-code: 63ms)
+✓ Compiled in 163ms
+✓ Compiled in 13ms
+ GET / 200 in 114ms (next.js: 59ms, application-code: 55ms)
+ GET / 200 in 50ms (next.js: 12ms, application-code: 37ms)
+✓ Compiled in 93ms
+ POST /api/auth/send-otp 502 in 12.1s (next.js: 29ms, application-code: 12.0s)
+ POST /api/auth/send-otp 502 in 12.0s (next.js: 3ms, application-code: 12.0s)
+ GET / 304 in 155ms (next.js: 98ms, application-code: 57ms)
+ POST /api/auth/send-otp 200 in 4.4s (next.js: 25ms, application-code: 4.4s)
+ POST /api/auth/send-otp 504 in 12.0s (next.js: 3ms, application-code: 12.0s)
+ GET / 200 in 69ms (next.js: 18ms, application-code: 51ms)

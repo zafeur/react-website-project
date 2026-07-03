@@ -1,0 +1,232 @@
+.login-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(16, 20, 24, 0.42);
+  backdrop-filter: blur(7px);
+  animation: fadeIn 160ms ease both;
+}
+
+.login-modal {
+  width: 448px;
+  min-height: 512px;
+  padding: 28px 30px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.22);
+  direction: rtl;
+  animation: modalIn 210ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.modal-mark {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  color: #fff;
+  background: linear-gradient(180deg, #0ba746 0%, #008b38 100%);
+  box-shadow: 0 10px 20px rgba(0, 139, 56, 0.24);
+}
+
+.modal-mark svg {
+  width: 27px;
+  height: 27px;
+  stroke-width: 2.6;
+}
+
+.modal-close {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #ececec;
+  border-radius: 50%;
+  background: #fff;
+  color: #222;
+  box-shadow: 0 5px 13px rgba(0, 0, 0, 0.05);
+}
+
+.modal-close:hover {
+  background: #f7f7f7;
+  border-color: #dedede;
+}
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.login-modal h2 {
+  margin: 0 0 9px;
+  color: #151515;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.login-modal p {
+  margin: 0 0 27px;
+  color: #64696d;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 2;
+}
+
+.login-field {
+  margin-bottom: 16px;
+}
+
+.login-field label {
+  display: block;
+  margin-bottom: 9px;
+  color: #222;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.input-shell {
+  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.035);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.input-shell:focus-within {
+  border-color: rgba(7, 150, 62, 0.72);
+  box-shadow: 0 0 0 4px rgba(7, 150, 62, 0.1);
+}
+
+.input-shell svg {
+  width: 21px;
+  height: 21px;
+  color: var(--green);
+  flex: 0 0 auto;
+}
+
+.input-shell input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #1d1f20;
+  background: transparent;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  direction: ltr;
+  text-align: right;
+}
+
+.input-shell input::placeholder {
+  color: #a5a9ad;
+  font-weight: 500;
+}
+
+.send-code-btn {
+  width: 100%;
+  height: 50px;
+  margin: 6px 0 14px;
+  border: 1px solid rgba(7, 150, 62, 0.22);
+  border-radius: 11px;
+  background: #f4fbf7;
+  color: var(--green);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.send-code-btn:hover {
+  background: #ecf8f1;
+  border-color: rgba(7, 150, 62, 0.38);
+}
+
+.login-submit {
+  width: 100%;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #0ba746 0%, #008b38 100%);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  box-shadow: 0 10px 20px rgba(0, 126, 52, 0.24);
+}
+
+.login-submit svg {
+  width: 21px;
+  height: 21px;
+}
+
+.modal-footnote {
+  margin-top: 18px;
+  color: #787d81;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.9;
+}
+
+.modal-footnote strong {
+  color: var(--green);
+  font-weight: 800;
+}
+
+
+.brand {
+  border: 0;
+  background: transparent;
+}
+
+.nav-list button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(.975);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .login-modal {
+    width: min(100%, 390px);
+    min-height: auto;
+    padding: 24px 22px 26px;
+  }
+}

@@ -1,0 +1,208 @@
+.dashboard-page { padding-top: 6px; }
+
+.dashboard-hero {
+  height: 260px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 52px;
+  padding: 0 80px;
+  border-radius: 14px;
+  background: radial-gradient(circle at 20% 25%, rgba(8,112,62,.38), transparent 34%), linear-gradient(135deg, #062f26 0%, #04231f 55%, #031916 100%);
+  color: #fff;
+}
+
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  opacity: .22;
+  background: repeating-radial-gradient(ellipse at 22% 54%, transparent 0 12px, rgba(255,255,255,.24) 13px 14px);
+  transform: scale(1.7) translateX(120px);
+}
+
+.dashboard-avatar {
+  width: 168px;
+  height: 168px;
+  position: relative;
+  z-index: 1;
+  border: 4px solid #18b94e;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 16px 32px rgba(0,0,0,.3);
+}
+
+.dashboard-user-copy { position: relative; z-index: 1; text-align: right; }
+.dashboard-user-copy h1 { display: flex; align-items: center; gap: 16px; margin: 0 0 22px; font-size: 40px; font-weight: 800; }
+.dashboard-user-copy h1 svg { width: 44px; height: 44px; color: #ffc247; fill: #ffc247; }
+.dashboard-user-copy p { margin: 0 0 18px; color: #fff; font-size: 20px; font-weight: 700; }
+.dashboard-user-copy p span { color: #ffc247; }
+.dashboard-user-copy strong { display: block; font-size: 30px; font-weight: 800; }
+
+.dashboard-actions { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; margin: 34px 17px 33px; }
+.dashboard-action-card { height: 162px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: #111; box-shadow: 0 8px 18px rgba(0,0,0,.025); }
+.dashboard-action-card:hover { transform: translateY(-4px); border-color: rgba(7,150,62,.32); box-shadow: 0 16px 28px rgba(0,0,0,.08); color: var(--green); }
+.dashboard-action-card svg { width: 46px; height: 46px; stroke-width: 2.2; }
+.dashboard-action-card span { font-size: 18px; font-weight: 800; }
+
+.active-gifts-panel { min-height: 476px; padding: 35px 36px 28px; }
+.panel-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 34px; }
+.panel-head-row h2, .history-panel h2, .stats-panel h2, .invite-card h2 { margin: 0; color: #171717; font-size: 26px; font-weight: 800; }
+.panel-head-row a { color: var(--green); font-size: 17px; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
+.active-gifts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.active-gift-card { overflow: hidden; min-height: 314px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 8px 18px rgba(0,0,0,.025); }
+.active-gift-card:hover { transform: translateY(-5px); box-shadow: 0 16px 30px rgba(0,0,0,.09); }
+.active-gift-card img { width: 100%; height: 177px; object-fit: cover; }
+.active-gift-card div { padding: 17px 16px 20px; text-align: center; }
+.active-gift-card h3 { margin: 0 0 13px; color: #171717; font-size: 20px; font-weight: 800; }
+.active-gift-card p { margin: 0 0 15px; color: #6e7175; font-size: 16px; font-weight: 600; }
+.active-gift-card span { color: #cc1e1e; font-size: 17px; font-weight: 800; }
+
+.dashboard-bottom-grid { display: grid; grid-template-columns: 1fr 576px; gap: 22px; margin-top: 18px; direction: ltr; }
+.history-panel, .dashboard-side-stack { direction: rtl; }
+.history-panel { min-height: 438px; padding: 31px 29px; }
+.history-panel h2 { margin-bottom: 31px; }
+.history-list { border: 1px solid var(--line); border-radius: 13px; padding: 9px 14px; }
+.history-item { display: grid; grid-template-columns: 64px 1fr; gap: 15px; align-items: center; min-height: 86px; border-bottom: 1px solid #ececec; }
+.history-item:last-child { border-bottom: 0; }
+.history-item:hover { transform: translateX(-3px); }
+.history-item img { width: 58px; height: 58px; border-radius: 7px; object-fit: cover; }
+.history-item h3 { margin: 0 0 6px; color: #171717; font-size: 18px; font-weight: 800; }
+.history-item p { margin: 0; color: #6f7377; font-size: 14px; font-weight: 600; }
+
+.dashboard-side-stack { display: grid; gap: 20px; }
+.invite-card { min-height: 253px; padding: 34px 41px 24px; overflow: hidden; border-radius: 14px; color: #fff; background: radial-gradient(circle at 25% 30%, rgba(8,112,62,.46), transparent 34%), linear-gradient(135deg, #062f26 0%, #04231f 60%, #031916 100%); box-shadow: 0 8px 19px rgba(0,0,0,.025); }
+.invite-card h2 { display: flex; align-items: center; gap: 8px; color: #fff; margin-bottom: 25px; }
+.invite-card h2 svg { width: 23px; height: 23px; }
+.invite-card p { margin: 0 0 24px; color: #fff; font-size: 17px; font-weight: 600; }
+.invite-row { display: grid; grid-template-columns: 1fr 205px; gap: 28px; align-items: end; direction: ltr; }
+.invite-code { height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: rgba(255,255,255,.14); color: #fff; font-size: 25px; font-weight: 800; letter-spacing: .4px; }
+.invite-row > div:last-child { direction: rtl; }
+.invite-row span { display: block; margin-bottom: 17px; color: #fff; font-size: 16px; font-weight: 800; }
+.invite-card button { width: 198px; height: 47px; border: 0; border-radius: 8px; background: linear-gradient(180deg, #0ba746 0%, #008b38 100%); color: #fff; font-size: 17px; font-weight: 800; box-shadow: 0 5px 10px rgba(0, 126, 52, 0.23); }
+.stats-panel { min-height: 150px; padding: 20px 33px 18px; }
+.stats-panel h2 { margin-bottom: 23px; text-align: right; font-size: 21px; }
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+.stat-item { min-height: 72px; border-left: 1px solid #e8e8e8; }
+.stat-item:first-child { border-left: 0; }
+.stat-item span { display: block; margin-bottom: 13px; color: #383d40; font-size: 14px; font-weight: 800; }
+.stat-item strong { color: #111; font-size: 25px; font-weight: 800; }
+
+.mobile-dashboard {
+  display: none;
+}
+
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding-top: 0;
+    margin: -20px -18px -126px;
+  }
+
+  .dashboard-page .desktop-dashboard-block {
+    display: none;
+  }
+
+  .dashboard-page + *,
+  .dashboard-page ~ * {
+    display: none;
+  }
+
+  .dashboard-page .mobile-dashboard {
+    display: block;
+    min-height: 100vh;
+    padding: 40px 18px 126px;
+    background: #fff;
+  }
+
+  .mobile-profile-card {
+    min-height: 156px;
+    display: flex;
+    align-items: center;
+    gap: 38px;
+    padding: 28px 34px;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 7px 17px rgba(0,0,0,.055);
+  }
+
+  .mobile-profile-card img {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .mobile-profile-card h1 {
+    margin: 0 0 14px;
+    font-size: 32px;
+    font-weight: 800;
+    color: #050505;
+  }
+
+  .mobile-profile-card button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--green);
+    font-size: 19px;
+    font-weight: 800;
+  }
+
+  .mobile-profile-menu {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .mobile-profile-item {
+    width: 100%;
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 22px;
+    padding: 0 30px;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    background: #fff;
+    color: #050505;
+    box-shadow: 0 6px 14px rgba(0,0,0,.035);
+  }
+
+  .mobile-profile-item:hover {
+    border-color: rgba(7,150,62,.35);
+    color: var(--green);
+    transform: translateY(-2px);
+  }
+
+  .mobile-profile-item svg {
+    width: 32px;
+    height: 32px;
+    stroke-width: 2.2;
+    flex: 0 0 auto;
+  }
+
+  .mobile-profile-item span {
+    font-size: 22px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+}
+
+.dashboard-action-card,
+.active-gift-card,
+.history-item,
+.invite-card button,
+.mobile-profile-item,
+.mobile-profile-card button {
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, color 180ms ease, filter 180ms ease;
+}
+
+.invite-card button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(0, 126, 52, 0.28);
+  filter: brightness(1.04);
+}
