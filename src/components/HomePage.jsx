@@ -1,21 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
   ChevronLeft,
   ChevronRight,
   Gift,
+  Moon,
   Search,
   ShoppingBag,
   Sparkles,
   Star,
   Store,
+  Sun,
   TicketPercent,
 } from 'lucide-react';
 import LoginModal from './LoginModal';
+import MobileBottomNav from './MobileBottomNav';
 import { sendOtp, verifyOtp } from '../api/auth';
-import { getHomePageData } from '../api/home';
-import { setAuthToken } from '../helper/authCookie';
+import { getHomePageData, requestDiscountCode } from '../api/home';
+import { hasAuthToken, setAuthToken } from '../helper/authCookie';
 
 const t = {
   brand: "\u06a9\u06cc \u0645\u06cc\u0627\u06cc",
@@ -26,6 +29,8 @@ const t = {
   club: "\u0628\u0627\u0634\u06af\u0627\u0647 \u0645\u0634\u062a\u0631\u06cc\u0627\u0646",
   faq: "\u0633\u0648\u0627\u0644\u0627\u062a \u0645\u062a\u062f\u0627\u0648\u0644",
   contact: "\u062a\u0645\u0627\u0633 \u0628\u0627 \u0645\u0627",
+  darkMode: "\u062d\u0627\u0644\u062a \u062a\u0627\u0631\u06cc\u06a9",
+  lightMode: "\u062d\u0627\u0644\u062a \u0631\u0648\u0634\u0646",
   login: "\u0648\u0631\u0648\u062f / \u062b\u0628\u062a \u0646\u0627\u0645",
   restaurant: "\u0631\u0633\u062a\u0648\u0631\u0627\u0646 \u0645\u0644\u0644",
   free: "\u0631\u0627\u06cc\u06af\u0627\u0646",
@@ -49,6 +54,11 @@ const t = {
   activeGifts: "\u0647\u062f\u06cc\u0647\u200c\u0647\u0627 \u0648 \u062a\u062e\u0641\u06cc\u0641\u200c\u0647\u0627\u06cc \u0641\u0639\u0627\u0644",
   all: "\u0645\u0634\u0627\u0647\u062f\u0647 \u0647\u0645\u0647",
   receive: "\u062f\u0631\u06cc\u0627\u0641\u062a",
+  close: "\u0628\u0633\u062a\u0646",
+  wait: "\u0644\u0637\u0641\u0627 \u0635\u0628\u0631 \u06a9\u0646\u06cc\u062f...",
+  discountCode: "\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0634\u0645\u0627",
+  discountRequested: "\u062f\u0631\u062e\u0648\u0627\u0633\u062a \u0634\u0645\u0627 \u062b\u0628\u062a \u0634\u062f.",
+  discountFailed: "\u062f\u0631\u06cc\u0627\u0641\u062a \u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0627\u0646\u062c\u0627\u0645 \u0646\u0634\u062f.",
   search: "\u062c\u0633\u062a\u062c\u0648\u06cc \u0628\u0631\u0646\u062f\u060c \u0647\u062f\u06cc\u0647 \u06cc\u0627 \u067e\u06cc\u0634\u0646\u0647\u0627\u062f...",
   bannerAlt: "\u0628\u0646\u0631 \u067e\u06cc\u0634\u0646\u0647\u0627\u062f \u0648\u06cc\u0698\u0647",
   footerText: "\u0647\u062f\u06cc\u0647\u200c\u0647\u0627\u060c \u062a\u062e\u0641\u06cc\u0641\u200c\u0647\u0627 \u0648 \u0628\u0627\u0634\u06af\u0627\u0647 \u0645\u0634\u062a\u0631\u06cc\u0627\u0646 \u062f\u0631 \u06cc\u06a9 \u062a\u062c\u0631\u0628\u0647 \u0633\u0627\u062f\u0647 \u0648 \u0647\u0645\u0627\u0647\u0646\u06af.",
@@ -61,14 +71,62 @@ const t = {
 
 const asset = (path) => `/home/${path}`;
 
+const storyDisplayTitleByTitle = {
+  [t.bastani]: "\u0628\u0627\u0633\u062a\u0627\u0646\u06cc",
+  [t.mojalal]: "\u0645\u062c\u0644\u0644",
+};
+
+const getStoryDisplayTitle = (title) => storyDisplayTitleByTitle[title] || title;
+
+const storyVideoByTitle = {
+  [t.barial]: asset('videos/barial.mp4'),
+  [t.bastani]: asset('videos/bastani.mp4'),
+  [getStoryDisplayTitle(t.bastani)]: asset('videos/bastani.mp4'),
+  [t.dorato]: asset('videos/dorato.mp4'),
+  [t.ibamo]: asset('videos/ibamo.mp4'),
+  [t.mojalal]: asset('videos/mojalal.mp4'),
+  [getStoryDisplayTitle(t.mojalal)]: asset('videos/mojalal.mp4'),
+  [t.bakhshi]: asset('videos/bakhshi.mp4'),
+};
+
+const extraSliderBanners = [
+  { title: t.ibamo, image: asset('img/banner/bannerweb ibamo.telegram.jpg') },
+  { title: t.mojalal, image: asset('img/banner/bannerweb mojalal.telegram.jpg') },
+  { title: t.dorato, image: asset('img/banner/bannerweb dorato.telegram.jpg') },
+];
+
+const mergeExtraBanners = (banners) => [...banners, ...extraSliderBanners];
+
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.VITE_API_BASE_URL || '';
+
+const normalizeMediaUrl = (value, fallback) => {
+  if (!value) {
+    return fallback;
+  }
+
+  if (/^(https?:|data:|blob:|\/)/.test(value)) {
+    return value;
+  }
+
+  if (apiBaseUrl) {
+    try {
+      return new URL(value, apiBaseUrl).toString();
+    } catch {
+      return `/${value}`;
+    }
+  }
+
+  return `/${value}`;
+};
+
 const defaultHomeData = {
   stories: [
-  { title: t.bastani, image: asset('img/logo bastani.jpg') },
-  { title: t.brand, image: asset('img/logo-6.b6f80db0.png') },
-  { title: t.barial, image: asset('img/barial.jpg') },
-  { title: t.dorato, image: asset('img/logo dorato.jpg') },
-  { title: t.ibamo, image: asset('img/logo ibamo.jpg') },
-  { title: t.mojalal, image: asset('img/mojalal.jpg') },
+  { title: getStoryDisplayTitle(t.bastani), image: asset('img/logo bastani.jpg'), video: storyVideoByTitle[t.bastani] },
+  { title: t.barial, image: asset('img/barial.jpg'), video: storyVideoByTitle[t.barial] },
+  { title: t.dorato, image: asset('img/logo dorato.jpg'), video: storyVideoByTitle[t.dorato] },
+  { title: t.ibamo, image: asset('img/logo ibamo.jpg'), video: storyVideoByTitle[t.ibamo] },
+  { title: getStoryDisplayTitle(t.mojalal), image: asset('img/mojalal.jpg'), video: storyVideoByTitle[t.mojalal] },
+  { title: t.bakhshi, image: asset('img/bakhshi.jpg'), video: storyVideoByTitle[t.bakhshi] },
 ],
 
   banners: [
@@ -111,15 +169,81 @@ const categoryIcons = {
 
 const normalizeList = (value, fallback) => (Array.isArray(value) && value.length ? value : fallback);
 
-const normalizeHomeData = (data) => ({
-  stories: normalizeList(data?.stories, defaultHomeData.stories),
-  banners: normalizeList(data?.banners, defaultHomeData.banners),
-  brands: normalizeList(data?.brands, defaultHomeData.brands),
-  categories: normalizeList(data?.categories, defaultHomeData.categories),
-  offers: normalizeList(data?.offers, defaultHomeData.offers),
-});
+const firstValue = (item, keys) => keys.map((key) => item?.[key]).find(Boolean);
 
-function HomePage() {
+const resolveHomeData = (data) => data?.data || data?.home || data?.homepage || data || {};
+
+const isRestaurantBrand = (title = '') =>
+  title === t.restaurant || title.toLowerCase().includes('restaurant') || title.includes('\u0645\u0644\u0644');
+
+const normalizeImage = (item, fallback) =>
+  normalizeMediaUrl(
+    firstValue(item, ['image', 'image_url', 'imageUrl', 'logo', 'logo_url', 'thumbnail', 'thumbnail_url', 'poster']),
+    fallback
+  );
+
+const normalizeStories = (items) =>
+  items.map((story, index) => {
+    const rawTitle = firstValue(story, ['title', 'name', 'brand', 'business_name']) || `${t.selectedBrands} ${index + 1}`;
+    const title = getStoryDisplayTitle(rawTitle);
+
+    return {
+      ...story,
+      title,
+      image: normalizeImage(story, defaultHomeData.stories[index % defaultHomeData.stories.length].image),
+      video: normalizeMediaUrl(
+        firstValue(story, ['video', 'video_url', 'videoUrl', 'media', 'media_url', 'mediaUrl', 'story_video', 'storyVideo']) || storyVideoByTitle[title] || storyVideoByTitle[rawTitle],
+        ''
+      ),
+    };
+  });
+
+const normalizeCards = (items, fallback) =>
+  items.map((item, index) => ({
+    ...item,
+    title: firstValue(item, ['title', 'name', 'brand', 'business_name']) || fallback[index % fallback.length].title,
+    image: normalizeImage(item, fallback[index % fallback.length].image),
+    href: firstValue(item, ['href', 'url', 'link']) || fallback[index % fallback.length].href,
+  }));
+
+const normalizeOffers = (items) =>
+  items.map((offer, index) => ({
+    ...offer,
+    id: firstValue(offer, ['id', 'discount_id', 'discountId', 'offer_id', 'offerId']),
+    title: firstValue(offer, ['title', 'name', 'gift_title', 'giftTitle']) || defaultHomeData.offers[index % defaultHomeData.offers.length].title,
+    brand: firstValue(offer, ['brand', 'business', 'business_name', 'place']) || defaultHomeData.offers[index % defaultHomeData.offers.length].brand,
+    tag: firstValue(offer, ['tag', 'badge', 'type', 'discount_type']) || defaultHomeData.offers[index % defaultHomeData.offers.length].tag,
+    image: normalizeImage(offer, defaultHomeData.offers[index % defaultHomeData.offers.length].image),
+  }));
+
+const normalizeHomeData = (payload) => {
+  const data = resolveHomeData(payload);
+  const brands = normalizeCards(
+    normalizeList(data?.brands || data?.businesses || data?.stores, defaultHomeData.brands),
+    defaultHomeData.brands
+  ).map((brand) =>
+    isRestaurantBrand(brand.title)
+      ? { ...brand, image: defaultHomeData.brands[0].image, href: brand.href || '/restaurant' }
+      : brand
+  );
+
+  return {
+    stories: normalizeStories(normalizeList(data?.stories || data?.story || data?.story_items, defaultHomeData.stories)),
+    banners: normalizeCards(normalizeList(data?.banners || data?.sliders || data?.slides, defaultHomeData.banners), defaultHomeData.banners),
+    brands,
+    categories: normalizeList(data?.categories, defaultHomeData.categories),
+    offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, defaultHomeData.offers)),
+  };
+};
+
+const getDiscountCode = (data) =>
+  firstValue(data, ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']) ||
+  firstValue(data?.data, ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']);
+
+const getDiscountMessage = (data) =>
+  firstValue(data, ['message', 'text']) || firstValue(data?.data, ['message', 'text']);
+
+function HomePage({ isDarkMode = false, onToggleTheme }) {
   const router = useRouter();
   const [homeData, setHomeData] = useState(defaultHomeData);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -131,7 +255,12 @@ function HomePage() {
   const dragStartRef = useRef(null);
   const [loginError, setLoginError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const bannerItems = homeData.banners.length ? homeData.banners : defaultHomeData.banners;
+  const [activeStory, setActiveStory] = useState(null);
+  const [pendingOffer, setPendingOffer] = useState(null);
+  const [discountPopup, setDiscountPopup] = useState(null);
+  const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
+  const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
+
 
   useEffect(() => {
     let isMounted = true;
@@ -184,6 +313,11 @@ function HomePage() {
   const spinStory = (title) => {
     setSpinningStory(title);
     window.setTimeout(() => setSpinningStory(null), 950);
+  };
+
+  const openStory = (story) => {
+    spinStory(story.title);
+    setActiveStory(story);
   };
 
   const showPreviousBanner = () => {
@@ -274,7 +408,7 @@ function HomePage() {
       setLoginError('');
       const data = await sendOtp(mobile);
 
-      if (data.otpSent) {
+      if (data.status === 'otp_sent') {
         return true;
       }
 
@@ -299,6 +433,13 @@ function HomePage() {
       }
 
       setIsLoginOpen(false);
+      if (pendingOffer) {
+        const offerToClaim = pendingOffer;
+        setPendingOffer(null);
+        await handleReceiveOffer(offerToClaim, true);
+        return;
+      }
+
       router.push('/dashboard');
     } catch (error) {
       setLoginError(error.response?.data?.message || error.message);
@@ -307,8 +448,59 @@ function HomePage() {
     }
   };
 
+  const handleReceiveOffer = async (offer, skipAuthCheck = false) => {
+    if (!skipAuthCheck && !hasAuthToken()) {
+      setPendingOffer(offer);
+      openLogin();
+      return;
+    }
+
+    try {
+      setIsRequestingDiscount(true);
+      const data = await requestDiscountCode(offer);
+      setDiscountPopup({
+        offer,
+        code: getDiscountCode(data),
+        message: getDiscountMessage(data) || t.discountRequested,
+      });
+    } catch (error) {
+      setDiscountPopup({
+        offer,
+        code: '',
+        message: error.response?.data?.message || error.message || t.discountFailed,
+      });
+    } finally {
+      setIsRequestingDiscount(false);
+    }
+  };
+
+  const handleMobileNav = (id) => {
+    if (id === 'home') {
+      router.push('/');
+      return;
+    }
+
+    if (id === 'shop') {
+      router.push('/restaurant');
+      return;
+    }
+
+    if (id === 'gifts') {
+      document.getElementById('gifts')?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    if (!hasAuthToken()) {
+      openLogin();
+      return;
+    }
+
+    router.push('/dashboard');
+  };
+
+
   return (
-    <main className="page-shell home-shell" dir="rtl">
+    <main className={`page-shell home-shell ${isDarkMode ? 'theme-dark' : ''}`} dir="rtl">
       <section className="frame home-frame">
         <header className="topbar d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
@@ -328,7 +520,20 @@ function HomePage() {
               </ul>
             </nav>
           </div>
-          <button className="login-btn home-login-btn" type="button" onClick={openLogin}>{t.login}</button>
+          <div className="home-header-actions">
+            <button
+              className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
+              type="button"
+              onClick={onToggleTheme}
+              aria-label={isDarkMode ? t.lightMode : t.darkMode}
+              title={isDarkMode ? t.lightMode : t.darkMode}
+            >
+              <span className="home-theme-toggle-icon home-theme-toggle-sun"><Sun /></span>
+              <span className="home-theme-toggle-thumb" />
+              <span className="home-theme-toggle-icon home-theme-toggle-moon"><Moon /></span>
+            </button>
+            <button className="login-btn home-login-btn" type="button" onClick={openLogin}>{t.login}</button>
+          </div>
         </header>
 
         <section className="home-search-row">
@@ -344,10 +549,14 @@ function HomePage() {
               className={`home-story ${spinningStory === story.title ? 'is-spinning' : ''}`}
               type="button"
               key={story.title}
-              onClick={() => spinStory(story.title)}
+              onClick={() => openStory(story)}
             >
               <span className="home-story-ring">
-                <img src={story.image} alt={story.title} />
+                {story.video ? (
+                  <video src={story.video} poster={story.image} preload="metadata" muted playsInline />
+                ) : (
+                  <img src={story.image} alt={story.title} />
+                )}
               </span>
               <span>{story.title}</span>
             </button>
@@ -365,8 +574,8 @@ function HomePage() {
               onLostPointerCapture={cancelBannerDrag}
             >
               <div className="home-banner-track" style={{ transform: 'translateX(calc(' + activeBanner * -100 + '% + ' + bannerDragOffset + 'px))' }}>
-                {bannerItems.map((banner) => (
-                  <div className="home-banner-slide" key={banner.title}>
+                {bannerItems.map((banner, index) => (
+                  <div className="home-banner-slide" key={`${banner.title}-${index}`}>
                     <img src={banner.image} alt={`${t.bannerAlt} ${banner.title}`} />
                   </div>
                 ))}
@@ -385,7 +594,7 @@ function HomePage() {
                 <button
                   className={index === activeBanner ? 'is-active' : ''}
                   type="button"
-                  key={banner.title}
+                  key={`${banner.title}-${index}`}
                   onClick={() => showBanner(index)}
                   aria-label={'Show banner ' + (index + 1)}
                 />
@@ -464,7 +673,9 @@ function HomePage() {
                 </div>
                 <div className="home-offer-footer">
                   <span><TicketPercent /> {offer.tag}</span>
-                  <button type="button">{t.receive}</button>
+                  <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount}>
+                    {isRequestingDiscount ? t.wait : t.receive}
+                  </button>
                 </div>
               </article>
             ))}
@@ -483,6 +694,8 @@ function HomePage() {
         </footer>
       </section>
 
+      <MobileBottomNav currentPage="home" isLoggedIn={hasAuthToken()} onNavigate={handleMobileNav} />
+
       {isLoginOpen && (
         <LoginModal
           loginError={loginError}
@@ -492,8 +705,35 @@ function HomePage() {
           onVerifyOtp={handleVerifyOtp}
         />
       )}
+
+      {activeStory && (
+        <div className="home-popup-backdrop" onClick={() => setActiveStory(null)}>
+          <section className="home-story-popup" onClick={(event) => event.stopPropagation()}>
+            <button type="button" className="home-popup-close" onClick={() => setActiveStory(null)}>{t.close}</button>
+            {activeStory.video ? (
+              <video src={activeStory.video} controls autoPlay playsInline preload="auto" />
+            ) : (
+              <img src={activeStory.image} alt={activeStory.title} />
+            )}
+            <h2>{activeStory.title}</h2>
+          </section>
+        </div>
+      )}
+
+      {discountPopup && (
+        <div className="home-popup-backdrop" onClick={() => setDiscountPopup(null)}>
+          <section className="home-discount-popup" onClick={(event) => event.stopPropagation()}>
+            <button type="button" className="home-popup-close" onClick={() => setDiscountPopup(null)}>{t.close}</button>
+            <span className="home-eyebrow">{discountPopup.offer?.brand}</span>
+            <h2>{discountPopup.code ? t.discountCode : discountPopup.offer?.title}</h2>
+            {discountPopup.code && <div className="home-discount-code">{discountPopup.code}</div>}
+            <p>{discountPopup.message}</p>
+          </section>
+        </div>
+      )}
     </main>
   );
 }
 
 export default HomePage;
+

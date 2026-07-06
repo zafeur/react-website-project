@@ -1,25 +1,78 @@
 
 > dev
-> next dev
+> next dev --webpack -p 3001
 
-▲ Next.js 16.2.9 (Turbopack)
-- Local:         http://localhost:3000
-- Network:       http://192.168.100.5:3000
+▲ Next.js 16.2.9 (webpack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.100.5:3001
 - Environments: .env
-✓ Ready in 1034ms
+✓ Ready in 796ms
 
- GET / 200 in 514ms (next.js: 439ms, application-code: 75ms)
- GET / 200 in 65ms (next.js: 9ms, application-code: 56ms)
- GET / 304 in 82ms (next.js: 18ms, application-code: 64ms)
- GET / 304 in 77ms (next.js: 14ms, application-code: 63ms)
-✓ Compiled in 163ms
-✓ Compiled in 13ms
- GET / 200 in 114ms (next.js: 59ms, application-code: 55ms)
- GET / 200 in 50ms (next.js: 12ms, application-code: 37ms)
-✓ Compiled in 93ms
- POST /api/auth/send-otp 502 in 12.1s (next.js: 29ms, application-code: 12.0s)
- POST /api/auth/send-otp 502 in 12.0s (next.js: 3ms, application-code: 12.0s)
- GET / 304 in 155ms (next.js: 98ms, application-code: 57ms)
- POST /api/auth/send-otp 200 in 4.4s (next.js: 25ms, application-code: 4.4s)
- POST /api/auth/send-otp 504 in 12.0s (next.js: 3ms, application-code: 12.0s)
- GET / 200 in 69ms (next.js: 18ms, application-code: 51ms)
+○ Compiling / ...
+ GET / 200 in 1054ms (next.js: 909ms, application-code: 145ms)
+ GET / 200 in 8.2s (next.js: 8.0s, application-code: 153ms)
+ GET / 200 in 222ms (next.js: 8ms, application-code: 214ms)
+ GET / 304 in 41ms (next.js: 4ms, application-code: 37ms)
+ GET / 304 in 28ms (next.js: 1827µs, application-code: 26ms)
+ GET / 200 in 60ms (next.js: 3ms, application-code: 57ms)
+ GET / 304 in 55ms (next.js: 5ms, application-code: 50ms)
+ GET / 304 in 36ms (next.js: 1599µs, application-code: 35ms)
+ GET / 304 in 46ms (next.js: 2ms, application-code: 44ms)
+ GET / 304 in 64ms (next.js: 3ms, application-code: 61ms)
+ GET / 304 in 648ms (next.js: 540ms, application-code: 108ms)
+ GET / 304 in 40ms (next.js: 3ms, application-code: 36ms)
+ GET / 304 in 331ms (next.js: 294ms, application-code: 36ms)
+ GET / 200 in 353ms (next.js: 280ms, application-code: 73ms)
+ GET / 200 in 33ms (next.js: 4ms, application-code: 29ms)
+ GET / 200 in 459ms (next.js: 401ms, application-code: 58ms)
+ GET / 200 in 33ms (next.js: 3ms, application-code: 30ms)
+ GET / 304 in 29ms (next.js: 2ms, application-code: 27ms)
+ GET / 200 in 305ms (next.js: 266ms, application-code: 39ms)
+ GET /restaurant 500 in 2.1s (next.js: 1813ms, application-code: 287ms)
+○ Compiling /_error ...
+ GET /restaurant 200 in 496ms (next.js: 424ms, application-code: 72ms)
+ GET /restaurant 304 in 485ms (next.js: 455ms, application-code: 30ms)
+ GET /restaurant 200 in 2.1s (next.js: 1877ms, application-code: 185ms)
+ GET /restaurant 200 in 39ms (next.js: 3ms, application-code: 36ms)
+ GET /restaurant 304 in 43ms (next.js: 3ms, application-code: 40ms)
+ GET /faq 200 in 1996ms (next.js: 1937ms, application-code: 59ms)
+ GET /restaurant 304 in 430ms (next.js: 188ms, application-code: 241ms)
+ GET /restaurant 304 in 25ms (next.js: 2ms, application-code: 22ms)
+ GET /faq 304 in 35ms (next.js: 3ms, application-code: 32ms)
+ GET / 200 in 384ms (next.js: 329ms, application-code: 56ms)
+ GET / 304 in 37ms (next.js: 2ms, application-code: 34ms)
+ GET /restaurant 304 in 122ms (next.js: 53ms, application-code: 69ms)
+ GET /restaurant 304 in 42ms (next.js: 6ms, application-code: 36ms)
+ GET / 304 in 32ms (next.js: 2ms, application-code: 29ms)
+ GET / 304 in 38ms (next.js: 2ms, application-code: 36ms)
+ GET / 304 in 55ms (next.js: 3ms, application-code: 51ms)
+ GET / 304 in 29ms (next.js: 1391µs, application-code: 28ms)
+ GET / 304 in 410ms (next.js: 360ms, application-code: 50ms)
+ GET / 304 in 48ms (next.js: 3ms, application-code: 46ms)
+ GET /restaurant 200 in 1055ms (next.js: 899ms, application-code: 156ms)
+ GET / 200 in 1055ms (next.js: 898ms, application-code: 157ms)
+ GET /restaurant 200 in 1638ms (next.js: 1428ms, application-code: 210ms)
+ GET /restaurant 304 in 320ms (next.js: 291ms, application-code: 30ms)
+ GET / 200 in 64ms (next.js: 28ms, application-code: 36ms)
+ GET /restaurant 304 in 26ms (next.js: 1769µs, application-code: 24ms)
+ GET / 304 in 48ms (next.js: 6ms, application-code: 42ms)
+ GET / 304 in 39ms (next.js: 4ms, application-code: 35ms)
+ GET / 304 in 25ms (next.js: 1627µs, application-code: 23ms)
+ GET /restaurant 304 in 22ms (next.js: 1251µs, application-code: 21ms)
+ GET / 304 in 32ms (next.js: 1523µs, application-code: 30ms)
+ GET /restaurant 304 in 24ms (next.js: 1810µs, application-code: 22ms)
+ GET /restaurant 200 in 455ms (next.js: 390ms, application-code: 65ms)
+ GET /restaurant 200 in 346ms (next.js: 6ms, application-code: 340ms)
+ GET / 200 in 253ms (next.js: 121ms, application-code: 132ms)
+ GET / 304 in 257ms (next.js: 220ms, application-code: 36ms)
+ GET /restaurant 304 in 209ms (next.js: 65ms, application-code: 144ms)
+ GET / 200 in 41ms (next.js: 3ms, application-code: 38ms)
+ GET / 304 in 36ms (next.js: 1498µs, application-code: 35ms)
+ GET /restaurant 304 in 22ms (next.js: 1621µs, application-code: 20ms)
+ GET /restaurant 304 in 1055ms (next.js: 959ms, application-code: 96ms)
+ GET / 500 in 2.3s (next.js: 2.3s, application-code: 37ms)
+ GET /restaurant 304 in 286ms (next.js: 247ms, application-code: 38ms)
+ GET / 200 in 79ms (next.js: 44ms, application-code: 35ms)
+ GET /restaurant 200 in 269ms (next.js: 234ms, application-code: 35ms)
+ GET /restaurant 200 in 404ms (next.js: 339ms, application-code: 64ms)
+ GET /restaurant 304 in 71ms (next.js: 10ms, application-code: 61ms)

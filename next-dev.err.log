@@ -1,1 +1,1099 @@
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx 
+⨯ ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx
+./pages/restaurant.jsx 
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx 
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx
+./pages/restaurant.jsx 
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx 
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx 
+⨯ ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx
+./pages/restaurant.jsx 
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error 
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx 
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx 
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx
+./pages/restaurant.jsx 
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ./src/components/Header.jsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:66:1]
+ 63 |       )}
+ 64 |     </header>
+ 65 |   );
+ 66 | }
+    : ^
+ 67 | 
+ 68 | export default Header;
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[C:\Users\dhafe\OneDrive\Desktop\react website\new website react 2\src\components\Header.jsx:64:1]
+ 61 |           ) : (
+ 62 |             <button className="login-btn" type="button" onClick={onLogin}>ورود / ثبت نام</button>
+ 63 |           )}
+ 64 | ,->     </header>
+ 65 | |     );
+ 66 | |   }
+ 67 | |   
+ 68 | `-> export default Header;
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Header.jsx
+./src/App.jsx 
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Restaurant} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Restaurant isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <App initialPage="restaurant" isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell theme-dark"
+-                     className={"page-shell "}
+                      dir="rtl"
+                    >
+                      <section className={"frame "}>
+                        <Header currentPage="restaurant" isLoggedIn={false} isUserMenuOpen={false} ...>
+                          <header className="topbar d-f...">
+                            <div>
+                            <div className="home-heade...">
+                              <button
++                               className="home-theme-toggle is-dark"
+-                               className={"home-theme-toggle "}
+                                type="button"
+                                onClick={function onToggleTheme}
++                               aria-label="Light mode"
+-                               aria-label="Dark mode"
++                               title="Light mode"
+-                               title="Dark mode"
+                              >
+                              ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Home} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Home isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <HomePage isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell home-shell theme-dark"
+-                     className={"page-shell home-shell "}
+                      dir="rtl"
+                    >
+                      <section className="frame home...">
+                        <header className="topbar d-f...">
+                          <div>
+                          <div className="home-heade...">
+                            <button
++                             className="home-theme-toggle is-dark"
+-                             className={"home-theme-toggle "}
+                              type="button"
+                              onClick={function onToggleTheme}
++                             aria-label="حالت روشن"
+-                             aria-label="حالت تاریک"
++                             title="حالت روشن"
+-                             title="حالت تاریک"
+                            >
+                            ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Restaurant} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Restaurant isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <App initialPage="restaurant" isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell theme-dark"
+-                     className={"page-shell "}
+                      dir="rtl"
+                    >
+                      <section className={"frame "}>
+                        <Header currentPage="restaurant" isLoggedIn={false} isUserMenuOpen={false} ...>
+                          <header className="topbar d-f...">
+                            <div>
+                            <div className="home-heade...">
+                              <button
++                               className="home-theme-toggle is-dark"
+-                               className={"home-theme-toggle "}
+                                type="button"
+                                onClick={function onToggleTheme}
++                               aria-label="Light mode"
+-                               aria-label="Dark mode"
++                               title="Light mode"
+-                               title="Dark mode"
+                              >
+                              ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Home} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Home isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <HomePage isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell home-shell theme-dark"
+-                     className={"page-shell home-shell "}
+                      dir="rtl"
+                    >
+                      <section className="frame home...">
+                        <header className="topbar d-f...">
+                          <div>
+                          <div className="home-heade...">
+                            <button
++                             className="home-theme-toggle is-dark"
+-                             className={"home-theme-toggle "}
+                              type="button"
+                              onClick={function onToggleTheme}
++                             aria-label="حالت روشن"
+-                             aria-label="حالت تاریک"
++                             title="حالت روشن"
+-                             title="حالت تاریک"
+                            >
+                            ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Home} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Home isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <HomePage isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell home-shell theme-dark"
+-                     className={"page-shell home-shell "}
+                      dir="rtl"
+                    >
+                      <section className="frame home...">
+                        <header className="topbar d-f...">
+                          <div>
+                          <div className="home-heade...">
+                            <button
++                             className="home-theme-toggle is-dark"
+-                             className={"home-theme-toggle "}
+                              type="button"
+                              onClick={function onToggleTheme}
++                             aria-label="حالت روشن"
+-                             aria-label="حالت تاریک"
++                             title="حالت روشن"
+-                             title="حالت تاریک"
+                            >
+                            ...
+                        ...
+                      ...
+              ...
+ 
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Home} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Home isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <HomePage isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell home-shell theme-dark"
+-                     className={"page-shell home-shell "}
+                      dir="rtl"
+                    >
+                      <section className="frame home...">
+                        <header className="topbar d-f...">
+                          <div>
+                          <div className="home-heade...">
+                            <button
++                             className="home-theme-toggle is-dark"
+-                             className={"home-theme-toggle "}
+                              type="button"
+                              onClick={function onToggleTheme}
++                             aria-label="حالت روشن"
+-                             aria-label="حالت تاریک"
++                             title="حالت روشن"
+-                             title="حالت تاریک"
+                            >
+                            ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Restaurant} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Restaurant isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <App initialPage="restaurant" isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell theme-dark"
+-                     className={"page-shell "}
+                      dir="rtl"
+                    >
+                      <section className={"frame "}>
+                        <Header currentPage="restaurant" isLoggedIn={false} isUserMenuOpen={false} ...>
+                          <header className="topbar d-f...">
+                            <div>
+                            <div className="home-heade...">
+                              <button
++                               className="home-theme-toggle is-dark"
+-                               className={"home-theme-toggle "}
+                                type="button"
+                                onClick={function onToggleTheme}
++                               aria-label="Light mode"
+-                               aria-label="Dark mode"
++                               title="Light mode"
+-                               title="Dark mode"
+                              >
+                              ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Restaurant} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Restaurant isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <App initialPage="restaurant" isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell theme-dark"
+-                     className={"page-shell "}
+                      dir="rtl"
+                    >
+                      <section className={"frame "}>
+                        <Header currentPage="restaurant" isLoggedIn={false} isUserMenuOpen={false} ...>
+                          <header className="topbar d-f...">
+                            <div>
+                            <div className="home-heade...">
+                              <button
++                               className="home-theme-toggle is-dark"
+-                               className={"home-theme-toggle "}
+                                type="button"
+                                onClick={function onToggleTheme}
++                               aria-label="Light mode"
+-                               aria-label="Dark mode"
++                               title="Light mode"
+-                               title="Dark mode"
+                              >
+                              ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Restaurant} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Restaurant isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <App initialPage="restaurant" isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell theme-dark"
+-                     className={"page-shell "}
+                      dir="rtl"
+                    >
+                      <section className={"frame "}>
+                        <Header currentPage="restaurant" isLoggedIn={false} isUserMenuOpen={false} ...>
+                          <header className="topbar d-f...">
+                            <div>
+                            <div className="home-heade...">
+                              <button
++                               className="home-theme-toggle is-dark"
+-                               className={"home-theme-toggle "}
+                                type="button"
+                                onClick={function onToggleTheme}
++                               aria-label="Light mode"
+-                               aria-label="Dark mode"
++                               title="Light mode"
+-                               title="Dark mode"
+                              >
+                              ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Restaurant} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Restaurant isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <App initialPage="restaurant" isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell theme-dark"
+-                     className={"page-shell "}
+                      dir="rtl"
+                    >
+                      <section className={"frame "}>
+                        <Header currentPage="restaurant" isLoggedIn={false} isUserMenuOpen={false} ...>
+                          <header className="topbar d-f...">
+                            <div>
+                            <div className="home-heade...">
+                              <button
++                               className="home-theme-toggle is-dark"
+-                               className={"home-theme-toggle "}
+                                type="button"
+                                onClick={function onToggleTheme}
++                               aria-label="Light mode"
+-                               aria-label="Dark mode"
++                               title="Light mode"
+-                               title="Dark mode"
+                              >
+                              ...
+                        ...
+                      ...
+              ...
+ 
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⨯ ReferenceError: getStoryDisplayTitle is not defined
+    at eval (src\components\HomePage.jsx:76:16)
+  74 | const storyVideoByTitle = {
+  75 |   [t.barial]: asset('videos/barial.mp4'),
+> 76 |   [t.bastani]: asset('videos/bastani.mp4'),
+     |                ^
+  77 |   [getStoryDisplayTitle(t.bastani)]: asset('videos/bastani.mp4'),
+  78 |   [t.dorato]: asset('videos/dorato.mp4'),
+  79 |   [t.ibamo]: asset('videos/ibamo.mp4'), {
+  page: '/'
+}
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Restaurant} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Restaurant isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <App initialPage="restaurant" isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell theme-dark"
+-                     className={"page-shell "}
+                      dir="rtl"
+                    >
+                      <section className={"frame "}>
+                        <Header currentPage="restaurant" isLoggedIn={false} isUserMenuOpen={false} ...>
+                          <header className="topbar d-f...">
+                            <div>
+                            <div className="home-heade...">
+                              <button
++                               className="home-theme-toggle is-dark"
+-                               className={"home-theme-toggle "}
+                                type="button"
+                                onClick={function onToggleTheme}
++                               aria-label="Light mode"
+-                               aria-label="Dark mode"
++                               title="Light mode"
+-                               title="Dark mode"
+                              >
+                              ...
+                        ...
+                      ...
+              ...
+ 
+[browser] Uncaught ReferenceError: getStoryDisplayTitle is not defined
+    at eval (src\components\HomePage.jsx:76:16)
+  74 | const storyVideoByTitle = {
+  75 |   [t.barial]: asset('videos/barial.mp4'),
+> 76 |   [t.bastani]: asset('videos/bastani.mp4'),
+     |                ^
+  77 |   [getStoryDisplayTitle(t.bastani)]: asset('videos/bastani.mp4'),
+  78 |   [t.dorato]: asset('videos/dorato.mp4'),
+  79 |   [t.ibamo]: asset('videos/ibamo.mp4'),
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Restaurant} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Restaurant isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <App initialPage="restaurant" isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell theme-dark"
+-                     className={"page-shell "}
+                      dir="rtl"
+                    >
+                      <section className={"frame "}>
+                        <Header currentPage="restaurant" isLoggedIn={false} isUserMenuOpen={false} ...>
+                          <header className="topbar d-f...">
+                            <div>
+                            <div className="home-heade...">
+                              <button
++                               className="home-theme-toggle is-dark"
+-                               className={"home-theme-toggle "}
+                                type="button"
+                                onClick={function onToggleTheme}
++                               aria-label="Light mode"
+-                               aria-label="Dark mode"
++                               title="Light mode"
+-                               title="Dark mode"
+                              >
+                              ...
+                        ...
+                      ...
+              ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <AppContainer>
+      <Container fn={function fn}>
+        <PagesDevOverlayBridge>
+          <PagesDevOverlayErrorBoundary>
+            <PathnameContextProviderAdapter router={{sdc:{},sbc:{}, ...}} isAutoExport={true}>
+              <MyApp pageProps={{}} Component={function Home} err={undefined} router={{sdc:{},sbc:{}, ...}}>
+                <Home isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                  <Head>
+                  <HomePage isDarkMode={true} onToggleTheme={function onToggleTheme}>
+                    <main
++                     className="page-shell home-shell theme-dark"
+-                     className={"page-shell home-shell "}
+                      dir="rtl"
+                    >
+                      <section className="frame home...">
+                        <header className="topbar d-f...">
+                          <div>
+                          <div className="home-heade...">
+                            <button
++                             className="home-theme-toggle is-dark"
+-                             className={"home-theme-toggle "}
+                              type="button"
+                              onClick={function onToggleTheme}
++                             aria-label="حالت روشن"
+-                             aria-label="حالت تاریک"
++                             title="حالت روشن"
+-                             title="حالت تاریک"
+                            >
+                            ...
+                        ...
+                      ...
+              ...
+ 

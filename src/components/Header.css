@@ -298,3 +298,145 @@
 .nav-list li button::after {
   content: none;
 }
+
+@media (max-width: 1200px) and (min-width: 769px) {
+  .topbar {
+    gap: 16px;
+  }
+
+  .topbar > div:first-child {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .topbar nav {
+    min-width: 0;
+  }
+
+  .brand {
+    font-size: 30px;
+  }
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .nav-list {
+    gap: clamp(12px, 1.7vw, 22px);
+    margin-right: clamp(12px, 2vw, 24px);
+    font-size: clamp(13px, 1.25vw, 15px);
+  }
+
+  .login-btn,
+  .user-menu-btn {
+    width: auto;
+    min-width: 92px;
+    max-width: 128px;
+    height: 44px;
+    padding: 0 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 769px) {
+  .topbar {
+    gap: 10px;
+  }
+
+  .brand {
+    font-size: 26px;
+  }
+
+  .brand-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .nav-list {
+    gap: 10px;
+    margin-right: 10px;
+    font-size: 12.5px;
+  }
+
+  .login-btn,
+  .user-menu-btn {
+    min-width: 76px;
+    max-width: 106px;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .topbar {
+    height: auto;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .topbar > div:first-child {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .nav-list {
+    display: none !important;
+  }
+
+  .login-btn,
+  .user-menu-btn {
+    width: auto;
+    min-width: 132px;
+    max-width: 160px;
+    height: 46px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand {
+    font-size: 26px;
+  }
+
+  .brand-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .login-btn,
+  .user-menu-btn {
+    min-width: 112px;
+    height: 42px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}
+
+
+@media (max-width: 1100px) {
+  .faq-header-action {
+    max-width: none;
+    min-width: 190px;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    align-items: flex-start !important;
+  }
+
+  .home-header-actions {
+    flex-wrap: nowrap;
+  }
+
+  .faq-header-action {
+    min-width: 0;
+    width: auto;
+    max-width: 190px;
+    white-space: normal;
+    line-height: 1.6;
+  }
+}

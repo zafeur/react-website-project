@@ -11,7 +11,7 @@ const PAGE_STORAGE_KEY = "keymiyay-current-page";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
 
-function App({ initialPage = "restaurant" }) {
+function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthToken());
@@ -68,7 +68,7 @@ function App({ initialPage = "restaurant" }) {
 
       const data = await sendOtp(mobile);
 
-      if (data.otpSent) {
+      if (data.status === "otp_sent") {
         return true;
       }
 
@@ -161,7 +161,7 @@ function App({ initialPage = "restaurant" }) {
   };
 
   return (
-    <main className="page-shell" dir="rtl">
+    <main className={`page-shell ${isDarkMode ? "theme-dark" : ""}`} dir="rtl">
       <section
         className={`frame ${
           currentPage === "dashboard" ? "dashboard-frame" : ""
@@ -175,6 +175,8 @@ function App({ initialPage = "restaurant" }) {
           onDashboard={goDashboard}
           onLogout={handleLogout}
           onLogin={openLogin}
+          isDarkMode={isDarkMode}
+          onToggleTheme={onToggleTheme}
         />
 
         <RestaurantPage

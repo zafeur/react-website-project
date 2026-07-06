@@ -58,3 +58,19 @@
     display: none !important;
   }
 }
+
+@media (max-width: 1100px) {
+  .mobile-bottom-nav {
+    display: grid !important;
+  }
+
+  .frame {
+    padding-bottom: 126px;
+  }
+}
+
+@media (min-width: 1101px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}

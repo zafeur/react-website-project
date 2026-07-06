@@ -9,7 +9,9 @@ import {
   Handshake,
   HelpCircle,
   Megaphone,
+  Moon,
   Send,
+  Sun,
   Store,
 } from 'lucide-react';
 import { submitMembershipRequest } from '../api/membership';
@@ -126,7 +128,7 @@ function ToggleField({ field, value, onChange }) {
   );
 }
 
-function FaqMembershipPage() {
+function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
   const [activeStep, setActiveStep] = useState(0);
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -206,7 +208,7 @@ function FaqMembershipPage() {
   };
 
   return (
-    <main className="page-shell faq-shell" dir="rtl">
+    <main className={`page-shell faq-shell ${isDarkMode ? "theme-dark" : ""}`} dir="rtl">
       <section className="frame faq-frame">
         <header className="topbar d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
@@ -224,7 +226,20 @@ function FaqMembershipPage() {
               </ul>
             </nav>
           </div>
-          <Link className="login-btn faq-header-action" href="#membership-form">بررسی رایگان شرایط عضویت</Link>
+          <div className="home-header-actions">
+            <button
+              className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
+              type="button"
+              onClick={onToggleTheme}
+              aria-label={isDarkMode ? 'Light mode' : 'Dark mode'}
+              title={isDarkMode ? 'Light mode' : 'Dark mode'}
+            >
+              <span className="home-theme-toggle-icon home-theme-toggle-sun"><Sun /></span>
+              <span className="home-theme-toggle-thumb" />
+              <span className="home-theme-toggle-icon home-theme-toggle-moon"><Moon /></span>
+            </button>
+            <Link className="login-btn faq-header-action" href="#membership-form">{'\u0628\u0631\u0631\u0633\u06cc \u0631\u0627\u06cc\u06af\u0627\u0646 \u0634\u0631\u0627\u06cc\u0637 \u0639\u0636\u0648\u06cc\u062a'}</Link>
+          </div>
         </header>
 
         <section className="faq-hero">
