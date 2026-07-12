@@ -2070,3 +2070,228 @@ html.theme-dark .home-theme-toggle .home-theme-toggle-moon {
   color: #b8ffd6;
   transform: rotate(-8deg) scale(1.08);
 }
+
+
+.home-theme-toggle {
+  --home-theme-toggle-shift: -36px;
+}
+
+.home-theme-toggle.is-dark .home-theme-toggle-thumb,
+html.theme-dark .home-theme-toggle .home-theme-toggle-thumb {
+  transform: translateX(var(--home-theme-toggle-shift));
+}
+
+@media (max-width: 1320px) and (min-width: 1101px) {
+  .home-theme-toggle {
+    --home-theme-toggle-shift: -30px;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 981px) {
+  .home-theme-toggle {
+    --home-theme-toggle-shift: -30px;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 769px) {
+  .home-theme-toggle {
+    --home-theme-toggle-shift: -26px;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-theme-toggle {
+    --home-theme-toggle-shift: -24px;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 421px) {
+  .home-theme-toggle {
+    --home-theme-toggle-shift: -28px;
+  }
+}
+
+.home-theme-toggle.is-dark .home-theme-toggle-moon,
+html.theme-dark .home-theme-toggle .home-theme-toggle-moon {
+  color: #065f35;
+  z-index: 4;
+  filter: none;
+}
+
+.home-theme-toggle.is-dark .home-theme-toggle-sun,
+html.theme-dark .home-theme-toggle .home-theme-toggle-sun {
+  color: rgba(255, 255, 255, .5);
+}
+
+.home-theme-toggle {
+  --home-theme-toggle-thumb-size: 32px;
+  --home-theme-toggle-thumb-offset: 5px;
+}
+
+@media (max-width: 980px) and (min-width: 769px) {
+  .home-theme-toggle {
+    --home-theme-toggle-thumb-size: 28px;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-theme-toggle {
+    --home-theme-toggle-thumb-size: 26px;
+  }
+}
+
+.home-theme-toggle.is-dark .home-theme-toggle-moon,
+html.theme-dark .home-theme-toggle .home-theme-toggle-moon {
+  position: absolute;
+  top: var(--home-theme-toggle-thumb-offset);
+  right: calc(var(--home-theme-toggle-thumb-offset) - var(--home-theme-toggle-shift));
+  width: var(--home-theme-toggle-thumb-size);
+  height: var(--home-theme-toggle-thumb-size);
+  display: grid;
+  place-items: center;
+  transform: rotate(-8deg) scale(1.02);
+}
+
+/* Stable theme toggle geometry: one positioning model for all pages and first paint. */
+.home-theme-toggle {
+  --home-toggle-thumb-size: 32px;
+  --home-toggle-thumb-offset: 5px;
+}
+
+.home-theme-toggle .home-theme-toggle-thumb {
+  right: auto;
+  left: calc(100% - var(--home-toggle-thumb-offset) - var(--home-toggle-thumb-size));
+  width: var(--home-toggle-thumb-size);
+  height: var(--home-toggle-thumb-size);
+  transform: none !important;
+  transition: left 280ms cubic-bezier(.2, .8, .2, 1), background 280ms ease;
+}
+
+.home-theme-toggle.is-dark .home-theme-toggle-thumb,
+html.theme-dark .home-theme-toggle .home-theme-toggle-thumb {
+  left: var(--home-toggle-thumb-offset);
+  transform: none !important;
+  background: #dff8e9;
+}
+
+.home-theme-toggle .home-theme-toggle-sun,
+.home-theme-toggle.is-dark .home-theme-toggle-moon,
+html.theme-dark .home-theme-toggle .home-theme-toggle-moon {
+  position: absolute;
+  top: var(--home-toggle-thumb-offset);
+  width: var(--home-toggle-thumb-size);
+  height: var(--home-toggle-thumb-size);
+  display: grid;
+  place-items: center;
+}
+
+.home-theme-toggle .home-theme-toggle-sun {
+  left: calc(100% - var(--home-toggle-thumb-offset) - var(--home-toggle-thumb-size));
+  z-index: 4;
+  color: #e6a700;
+  transform: none;
+}
+
+.home-theme-toggle .home-theme-toggle-moon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  transform: translateY(-50%);
+  color: rgba(15, 23, 42, .42);
+}
+
+.home-theme-toggle.is-dark .home-theme-toggle-moon,
+html.theme-dark .home-theme-toggle .home-theme-toggle-moon {
+  left: var(--home-toggle-thumb-offset);
+  z-index: 4;
+  color: #065f35;
+  transform: none;
+}
+
+.home-theme-toggle.is-dark .home-theme-toggle-sun,
+html.theme-dark .home-theme-toggle .home-theme-toggle-sun {
+  left: auto;
+  right: 10px;
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, .5);
+  transform: none;
+}
+
+@media (max-width: 980px) and (min-width: 769px) {
+  .home-theme-toggle {
+    --home-toggle-thumb-size: 28px;
+    --home-toggle-thumb-offset: 5px;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 421px) {
+  .home-theme-toggle {
+    --home-toggle-thumb-size: 28px;
+    --home-toggle-thumb-offset: 5px;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-theme-toggle {
+    --home-toggle-thumb-size: 26px;
+    --home-toggle-thumb-offset: 5px;
+  }
+}
+
+/* Match first-paint html.theme-dark toggle with hydrated .is-dark toggle exactly. */
+html.theme-dark .page-shell .home-theme-toggle,
+.page-shell.theme-dark .home-theme-toggle,
+.home-theme-toggle.is-dark {
+  border-color: rgba(210, 255, 228, .72);
+  background: linear-gradient(135deg, #0f172a 0%, #07351e 100%);
+}
+
+html.theme-dark .page-shell .home-theme-toggle::before,
+.page-shell.theme-dark .home-theme-toggle::before,
+.home-theme-toggle.is-dark::before {
+  opacity: 1;
+}
+
+html.theme-dark .page-shell .home-theme-toggle .home-theme-toggle-thumb,
+.page-shell.theme-dark .home-theme-toggle .home-theme-toggle-thumb,
+.home-theme-toggle.is-dark .home-theme-toggle-thumb {
+  right: auto !important;
+  left: var(--home-toggle-thumb-offset) !important;
+  width: var(--home-toggle-thumb-size);
+  height: var(--home-toggle-thumb-size);
+  background: #dff8e9;
+  transform: none !important;
+}
+
+html.theme-dark .page-shell .home-theme-toggle .home-theme-toggle-moon,
+.page-shell.theme-dark .home-theme-toggle .home-theme-toggle-moon,
+.home-theme-toggle.is-dark .home-theme-toggle-moon {
+  right: auto !important;
+  left: var(--home-toggle-thumb-offset) !important;
+  top: var(--home-toggle-thumb-offset) !important;
+  width: var(--home-toggle-thumb-size);
+  height: var(--home-toggle-thumb-size);
+  display: grid;
+  place-items: center;
+  color: #065f35;
+  transform: none !important;
+  z-index: 4;
+}
+
+html.theme-dark .page-shell .home-theme-toggle .home-theme-toggle-sun,
+.page-shell.theme-dark .home-theme-toggle .home-theme-toggle-sun,
+.home-theme-toggle.is-dark .home-theme-toggle-sun {
+  left: auto !important;
+  right: 10px !important;
+  top: 50% !important;
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, .5);
+  transform: translateY(-50%) !important;
+  z-index: 3;
+}

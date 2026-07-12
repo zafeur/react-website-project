@@ -29,6 +29,11 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
     setIsLoggedIn(loggedIn);
     setHasCheckedAuth(true);
 
+    if (loggedIn && initialPage === "dashboard") {
+      setCurrentPage("dashboard");
+      return;
+    }
+
     if (loggedIn && canUseStorage()) {
       setCurrentPage(localStorage.getItem(PAGE_STORAGE_KEY) || initialPage);
       return;
