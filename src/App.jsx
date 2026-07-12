@@ -5,7 +5,7 @@ import LoginModal from "./components/LoginModal";
 import MobileBottomNav from "./components/MobileBottomNav";
 import RestaurantPage from "./components/RestaurantPage";
 import { sendOtp, verifyOtp } from "./api/auth";
-import { clearAuthToken, hasAuthToken, setAuthToken } from "./helper/authCookie";
+import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from "./helper/authCookie";
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
 
@@ -14,27 +14,35 @@ const canUseStorage = () => typeof window !== "undefined" && window.localStorage
 function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthToken());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(() => {
-    if (!canUseStorage()) {
-      return initialPage === "dashboard" ? "restaurant" : initialPage;
-    }
-
-    if (!hasAuthToken()) {
-      return "restaurant";
-    }
-
-    return localStorage.getItem(PAGE_STORAGE_KEY) || initialPage;
-  });
+  const [currentPage, setCurrentPage] = useState(initialPage === "dashboard" ? "restaurant" : initialPage);
 
   const [loginError, setLoginError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!canUseStorage()) {
+    const loggedIn = hasAuthToken();
+    setIsLoggedIn(loggedIn);
+    setHasCheckedAuth(true);
+
+    if (loggedIn && canUseStorage()) {
+      setCurrentPage(localStorage.getItem(PAGE_STORAGE_KEY) || initialPage);
+      return;
+    }
+
+    setCurrentPage(initialPage === "dashboard" ? "restaurant" : initialPage);
+
+    if (initialPage === "dashboard") {
+      setIsLoginOpen(true);
+    }
+  }, [initialPage]);
+
+  useEffect(() => {
+    if (!hasCheckedAuth || !canUseStorage()) {
       return;
     }
 
@@ -42,14 +50,16 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
       PAGE_STORAGE_KEY,
       isLoggedIn ? currentPage : "restaurant"
     );
-  }, [isLoggedIn, currentPage]);
+  }, [hasCheckedAuth, isLoggedIn, currentPage]);
 
   useEffect(() => {
-    if (initialPage === "dashboard" && !isLoggedIn) {
-      setCurrentPage("restaurant");
-      setIsLoginOpen(true);
+    if (!hasCheckedAuth || initialPage !== "dashboard" || isLoggedIn) {
+      return;
     }
-  }, [initialPage, isLoggedIn]);
+
+    setCurrentPage("restaurant");
+    setIsLoginOpen(true);
+  }, [hasCheckedAuth, initialPage, isLoggedIn]);
 
   const openLogin = () => {
     setLoginError("");
@@ -97,14 +107,18 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
 
       console.log(data);
 
-      if (data.token) {
-        setAuthToken(data.token, data.user?.type || data.userType || data.role);
+      const token = getTokenFromAuthResponse(data);
+      const tokenSaved = setAuthToken(token, getUserTypeFromAuthResponse(data));
+
+      if (!tokenSaved) {
+        setLoginError("\u062a\u0648\u06a9\u0646 \u0648\u0631\u0648\u062f \u062f\u0631 \u06a9\u0648\u06a9\u06cc \u0630\u062e\u06cc\u0631\u0647 \u0646\u0634\u062f.");
+        return;
       }
 
       setIsLoggedIn(true);
       setIsLoginOpen(false);
       setIsUserMenuOpen(false);
-      setCurrentPage("restaurant");
+      setCurrentPage("dashboard");
     } catch (error) {
       console.log(error);
 
@@ -214,3 +228,4 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
 }
 
 export default App;
+

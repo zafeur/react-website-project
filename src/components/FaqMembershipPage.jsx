@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -15,6 +15,8 @@ import {
   Store,
 } from 'lucide-react';
 import { submitMembershipRequest } from '../api/membership';
+import MobileBottomNav from './MobileBottomNav';
+import { hasAuthToken } from '../helper/authCookie';
 
 const nav = {
   brand: 'کی میای',
@@ -133,6 +135,11 @@ function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(hasAuthToken());
+  }, []);
 
   const formTitle = activeStep === 0 ? 'اطلاعات مجموعه' : 'اطلاعات کسب‌وکار و مارکتینگ';
   const progressText = activeStep === 0 ? '۱ از ۲' : '۲ از ۲';
@@ -150,6 +157,30 @@ function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
   const goBack = () => {
     setStatus({ type: '', message: '' });
     setActiveStep(0);
+  };
+
+  const handleMobileNav = (id) => {
+    if (id === 'home') {
+      window.location.href = '/';
+      return;
+    }
+
+    if (id === 'shop') {
+      window.location.href = '/restaurant';
+      return;
+    }
+
+    if (id === 'gifts') {
+      window.location.href = '/#gifts';
+      return;
+    }
+
+    if (id === 'faq') {
+      window.location.href = '/faq';
+      return;
+    }
+
+    window.location.href = isLoggedIn ? '/dashboard' : '/restaurant';
   };
 
   const handleSubmit = async (event) => {
@@ -358,6 +389,8 @@ function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
           </form>
         </section>
       </section>
+
+      <MobileBottomNav currentPage="faq" isLoggedIn={isLoggedIn} onNavigate={handleMobileNav} />
     </main>
   );
 }

@@ -440,3 +440,28 @@
     line-height: 1.6;
   }
 }
+
+@media (min-width: 769px) {
+  .topbar .nav-list {
+    align-items: center !important;
+  }
+
+  .topbar .nav-list li {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0;
+  }
+
+  .topbar .nav-list a,
+  .topbar .nav-list button {
+    height: 100%;
+    align-items: center;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .topbar .nav-list li::after {
+    bottom: 2px;
+  }
+}

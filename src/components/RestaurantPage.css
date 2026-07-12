@@ -566,3 +566,54 @@
 }
 
 
+
+@media (max-width: 1200px) and (min-width: 769px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+    gap: clamp(24px, 3vw, 38px);
+  }
+
+  .hero-photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 806 / 361;
+  }
+
+  .profile {
+    padding-top: 18px;
+  }
+
+  .logo-circle {
+    width: clamp(118px, 13vw, 146px);
+    height: clamp(118px, 13vw, 146px);
+    margin-bottom: 22px;
+    font-size: clamp(52px, 6vw, 64px);
+  }
+
+  .logo-circle small {
+    bottom: 37px;
+    left: 47px;
+  }
+
+  .profile-title {
+    font-size: clamp(26px, 3vw, 32px);
+  }
+
+  .info-row {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .info-card {
+    padding-inline: clamp(14px, 2vw, 22px);
+  }
+
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .content-grid {
+    grid-template-columns: minmax(300px, .9fr) minmax(0, 1.1fr);
+  }
+}

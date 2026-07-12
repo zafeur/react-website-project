@@ -49,14 +49,36 @@ export const getAuthUserType = () => getCookie(USER_TYPE_COOKIE_NAME);
 export const hasAuthToken = () => Boolean(getAuthToken());
 
 export const setAuthToken = (token, userType) => {
+  if (!token) {
+    return false;
+  }
+
   setCookie(TOKEN_COOKIE_NAME, token);
 
   if (userType) {
     setCookie(USER_TYPE_COOKIE_NAME, userType);
   }
+
+  return hasAuthToken();
 };
 
 export const clearAuthToken = () => {
   clearCookie(TOKEN_COOKIE_NAME);
   clearCookie(USER_TYPE_COOKIE_NAME);
 };
+
+export const getTokenFromAuthResponse = (data) =>
+  data?.token ||
+  data?.access_token ||
+  data?.accessToken ||
+  data?.data?.token ||
+  data?.data?.access_token ||
+  data?.data?.accessToken;
+
+export const getUserTypeFromAuthResponse = (data) =>
+  data?.user?.type ||
+  data?.data?.user?.type ||
+  data?.userType ||
+  data?.data?.userType ||
+  data?.role ||
+  data?.data?.role;

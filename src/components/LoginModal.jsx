@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LogIn, Smartphone, X } from "lucide-react";
 
 const t = {
@@ -21,6 +21,13 @@ function LoginModal({
   const [mobile, setMobile] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1);
+  const otpInputRef = useRef(null);
+
+  useEffect(() => {
+    if (step === 2) {
+      otpInputRef.current?.focus();
+    }
+  }, [step]);
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
@@ -95,6 +102,7 @@ function LoginModal({
 
               <div className="input-shell">
                 <input
+                  ref={otpInputRef}
                   type="text"
                   placeholder="12345"
                   value={otp}

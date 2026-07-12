@@ -14,7 +14,10 @@ const getSavedDarkMode = () => {
     return false;
   }
 
-  return window.localStorage.getItem('keymiyay-theme') === 'dark';
+  return (
+    window.localStorage.getItem('keymiyay-theme') === 'dark' ||
+    document.documentElement.classList.contains('theme-dark')
+  );
 };
 
 export default function MyApp({ Component, pageProps }) {

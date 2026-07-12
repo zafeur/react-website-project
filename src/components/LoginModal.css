@@ -230,3 +230,65 @@
     padding: 24px 22px 26px;
   }
 }
+
+.page-shell.theme-dark .login-modal,
+html.theme-dark .page-shell .login-modal {
+  color: #173327;
+  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.82);
+}
+
+.page-shell.theme-dark .login-modal :where(h2, label),
+html.theme-dark .page-shell .login-modal :where(h2, label) {
+  color: #151515;
+}
+
+.page-shell.theme-dark .login-modal :where(p, span),
+html.theme-dark .page-shell .login-modal :where(p, span) {
+  color: #64696d;
+}
+
+.page-shell.theme-dark .login-modal .modal-footnote,
+html.theme-dark .page-shell .login-modal .modal-footnote {
+  color: #787d81;
+}
+
+.page-shell.theme-dark .login-modal .modal-footnote strong,
+html.theme-dark .page-shell .login-modal .modal-footnote strong {
+  color: var(--green);
+}
+
+.page-shell.theme-dark .login-modal .modal-close,
+html.theme-dark .page-shell .login-modal .modal-close {
+  color: #22322b;
+  background: #ffffff;
+  border-color: #ececec;
+}
+
+.page-shell.theme-dark .login-modal .input-shell,
+html.theme-dark .page-shell .login-modal .input-shell {
+  background: #ffffff;
+  border-color: #e5e5e5;
+}
+
+.page-shell.theme-dark .login-modal .input-shell input,
+html.theme-dark .page-shell .login-modal .input-shell input {
+  color: #1d1f20;
+}
+
+.page-shell.theme-dark .login-modal .input-shell input::placeholder,
+html.theme-dark .page-shell .login-modal .input-shell input::placeholder {
+  color: #8a949b;
+  opacity: 1;
+}
+
+.page-shell.theme-dark .login-modal .send-code-btn,
+html.theme-dark .page-shell .login-modal .send-code-btn {
+  color: var(--green);
+  background: #f4fbf7;
+}
+
+.page-shell.theme-dark .login-modal .login-submit,
+html.theme-dark .page-shell .login-modal .login-submit {
+  color: #ffffff;
+}

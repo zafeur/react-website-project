@@ -18,7 +18,7 @@ import LoginModal from './LoginModal';
 import MobileBottomNav from './MobileBottomNav';
 import { sendOtp, verifyOtp } from '../api/auth';
 import { getHomePageData, requestDiscountCode } from '../api/home';
-import { hasAuthToken, setAuthToken } from '../helper/authCookie';
+import { getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
 
 const t = {
   brand: "\u06a9\u06cc \u0645\u06cc\u0627\u06cc",
@@ -251,6 +251,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const storyVideoRef = useRef(null);
   const [loginError, setLoginError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeStoryIndex, setActiveStoryIndex] = useState(null);
   const [storyDurationMs, setStoryDurationMs] = useState(4200);
   const [pendingOffer, setPendingOffer] = useState(null);
@@ -258,6 +259,10 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
   const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
 
+
+  useEffect(() => {
+    setIsLoggedIn(hasAuthToken());
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -474,10 +479,15 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       setLoginError('');
       const data = await verifyOtp({ mobile, otp });
 
-      if (data.token) {
-        setAuthToken(data.token, data.user?.type || data.userType || data.role);
+      const token = getTokenFromAuthResponse(data);
+      const tokenSaved = setAuthToken(token, getUserTypeFromAuthResponse(data));
+
+      if (!tokenSaved) {
+        setLoginError("\u062a\u0648\u06a9\u0646 \u0648\u0631\u0648\u062f \u062f\u0631 \u06a9\u0648\u06a9\u06cc \u0630\u062e\u06cc\u0631\u0647 \u0646\u0634\u062f.");
+        return;
       }
 
+      setIsLoggedIn(true);
       setIsLoginOpen(false);
       if (pendingOffer) {
         const offerToClaim = pendingOffer;
@@ -495,7 +505,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   };
 
   const handleReceiveOffer = async (offer, skipAuthCheck = false) => {
-    if (!skipAuthCheck && !hasAuthToken()) {
+    if (!skipAuthCheck && !isLoggedIn) {
       setPendingOffer(offer);
       openLogin();
       return;
@@ -541,7 +551,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       return;
     }
 
-    if (!hasAuthToken()) {
+    if (!isLoggedIn) {
       openLogin();
       return;
     }
@@ -752,7 +762,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         </footer>
       </section>
 
-      <MobileBottomNav currentPage="home" isLoggedIn={hasAuthToken()} onNavigate={handleMobileNav} />
+      <MobileBottomNav currentPage="home" isLoggedIn={isLoggedIn} onNavigate={handleMobileNav} />
 
       {isLoginOpen && (
         <LoginModal
