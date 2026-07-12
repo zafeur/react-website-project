@@ -36,11 +36,11 @@ const t = {
   free: "\u0631\u0627\u06cc\u06af\u0627\u0646",
   discount: "\u062a\u062e\u0641\u06cc\u0641",
   special: "\u0648\u06cc\u0698\u0647",
-  bastani: "\u0628\u0633\u062a\u0646\u06cc",
+  bastani: "\u0628\u0627\u0633\u062a\u0627\u0646\u06cc",
   barial: "\u0628\u0631\u06cc\u0627\u0644",
   dorato: "\u062f\u0648\u0631\u0627\u062a\u0648",
   ibamo: "\u0627\u06cc\u0628\u0627\u0645\u0648",
-  mojalal: "\u0645\u062c\u0644\u0627\u0644",
+  mojalal: "\u0645\u062c\u0644\u0644",
   bakhshi: "\u0628\u062e\u0634\u06cc",
   heroKicker: "\u062f\u0646\u06cc\u0627\u06cc \u0647\u062f\u06cc\u0647\u200c\u0647\u0627 \u0648 \u062a\u062e\u0641\u06cc\u0641\u200c\u0647\u0627",
   heroTitle: "\u06a9\u06cc \u0645\u06cc\u0627\u06cc\u061b \u06cc\u06a9 \u0634\u0631\u0648\u0639 \u0647\u0645\u0627\u0647\u0646\u06af \u0628\u0627 \u0628\u0627\u0642\u06cc \u0633\u0627\u06cc\u062a",
@@ -71,21 +71,16 @@ const t = {
 
 const asset = (path) => `/home/${path}`;
 
-const storyDisplayTitleByTitle = {
-  [t.bastani]: "\u0628\u0627\u0633\u062a\u0627\u0646\u06cc",
-  [t.mojalal]: "\u0645\u062c\u0644\u0644",
-};
+const storyDisplayTitleByTitle = {};
 
 const getStoryDisplayTitle = (title) => storyDisplayTitleByTitle[title] || title;
 
 const storyVideoByTitle = {
   [t.barial]: asset('videos/barial.mp4'),
   [t.bastani]: asset('videos/bastani.mp4'),
-  [getStoryDisplayTitle(t.bastani)]: asset('videos/bastani.mp4'),
   [t.dorato]: asset('videos/dorato.mp4'),
   [t.ibamo]: asset('videos/ibamo.mp4'),
   [t.mojalal]: asset('videos/mojalal.mp4'),
-  [getStoryDisplayTitle(t.mojalal)]: asset('videos/mojalal.mp4'),
   [t.bakhshi]: asset('videos/bakhshi.mp4'),
 };
 
@@ -136,7 +131,7 @@ const defaultHomeData = {
 ],
 
   brands: [
-  { title: t.restaurant, image: asset('img/logo-6.b6f80db0.png'), href: '/restaurant' },
+  { title: t.restaurant, image: asset('img/restaurant-melal.png'), href: '/restaurant' },
   { title: t.barial, image: asset('img/barial.jpg'), href: '/restaurant' },
   { title: t.dorato, image: asset('img/logo dorato.jpg'), href: '/restaurant' },
   { title: t.bastani, image: asset('img/logo bastani.jpg'), href: '/restaurant' },
@@ -153,7 +148,7 @@ const defaultHomeData = {
 ],
 
   offers: [
-  { title: t.gift1, brand: t.restaurant, tag: t.free, image: asset('img/logo-6.b6f80db0.png') },
+  { title: t.gift1, brand: t.restaurant, tag: t.free, image: asset('img/restaurant-melal.png') },
   { title: t.gift2, brand: t.barial, tag: t.discount, image: asset('img/barial.jpg') },
   { title: t.gift3, brand: t.dorato, tag: t.special, image: asset('img/logo dorato.jpg') },
 ],
@@ -253,9 +248,11 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [isBannerDragging, setIsBannerDragging] = useState(false);
   const bannerTimerRef = useRef(null);
   const dragStartRef = useRef(null);
+  const storyVideoRef = useRef(null);
   const [loginError, setLoginError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [activeStory, setActiveStory] = useState(null);
+  const [activeStoryIndex, setActiveStoryIndex] = useState(null);
+  const [storyDurationMs, setStoryDurationMs] = useState(4200);
   const [pendingOffer, setPendingOffer] = useState(null);
   const [discountPopup, setDiscountPopup] = useState(null);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
@@ -315,10 +312,59 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
     window.setTimeout(() => setSpinningStory(null), 950);
   };
 
-  const openStory = (story) => {
+  const openStory = (story, index) => {
     spinStory(story.title);
-    setActiveStory(story);
+    setActiveStoryIndex(index);
   };
+
+  const closeStory = () => {
+    setActiveStoryIndex(null);
+  };
+  const showNextStory = () => {
+    setActiveStoryIndex((current) => {
+      if (current === null) {
+        return current;
+      }
+
+      return current >= homeData.stories.length - 1 ? null : current + 1;
+    });
+  };
+
+  const showPreviousStory = () => {
+    setActiveStoryIndex((current) => {
+      if (current === null) {
+        return current;
+      }
+
+      return current <= 0 ? 0 : current - 1;
+    });
+  };
+
+  const activeStory = activeStoryIndex === null ? null : homeData.stories[activeStoryIndex];
+
+  useEffect(() => {
+    setStoryDurationMs(4200);
+  }, [activeStoryIndex, activeStory?.video]);
+
+  useEffect(() => {
+    if (!activeStory?.video) {
+      return;
+    }
+
+    storyVideoRef.current?.load?.();
+  }, [activeStoryIndex, activeStory?.video]);
+
+  useEffect(() => {
+    if (!activeStory || activeStory.video) {
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => {
+      showNextStory();
+    }, 4200);
+
+    return () => window.clearTimeout(timer);
+  }, [activeStoryIndex, activeStory?.video, homeData.stories.length]);
 
   const showPreviousBanner = () => {
     setActiveBanner((current) => (current - 1 + bannerItems.length) % bannerItems.length);
@@ -485,6 +531,11 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       return;
     }
 
+    if (id === 'faq') {
+      router.push('/faq');
+      return;
+    }
+
     if (id === 'gifts') {
       document.getElementById('gifts')?.scrollIntoView({ behavior: 'smooth' });
       return;
@@ -544,12 +595,12 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         </section>
 
         <section className="home-stories" aria-label={t.selectedBrands}>
-          {homeData.stories.map((story) => (
+          {homeData.stories.map((story, index) => (
             <button
               className={`home-story ${spinningStory === story.title ? 'is-spinning' : ''}`}
               type="button"
               key={story.title}
-              onClick={() => openStory(story)}
+              onClick={() => openStory(story, index)}
             >
               <span className="home-story-ring">
                 {story.video ? (
@@ -627,7 +678,14 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           <div className="home-brand-grid">
             {homeData.brands.map((brand) => (
               <article className="home-brand-card" key={brand.title}>
-                <img src={brand.image} alt={brand.title} />
+                {isRestaurantBrand(brand.title) ? (
+                  <span className="home-brand-melal-logo" aria-label={brand.title}>
+                    <span>{'\u0645\u0644\u0644'}</span>
+                    <small>RESTAURANT</small>
+                  </span>
+                ) : (
+                  <img src={brand.image} alt={brand.title} />
+                )}
                 <strong>{brand.title}</strong>
               </article>
             ))}
@@ -707,15 +765,57 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       )}
 
       {activeStory && (
-        <div className="home-popup-backdrop" onClick={() => setActiveStory(null)}>
-          <section className="home-story-popup" onClick={(event) => event.stopPropagation()}>
-            <button type="button" className="home-popup-close" onClick={() => setActiveStory(null)}>{t.close}</button>
+        <div className="home-popup-backdrop" onClick={closeStory}>
+          <section className="home-story-popup home-story-viewer" onClick={(event) => event.stopPropagation()}>
+            <div className="home-story-progress" aria-hidden="true">
+              {homeData.stories.map((story, index) => (
+                <span
+                  className={index < activeStoryIndex ? 'is-done' : index === activeStoryIndex ? 'is-active' : ''}
+                  style={index === activeStoryIndex ? { '--story-duration': storyDurationMs + 'ms' } : undefined}
+                  key={story.title}
+                >
+                  <i />
+                </span>
+              ))}
+            </div>
+            <button type="button" className="home-popup-close" onClick={closeStory}>{t.close}</button>
+            {!activeStory.video && (
+              <>
+                <button type="button" className="home-story-tap-zone home-story-tap-prev" onClick={showPreviousStory} aria-label="Previous story" />
+                <button type="button" className="home-story-tap-zone home-story-tap-next" onClick={showNextStory} aria-label="Next story" />
+              </>
+            )}
             {activeStory.video ? (
-              <video src={activeStory.video} controls autoPlay playsInline preload="auto" />
+              <video
+                ref={storyVideoRef}
+                key={activeStory.video}
+                src={activeStory.video}
+                autoPlay
+                controls
+                playsInline
+                preload="auto"
+                onLoadedMetadata={(event) => {
+                  const duration = event.currentTarget.duration;
+                  if (Number.isFinite(duration) && duration > 0) {
+                    setStoryDurationMs(Math.max(1200, duration * 1000));
+                  }
+                }}
+                onEnded={showNextStory}
+              />
             ) : (
               <img src={activeStory.image} alt={activeStory.title} />
             )}
-            <h2>{activeStory.title}</h2>
+            <div className="home-story-footer-controls">
+              <button type="button" className="home-story-step-button" onClick={showPreviousStory} aria-label="Previous story">
+                <ChevronRight />
+              </button>
+              <div className="home-story-footer-title">
+                <h2>{activeStory.title}</h2>
+              </div>
+              <button type="button" className="home-story-step-button" onClick={showNextStory} aria-label="Next story">
+                <ChevronLeft />
+              </button>
+            </div>
           </section>
         </div>
       )}

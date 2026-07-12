@@ -338,20 +338,12 @@
 }
 
 .faq-form-window {
-  overflow: hidden;
-  direction: ltr;
-}
-
-.faq-form-track {
-  display: flex;
-  width: 200%;
-  transition: transform 320ms cubic-bezier(.2, .8, .2, 1);
+  overflow: visible;
 }
 
 .faq-form-slide {
   direction: rtl;
-  width: 50%;
-  flex: 0 0 50%;
+  width: 100%;
   padding-left: 1px;
   padding-right: 1px;
 }

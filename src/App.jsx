@@ -150,6 +150,11 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
       return;
     }
 
+    if (id === "faq") {
+      window.location.href = "/faq";
+      return;
+    }
+
     if (!isLoggedIn && ["account", "gifts", "club"].includes(id)) {
       openLogin();
       return;

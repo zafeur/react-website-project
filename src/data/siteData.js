@@ -126,6 +126,7 @@ export const mobileBottomNav = [
   { id: 'club', title: 'باشگاه مشتریان', icon: Gift },
   { id: 'shop', title: 'فروشگاهی', icon: MapPin },
   { id: 'gifts', title: 'هدایا', icon: Gift },
+  { id: 'faq', title: '\u0633\u0648\u0627\u0644\u0627\u062a', icon: CircleHelp },
   { id: 'account', title: 'حساب', icon: User },
 ];
 

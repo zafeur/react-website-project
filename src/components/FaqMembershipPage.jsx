@@ -322,26 +322,26 @@ function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
 
           <form className="faq-slider-form" onSubmit={handleSubmit}>
             <div className="faq-form-window">
-              <div className="faq-form-track" style={{ transform: activeStep === 0 ? 'translateX(0)' : 'translateX(-50%)' }}>
-                <section className="faq-form-slide" aria-label="اطلاعات مجموعه">
-                  <div className="faq-form-title"><Store />اطلاعات مجموعه</div>
+              {activeStep === 0 ? (
+                <section className="faq-form-slide" aria-label="\u0627\u0637\u0644\u0627\u0639\u0627\u062a \u0645\u062c\u0645\u0648\u0639\u0647">
+                  <div className="faq-form-title"><Store />{'\u0627\u0637\u0644\u0627\u0639\u0627\u062a \u0645\u062c\u0645\u0648\u0639\u0647'}</div>
                   <div className="faq-form-grid">
-                    {collectionFields.map((field) => <Field key={field.name} field={field} value={form[field.name]} onChange={handleChange} isActive={activeStep === 0} />)}
+                    {collectionFields.map((field) => <Field key={field.name} field={field} value={form[field.name]} onChange={handleChange} isActive />)}
                   </div>
                 </section>
-
-                <section className="faq-form-slide" aria-label="اطلاعات کسب‌وکار و مارکتینگ">
-                  <div className="faq-form-title"><BarChart3 />اطلاعات کسب‌وکار</div>
+              ) : (
+                <section className="faq-form-slide" aria-label="\u0627\u0637\u0644\u0627\u0639\u0627\u062a \u06a9\u0633\u0628\u200c\u0648\u06a9\u0627\u0631 \u0648 \u0645\u0627\u0631\u06a9\u062a\u06cc\u0646\u06af">
+                  <div className="faq-form-title"><BarChart3 />{'\u0627\u0637\u0644\u0627\u0639\u0627\u062a \u06a9\u0633\u0628\u200c\u0648\u06a9\u0627\u0631'}</div>
                   <div className="faq-form-grid">
-                    {businessFields.map((field) => <Field key={field.name} field={field} value={form[field.name]} onChange={handleChange} isActive={activeStep === 1} />)}
+                    {businessFields.map((field) => <Field key={field.name} field={field} value={form[field.name]} onChange={handleChange} isActive />)}
                   </div>
 
-                  <div className="faq-form-title faq-form-title-spaced"><Megaphone />اطلاعات مارکتینگ</div>
+                  <div className="faq-form-title faq-form-title-spaced"><Megaphone />{'\u0627\u0637\u0644\u0627\u0639\u0627\u062a \u0645\u0627\u0631\u06a9\u062a\u06cc\u0646\u06af'}</div>
                   <div className="faq-form-grid faq-marketing-grid">
                     {marketingFields.map((field) => <ToggleField key={field.name} field={field} value={form[field.name]} onChange={handleChange} />)}
                   </div>
                 </section>
-              </div>
+              )}
             </div>
 
             {status.message && <p className={'faq-status faq-status-' + status.type}>{status.message}</p>}
