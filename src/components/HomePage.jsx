@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Gift,
   Moon,
+  PawPrint,
   Search,
   ShoppingBag,
   Sparkles,
@@ -142,6 +143,7 @@ const defaultHomeData = {
   categories: [
   { title: t.gifts, icon: 'Gift' },
   { title: t.restaurant, icon: 'Store' },
+  { title: t.pet, icon: 'PawPrint', href: '/pet' },
   { title: t.shop, icon: 'ShoppingBag' },
   { title: t.club, icon: 'Star' },
   { title: t.special, icon: 'Sparkles' },
@@ -157,6 +159,7 @@ const defaultHomeData = {
 const categoryIcons = {
   Gift,
   Store,
+  PawPrint,
   ShoppingBag,
   Star,
   Sparkles,
@@ -561,7 +564,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
 
   return (
-    <main className={`page-shell home-shell ${isDarkMode ? 'theme-dark' : ''}`} dir="rtl">
+    <main className={`page-shell home-shell ${isDarkMode ? 'theme-dark' : ''} ${isLoginOpen ? 'is-login-open' : ''}`} dir="rtl">
       <section className="frame home-frame">
         <header className="topbar d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
@@ -710,13 +713,17 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
             </div>
           </div>
           <div className="home-category-grid">
-            {homeData.categories.map(({ title, icon }) => {
+            {homeData.categories.map(({ title, icon, href }) => {
               const Icon = categoryIcons[icon] || Gift;
 
               return (
                 <article className="home-category-card" key={title}>
-                  <Icon />
-                  <span>{title}</span>
+                  <Link href={href || '#'}>
+                    <span className="home-category-inner">
+                      <Icon />
+                      <span>{title}</span>
+                    </span>
+                  </Link>
                 </article>
               );
             })}

@@ -185,7 +185,7 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
   };
 
   return (
-    <main className={`page-shell ${isDarkMode ? "theme-dark" : ""}`} dir="rtl">
+    <main className={`page-shell ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen ? "is-login-open" : ""}`} dir="rtl">
       <section
         className={`frame ${
           currentPage === "dashboard" ? "dashboard-frame" : ""

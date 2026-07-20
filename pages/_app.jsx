@@ -7,6 +7,7 @@ import '../src/components/DashboardPage.css';
 import '../src/components/LoginModal.css';
 import '../src/components/MobileBottomNav.css';
 import '../src/components/HomePage.css';
+import '../src/components/PetPage.css';
 import '../src/components/FaqMembershipPage.css';
 
 const getSavedDarkMode = () => {
