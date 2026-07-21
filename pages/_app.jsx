@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/App.css';
 import '../src/components/Header.css';
@@ -9,6 +9,7 @@ import '../src/components/MobileBottomNav.css';
 import '../src/components/HomePage.css';
 import '../src/components/PetPage.css';
 import '../src/components/FaqMembershipPage.css';
+import '../src/components/GlobalDarkMode.css';
 
 const getSavedDarkMode = () => {
   if (typeof window === 'undefined') {
@@ -37,3 +38,4 @@ export default function MyApp({ Component, pageProps }) {
     />
   );
 }
+

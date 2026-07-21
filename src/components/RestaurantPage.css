@@ -617,3 +617,168 @@
     grid-template-columns: minmax(300px, .9fr) minmax(0, 1.1fr);
   }
 }
+
+.business-wallet-card {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 260px);
+  margin: 22px auto 0;
+  padding: 18px 20px;
+  border: 1px solid rgba(7, 150, 62, .2);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(7, 150, 62, .1), #fff 58%);
+  box-shadow: 0 12px 24px rgba(7, 150, 62, .09);
+  text-align: right;
+}
+
+.business-wallet-card div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--green);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.business-wallet-card svg {
+  width: 22px;
+  height: 22px;
+}
+
+.business-wallet-card strong {
+  display: block;
+  color: #151515;
+  font-size: 24px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.business-wallet-card p {
+  margin: 0;
+  color: #60666a;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.page-shell.theme-dark .business-wallet-card {
+  background: linear-gradient(135deg, rgba(7, 150, 62, .18), #0f1712 58%);
+  border-color: rgba(255, 255, 255, .11);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, .26);
+}
+
+.page-shell.theme-dark .business-wallet-card strong,
+.page-shell.theme-dark .business-wallet-card p {
+  color: #edf7f0;
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .hero-grid {
+    display: block;
+    direction: rtl;
+  }
+
+  .hero-photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 806 / 361;
+  }
+
+  .profile {
+    max-width: 440px;
+    margin: 28px auto 0;
+    padding-top: 0;
+  }
+
+  .logo-circle {
+    width: 132px;
+    height: 132px;
+    margin-bottom: 20px;
+    font-size: 58px;
+  }
+
+  .logo-circle small {
+    bottom: 34px;
+    left: 43px;
+  }
+
+  .profile-title {
+    font-size: 30px;
+  }
+
+  .follow-btn {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 28px;
+  }
+
+  .business-wallet-card {
+    width: min(100%, 300px);
+  }
+
+  .info-row {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .info-card {
+    height: auto;
+    min-height: 92px;
+    padding: 16px 18px;
+    align-items: center !important;
+  }
+
+  .info-card .text-end {
+    text-align: right !important;
+  }
+
+  .info-title,
+  .info-text {
+    line-height: 1.7;
+  }
+
+  .info-text {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .tabs {
+    margin-top: 26px;
+    padding-inline: 24px;
+  }
+
+  .tabs ul {
+    gap: 42px;
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .content-grid {
+    grid-template-columns: minmax(280px, .82fr) minmax(0, 1.18fr);
+    gap: 18px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 900px) {
+  .info-row {
+    grid-template-columns: 1fr;
+  }
+
+  .info-card {
+    min-height: 78px;
+  }
+
+  .content-grid {
+    display: block;
+  }
+
+  .gift-panel,
+  .about-panel,
+  .review-panel {
+    height: auto;
+    margin-top: 18px;
+  }
+}

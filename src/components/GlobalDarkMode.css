@@ -1,0 +1,742 @@
+/* Global first-paint dark mode overrides.
+   This file is imported last so html.theme-dark and hydrated .theme-dark render the same. */
+html.theme-dark body,
+html.theme-dark .page-shell,
+.page-shell.theme-dark {
+  --text: #edf7f0;
+  --muted: #d8e8de;
+  --line: rgba(255, 255, 255, .11);
+  --soft: #101a14;
+  background: #090f0c;
+  color: #edf7f0;
+}
+
+html.theme-dark .page-shell :where(
+  .frame,
+  .home-frame,
+  .panel,
+  .profile,
+  .info-card,
+  .tabs,
+  .gift-item,
+  .review-row,
+  .dashboard-action-card,
+  .active-gift-card,
+  .history-list,
+  .history-item,
+  .invite-card,
+  .stats-panel,
+  .stat-item,
+  .wallet-panel,
+  .wallet-business-card,
+  .wallet-history-item,
+  .mobile-profile-card,
+  .mobile-profile-menu,
+  .mobile-profile-item,
+  .mobile-wallet-card,
+  .mobile-wallet-business,
+  .home-search-field,
+  .home-profile-card,
+  .home-section,
+  .home-footer,
+  .home-brand-card,
+  .home-category-card,
+  .home-offer-card,
+  .home-banner-slide,
+  .home-banner-viewport,
+  .home-banner-slider,
+  .home-discount-popup,
+  .faq-hero-copy,
+  .faq-hero-card,
+  .faq-section,
+  .faq-step-card,
+  .faq-business-flow li,
+  .faq-trust-card,
+  .faq-item,
+  .faq-field input,
+  .faq-field textarea,
+  .faq-field select,
+  .faq-secondary-btn,
+  .pet-hero,
+  .pet-intro-panel,
+  .pet-benefit-card,
+  .business-wallet-card
+),
+.page-shell.theme-dark :where(
+  .frame,
+  .home-frame,
+  .panel,
+  .profile,
+  .info-card,
+  .tabs,
+  .gift-item,
+  .review-row,
+  .dashboard-action-card,
+  .active-gift-card,
+  .history-list,
+  .history-item,
+  .invite-card,
+  .stats-panel,
+  .stat-item,
+  .wallet-panel,
+  .wallet-business-card,
+  .wallet-history-item,
+  .mobile-profile-card,
+  .mobile-profile-menu,
+  .mobile-profile-item,
+  .mobile-wallet-card,
+  .mobile-wallet-business,
+  .home-search-field,
+  .home-profile-card,
+  .home-section,
+  .home-footer,
+  .home-brand-card,
+  .home-category-card,
+  .home-offer-card,
+  .home-banner-slide,
+  .home-banner-viewport,
+  .home-banner-slider,
+  .home-discount-popup,
+  .faq-hero-copy,
+  .faq-hero-card,
+  .faq-section,
+  .faq-step-card,
+  .faq-business-flow li,
+  .faq-trust-card,
+  .faq-item,
+  .faq-field input,
+  .faq-field textarea,
+  .faq-field select,
+  .faq-secondary-btn,
+  .pet-hero,
+  .pet-intro-panel,
+  .pet-benefit-card,
+  .business-wallet-card
+) {
+  background-color: #0f1712;
+  border-color: rgba(255, 255, 255, .11);
+  color: #edf7f0;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
+}
+
+html.theme-dark .page-shell :where(
+  .brand,
+  .brand-icon,
+  .nav-list,
+  .nav-list a,
+  .nav-list button,
+  .profile-title,
+  .info-text,
+  .section-title,
+  .gift-copy h3,
+  .review-name,
+  .dashboard-user-copy h1,
+  .dashboard-action-card,
+  .dashboard-action-card span,
+  .dashboard-action-card svg,
+  .active-gift-card h3,
+  .history-item h3,
+  .history-item strong,
+  .stat-item strong,
+  .wallet-summary h2,
+  .wallet-history h3,
+  .wallet-business-card h3,
+  .wallet-history-item strong,
+  .mobile-profile-card h1,
+  .mobile-profile-item span,
+  .mobile-wallet-head span,
+  .mobile-wallet-business h3,
+  .home-story,
+  .home-brand-card,
+  .home-category-card,
+  .home-offer-copy h3,
+  .home-profile-card h1,
+  .home-section-head h2,
+  .home-text-action,
+  .home-offer-footer button,
+  .home-footer-links,
+  .faq-hero h1,
+  .faq-section-head h2,
+  .faq-form-intro h2,
+  .faq-step-card h3,
+  .faq-business-flow li,
+  .faq-trust-card li,
+  .faq-item summary,
+  .faq-form-progress span,
+  .faq-form-title,
+  .faq-field span,
+  .pet-hero-copy h1,
+  .pet-intro-panel h2,
+  .pet-benefit-card h3,
+  .business-wallet-card strong
+),
+.page-shell.theme-dark :where(
+  .brand,
+  .brand-icon,
+  .nav-list,
+  .nav-list a,
+  .nav-list button,
+  .profile-title,
+  .info-text,
+  .section-title,
+  .gift-copy h3,
+  .review-name,
+  .dashboard-user-copy h1,
+  .dashboard-action-card,
+  .dashboard-action-card span,
+  .dashboard-action-card svg,
+  .active-gift-card h3,
+  .history-item h3,
+  .history-item strong,
+  .stat-item strong,
+  .wallet-summary h2,
+  .wallet-history h3,
+  .wallet-business-card h3,
+  .wallet-history-item strong,
+  .mobile-profile-card h1,
+  .mobile-profile-item span,
+  .mobile-wallet-head span,
+  .mobile-wallet-business h3,
+  .home-story,
+  .home-brand-card,
+  .home-category-card,
+  .home-offer-copy h3,
+  .home-profile-card h1,
+  .home-section-head h2,
+  .home-text-action,
+  .home-offer-footer button,
+  .home-footer-links,
+  .faq-hero h1,
+  .faq-section-head h2,
+  .faq-form-intro h2,
+  .faq-step-card h3,
+  .faq-business-flow li,
+  .faq-trust-card li,
+  .faq-item summary,
+  .faq-form-progress span,
+  .faq-form-title,
+  .faq-field span,
+  .pet-hero-copy h1,
+  .pet-intro-panel h2,
+  .pet-benefit-card h3,
+  .business-wallet-card strong
+) {
+  color: #edf7f0;
+}
+
+html.theme-dark .page-shell :where(
+  .meta,
+  .about-text,
+  .review-text,
+  .gift-copy p,
+  .dashboard-user-copy p,
+  .active-gift-card p,
+  .history-item p,
+  .history-item span,
+  .invite-card p,
+  .stat-item span,
+  .wallet-summary p,
+  .wallet-business-card span,
+  .wallet-history-item span,
+  .wallet-history-item p,
+  .home-story span,
+  .home-profile-card p,
+  .home-footer p,
+  .faq-hero p,
+  .faq-form-intro p,
+  .faq-step-card p,
+  .faq-item p,
+  .faq-hero-card span,
+  .pet-eyebrow,
+  .pet-hero-copy p,
+  .pet-benefit-card p,
+  .business-wallet-card p
+),
+.page-shell.theme-dark :where(
+  .meta,
+  .about-text,
+  .review-text,
+  .gift-copy p,
+  .dashboard-user-copy p,
+  .active-gift-card p,
+  .history-item p,
+  .history-item span,
+  .invite-card p,
+  .stat-item span,
+  .wallet-summary p,
+  .wallet-business-card span,
+  .wallet-history-item span,
+  .wallet-history-item p,
+  .home-story span,
+  .home-profile-card p,
+  .home-footer p,
+  .faq-hero p,
+  .faq-form-intro p,
+  .faq-step-card p,
+  .faq-item p,
+  .faq-hero-card span,
+  .pet-eyebrow,
+  .pet-hero-copy p,
+  .pet-benefit-card p,
+  .business-wallet-card p
+) {
+  color: #d8e8de;
+}
+
+html.theme-dark .page-shell :where(input, textarea, select),
+.page-shell.theme-dark :where(input, textarea, select) {
+  background: #0f1712;
+  border-color: rgba(255, 255, 255, .12);
+  color: #edf7f0;
+}
+
+html.theme-dark .page-shell :where(input::placeholder, textarea::placeholder),
+.page-shell.theme-dark :where(input::placeholder, textarea::placeholder) {
+  color: rgba(237, 247, 240, .62);
+}
+
+html.theme-dark .mobile-bottom-nav,
+html.theme-dark .page-shell .mobile-bottom-nav,
+.page-shell.theme-dark .mobile-bottom-nav {
+  background: rgba(9, 15, 12, .94);
+  border-top-color: rgba(255, 255, 255, .1);
+  box-shadow: 0 -14px 30px rgba(0, 0, 0, .28);
+}
+
+html.theme-dark .mobile-bottom-nav button,
+html.theme-dark .page-shell .mobile-bottom-nav button,
+.page-shell.theme-dark .mobile-bottom-nav button {
+  color: #edf7f0;
+}
+
+html.theme-dark .mobile-bottom-nav button:hover,
+html.theme-dark .mobile-bottom-nav .active,
+html.theme-dark .page-shell .mobile-bottom-nav button:hover,
+html.theme-dark .page-shell .mobile-bottom-nav .active,
+.page-shell.theme-dark .mobile-bottom-nav button:hover,
+.page-shell.theme-dark .mobile-bottom-nav .active {
+  color: #6df09b;
+  background: rgba(37, 196, 99, .1);
+  box-shadow: inset 0 0 0 1px rgba(109, 240, 155, .18);
+}
+
+html.theme-dark .page-shell :where(.dashboard-action-card:hover, .mobile-profile-item:hover, .faq-secondary-btn:hover),
+.page-shell.theme-dark :where(.dashboard-action-card:hover, .mobile-profile-item:hover, .faq-secondary-btn:hover) {
+  color: #6df09b;
+  background: rgba(7, 150, 62, .14);
+  border-color: rgba(109, 240, 155, .22);
+}
+
+html.theme-dark .page-shell :where(.logo-circle, .faq-hero-card svg, .faq-business-flow li::before),
+.page-shell.theme-dark :where(.logo-circle, .faq-hero-card svg, .faq-business-flow li::before) {
+  background: rgba(7, 150, 62, .16);
+}
+
+html.theme-dark .page-shell :where(.wallet-total-card, .invite-card),
+.page-shell.theme-dark :where(.wallet-total-card, .invite-card) {
+  background: linear-gradient(135deg, #0ba746 0%, #087b35 100%);
+  color: #fff;
+}
+
+html.theme-dark .page-shell :where(.wallet-history-item, .history-item, .gift-item),
+.page-shell.theme-dark :where(.wallet-history-item, .history-item, .gift-item) {
+  border-bottom-color: rgba(255, 255, 255, .1);
+}
+
+/* Mobile dark-mode shell fix: prevent hard-coded mobile white backgrounds from leaking through. */
+html.theme-dark :where(body),
+html.theme-dark .page-shell,
+html.theme-dark .page-shell .frame,
+html.theme-dark .page-shell .dashboard-page,
+html.theme-dark .page-shell .dashboard-page .mobile-dashboard,
+.page-shell.theme-dark,
+.page-shell.theme-dark .frame,
+.page-shell.theme-dark .dashboard-page,
+.page-shell.theme-dark .dashboard-page .mobile-dashboard {
+  background: #090f0c;
+  color: #edf7f0;
+}
+
+html.theme-dark .page-shell .dashboard-page .mobile-dashboard,
+.page-shell.theme-dark .dashboard-page .mobile-dashboard {
+  background-color: #090f0c;
+}
+
+@media (max-width: 768px) {
+  html.theme-dark body,
+  html.theme-dark .page-shell,
+  html.theme-dark .page-shell .frame,
+  html.theme-dark .page-shell .dashboard-page,
+  html.theme-dark .page-shell .dashboard-page .mobile-dashboard,
+  .page-shell.theme-dark,
+  .page-shell.theme-dark .frame,
+  .page-shell.theme-dark .dashboard-page,
+  .page-shell.theme-dark .dashboard-page .mobile-dashboard {
+    background: #090f0c;
+  }
+}
+
+/* Login glass inputs must stay transparent even in global dark mode and Chrome autofill. */
+html.theme-dark .page-shell .login-modal .input-shell,
+.page-shell.theme-dark .login-modal .input-shell {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(219, 255, 233, 0.48);
+}
+
+html.theme-dark .page-shell .login-modal .input-shell:focus-within,
+.page-shell.theme-dark .login-modal .input-shell:focus-within {
+  background: rgba(255, 255, 255, 0.17);
+  border-color: rgba(187, 255, 211, 0.86);
+}
+
+html.theme-dark .page-shell .login-modal .input-shell input,
+.page-shell.theme-dark .login-modal .input-shell input,
+.login-modal .input-shell input {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff;
+  box-shadow: none !important;
+}
+
+html.theme-dark .page-shell .login-modal .input-shell input:disabled,
+.page-shell.theme-dark .login-modal .input-shell input:disabled,
+.login-modal .input-shell input:disabled {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: rgba(255, 255, 255, .86) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, .86) !important;
+  opacity: 1;
+}
+
+.login-modal .input-shell input:-webkit-autofill,
+.login-modal .input-shell input:-webkit-autofill:hover,
+.login-modal .input-shell input:-webkit-autofill:focus,
+.login-modal .input-shell input:-webkit-autofill:disabled {
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff;
+  transition: background-color 99999s ease-in-out 0s, color 99999s ease-in-out 0s;
+  box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.01) inset !important;
+}
+
+/* Floating mobile tab bar dark-mode variant. */
+@media (max-width: 768px) {
+  html.theme-dark .mobile-bottom-nav,
+  html.theme-dark .page-shell .mobile-bottom-nav,
+  .page-shell.theme-dark .mobile-bottom-nav {
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    height: 78px;
+    max-width: 620px;
+    margin: 0 auto;
+    overflow: visible;
+    padding: 0 10px;
+    border: 1px solid rgba(109, 240, 155, .16);
+    border-radius: 28px;
+    background: rgba(15, 23, 18, .82);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .34);
+  }
+
+  html.theme-dark .mobile-bottom-nav button,
+  html.theme-dark .page-shell .mobile-bottom-nav button,
+  .page-shell.theme-dark .mobile-bottom-nav button {
+    color: rgba(237, 247, 240, .68);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  html.theme-dark .mobile-bottom-nav button::before,
+  html.theme-dark .page-shell .mobile-bottom-nav button::before,
+  .page-shell.theme-dark .mobile-bottom-nav button::before {
+    background: linear-gradient(135deg, #6df09b 0%, #07963e 100%);
+    box-shadow: 0 14px 28px rgba(7, 150, 62, .38);
+  }
+
+  html.theme-dark .mobile-bottom-nav button:hover,
+  html.theme-dark .page-shell .mobile-bottom-nav button:hover,
+  .page-shell.theme-dark .mobile-bottom-nav button:hover {
+    color: #6df09b;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  html.theme-dark .mobile-bottom-nav .active,
+  html.theme-dark .page-shell .mobile-bottom-nav .active,
+  .page-shell.theme-dark .mobile-bottom-nav .active {
+    color: #6df09b;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  html.theme-dark .mobile-bottom-nav .active::before,
+  html.theme-dark .page-shell .mobile-bottom-nav .active::before,
+  .page-shell.theme-dark .mobile-bottom-nav .active::before {
+    width: 62px;
+    height: 62px;
+    border: 7px solid #090f0c;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  html.theme-dark .mobile-bottom-nav .active svg,
+  html.theme-dark .page-shell .mobile-bottom-nav .active svg,
+  .page-shell.theme-dark .mobile-bottom-nav .active svg {
+    color: #ffffff;
+    transform: translateY(-21px);
+    stroke: currentColor;
+    fill: none;
+  }
+
+  html.theme-dark .mobile-bottom-nav .active span,
+  html.theme-dark .page-shell .mobile-bottom-nav .active span,
+  .page-shell.theme-dark .mobile-bottom-nav .active span {
+    color: #6df09b;
+    transform: translateY(-6px);
+  }
+}
+
+@media (max-width: 420px) {
+  html.theme-dark .mobile-bottom-nav,
+  html.theme-dark .page-shell .mobile-bottom-nav,
+  .page-shell.theme-dark .mobile-bottom-nav {
+    left: max(6px, env(safe-area-inset-left));
+    right: max(6px, env(safe-area-inset-right));
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    height: 74px;
+    padding: 0 7px;
+    border-radius: 24px;
+  }
+
+  html.theme-dark .mobile-bottom-nav .active::before,
+  html.theme-dark .page-shell .mobile-bottom-nav .active::before,
+  .page-shell.theme-dark .mobile-bottom-nav .active::before {
+    width: 58px;
+    height: 58px;
+    border-width: 6px;
+  }
+
+  html.theme-dark .mobile-bottom-nav .active svg,
+  html.theme-dark .page-shell .mobile-bottom-nav .active svg,
+  .page-shell.theme-dark .mobile-bottom-nav .active svg {
+    transform: translateY(-19px);
+  }
+}
+
+.login-modal .input-shell input {
+  color: rgba(255, 255, 255, .78) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, .78) !important;
+}
+
+.login-modal .input-shell input:focus {
+  color: rgba(255, 255, 255, .9) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, .9) !important;
+}
+
+.login-modal .input-shell input:disabled {
+  color: rgba(255, 255, 255, .72) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, .72) !important;
+}
+
+.login-modal .input-shell input:-webkit-autofill,
+.login-modal .input-shell input:-webkit-autofill:hover,
+.login-modal .input-shell input:-webkit-autofill:focus,
+.login-modal .input-shell input:-webkit-autofill:disabled {
+  -webkit-text-fill-color: rgba(255, 255, 255, .78) !important;
+}
+
+.login-modal .input-shell input::placeholder {
+  color: rgba(255, 255, 255, .42) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, .42) !important;
+  opacity: 1;
+}
+
+html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
+.page-shell.theme-dark .login-modal .input-shell input::placeholder {
+  color: rgba(255, 255, 255, .42) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, .42) !important;
+}
+
+/* Keep the floating mobile nav identical on every dark-mode page. */
+@media (max-width: 1100px) {
+  html.theme-dark .mobile-bottom-nav,
+  html.theme-dark .page-shell .mobile-bottom-nav,
+  .page-shell.theme-dark .mobile-bottom-nav,
+  .home-shell.theme-dark .mobile-bottom-nav {
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    height: 78px;
+    max-width: 620px;
+    margin: 0 auto;
+    overflow: visible;
+    padding: 0 10px;
+    border: 1px solid rgba(109, 240, 155, .16);
+    border-radius: 28px;
+    background: rgba(15, 23, 18, .82);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .34);
+  }
+
+  html.theme-dark .mobile-bottom-nav button,
+  html.theme-dark .page-shell .mobile-bottom-nav button,
+  .page-shell.theme-dark .mobile-bottom-nav button,
+  .home-shell.theme-dark .mobile-bottom-nav button {
+    height: 72px;
+    color: rgba(237, 247, 240, .68);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  html.theme-dark .mobile-bottom-nav button:hover,
+  html.theme-dark .page-shell .mobile-bottom-nav button:hover,
+  .page-shell.theme-dark .mobile-bottom-nav button:hover,
+  .home-shell.theme-dark .mobile-bottom-nav button:hover,
+  html.theme-dark .mobile-bottom-nav .active,
+  html.theme-dark .page-shell .mobile-bottom-nav .active,
+  .page-shell.theme-dark .mobile-bottom-nav .active,
+  .home-shell.theme-dark .mobile-bottom-nav .active {
+    color: #6df09b;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  html.theme-dark .mobile-bottom-nav .active::before,
+  html.theme-dark .page-shell .mobile-bottom-nav .active::before,
+  .page-shell.theme-dark .mobile-bottom-nav .active::before,
+  .home-shell.theme-dark .mobile-bottom-nav .active::before {
+    width: 62px;
+    height: 62px;
+    border: 7px solid #090f0c;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  html.theme-dark .mobile-bottom-nav .active svg,
+  html.theme-dark .page-shell .mobile-bottom-nav .active svg,
+  .page-shell.theme-dark .mobile-bottom-nav .active svg,
+  .home-shell.theme-dark .mobile-bottom-nav .active svg {
+    color: #ffffff;
+    transform: translateY(-21px);
+    stroke: currentColor;
+    fill: none;
+  }
+
+  html.theme-dark .mobile-bottom-nav .active span,
+  html.theme-dark .page-shell .mobile-bottom-nav .active span,
+  .page-shell.theme-dark .mobile-bottom-nav .active span,
+  .home-shell.theme-dark .mobile-bottom-nav .active span {
+    color: #6df09b;
+    transform: translateY(-6px);
+  }
+}
+
+/* Home mobile nav visibility guard: keep the bottom bar mounted on tight home layouts. */
+@media (max-width: 1100px) {
+  .home-shell .mobile-bottom-nav,
+  html.theme-dark .home-shell .mobile-bottom-nav,
+  .home-shell.theme-dark .mobile-bottom-nav {
+    display: grid !important;
+    position: fixed;
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 80;
+  }
+}
+
+/* Unified mobile bottom-nav active state across every page and route. */
+@media (max-width: 1100px) {
+  .mobile-bottom-nav,
+  html.theme-dark .mobile-bottom-nav,
+  html.theme-dark .page-shell .mobile-bottom-nav,
+  .page-shell.theme-dark .mobile-bottom-nav,
+  .home-shell.theme-dark .mobile-bottom-nav {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    justify-items: center !important;
+    overflow: visible !important;
+  }
+
+  .mobile-bottom-nav button,
+  html.theme-dark .mobile-bottom-nav button,
+  html.theme-dark .page-shell .mobile-bottom-nav button,
+  .page-shell.theme-dark .mobile-bottom-nav button,
+  .home-shell.theme-dark .mobile-bottom-nav button {
+    position: relative !important;
+    width: 100% !important;
+    height: 72px !important;
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+  }
+
+  .mobile-bottom-nav button:hover,
+  .mobile-bottom-nav button.active,
+  html.theme-dark .mobile-bottom-nav button:hover,
+  html.theme-dark .mobile-bottom-nav button.active,
+  html.theme-dark .page-shell .mobile-bottom-nav button:hover,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active,
+  .page-shell.theme-dark .mobile-bottom-nav button:hover,
+  .page-shell.theme-dark .mobile-bottom-nav button.active,
+  .home-shell.theme-dark .mobile-bottom-nav button:hover,
+  .home-shell.theme-dark .mobile-bottom-nav button.active {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-bottom-nav button::before {
+    content: '';
+    position: absolute;
+    top: -27px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 999px;
+    opacity: 0;
+    transform: translateX(-50%) scale(.72);
+  }
+
+  .mobile-bottom-nav button.active::before,
+  html.theme-dark .mobile-bottom-nav button.active::before,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active::before,
+  .page-shell.theme-dark .mobile-bottom-nav button.active::before,
+  .home-shell.theme-dark .mobile-bottom-nav button.active::before {
+    width: 62px !important;
+    height: 62px !important;
+    opacity: 1 !important;
+    transform: translateX(-50%) scale(1) !important;
+    background: linear-gradient(135deg, #6df09b 0%, #07963e 100%) !important;
+    border: 7px solid #090f0c !important;
+    box-shadow: 0 14px 28px rgba(7, 150, 62, .38) !important;
+  }
+
+  .mobile-bottom-nav button.active svg,
+  html.theme-dark .mobile-bottom-nav button.active svg,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active svg,
+  .page-shell.theme-dark .mobile-bottom-nav button.active svg,
+  .home-shell.theme-dark .mobile-bottom-nav button.active svg {
+    color: #ffffff !important;
+    stroke: currentColor !important;
+    fill: none !important;
+    transform: translateY(-21px) !important;
+  }
+
+  .mobile-bottom-nav button.active span,
+  html.theme-dark .mobile-bottom-nav button.active span,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active span,
+  .page-shell.theme-dark .mobile-bottom-nav button.active span,
+  .home-shell.theme-dark .mobile-bottom-nav button.active span {
+    color: #6df09b !important;
+    transform: translateY(-6px) !important;
+  }
+}

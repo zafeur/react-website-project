@@ -1,13 +1,51 @@
-import { ChevronLeft, Star } from 'lucide-react';
+﻿import { useEffect, useMemo, useState } from 'react';
+import { ChevronLeft, Star, Wallet } from 'lucide-react';
 import restaurantInteriorImage from '../assets/images/restaurant-interior.jpg';
 import userAvatarImage from '../assets/images/user-avatar.jpg';
+import { getBusinessWallet, getMockWallet } from '../api/wallet';
 import { galleryImages, gifts, infoCards, stars, tabs } from '../data/siteData';
 
 const getImageSrc = (image) => image?.src || image;
+const RESTAURANT_BUSINESS_ID = 'melal';
+const restaurantWalletKeys = ['melal', 'restaurant', 'رستوران ملل', 'ملل'];
+
+const findRestaurantWallet = (wallets) => (
+  wallets.find((wallet) => {
+    const haystack = `${wallet.id || ''} ${wallet.title || ''}`.toLowerCase();
+    return restaurantWalletKeys.some((key) => haystack.includes(key.toLowerCase()));
+  }) || wallets[0]
+);
 
 function RestaurantPage({ isVisible }) {
+  const [walletData, setWalletData] = useState(() => getMockWallet(RESTAURANT_BUSINESS_ID));
+  const restaurantWallet = useMemo(() => findRestaurantWallet(walletData.wallets), [walletData.wallets]);
+
+  useEffect(() => {
+    if (!isVisible) {
+      return;
+    }
+
+    let isMounted = true;
+
+    getBusinessWallet(RESTAURANT_BUSINESS_ID)
+      .then((data) => {
+        if (isMounted) {
+          setWalletData(data);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setWalletData(getMockWallet(RESTAURANT_BUSINESS_ID));
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isVisible]);
+
   return (
-    <div className={isVisible ? '' : 'd-none'}>
+    <div className={isVisible ? '' : 'd-none'} id="restaurant-top">
       <section className="hero-grid">
         <div>
           <img
@@ -51,6 +89,15 @@ function RestaurantPage({ isVisible }) {
             <span>غذاهای ایرانی</span>
           </div>
           <button className="follow-btn">دنبال کردن</button>
+
+          <section className="business-wallet-card">
+            <div>
+              <Wallet />
+              <span>کیف پول این مجموعه</span>
+            </div>
+            <strong>{restaurantWallet?.balanceLabel || '۰ تومان'}</strong>
+            <p>{restaurantWallet?.status || 'در خرید بعدی از همین مجموعه قابل استفاده است.'}</p>
+          </section>
         </aside>
       </section>
 
@@ -65,7 +112,7 @@ function RestaurantPage({ isVisible }) {
       </nav>
 
       <section className="content-grid">
-        <aside className="panel gift-panel">
+        <aside className="panel gift-panel" id="restaurant-gifts">
           <h2>هدیه‌های این مجموعه</h2>
           {gifts.map((gift) => (
             <article className="gift-item" key={gift.title}>

@@ -1,4 +1,4 @@
-import {
+﻿import {
   CircleHelp,
   ClipboardList,
   Clock3,
@@ -8,6 +8,7 @@ import {
   Phone,
   Settings,
   Shirt,
+  Store,
   SquareX,
   User,
   Wallet,
@@ -123,8 +124,7 @@ export const mobileProfileLinks = [
 
 export const mobileBottomNav = [
   { id: 'home', title: 'پیشخوان', icon: Home },
-  { id: 'club', title: 'باشگاه مشتریان', icon: Gift },
-  { id: 'shop', title: 'فروشگاهی', icon: MapPin },
+  { id: 'shop', title: 'فروشگاهی', icon: Store },
   { id: 'gifts', title: 'هدایا', icon: Gift },
   { id: 'faq', title: '\u0633\u0648\u0627\u0644\u0627\u062a', icon: CircleHelp },
   { id: 'account', title: 'حساب', icon: User },
@@ -148,4 +148,63 @@ export const stats = [
   { label: 'امتیاز کل', value: '۲۸,۵۰۰' },
   { label: 'هدیه استفاده شده', value: '۱۶' },
 ];
+export const businessWallets = [
+  {
+    id: 'ibamo',
+    title: 'ایبامو',
+    balance: 300000,
+    balanceLabel: '۳۰۰,۰۰۰ تومان',
+    status: 'قابل استفاده در ایبامو',
+    image: '/home/img/logo ibamo.jpg',
+  },
+  {
+    id: 'mojalal',
+    title: 'مجلل',
+    balance: 180000,
+    balanceLabel: '۱۸۰,۰۰۰ تومان',
+    status: 'قابل استفاده در مجلل',
+    image: '/home/img/mojalal.jpg',
+  },
+  {
+    id: 'bastani',
+    title: 'باستانی',
+    balance: 120000,
+    balanceLabel: '۱۲۰,۰۰۰ تومان',
+    status: 'قابل استفاده در باستانی',
+    image: '/home/img/logo bastani.jpg',
+  },
+  {
+    id: 'bakhshi',
+    title: 'بخشی',
+    balance: 90000,
+    balanceLabel: '۹۰,۰۰۰ تومان',
+    status: 'قابل استفاده در بخشی',
+    image: '/home/img/bakhshi.jpg',
+  },
+  {
+    id: 'barial',
+    title: 'باریال',
+    balance: 0,
+    balanceLabel: '۰ تومان',
+    status: 'هنوز شارژ نشده',
+    image: '/home/img/barial.jpg',
+  },
+  {
+    id: 'dorato',
+    title: 'دوراتو',
+    balance: 75000,
+    balanceLabel: '۷۵,۰۰۰ تومان',
+    status: 'قابل استفاده در دوراتو',
+    image: '/home/img/logo dorato.jpg',
+  },
+];
+
+export const walletTransactions = [
+  { business: 'ایبامو', type: 'شارژ کیف پول', amount: '+۳۰۰,۰۰۰ تومان', date: '۱۴۰۳/۰۳/۲۵' },
+  { business: 'مجلل', type: 'استفاده برای خرید', amount: '-۴۵,۰۰۰ تومان', date: '۱۴۰۳/۰۳/۲۱' },
+  { business: 'باستانی', type: 'شارژ کیف پول', amount: '+۱۲۰,۰۰۰ تومان', date: '۱۴۰۳/۰۳/۱۸' },
+  { business: 'دوراتو', type: 'شارژ کیف پول', amount: '+۷۵,۰۰۰ تومان', date: '۱۴۰۳/۰۳/۱۰' },
+];
+
+
 

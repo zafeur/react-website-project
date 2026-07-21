@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import DashboardPage from "./components/DashboardPage";
 import Header from "./components/Header";
 import LoginModal from "./components/LoginModal";
@@ -20,6 +20,7 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(initialPage === "dashboard" ? "restaurant" : initialPage);
+  const [dashboardSectionRequest, setDashboardSectionRequest] = useState(null);
 
   const [loginError, setLoginError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,15 +31,18 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
     setHasCheckedAuth(true);
 
     if (loggedIn && initialPage === "dashboard") {
+      setDashboardSectionRequest(null);
       setCurrentPage("dashboard");
       return;
     }
 
-    if (loggedIn && canUseStorage()) {
-      setCurrentPage(localStorage.getItem(PAGE_STORAGE_KEY) || initialPage);
+    if (loggedIn) {
+      setDashboardSectionRequest(null);
+      setCurrentPage(initialPage);
       return;
     }
 
+    setDashboardSectionRequest(null);
     setCurrentPage(initialPage === "dashboard" ? "restaurant" : initialPage);
 
     if (initialPage === "dashboard") {
@@ -123,6 +127,7 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
       setIsLoggedIn(true);
       setIsLoginOpen(false);
       setIsUserMenuOpen(false);
+      setDashboardSectionRequest(null);
       setCurrentPage("dashboard");
     } catch (error) {
       console.log(error);
@@ -142,6 +147,7 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
 
     setIsLoggedIn(false);
     setIsUserMenuOpen(false);
+    setDashboardSectionRequest(null);
     setCurrentPage("restaurant");
     setLoginError("");
   };
@@ -152,8 +158,15 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
   };
 
   const goHome = () => {
+    setDashboardSectionRequest(null);
     setCurrentPage("restaurant");
     setIsUserMenuOpen(false);
+  };
+
+  const scrollToSection = (sectionId) => {
+    window.setTimeout(() => {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
   };
 
   const handleMobileNav = (id) => {
@@ -165,7 +178,21 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
     }
 
     if (id === "shop") {
+      setDashboardSectionRequest(null);
       setCurrentPage("restaurant");
+      scrollToSection("restaurant-top");
+      return;
+    }
+
+    if (id === "gifts") {
+      if (currentPage === "dashboard") {
+        setDashboardSectionRequest({ section: "gifts", createdAt: Date.now() });
+        return;
+      }
+
+      setDashboardSectionRequest(null);
+      setCurrentPage("restaurant");
+      scrollToSection("restaurant-gifts");
       return;
     }
 
@@ -174,15 +201,18 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
       return;
     }
 
-    if (!isLoggedIn && ["account", "gifts", "club"].includes(id)) {
+    if (!isLoggedIn && id === "account") {
       openLogin();
       return;
     }
 
     if (id === "account") {
+      setDashboardSectionRequest(null);
       setCurrentPage("dashboard");
     }
   };
+
+  const mobileBottomCurrentPage = currentPage === "dashboard" && dashboardSectionRequest?.section === "gifts" ? "gifts" : currentPage;
 
   return (
     <main className={`page-shell ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen ? "is-login-open" : ""}`} dir="rtl">
@@ -209,12 +239,13 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
 
         <DashboardPage
           isVisible={currentPage === "dashboard"}
+          sectionRequest={dashboardSectionRequest}
           onLogout={handleLogout}
         />
       </section>
 
       <MobileBottomNav
-        currentPage={currentPage}
+        currentPage={mobileBottomCurrentPage}
         isLoggedIn={isLoggedIn}
         onNavigate={handleMobileNav}
       />
@@ -233,4 +264,13 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
 

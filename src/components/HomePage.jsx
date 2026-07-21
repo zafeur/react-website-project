@@ -37,6 +37,7 @@ const t = {
   free: "\u0631\u0627\u06cc\u06af\u0627\u0646",
   discount: "\u062a\u062e\u0641\u06cc\u0641",
   special: "\u0648\u06cc\u0698\u0647",
+  pet: "\u062d\u06cc\u0648\u0627\u0646\u0627\u062a \u062e\u0627\u0646\u06af\u06cc",
   bastani: "\u0628\u0627\u0633\u062a\u0627\u0646\u06cc",
   barial: "\u0628\u0631\u06cc\u0627\u0644",
   dorato: "\u062f\u0648\u0631\u0627\u062a\u0648",
@@ -853,4 +854,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 }
 
 export default HomePage;
+
+
 
