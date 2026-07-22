@@ -1,4 +1,4 @@
-.page-shell.home-shell {
+﻿.page-shell.home-shell {
   width: 100%;
   max-width: 1256px;
   min-height: 100vh;
@@ -322,11 +322,12 @@
 }
 
 .home-category-grid {
-  grid-template-columns: repeat(auto-fit, minmax(180px, 220px));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   justify-content: center;
 }
 
 .home-category-card {
+  min-width: 0;
   min-height: 96px;
   display: flex;
   align-items: center;
@@ -2487,4 +2488,5 @@ html.theme-dark .home-shell .home-hero-actions a:not(.home-primary-action):hover
   background: rgba(7, 150, 62, .16);
   color: #ffffff;
 }
+
 

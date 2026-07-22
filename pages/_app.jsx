@@ -23,12 +23,22 @@ const getSavedDarkMode = () => {
 };
 
 export default function MyApp({ Component, pageProps }) {
-  const [isDarkMode, setIsDarkMode] = useState(getSavedDarkMode);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [hasHydratedTheme, setHasHydratedTheme] = useState(false);
 
   useEffect(() => {
+    setIsDarkMode(getSavedDarkMode());
+    setHasHydratedTheme(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydratedTheme) {
+      return;
+    }
+
     window.localStorage.setItem('keymiyay-theme', isDarkMode ? 'dark' : 'light');
     document.documentElement.classList.toggle('theme-dark', isDarkMode);
-  }, [isDarkMode]);
+  }, [hasHydratedTheme, isDarkMode]);
 
   return (
     <Component
@@ -38,4 +48,3 @@ export default function MyApp({ Component, pageProps }) {
     />
   );
 }
-

@@ -144,16 +144,19 @@ const defaultHomeData = {
   categories: [
   { title: t.gifts, icon: 'Gift' },
   { title: t.restaurant, icon: 'Store' },
-  { title: t.pet, icon: 'PawPrint', href: '/pet' },
   { title: t.shop, icon: 'ShoppingBag' },
   { title: t.club, icon: 'Star' },
   { title: t.special, icon: 'Sparkles' },
 ],
 
   offers: [
-  { title: t.gift1, brand: t.restaurant, tag: t.free, image: asset('img/restaurant-melal.png') },
-  { title: t.gift2, brand: t.barial, tag: t.discount, image: asset('img/barial.jpg') },
-  { title: t.gift3, brand: t.dorato, tag: t.special, image: asset('img/logo dorato.jpg') },
+  { id: 'melal-discount', businessId: 'melal', title: t.gift1, brand: t.restaurant, tag: t.free, image: asset('img/restaurant-melal.png') },
+  { id: 'barial-discount', businessId: 'barial', title: t.gift2, brand: t.barial, tag: t.discount, image: asset('img/barial.jpg') },
+  { id: 'dorato-discount', businessId: 'dorato', title: t.gift3, brand: t.dorato, tag: t.special, image: asset('img/logo dorato.jpg') },
+  { id: 'ibamo-discount', businessId: 'ibamo', title: 'کد تخفیف خرید از ایبامو', brand: t.ibamo, tag: t.discount, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
+  { id: 'bakhshi-discount', businessId: 'bakhshi', title: 'کد تخفیف خرید از بخشی', brand: t.bakhshi, tag: t.discount, image: asset('img/bakhshi.jpg') },
+  { id: 'bastani-discount', businessId: 'bastani', title: 'کد تخفیف خرید از باستانی', brand: t.bastani, tag: t.discount, image: asset('img/logo bastani.jpg') },
+  { id: 'mojalal-discount', businessId: 'mojalal', title: 'کد تخفیف خرید از مجلل', brand: t.mojalal, tag: t.discount, image: asset('img/mojalal.jpg') },
 ],
 };
 
@@ -206,14 +209,19 @@ const normalizeCards = (items, fallback) =>
   }));
 
 const normalizeOffers = (items) =>
-  items.map((offer, index) => ({
-    ...offer,
-    id: firstValue(offer, ['id', 'discount_id', 'discountId', 'offer_id', 'offerId']),
-    title: firstValue(offer, ['title', 'name', 'gift_title', 'giftTitle']) || defaultHomeData.offers[index % defaultHomeData.offers.length].title,
-    brand: firstValue(offer, ['brand', 'business', 'business_name', 'place']) || defaultHomeData.offers[index % defaultHomeData.offers.length].brand,
-    tag: firstValue(offer, ['tag', 'badge', 'type', 'discount_type']) || defaultHomeData.offers[index % defaultHomeData.offers.length].tag,
-    image: normalizeImage(offer, defaultHomeData.offers[index % defaultHomeData.offers.length].image),
-  }));
+  items.map((offer, index) => {
+    const fallback = defaultHomeData.offers[index % defaultHomeData.offers.length];
+
+    return {
+      ...offer,
+      id: firstValue(offer, ['id', 'discount_id', 'discountId', 'offer_id', 'offerId']) || fallback.id,
+      businessId: firstValue(offer, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug']) || fallback.businessId,
+      title: firstValue(offer, ['title', 'name', 'gift_title', 'giftTitle']) || fallback.title,
+      brand: firstValue(offer, ['brand', 'business', 'business_name', 'place']) || fallback.brand,
+      tag: firstValue(offer, ['tag', 'badge', 'type', 'discount_type']) || fallback.tag,
+      image: normalizeImage(offer, fallback.image),
+    };
+  });
 
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
@@ -235,12 +243,104 @@ const normalizeHomeData = (payload) => {
   };
 };
 
-const getDiscountCode = (data) =>
-  firstValue(data, ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']) ||
-  firstValue(data?.data, ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']);
+const findNestedValue = (source, keys) => {
+  if (!source) {
+    return undefined;
+  }
+
+  if (Array.isArray(source)) {
+    for (const item of source) {
+      const value = findNestedValue(item, keys);
+      if (value) {
+        return value;
+      }
+    }
+
+    return undefined;
+  }
+
+  if (typeof source !== 'object') {
+    return undefined;
+  }
+
+  const directValue = firstValue(source, keys);
+  if (directValue) {
+    return directValue;
+  }
+
+  for (const value of Object.values(source)) {
+    const nestedValue = findNestedValue(value, keys);
+    if (nestedValue) {
+      return nestedValue;
+    }
+  }
+
+  return undefined;
+};
+
+const discountCodeKeys = ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode'];
+
+const isOfferMatch = (item, offer) => {
+  if (!item || typeof item !== 'object' || !offer) {
+    return false;
+  }
+
+  const itemBusiness = String(firstValue(item, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug', 'business', 'business_name', 'brand']) || '').toLowerCase();
+  const offerBusinessCandidates = [offer.businessId, offer.business_id, offer.businessSlug, offer.business_slug, offer.brand]
+    .filter(Boolean)
+    .map((value) => String(value).toLowerCase());
+  const itemTitle = String(firstValue(item, ['title', 'name', 'gift_title', 'giftTitle']) || '').toLowerCase();
+  const offerTitle = String(offer.title || '').toLowerCase();
+  const businessMatches = offerBusinessCandidates.some((offerBusiness) =>
+    itemBusiness && (itemBusiness.includes(offerBusiness) || offerBusiness.includes(itemBusiness))
+  );
+
+  return Boolean(
+    businessMatches ||
+    (itemTitle && offerTitle && (itemTitle.includes(offerTitle) || offerTitle.includes(itemTitle)))
+  );
+};
+
+const findOfferDiscountCode = (source, offer) => {
+  if (!source) {
+    return undefined;
+  }
+
+  if (Array.isArray(source)) {
+    for (const item of source) {
+      const value = findOfferDiscountCode(item, offer);
+      if (value) {
+        return value;
+      }
+    }
+
+    return undefined;
+  }
+
+  if (typeof source !== 'object') {
+    return undefined;
+  }
+
+  const directCode = firstValue(source, discountCodeKeys);
+  if (directCode && isOfferMatch(source, offer)) {
+    return directCode;
+  }
+
+  for (const value of Object.values(source)) {
+    const nestedValue = findOfferDiscountCode(value, offer);
+    if (nestedValue) {
+      return nestedValue;
+    }
+  }
+
+  return undefined;
+};
+
+const getDiscountCode = (data, offer) =>
+  findOfferDiscountCode(data, offer) || findNestedValue(data, discountCodeKeys);
 
 const getDiscountMessage = (data) =>
-  firstValue(data, ['message', 'text']) || firstValue(data?.data, ['message', 'text']);
+  findNestedValue(data, ['message', 'text', 'description']);
 
 function HomePage({ isDarkMode = false, onToggleTheme }) {
   const router = useRouter();
@@ -520,7 +620,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const data = await requestDiscountCode(offer);
       setDiscountPopup({
         offer,
-        code: getDiscountCode(data),
+        code: getDiscountCode(data, offer) || offer.code || '',
         message: getDiscountMessage(data) || t.discountRequested,
       });
     } catch (error) {
