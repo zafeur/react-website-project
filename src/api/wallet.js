@@ -1,5 +1,5 @@
 ﻿import httpClient from "../helper/httpClient";
-import { businessWallets, walletTransactions } from "../data/siteData";
+import { businessProfiles, businessWallets, walletTransactions } from "../data/siteData";
 
 const WALLET_ENDPOINT = process.env.NEXT_PUBLIC_WALLET_API_URL || "/wallet";
 
@@ -22,16 +22,19 @@ const firstValue = (source, keys) => {
 const formatToman = (amount) => `${new Intl.NumberFormat("fa-IR").format(Number(amount) || 0)} تومان`;
 
 const normalizeWallet = (wallet) => {
-  const balance = Number(firstValue(wallet, ["balance", "amount", "credit", "wallet_balance", "walletBalance"])) || 0;
+  const balance = Number(firstValue(wallet, ["balance", "amount", "credit", "wallet_balance", "walletBalance", "walletBalanceAmount"])) || 0;
   const title = firstValue(wallet, ["title", "name", "business", "business_name", "businessName"]) || "کسب‌وکار";
 
   return {
     id: firstValue(wallet, ["id", "business_id", "businessId", "business_slug", "businessSlug", "slug"]) || title,
     title,
     balance,
-    balanceLabel: firstValue(wallet, ["balanceLabel", "balance_label", "formatted_balance", "formattedBalance"]) || formatToman(balance),
-    status: firstValue(wallet, ["status", "description"]) || (balance > 0 ? `قابل استفاده در ${title}` : "هنوز شارژ نشده"),
+    balanceLabel: firstValue(wallet, ["balanceLabel", "balance_label", "formatted_balance", "formattedBalance", "walletBalanceLabel"]) || formatToman(balance),
+    status: firstValue(wallet, ["status", "description", "walletStatus"]) || (balance > 0 ? `قابل استفاده در ${title}` : "هنوز شارژ نشده"),
     image: firstValue(wallet, ["image", "logo", "logo_url", "logoUrl", "avatar"]) || "/home/img/restaurant-melal.png",
+    points: firstValue(wallet, ["points", "score", "point", "user_points", "userPoints"]) || "۰ امتیاز",
+    discountCode: firstValue(wallet, ["discountCode", "discount_code", "code", "used_discount_code", "usedDiscountCode"]) || "",
+    cashbackLabel: firstValue(wallet, ["cashbackLabel", "cashback_label", "cashback", "cashback_amount", "cashbackAmount"]) || "",
   };
 };
 
@@ -51,16 +54,45 @@ const normalizeTransaction = (transaction) => {
   };
 };
 
+const findBusinessProfile = (businessId) => {
+  if (!businessId) {
+    return null;
+  }
+
+  const normalizedBusinessId = String(businessId).toLowerCase();
+
+  return businessProfiles.find((profile) => {
+    const aliases = Array.isArray(profile.aliases) ? profile.aliases : [];
+    const haystack = `${profile.id || ""} ${profile.slug || ""} ${profile.title || ""} ${profile.shortTitle || ""} ${aliases.join(" ")}`.toLowerCase();
+    return haystack.includes(normalizedBusinessId) || normalizedBusinessId.includes(String(profile.id || "").toLowerCase());
+  }) || null;
+};
+
+const walletFromProfile = (profile) => profile ? normalizeWallet({
+  id: profile.id,
+  businessId: profile.id,
+  title: profile.title,
+  balance: profile.walletBalance,
+  balanceLabel: profile.walletBalanceLabel,
+  status: profile.walletStatus,
+  image: profile.image,
+  points: profile.points,
+  discountCode: profile.discountCode,
+  cashbackLabel: profile.cashbackLabel,
+}) : null;
+
 const findMockWallet = (businessId) => {
   if (!businessId) {
     return null;
   }
 
   const normalizedBusinessId = String(businessId).toLowerCase();
-  return businessWallets.find((wallet) => {
-    const haystack = `${wallet.id || ""} ${wallet.title || ""}`.toLowerCase();
-    return haystack.includes(normalizedBusinessId);
-  }) || null;
+  const wallet = businessWallets.find((item) => {
+    const haystack = `${item.id || ""} ${item.title || ""}`.toLowerCase();
+    return haystack.includes(normalizedBusinessId) || normalizedBusinessId.includes(String(item.id || "").toLowerCase());
+  });
+
+  return wallet || walletFromProfile(findBusinessProfile(businessId));
 };
 
 const normalizeWalletResponse = (data, options = {}) => {
@@ -92,10 +124,11 @@ const normalizeWalletResponse = (data, options = {}) => {
 };
 
 export const getUserWallet = async (options = {}) => {
-  const { businessId } = options;
+  const { businessId, businessSlug } = options;
+  const businessIdentifier = businessId || businessSlug;
   const response = await httpClient.get(WALLET_ENDPOINT, {
     requiresAuth: true,
-    params: businessId ? { business_id: businessId } : undefined,
+    params: businessIdentifier ? { business_id: businessIdentifier, business_slug: businessIdentifier } : undefined,
   });
 
   return normalizeWalletResponse(response.data, options);
@@ -114,3 +147,4 @@ export const getMockWallet = (businessId) => {
     source: "mock",
   };
 };
+

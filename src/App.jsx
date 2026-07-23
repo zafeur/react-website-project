@@ -215,10 +215,10 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
   const mobileBottomCurrentPage = currentPage === "dashboard" && dashboardSectionRequest?.section === "gifts" ? "gifts" : currentPage;
 
   return (
-    <main className={`page-shell ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen ? "is-login-open" : ""}`} dir="rtl">
+    <main className={`page-shell ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen ? "is-login-open" : ""}`} dir="rtl">
       <section
-        className={`frame ${
-          currentPage === "dashboard" ? "dashboard-frame" : ""
+        className={`frame ${currentPage === "dashboard" ? "dashboard-frame" : ""} ${
+          currentPage === "restaurant" ? "restaurant-frame" : ""
         }`}
       >
         <Header
@@ -235,6 +235,7 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
 
         <RestaurantPage
           isVisible={currentPage === "restaurant"}
+          isLoggedIn={isLoggedIn}
         />
 
         <DashboardPage
@@ -264,6 +265,9 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
 }
 
 export default App;
+
+
+
 
 
 

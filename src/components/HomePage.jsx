@@ -133,12 +133,12 @@ const defaultHomeData = {
 ],
 
   brands: [
-  { title: t.restaurant, image: asset('img/restaurant-melal.png'), href: '/restaurant' },
-  { title: t.barial, image: asset('img/barial.jpg'), href: '/restaurant' },
-  { title: t.dorato, image: asset('img/logo dorato.jpg'), href: '/restaurant' },
-  { title: t.bastani, image: asset('img/logo bastani.jpg'), href: '/restaurant' },
-  { title: t.ibamo, image: asset('img/logo ibamo.jpg'), href: '/restaurant' },
-  { title: t.mojalal, image: asset('img/mojalal.jpg'), href: '/restaurant' },
+  { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/business/melal' },
+  { title: t.barial, businessId: 'barial', image: asset('img/barial.jpg'), href: '/business/barial' },
+  { title: t.dorato, businessId: 'dorato', image: asset('img/logo dorato.jpg'), href: '/business/dorato' },
+  { title: t.bastani, businessId: 'bastani', image: asset('img/logo bastani.jpg'), href: '/business/bastani' },
+  { title: t.ibamo, businessId: 'ibamo', image: asset('img/logo ibamo.jpg'), href: '/business/ibamo' },
+  { title: t.mojalal, businessId: 'mojalal', image: asset('img/mojalal.jpg'), href: '/business/mojalal' },
 ],
 
   categories: [
@@ -206,6 +206,7 @@ const normalizeCards = (items, fallback) =>
     title: firstValue(item, ['title', 'name', 'brand', 'business_name']) || fallback[index % fallback.length].title,
     image: normalizeImage(item, fallback[index % fallback.length].image),
     href: firstValue(item, ['href', 'url', 'link']) || fallback[index % fallback.length].href,
+    businessId: firstValue(item, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug']) || fallback[index % fallback.length].businessId,
   }));
 
 const normalizeOffers = (items) =>
@@ -230,7 +231,7 @@ const normalizeHomeData = (payload) => {
     defaultHomeData.brands
   ).map((brand) =>
     isRestaurantBrand(brand.title)
-      ? { ...brand, image: defaultHomeData.brands[0].image, href: brand.href || '/restaurant' }
+      ? { ...brand, image: defaultHomeData.brands[0].image, businessId: brand.businessId || 'melal', href: brand.href || '/business/melal' }
       : brand
   );
 
@@ -341,6 +342,17 @@ const getDiscountCode = (data, offer) =>
 
 const getDiscountMessage = (data) =>
   findNestedValue(data, ['message', 'text', 'description']);
+const getOfferPercent = (offer) =>
+  firstValue(offer, ['percent', 'discountPercent', 'discount_percent', 'percentage', 'badge']) ||
+  (String(offer.tag || '').includes('رایگان') ? 'رایگان' : String(offer.title || '').match(/[۰-۹0-9]+\s*٪|٪\s*[۰-۹0-9]+|[۰-۹0-9]+\s*%|%\s*[۰-۹0-9]+/)?.[0] || '۱۰٪');
+
+const getOfferStatus = (offer, index) =>
+  firstValue(offer, ['status', 'time', 'expires', 'expiresIn', 'expires_in', 'timer']) ||
+  (index % 3 === 0 ? 'منقضی' : index % 3 === 1 ? '۳۳۳:۰۱:۱۰:۱۹' : 'فعال');
+
+const getOfferDescription = (offer) =>
+  firstValue(offer, ['description', 'subtitle', 'text', 'body']) ||
+  `با خرید از مجموعه‌های همکار کی میای، هدیه یا تخفیف ویژه ${offer.brand || 'این مجموعه'} را دریافت کنید.`;
 
 function HomePage({ isDarkMode = false, onToggleTheme }) {
   const router = useRouter();
@@ -791,7 +803,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           </div>
           <div className="home-brand-grid">
             {homeData.brands.map((brand) => (
-              <article className="home-brand-card" key={brand.title}>
+              <Link className="home-brand-card" href={brand.href || `/business/${brand.businessId || 'melal'}`} key={brand.title}>
                 {isRestaurantBrand(brand.title) ? (
                   <span className="home-brand-melal-logo" aria-label={brand.title}>
                     <span>{'\u0645\u0644\u0644'}</span>
@@ -801,7 +813,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
                   <img src={brand.image} alt={brand.title} />
                 )}
                 <strong>{brand.title}</strong>
-              </article>
+              </Link>
             ))}
           </div>
         </section>
@@ -840,21 +852,30 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
           <div className="home-offer-grid">
-            {homeData.offers.map((offer) => (
-              <article className="home-offer-card" key={offer.title}>
-                <img src={offer.image} alt={offer.brand} />
-                <div className="home-offer-copy">
-                  <span>{offer.brand}</span>
-                  <h3>{offer.title}</h3>
-                </div>
-                <div className="home-offer-footer">
-                  <span><TicketPercent /> {offer.tag}</span>
-                  <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount}>
-                    {isRequestingDiscount ? t.wait : t.receive}
-                  </button>
-                </div>
-              </article>
-            ))}
+            {homeData.offers.map((offer, index) => {
+              const offerStatus = getOfferStatus(offer, index);
+              const isExpired = String(offerStatus).includes('منقضی');
+
+              return (
+                <article className={`home-offer-card ${isExpired ? 'is-expired' : ''}`} key={offer.title}>
+                  <div className="home-offer-media">
+                    <img src={offer.image} alt={offer.brand} />
+                    <span className="home-offer-percent">{getOfferPercent(offer)}</span>
+                    <span className={`home-offer-status ${isExpired ? 'is-expired' : ''}`}>{offerStatus}</span>
+                  </div>
+                  <div className="home-offer-copy">
+                    <span>{offer.brand}</span>
+                    <h3>{offer.title}</h3>
+                    <p>{getOfferDescription(offer)}</p>
+                  </div>
+                  <div className="home-offer-footer">
+                    <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount}>
+                      {isRequestingDiscount ? t.wait : 'کد خرید'}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
         <footer className="home-footer" id="footer">
@@ -954,6 +975,12 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 }
 
 export default HomePage;
+
+
+
+
+
+
 
 
 
