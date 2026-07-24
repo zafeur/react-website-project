@@ -82,27 +82,64 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
   const walletPoints = isLoggedIn ? businessWallet?.points || businessProfile.points : '';
   const walletDiscountCode = isLoggedIn ? businessWallet?.discountCode || businessProfile.discountCode : '';
   const walletCashback = isLoggedIn ? businessWallet?.cashbackLabel || businessProfile.cashbackLabel : '';
+  const displayedInfoCards = useMemo(() => (
+    infoCards.map((card, index) => {
+      if (index === 0) {
+        return { ...card, text: businessProfile.address || card.text, href: businessProfile.mapUrl };
+      }
+
+      if (index === 1) {
+        return { ...card, text: businessProfile.hours || card.text };
+      }
+
+      if (index === 2) {
+        return { ...card, text: businessProfile.phone || card.text };
+      }
+
+      return card;
+    })
+  ), [businessProfile.address, businessProfile.hours, businessProfile.mapUrl, businessProfile.phone]);
+  const bannerImage = businessProfile.bannerImage || getImageSrc(restaurantInteriorImage);
+  const bannerMode = businessProfile.bannerMode || 'photo';
 
   return (
     <div className={isVisible ? 'business-profile-page' : 'business-profile-page d-none'} id="restaurant-top">
       <section className="hero-grid">
         <div>
-          <img
-            className="hero-photo"
-            src={getImageSrc(restaurantInteriorImage)}
-            alt={`پروفایل ${businessProfile.title}`}
-          />
+          <div className={`business-hero-banner business-hero-banner-${bannerMode}`}>
+            <img
+              className="hero-photo"
+              src={bannerImage}
+              alt={`بنر ${businessProfile.title}`}
+            />
+            {bannerMode === 'logo' && (
+              <div className="business-hero-banner-caption">
+                <span>{businessProfile.category}</span>
+                <strong>{businessProfile.title}</strong>
+              </div>
+            )}
+          </div>
 
           <div className="info-row">
-            {infoCards.map(({ icon: Icon, title, text }) => (
-              <div className="info-card d-flex align-items-center justify-content-between" key={text}>
-                <Icon />
-                <div className="text-end">
-                  {title && <span className="info-title">{title}</span>}
-                  <span className="info-text">{text}</span>
-                </div>
-              </div>
-            ))}
+            {displayedInfoCards.map(({ icon: Icon, title, text, href }) => {
+              const InfoTag = href ? 'a' : 'div';
+
+              return (
+                <InfoTag
+                  className="info-card d-flex align-items-center justify-content-between"
+                  href={href}
+                  key={text}
+                  rel={href ? 'noreferrer' : undefined}
+                  target={href ? '_blank' : undefined}
+                >
+                  <Icon />
+                  <div className="text-end">
+                    {title && <span className="info-title">{title}</span>}
+                    <span className="info-text">{text}</span>
+                  </div>
+                </InfoTag>
+              );
+            })}
           </div>
         </div>
 
@@ -184,6 +221,9 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
 }
 
 export default RestaurantPage;
+
+
+
 
 
 

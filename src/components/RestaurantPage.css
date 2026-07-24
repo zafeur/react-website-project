@@ -996,3 +996,178 @@
     min-height: 100vh;
   }
 }
+
+.business-hero-banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  min-height: 250px;
+  max-height: 390px;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(7, 150, 62, .12);
+  background: linear-gradient(135deg, #f7fff9 0%, #eef8f1 48%, #ffffff 100%);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .055);
+}
+
+.business-hero-banner .hero-photo {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  border-radius: inherit;
+  object-fit: cover;
+  display: block;
+}
+
+.business-hero-banner-logo {
+  display: grid;
+  place-items: center;
+  padding: clamp(22px, 3.2vw, 42px);
+  isolation: isolate;
+}
+
+.business-hero-banner-logo::before,
+.business-hero-banner-logo::after {
+  content: '';
+  position: absolute;
+  inset: auto;
+  z-index: -1;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.business-hero-banner-logo::before {
+  width: 52%;
+  aspect-ratio: 1;
+  right: -12%;
+  top: -34%;
+  background: rgba(7, 150, 62, .14);
+  filter: blur(4px);
+}
+
+.business-hero-banner-logo::after {
+  width: 38%;
+  aspect-ratio: 1;
+  left: -8%;
+  bottom: -28%;
+  background: rgba(7, 150, 62, .09);
+}
+
+.business-hero-banner-logo .hero-photo {
+  width: min(42%, 230px);
+  height: min(78%, 230px);
+  object-fit: contain;
+  padding: clamp(12px, 1.7vw, 20px);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 22px 48px rgba(7, 150, 62, .17);
+}
+
+.business-hero-banner-caption {
+  position: absolute;
+  right: clamp(18px, 3vw, 34px);
+  bottom: clamp(18px, 3vw, 30px);
+  display: grid;
+  gap: 5px;
+  text-align: right;
+  color: #063f1d;
+}
+
+.business-hero-banner-caption span {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.business-hero-banner-caption strong {
+  font-size: clamp(24px, 3.2vw, 42px);
+  line-height: 1.15;
+  color: #0b2415;
+}
+
+.page-shell.theme-dark .business-hero-banner {
+  border-color: rgba(255, 255, 255, .1);
+  background: linear-gradient(135deg, #0b2115 0%, #10291a 48%, #07100b 100%);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, .28);
+}
+
+.page-shell.theme-dark .business-hero-banner-logo .hero-photo {
+  background: rgba(255, 255, 255, .93);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, .24), 0 0 0 1px rgba(255, 255, 255, .12);
+}
+
+.page-shell.theme-dark .business-hero-banner-caption {
+  color: #f0fff4;
+}
+
+.page-shell.theme-dark .business-hero-banner-caption strong {
+  color: #f2fff7;
+}
+
+@media (max-width: 768px) {
+  .business-hero-banner {
+    min-height: 180px;
+    aspect-ratio: 16 / 9;
+  }
+
+  .business-hero-banner-logo .hero-photo {
+    width: min(54%, 190px);
+    height: min(74%, 190px);
+    border-radius: 22px;
+  }
+
+  .business-hero-banner-caption {
+    right: 16px;
+    bottom: 14px;
+  }
+}
+
+.info-card[href] {
+  color: inherit;
+  text-decoration: none;
+}
+
+.info-card[href]:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Keep business banners fully visible instead of cropping them on narrow screens. */
+.business-hero-banner.business-hero-banner-photo {
+  aspect-ratio: 2.4 / 1;
+  min-height: 0;
+  max-height: none;
+  display: grid;
+  place-items: center;
+  background: #f5f7f3;
+}
+
+.business-hero-banner.business-hero-banner-photo .hero-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  background: inherit;
+}
+
+.page-shell.theme-dark .business-hero-banner.business-hero-banner-photo {
+  background: #07100b;
+}
+
+@media (max-width: 900px) {
+  .business-hero-banner.business-hero-banner-photo {
+    aspect-ratio: 2.35 / 1;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .business-hero-banner.business-hero-banner-photo {
+    aspect-ratio: 2.25 / 1;
+    width: 100%;
+  }
+
+  .business-hero-banner.business-hero-banner-photo .hero-photo {
+    object-position: center center;
+  }
+}

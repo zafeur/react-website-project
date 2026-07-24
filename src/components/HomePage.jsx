@@ -118,7 +118,7 @@ const normalizeMediaUrl = (value, fallback) => {
 
 const defaultHomeData = {
   stories: [
-  { title: getStoryDisplayTitle(t.bastani), image: asset('img/logo bastani.jpg'), video: storyVideoByTitle[t.bastani] },
+  { title: getStoryDisplayTitle(t.bastani), image: asset('img/business-banners/bastani-logo-enhanced.png'), video: storyVideoByTitle[t.bastani] },
   { title: t.barial, image: asset('img/barial.jpg'), video: storyVideoByTitle[t.barial] },
   { title: t.dorato, image: asset('img/logo dorato.jpg'), video: storyVideoByTitle[t.dorato] },
   { title: t.ibamo, image: asset('img/logo ibamo.jpg'), video: storyVideoByTitle[t.ibamo] },
@@ -136,7 +136,7 @@ const defaultHomeData = {
   { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/business/melal' },
   { title: t.barial, businessId: 'barial', image: asset('img/barial.jpg'), href: '/business/barial' },
   { title: t.dorato, businessId: 'dorato', image: asset('img/logo dorato.jpg'), href: '/business/dorato' },
-  { title: t.bastani, businessId: 'bastani', image: asset('img/logo bastani.jpg'), href: '/business/bastani' },
+  { title: t.bastani, businessId: 'bastani', image: asset('img/business-banners/bastani-logo-enhanced.png'), href: '/business/bastani' },
   { title: t.ibamo, businessId: 'ibamo', image: asset('img/logo ibamo.jpg'), href: '/business/ibamo' },
   { title: t.mojalal, businessId: 'mojalal', image: asset('img/mojalal.jpg'), href: '/business/mojalal' },
 ],
@@ -155,7 +155,7 @@ const defaultHomeData = {
   { id: 'dorato-discount', businessId: 'dorato', title: t.gift3, brand: t.dorato, tag: t.special, image: asset('img/logo dorato.jpg') },
   { id: 'ibamo-discount', businessId: 'ibamo', title: 'کد تخفیف خرید از ایبامو', brand: t.ibamo, tag: t.discount, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
   { id: 'bakhshi-discount', businessId: 'bakhshi', title: 'کد تخفیف خرید از بخشی', brand: t.bakhshi, tag: t.discount, image: asset('img/bakhshi.jpg') },
-  { id: 'bastani-discount', businessId: 'bastani', title: 'کد تخفیف خرید از باستانی', brand: t.bastani, tag: t.discount, image: asset('img/logo bastani.jpg') },
+  { id: 'bastani-discount', businessId: 'bastani', title: 'کد تخفیف خرید از باستانی', brand: t.bastani, tag: t.discount, image: asset('img/business-banners/bastani-logo-enhanced.png') },
   { id: 'mojalal-discount', businessId: 'mojalal', title: 'کد تخفیف خرید از مجلل', brand: t.mojalal, tag: t.discount, image: asset('img/mojalal.jpg') },
 ],
 };
@@ -975,6 +975,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 }
 
 export default HomePage;
+
 
 
 
