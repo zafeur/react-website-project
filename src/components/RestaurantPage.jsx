@@ -1,15 +1,31 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { ChevronLeft, Star, Wallet } from 'lucide-react';
+import {
+  Award,
+  ChevronLeft,
+  Gamepad2,
+  Heart,
+  Navigation,
+  Star,
+  Users,
+  Wallet,
+} from 'lucide-react';
 import restaurantInteriorImage from '../assets/images/restaurant-interior.jpg';
 import userAvatarImage from '../assets/images/user-avatar.jpg';
 import { getBusinessWallet, getMockWallet } from '../api/wallet';
-import { businessProfiles, galleryImages, gifts, infoCards, stars, tabs } from '../data/siteData';
+import { businessProfiles, infoCards, stars, tabs } from '../data/siteData';
 
 const getImageSrc = (image) => image?.src || image;
 const DEFAULT_BUSINESS_ID = 'melal';
 
 const normalizeKey = (value = '') => String(value).trim().toLowerCase();
+
+const normalizePhoneHref = (phone = '') => String(phone)
+  .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 1776))
+  .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 1632))
+  .replace(/[^0-9+]/g, '');
+
+const getMapHref = (profile) => profile.mapUrl || undefined;
 
 const getBusinessFromQuery = (queryValue) => {
   if (Array.isArray(queryValue)) {
@@ -85,15 +101,32 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
   const displayedInfoCards = useMemo(() => (
     infoCards.map((card, index) => {
       if (index === 0) {
-        return { ...card, text: businessProfile.address || card.text, href: businessProfile.mapUrl };
+        return {
+          ...card,
+          title: 'موقعیت مکانی',
+          text: businessProfile.address || card.text,
+          href: getMapHref(businessProfile),
+          actionLabel: 'مسیر یابی',
+        };
       }
 
       if (index === 1) {
-        return { ...card, text: businessProfile.hours || card.text };
+        return {
+          ...card,
+          title: 'ساعات کاری',
+          text: businessProfile.hours || card.text,
+          actionLabel: 'مشاهده',
+        };
       }
 
       if (index === 2) {
-        return { ...card, text: businessProfile.phone || card.text };
+        return {
+          ...card,
+          title: 'تماس با ما',
+          text: businessProfile.phone || 'شماره تماس ثبت نشده',
+          href: businessProfile.phone ? `tel:${normalizePhoneHref(businessProfile.phone)}` : undefined,
+          actionLabel: 'تماس',
+        };
       }
 
       return card;
@@ -101,50 +134,22 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
   ), [businessProfile.address, businessProfile.hours, businessProfile.mapUrl, businessProfile.phone]);
   const bannerImage = businessProfile.bannerImage || getImageSrc(restaurantInteriorImage);
   const bannerMode = businessProfile.bannerMode || 'photo';
+  const highlightItems = [
+    { icon: Users, title: 'مناسب برای همه', text: businessProfile.category || 'مجموعه' },
+    { icon: Award, title: 'خدمات منتخب', text: businessProfile.specialty || 'کیفیت بالا' },
+    { icon: Wallet, title: 'کیف پول اختصاصی', text: walletStatus },
+    { icon: Gamepad2, title: 'پیشنهاد ویژه', text: businessProfile.cashbackLabel || 'هدیه و تخفیف فعال' },
+  ];
 
   return (
     <div className={isVisible ? 'business-profile-page' : 'business-profile-page d-none'} id="restaurant-top">
-      <section className="hero-grid">
-        <div>
-          <div className={`business-hero-banner business-hero-banner-${bannerMode}`}>
-            <img
-              className="hero-photo"
-              src={bannerImage}
-              alt={`بنر ${businessProfile.title}`}
-            />
-            {bannerMode === 'logo' && (
-              <div className="business-hero-banner-caption">
-                <span>{businessProfile.category}</span>
-                <strong>{businessProfile.title}</strong>
-              </div>
-            )}
-          </div>
+      <section className="business-profile-layout">
+        <aside className="profile business-profile-card">
+          <button className="business-favorite-button" type="button" aria-label="افزودن به علاقه‌مندی‌ها">
+            <Heart />
+          </button>
 
-          <div className="info-row">
-            {displayedInfoCards.map(({ icon: Icon, title, text, href }) => {
-              const InfoTag = href ? 'a' : 'div';
-
-              return (
-                <InfoTag
-                  className="info-card d-flex align-items-center justify-content-between"
-                  href={href}
-                  key={text}
-                  rel={href ? 'noreferrer' : undefined}
-                  target={href ? '_blank' : undefined}
-                >
-                  <Icon />
-                  <div className="text-end">
-                    {title && <span className="info-title">{title}</span>}
-                    <span className="info-text">{text}</span>
-                  </div>
-                </InfoTag>
-              );
-            })}
-          </div>
-        </div>
-
-        <aside className="profile">
-          <div className="logo-circle">
+          <div className="logo-circle business-logo-circle">
             {businessProfile.logoText ? (
               <>
                 <span>{businessProfile.logoText}</span>
@@ -154,8 +159,9 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
               <img src={businessProfile.image} alt={businessProfile.title} />
             )}
           </div>
+
           <h1 className="profile-title">{businessProfile.title}</h1>
-          <div className="rating d-flex align-items-center justify-content-center">
+          <div className="rating business-rating d-flex align-items-center justify-content-center">
             <span>{businessProfile.rating || '۴.۸'}</span>
             <span>|</span>
             <span className="d-flex align-items-center gap-1">
@@ -165,14 +171,15 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
             </span>
             <span>{businessProfile.votes || '۲۳۴ رای'}</span>
           </div>
-          <div className="meta d-flex align-items-center justify-content-center">
+
+          <div className="business-tags">
             <span>{businessProfile.category || 'مجموعه'}</span>
-            <span className="dot" />
             <span>{businessProfile.specialty || 'خدمات'}</span>
           </div>
-          <button className="follow-btn">دنبال کردن</button>
 
-          <section className="business-wallet-card">
+          <button className="follow-btn business-follow-btn" type="button">دنبال کردن</button>
+
+          <section className="business-wallet-card business-wallet-panel">
             <div>
               <Wallet />
               <span>کیف پول این مجموعه</span>
@@ -183,7 +190,86 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
             {walletDiscountCode && <p>کد تخفیف فعال: {walletDiscountCode}</p>}
             {walletCashback && <p>کش‌بک خریدها: {walletCashback}</p>}
           </section>
+
+          {businessProfile.instagramUrl && (
+            <div className="business-social-actions" aria-label="راه‌های ارتباطی">
+              <a
+                className="business-instagram-link"
+                href={businessProfile.instagramUrl}
+                rel="noreferrer"
+                target="_blank"
+                aria-label={'اینستاگرام ' + businessProfile.title}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1.2" />
+                </svg>
+                <span>اینستاگرام</span>
+              </a>
+            </div>
+          )}
         </aside>
+
+        <div className="business-main-panel">
+          <div className={`business-hero-banner business-hero-banner-${bannerMode}`}>
+            <img
+              className="hero-photo"
+              src={bannerImage}
+              alt={`بنر ${businessProfile.title}`}
+            />
+
+          </div>
+
+          <div className="info-row business-info-grid">
+            {displayedInfoCards.map(({ icon: Icon, title, text, href, actionLabel }) => {
+              const ActionIcon = title === 'موقعیت مکانی' ? Navigation : ChevronLeft;
+              const isPhoneCard = title === 'تماس با ما';
+              const isExternalLink = href && href.startsWith('http');
+
+              return (
+                <div
+                  className="info-card business-info-card d-flex align-items-start justify-content-between"
+                  key={`${title}-${text}`}
+                >
+                  <span className="business-info-icon"><Icon /></span>
+                  <div className="text-end business-info-copy">
+                    {title && <span className="info-title">{title}</span>}
+                    <span className={`info-text ${isPhoneCard ? 'business-phone-text' : ''}`} dir={isPhoneCard ? 'ltr' : 'rtl'}>{text}</span>
+                    {href ? (
+                      <a
+                        className="business-info-action"
+                        href={href}
+                        rel={isExternalLink ? 'noreferrer' : undefined}
+                        target={isExternalLink ? '_blank' : undefined}
+                      >
+                        {actionLabel || 'مشاهده'}
+                        <ActionIcon />
+                      </a>
+                    ) : (
+                      <span className="business-info-action is-disabled">
+                        {actionLabel || 'مشاهده'}
+                        <ActionIcon />
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="business-feature-strip">
+            {highlightItems.map(({ icon: Icon, title, text }) => (
+              <div className="business-feature-item" key={title}>
+                <Icon />
+                <div>
+                  <strong>{title}</strong>
+                  <span>{text}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <nav className="tabs">
@@ -221,6 +307,12 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
 }
 
 export default RestaurantPage;
+
+
+
+
+
+
 
 
 
