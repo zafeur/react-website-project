@@ -5,7 +5,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Gift,
+  LogIn,
   Moon,
+  MousePointerClick,
   Search,
   ShoppingBag,
   Sparkles,
@@ -13,6 +15,7 @@ import {
   Store,
   Sun,
   TicketPercent,
+  Trophy,
 } from 'lucide-react';
 import LoginModal from './LoginModal';
 import MobileBottomNav from './MobileBottomNav';
@@ -160,6 +163,7 @@ const defaultHomeData = {
 
 const categoryIcons = {
   Gift,
+  LogIn,
   Store,
   ShoppingBag,
   Star,
@@ -931,6 +935,35 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
             })}
           </div>
         </section>
+        <section className="home-guide-section" aria-labelledby="home-guide-title">
+          <div className="home-guide-head">
+            <span>{'\u0631\u0627\u0647\u0646\u0645\u0627\u06cc \u0633\u0631\u06cc\u0639'}</span>
+            <h2 id="home-guide-title">{'\u0631\u0627\u0647\u0646\u0645\u0627\u06cc \u067e\u0644\u062a\u0641\u0631\u0645 \u06a9\u06cc \u0645\u06cc\u0627\u06cc'}</h2>
+          </div>
+          <ol className="home-guide-steps">
+            <li>
+              <span className="home-guide-number">{'\u06f1'}</span>
+              <span className="home-guide-icon"><LogIn /></span>
+              <p>{'\u0627\u0628\u062a\u062f\u0627 \u0628\u0627 \u0634\u0645\u0627\u0631\u0647 \u062a\u0645\u0627\u0633 \u062e\u0648\u062f \u0648\u0627\u0631\u062f \u0634\u0648\u06cc\u062f'}</p>
+            </li>
+            <li>
+              <span className="home-guide-number">{'\u06f2'}</span>
+              <span className="home-guide-icon"><MousePointerClick /></span>
+              <p>{'\u0633\u067e\u0633 \u0631\u0648\u06cc \u062f\u0631\u06cc\u0627\u0641\u062a \u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u06a9\u0644\u06cc\u06a9 \u06a9\u0646\u06cc\u062f'}</p>
+            </li>
+            <li>
+              <span className="home-guide-number">{'\u06f3'}</span>
+              <span className="home-guide-icon"><TicketPercent /></span>
+              <p>{'\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0648\u062f \u0631\u0627 \u062f\u0631\u06cc\u0627\u0641\u062a \u06a9\u0646\u06cc\u062f'}</p>
+            </li>
+            <li>
+              <span className="home-guide-number">{'\u06f4'}</span>
+              <span className="home-guide-icon"><Trophy /></span>
+              <p>{'\u0627\u0632 \u067e\u0631\u0648\u0641\u0627\u06cc\u0644 \u06a9\u0627\u0631\u0628\u0631\u06cc \u0627\u0632 \u0627\u0645\u062a\u06cc\u0627\u0632 \u0648 \u062c\u0648\u0627\u06cc\u0632 \u062e\u0648\u062f \u0645\u0637\u0644\u0639 \u0634\u0648\u06cc\u062f'}</p>
+            </li>
+          </ol>
+        </section>
+
         <footer className="home-footer" id="footer">
           <div>
             <h2>{t.brand}</h2>

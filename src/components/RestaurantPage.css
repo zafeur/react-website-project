@@ -1,4 +1,4 @@
-.hero-grid {
+﻿.hero-grid {
   display: grid;
   grid-template-columns: 806px 1fr;
   gap: 50px;
@@ -692,5 +692,155 @@ html.theme-dark .page-shell .restaurant-wallet-card small {
 
   .restaurant-shell .restaurant-phone-text {
     font-size: 11px;
+  }
+}
+
+/* Business profile late containment: override restored restaurant fixed widths only on business pages. */
+.page-shell.business-shell {
+  width: min(100%, 1256px) !important;
+  overflow-x: hidden !important;
+}
+
+.page-shell.business-shell .business-frame {
+  overflow-x: hidden !important;
+}
+
+.business-frame .business-profile-page {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-inline: clamp(24px, 2.5vw, 36px) !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+
+.business-frame .business-profile-layout {
+  display: grid !important;
+  direction: ltr !important;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px) !important;
+  gap: clamp(20px, 2.2vw, 30px) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+  padding: 0 !important;
+  align-items: start !important;
+  box-sizing: border-box !important;
+}
+
+.business-frame .business-main-panel {
+  grid-column: 1 !important;
+  direction: rtl !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+.business-frame .business-profile-card {
+  grid-column: 2 !important;
+  direction: rtl !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.business-frame .business-profile-layout .business-hero-banner,
+.business-frame .business-profile-layout .business-hero-banner.business-hero-banner-photo {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.business-frame .business-profile-layout .business-hero-banner .hero-photo,
+.business-frame .business-profile-layout .business-hero-banner.business-hero-banner-photo .hero-photo {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+.business-frame .business-info-grid,
+.business-frame .info-row.business-info-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: minmax(0, .85fr) minmax(0, .85fr) minmax(0, 1.3fr) !important;
+  gap: clamp(12px, 1.4vw, 18px) !important;
+  margin-top: 0 !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+
+.business-frame .business-info-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 128px !important;
+  box-sizing: border-box !important;
+}
+
+.business-frame .business-feature-strip {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.business-frame .business-feature-item {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.business-frame .business-feature-item div {
+  min-width: 0 !important;
+}
+
+.business-frame .business-feature-item strong,
+.business-frame .business-feature-item span,
+.business-frame .business-info-card .info-title,
+.business-frame .business-info-card .info-text {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  white-space: normal !important;
+}
+
+.business-frame .business-phone-text {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 1180px) {
+  .business-frame .business-profile-page {
+    padding-inline: clamp(18px, 4vw, 30px) !important;
+  }
+
+  .business-frame .business-profile-layout {
+    grid-template-columns: 1fr !important;
+    direction: rtl !important;
+    max-width: 860px !important;
+  }
+
+  .business-frame .business-main-panel,
+  .business-frame .business-profile-card {
+    grid-column: 1 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .business-frame .business-profile-page {
+    padding-inline: 0 !important;
+  }
+
+  .business-frame .business-info-grid,
+  .business-frame .info-row.business-info-grid,
+  .business-frame .business-feature-strip {
+    grid-template-columns: 1fr !important;
   }
 }

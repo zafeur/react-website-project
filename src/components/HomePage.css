@@ -3273,3 +3273,400 @@ html.theme-dark .home-shell .home-hero-actions a:not(.home-primary-action):hover
     background: linear-gradient(90deg, rgba(7, 150, 62, .95), rgba(109, 240, 155, .88));
   }
 }
+
+/* Hide header separator on app/profile pages; it can appear as a stray line when zoomed out. */
+.page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+  border-inline-start: 0 !important;
+}
+
+/* Keep app-page brand pinned to the RTL side when nav collapses. */
+@media (max-width: 1100px) and (min-width: 769px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    direction: ltr !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar > div:first-child {
+    grid-column: 3 !important;
+    justify-self: end !important;
+    width: auto !important;
+    min-width: 0 !important;
+    flex: none !important;
+    justify-content: flex-end !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .brand {
+    margin: 0 !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+    grid-column: 1 !important;
+    justify-self: start !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* Final app-page tablet header lock: one row, brand right, actions left. */
+@media (max-width: 1100px) and (min-width: 769px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-rows: 52px !important;
+    height: 52px !important;
+    align-items: center !important;
+    gap: 0 !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar > div:first-child {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+    justify-self: end !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+}
+
+/* Home platform guide timeline. */
+.home-guide-section {
+  margin-top: 24px;
+  padding: clamp(28px, 4vw, 52px) clamp(20px, 4vw, 48px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 19px rgba(0, 0, 0, 0.025);
+  direction: rtl;
+  text-align: center;
+}
+
+.home-guide-section h2 {
+  margin: 0 0 clamp(34px, 5vw, 64px);
+  color: #171717;
+  font-size: clamp(24px, 2.8vw, 38px);
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.home-guide-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 44px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-guide-steps::before {
+  content: '';
+  position: absolute;
+  top: 42px;
+  inset-inline: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(93, 59, 177, .1), rgba(93, 59, 177, .34), rgba(93, 59, 177, .1));
+  pointer-events: none;
+}
+
+.home-guide-steps li {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.home-guide-steps span {
+  position: relative;
+  z-index: 1;
+  width: 84px;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 24%, #6d4ee0, #34127f 72%);
+  color: #fff;
+  box-shadow: 0 18px 32px rgba(52, 18, 127, .22);
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.home-guide-steps p {
+  max-width: 190px;
+  margin: 0;
+  color: #3a4250;
+  font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 800;
+  line-height: 1.8;
+}
+
+.home-shell.theme-dark .home-guide-section,
+html.theme-dark .home-shell .home-guide-section {
+  background: #0f1712;
+  border-color: rgba(255, 255, 255, .11);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
+}
+
+.home-shell.theme-dark .home-guide-section h2,
+html.theme-dark .home-shell .home-guide-section h2 {
+  color: #edf7f0;
+}
+
+.home-shell.theme-dark .home-guide-steps p,
+html.theme-dark .home-shell .home-guide-steps p {
+  color: rgba(237, 247, 240, .78);
+}
+
+.home-shell.theme-dark .home-guide-steps::before,
+html.theme-dark .home-shell .home-guide-steps::before {
+  background: linear-gradient(90deg, rgba(109, 240, 155, .08), rgba(109, 240, 155, .32), rgba(109, 240, 155, .08));
+}
+
+@media (max-width: 760px) {
+  .home-guide-section {
+    padding: 26px 18px;
+  }
+
+  .home-guide-steps {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    text-align: right;
+  }
+
+  .home-guide-steps::before {
+    top: 34px;
+    bottom: 34px;
+    inset-inline-start: auto;
+    inset-inline-end: 34px;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(180deg, rgba(93, 59, 177, .08), rgba(93, 59, 177, .34), rgba(93, 59, 177, .08));
+  }
+
+  .home-guide-steps li {
+    grid-template-columns: 68px minmax(0, 1fr);
+    align-items: center;
+    justify-items: stretch;
+    gap: 14px;
+  }
+
+  .home-guide-steps span {
+    width: 68px;
+    height: 68px;
+    font-size: 26px;
+  }
+
+  .home-guide-steps p {
+    max-width: none;
+    font-size: 15px;
+  }
+}
+
+/* Polished home guide UI. */
+.home-guide-section {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(30px, 4vw, 56px) clamp(18px, 4vw, 48px) !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(7, 150, 62, .13) !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(89, 51, 190, .08), transparent 28%),
+    radial-gradient(circle at 88% 12%, rgba(7, 150, 62, .12), transparent 26%),
+    linear-gradient(180deg, #ffffff 0%, #fbfffd 100%) !important;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, .06) !important;
+}
+
+.home-guide-head {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-bottom: clamp(28px, 4vw, 46px);
+}
+
+.home-guide-head span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(7, 150, 62, .1);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.home-guide-head h2,
+.home-guide-section h2 {
+  margin: 0 !important;
+  color: #111827 !important;
+  font-size: clamp(24px, 3vw, 38px) !important;
+  font-weight: 950 !important;
+  line-height: 1.35 !important;
+}
+
+.home-guide-steps {
+  gap: 18px !important;
+}
+
+.home-guide-steps::before {
+  top: 39px !important;
+  inset-inline: 11% !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, rgba(7, 150, 62, .05), rgba(89, 51, 190, .26), rgba(7, 150, 62, .05)) !important;
+}
+
+.home-guide-steps li {
+  min-height: 210px;
+  padding: 28px 18px 22px;
+  border: 1px solid rgba(7, 150, 62, .1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .82);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, .055);
+  backdrop-filter: blur(10px);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.home-guide-steps li:hover {
+  transform: translateY(-4px);
+  border-color: rgba(7, 150, 62, .22);
+  box-shadow: 0 24px 44px rgba(15, 23, 42, .09);
+}
+
+.home-guide-number {
+  position: absolute !important;
+  top: -20px;
+  width: 64px !important;
+  height: 64px !important;
+  background: linear-gradient(145deg, #6646d7 0%, #32127d 100%) !important;
+  box-shadow: 0 16px 28px rgba(52, 18, 127, .24) !important;
+  font-size: 26px !important;
+}
+
+.home-guide-icon {
+  width: 54px !important;
+  height: 54px !important;
+  margin-top: 28px;
+  border-radius: 16px !important;
+  background: rgba(7, 150, 62, .1) !important;
+  color: var(--green) !important;
+  box-shadow: none !important;
+  font-size: 0 !important;
+}
+
+.home-guide-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke-width: 2.2;
+}
+
+.home-guide-steps p {
+  max-width: 210px !important;
+  color: #1f2937 !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  line-height: 1.9 !important;
+}
+
+.home-shell.theme-dark .home-guide-section,
+html.theme-dark .home-shell .home-guide-section {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(109, 84, 224, .14), transparent 28%),
+    radial-gradient(circle at 88% 12%, rgba(37, 196, 99, .13), transparent 26%),
+    linear-gradient(180deg, #0f1712 0%, #0b120e 100%) !important;
+  border-color: rgba(255, 255, 255, .1) !important;
+}
+
+.home-shell.theme-dark .home-guide-head span,
+html.theme-dark .home-shell .home-guide-head span {
+  background: rgba(109, 240, 155, .1);
+  color: #9ff7bb;
+}
+
+.home-shell.theme-dark .home-guide-head h2,
+html.theme-dark .home-shell .home-guide-head h2 {
+  color: #edf7f0 !important;
+}
+
+.home-shell.theme-dark .home-guide-steps li,
+html.theme-dark .home-shell .home-guide-steps li {
+  background: rgba(255, 255, 255, .045);
+  border-color: rgba(255, 255, 255, .09);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, .22);
+}
+
+.home-shell.theme-dark .home-guide-icon,
+html.theme-dark .home-shell .home-guide-icon {
+  background: rgba(109, 240, 155, .11) !important;
+  color: #9ff7bb !important;
+}
+
+.home-shell.theme-dark .home-guide-steps p,
+html.theme-dark .home-shell .home-guide-steps p {
+  color: rgba(237, 247, 240, .86) !important;
+}
+
+@media (max-width: 760px) {
+  .home-guide-steps::before {
+    top: 48px !important;
+    bottom: 48px !important;
+    inset-inline-end: 32px !important;
+    width: 2px !important;
+    height: auto !important;
+    background: linear-gradient(180deg, rgba(7, 150, 62, .05), rgba(89, 51, 190, .28), rgba(7, 150, 62, .05)) !important;
+  }
+
+  .home-guide-steps li {
+    min-height: 0;
+    grid-template-columns: 58px minmax(0, 1fr) !important;
+    grid-template-areas:
+      "number icon"
+      "number text";
+    justify-items: stretch !important;
+    padding: 18px 16px;
+    text-align: right;
+  }
+
+  .home-guide-number {
+    position: relative !important;
+    top: auto;
+    grid-area: number;
+    width: 58px !important;
+    height: 58px !important;
+    align-self: center;
+    justify-self: center;
+    font-size: 24px !important;
+  }
+
+  .home-guide-icon {
+    grid-area: icon;
+    width: 44px !important;
+    height: 44px !important;
+    margin-top: 0;
+    justify-self: end;
+    border-radius: 12px !important;
+  }
+
+  .home-guide-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .home-guide-steps p {
+    grid-area: text;
+    max-width: none !important;
+    justify-self: stretch;
+  }
+}

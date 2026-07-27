@@ -149,8 +149,16 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
     setIsLoggedIn(false);
     setIsUserMenuOpen(false);
     setDashboardSectionRequest(null);
-    setCurrentPage("restaurant");
+    setIsLoginOpen(false);
     setLoginError("");
+
+    if (canUseStorage()) {
+      localStorage.removeItem(PAGE_STORAGE_KEY);
+    }
+
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
   };
 
   const goDashboard = () => {
