@@ -27,7 +27,36 @@ export default function BusinessProfile({ isDarkMode, onToggleTheme }) {
       <Head>
         <title>{`${findBusinessTitle(router.query.business)} | ${SITE_TITLE}`}</title>
       </Head>
-      <App initialPage="restaurant" isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
+      <App initialPage="business" isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
     </>
   );
 }
+export const getStaticPaths = async () => {
+  const slugs = Array.from(
+    new Set(
+      businessProfiles
+        .flatMap((profile) => [profile.id, profile.slug])
+        .filter(Boolean)
+    )
+  );
+
+  return {
+    paths: slugs.map((business) => ({ params: { business } })),
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
+  const normalized = String(getBusinessValue(params?.business) || '').toLowerCase();
+
+  if (normalized === 'melal' || normalized === 'restaurant' || normalized.includes('ملل')) {
+    return {
+      redirect: {
+        destination: '/restaurant',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+};

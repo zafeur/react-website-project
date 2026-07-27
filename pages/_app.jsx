@@ -1,13 +1,13 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/App.css';
 import '../src/components/Header.css';
+import '../src/components/BusinessProfilePage.css';
 import '../src/components/RestaurantPage.css';
 import '../src/components/DashboardPage.css';
 import '../src/components/LoginModal.css';
 import '../src/components/MobileBottomNav.css';
 import '../src/components/HomePage.css';
-import '../src/components/PetPage.css';
 import '../src/components/FaqMembershipPage.css';
 import '../src/components/GlobalDarkMode.css';
 

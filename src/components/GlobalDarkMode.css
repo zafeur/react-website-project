@@ -1,4 +1,4 @@
-/* Global first-paint dark mode overrides.
+﻿/* Global first-paint dark mode overrides.
    This file is imported last so html.theme-dark and hydrated .theme-dark render the same. */
 html.theme-dark body,
 html.theme-dark .page-shell,
@@ -57,9 +57,6 @@ html.theme-dark .page-shell :where(
   .faq-field textarea,
   .faq-field select,
   .faq-secondary-btn,
-  .pet-hero,
-  .pet-intro-panel,
-  .pet-benefit-card,
   .business-wallet-card
 ),
 .page-shell.theme-dark :where(
@@ -108,9 +105,6 @@ html.theme-dark .page-shell :where(
   .faq-field textarea,
   .faq-field select,
   .faq-secondary-btn,
-  .pet-hero,
-  .pet-intro-panel,
-  .pet-benefit-card,
   .business-wallet-card
 ) {
   background-color: #0f1712;
@@ -165,9 +159,6 @@ html.theme-dark .page-shell :where(
   .faq-form-progress span,
   .faq-form-title,
   .faq-field span,
-  .pet-hero-copy h1,
-  .pet-intro-panel h2,
-  .pet-benefit-card h3,
   .business-wallet-card strong
 ),
 .page-shell.theme-dark :where(
@@ -216,9 +207,6 @@ html.theme-dark .page-shell :where(
   .faq-form-progress span,
   .faq-form-title,
   .faq-field span,
-  .pet-hero-copy h1,
-  .pet-intro-panel h2,
-  .pet-benefit-card h3,
   .business-wallet-card strong
 ) {
   color: #edf7f0;
@@ -247,9 +235,6 @@ html.theme-dark .page-shell :where(
   .faq-step-card p,
   .faq-item p,
   .faq-hero-card span,
-  .pet-eyebrow,
-  .pet-hero-copy p,
-  .pet-benefit-card p,
   .business-wallet-card p
 ),
 .page-shell.theme-dark :where(
@@ -275,9 +260,6 @@ html.theme-dark .page-shell :where(
   .faq-step-card p,
   .faq-item p,
   .faq-hero-card span,
-  .pet-eyebrow,
-  .pet-hero-copy p,
-  .pet-benefit-card p,
   .business-wallet-card p
 ) {
   color: #d8e8de;

@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
@@ -6,7 +6,6 @@ import {
   ChevronRight,
   Gift,
   Moon,
-  PawPrint,
   Search,
   ShoppingBag,
   Sparkles,
@@ -37,7 +36,6 @@ const t = {
   free: "\u0631\u0627\u06cc\u06af\u0627\u0646",
   discount: "\u062a\u062e\u0641\u06cc\u0641",
   special: "\u0648\u06cc\u0698\u0647",
-  pet: "\u062d\u06cc\u0648\u0627\u0646\u0627\u062a \u062e\u0627\u0646\u06af\u06cc",
   bastani: "\u0628\u0627\u0633\u062a\u0627\u0646\u06cc",
   barial: "\u0628\u0631\u06cc\u0627\u0644",
   dorato: "\u062f\u0648\u0631\u0627\u062a\u0648",
@@ -133,7 +131,7 @@ const defaultHomeData = {
 ],
 
   brands: [
-  { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/business/melal' },
+  { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/restaurant' },
   { title: t.barial, businessId: 'barial', image: asset('img/barial.jpg'), href: '/business/barial' },
   { title: t.dorato, businessId: 'dorato', image: asset('img/logo dorato.jpg'), href: '/business/dorato' },
   { title: t.bastani, businessId: 'bastani', image: asset('img/business-banners/bastani-logo-enhanced.png'), href: '/business/bastani' },
@@ -163,7 +161,6 @@ const defaultHomeData = {
 const categoryIcons = {
   Gift,
   Store,
-  PawPrint,
   ShoppingBag,
   Star,
   Sparkles,
@@ -172,6 +169,19 @@ const categoryIcons = {
 const normalizeList = (value, fallback) => (Array.isArray(value) && value.length ? value : fallback);
 
 const firstValue = (item, keys) => keys.map((key) => item?.[key]).find(Boolean);
+const blockedCategoryTerms = ['pet', 'pets', 'animal', 'animals', 'حیوان', 'حیوانات', 'حیوانات خانگی'];
+
+const isAllowedCategory = (category) => {
+  const title = String(firstValue(category, ['title', 'name', 'label']) || '').toLowerCase();
+  const icon = String(firstValue(category, ['icon', 'iconName', 'icon_name']) || '').toLowerCase();
+
+  return !blockedCategoryTerms.some((term) => title.includes(term) || icon.includes(term));
+};
+
+const normalizeCategories = (items) => {
+  const categories = normalizeList(items, defaultHomeData.categories).filter(isAllowedCategory);
+  return categories.length ? categories : defaultHomeData.categories;
+};
 
 const resolveHomeData = (data) => data?.data || data?.home || data?.homepage || data || {};
 
@@ -221,6 +231,7 @@ const normalizeOffers = (items) =>
       brand: firstValue(offer, ['brand', 'business', 'business_name', 'place']) || fallback.brand,
       tag: firstValue(offer, ['tag', 'badge', 'type', 'discount_type']) || fallback.tag,
       image: normalizeImage(offer, fallback.image),
+      code: firstValue(offer, ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']) || fallback.code || '',
     };
   });
 
@@ -231,7 +242,7 @@ const normalizeHomeData = (payload) => {
     defaultHomeData.brands
   ).map((brand) =>
     isRestaurantBrand(brand.title)
-      ? { ...brand, image: defaultHomeData.brands[0].image, businessId: brand.businessId || 'melal', href: brand.href || '/business/melal' }
+      ? { ...brand, image: defaultHomeData.brands[0].image, businessId: brand.businessId || 'melal', href: '/restaurant' }
       : brand
   );
 
@@ -239,7 +250,7 @@ const normalizeHomeData = (payload) => {
     stories: normalizeStories(normalizeList(data?.stories || data?.story || data?.story_items, defaultHomeData.stories)),
     banners: normalizeCards(normalizeList(data?.banners || data?.sliders || data?.slides, defaultHomeData.banners), defaultHomeData.banners),
     brands,
-    categories: normalizeList(data?.categories, defaultHomeData.categories),
+    categories: normalizeCategories(data?.categories),
     offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, defaultHomeData.offers)),
   };
 };
@@ -346,9 +357,11 @@ const getOfferPercent = (offer) =>
   firstValue(offer, ['percent', 'discountPercent', 'discount_percent', 'percentage', 'badge']) ||
   (String(offer.tag || '').includes('رایگان') ? 'رایگان' : String(offer.title || '').match(/[۰-۹0-9]+\s*٪|٪\s*[۰-۹0-9]+|[۰-۹0-9]+\s*%|%\s*[۰-۹0-9]+/)?.[0] || '۱۰٪');
 
-const getOfferStatus = (offer, index) =>
-  firstValue(offer, ['status', 'time', 'expires', 'expiresIn', 'expires_in', 'timer']) ||
-  (index % 3 === 0 ? 'منقضی' : index % 3 === 1 ? '۳۳۳:۰۱:۱۰:۱۹' : 'فعال');
+const getOfferStatus = (offer) => {
+  return offer.businessId === "ibamo"
+    ? "فعال"
+    : "غیرفعال";
+};
 
 const getOfferDescription = (offer) =>
   firstValue(offer, ['description', 'subtitle', 'text', 'body']) ||
@@ -376,9 +389,19 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
 
 
-  useEffect(() => {
+ useEffect(() => {
+  const checkAuth = () => {
     setIsLoggedIn(hasAuthToken());
-  }, []);
+  };
+
+  checkAuth();
+
+  window.addEventListener("focus", checkAuth);
+
+  return () => {
+    window.removeEventListener("focus", checkAuth);
+  };
+}, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -426,6 +449,17 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const openLogin = () => {
     setLoginError('');
     setIsLoginOpen(true);
+  };
+
+  const openAccount = () => {
+    if (hasAuthToken()) {
+      setIsLoggedIn(true);
+      router.push('/dashboard');
+      return;
+    }
+
+    setIsLoggedIn(false);
+    openLogin();
   };
 
   const spinStory = (title) => {
@@ -619,9 +653,20 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       setIsLoading(false);
     }
   };
-
   const handleReceiveOffer = async (offer, skipAuthCheck = false) => {
-    if (!skipAuthCheck && !isLoggedIn) {
+    const isIbamo = offer.businessId === 'ibamo';
+
+    if (!isIbamo) {
+      setDiscountPopup({
+        offer,
+        code: '',
+        message: 'این کد تخفیف در حال حاضر غیرفعال است.',
+      });
+      return;
+    }
+
+    if (!skipAuthCheck && !hasAuthToken()) {
+      setIsLoggedIn(false);
       setPendingOffer(offer);
       openLogin();
       return;
@@ -630,16 +675,24 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
     try {
       setIsRequestingDiscount(true);
       const data = await requestDiscountCode(offer);
+      const receivedCode = getDiscountCode(data, offer) || offer.code || '';
+
       setDiscountPopup({
         offer,
-        code: getDiscountCode(data, offer) || offer.code || '',
-        message: getDiscountMessage(data) || t.discountRequested,
+        code: receivedCode,
+        message: receivedCode
+          ? getDiscountMessage(data) || 'کد تخفیف با موفقیت دریافت شد.'
+          : getDiscountMessage(data) || t.discountFailed,
       });
     } catch (error) {
+      const fallbackCode = offer.code || '';
+
       setDiscountPopup({
         offer,
-        code: '',
-        message: error.response?.data?.message || error.message || t.discountFailed,
+        code: fallbackCode,
+        message: fallbackCode
+          ? 'کد تخفیف با موفقیت دریافت شد.'
+          : error.response?.data?.message || error.message || t.discountFailed,
       });
     } finally {
       setIsRequestingDiscount(false);
@@ -692,7 +745,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
                 <li><a href="#brands">{t.businesses}</a></li>
                 <li><a href="#categories">{t.shop}</a></li>
                 <li><Link href="/faq">{t.faq}</Link></li>
-                <li><button type="button" onClick={openLogin}>{t.club}</button></li>
+                <li><button type="button" onClick={openAccount}>{t.club}</button></li>
                 <li><a href="#footer">{t.contact}</a></li>
               </ul>
             </nav>
@@ -709,7 +762,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
               <span className="home-theme-toggle-thumb" />
               <span className="home-theme-toggle-icon home-theme-toggle-moon"><Moon /></span>
             </button>
-            <button className="login-btn home-login-btn" type="button" onClick={openLogin}>{t.login}</button>
+            <button className="login-btn home-login-btn" type="button" onClick={openAccount}>{isLoggedIn ? 'حساب کاربری' : t.login}</button>
           </div>
         </header>
 
@@ -853,15 +906,15 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           </div>
           <div className="home-offer-grid">
             {homeData.offers.map((offer, index) => {
-              const offerStatus = getOfferStatus(offer, index);
-              const isExpired = String(offerStatus).includes('منقضی');
+             const offerStatus = getOfferStatus(offer);
+             const isInactive = offerStatus === "غیرفعال";     
 
               return (
-                <article className={`home-offer-card ${isExpired ? 'is-expired' : ''}`} key={offer.title}>
+                <article className={`home-offer-card ${isInactive ? 'is-inactive' : ''}`} key={offer.title}>
                   <div className="home-offer-media">
                     <img src={offer.image} alt={offer.brand} />
                     <span className="home-offer-percent">{getOfferPercent(offer)}</span>
-                    <span className={`home-offer-status ${isExpired ? 'is-expired' : ''}`}>{offerStatus}</span>
+                    <span className={`home-offer-status ${isInactive ? 'is-inactive' : ''}`}>{offerStatus}</span>
                   </div>
                   <div className="home-offer-copy">
                     <span>{offer.brand}</span>
@@ -869,7 +922,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
                     <p>{getOfferDescription(offer)}</p>
                   </div>
                   <div className="home-offer-footer">
-                    <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount}>
+                    <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount || isInactive}>
                       {isRequestingDiscount ? t.wait : 'کد خرید'}
                     </button>
                   </div>
@@ -886,7 +939,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           <div className="home-footer-links">
             <Link href="/">{t.home}</Link>
             <Link href="/restaurant">{t.restaurant}</Link>
-            <button type="button" onClick={openLogin}>{t.club}</button>
+            <button type="button" onClick={openAccount}>{t.club}</button>
           </div>
         </footer>
       </section>

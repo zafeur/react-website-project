@@ -1,4 +1,4 @@
-﻿.hero-grid {
+.hero-grid {
   display: grid;
   grid-template-columns: 806px 1fr;
   gap: 50px;
@@ -48,13 +48,6 @@
   font-size: 6px;
   letter-spacing: .8px;
   font-weight: 700;
-}
-
-.logo-circle img {
-  width: 82%;
-  height: 82%;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .profile-title {
@@ -572,1221 +565,132 @@
   object-position: center;
 }
 
-
-
-@media (max-width: 1200px) and (min-width: 769px) {
-  .hero-grid {
-    grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
-    gap: clamp(24px, 3vw, 38px);
-  }
-
-  .hero-photo {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 806 / 361;
-  }
-
-  .profile {
-    padding-top: 18px;
-  }
-
-  .logo-circle {
-    width: clamp(118px, 13vw, 146px);
-    height: clamp(118px, 13vw, 146px);
-    margin-bottom: 22px;
-    font-size: clamp(52px, 6vw, 64px);
-  }
-
-  .logo-circle small {
-    bottom: 37px;
-    left: 47px;
-  }
-
-.logo-circle img {
-  width: 82%;
-  height: 82%;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-  .profile-title {
-    font-size: clamp(26px, 3vw, 32px);
-  }
-
-  .info-row {
-    width: 100%;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .info-card {
-    padding-inline: clamp(14px, 2vw, 22px);
-  }
-
-  .tabs {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  .content-grid {
-    grid-template-columns: minmax(300px, .9fr) minmax(0, 1.1fr);
-  }
-}
-
-.business-wallet-card {
-  display: grid;
-  gap: 10px;
-  width: min(100%, 260px);
-  margin: 22px auto 0;
-  padding: 18px 20px;
-  border: 1px solid rgba(7, 150, 62, .2);
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(7, 150, 62, .1), #fff 58%);
-  box-shadow: 0 12px 24px rgba(7, 150, 62, .09);
-  text-align: right;
-}
-
-.business-wallet-card div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: var(--green);
-  font-size: 15px;
-  font-weight: 900;
-}
-
-.business-wallet-card svg {
-  width: 22px;
-  height: 22px;
-}
-
-.business-wallet-card strong {
-  display: block;
-  color: #151515;
-  font-size: 24px;
-  font-weight: 900;
-  text-align: center;
-}
-
-.business-wallet-card p {
-  margin: 0;
-  color: #60666a;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.8;
-  text-align: center;
-}
-
-.page-shell.theme-dark .business-wallet-card {
-  background: linear-gradient(135deg, rgba(7, 150, 62, .18), #0f1712 58%);
-  border-color: rgba(255, 255, 255, .11);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, .26);
-}
-
-.page-shell.theme-dark .business-wallet-card strong,
-.page-shell.theme-dark .business-wallet-card p {
-  color: #edf7f0;
-}
-
-@media (min-width: 769px) and (max-width: 1100px) {
-  .hero-grid {
-    display: block;
-    direction: rtl;
-  }
-
-  .hero-photo {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 806 / 361;
-  }
-
-  .profile {
-    max-width: 440px;
-    margin: 28px auto 0;
-    padding-top: 0;
-  }
-
-  .logo-circle {
-    width: 132px;
-    height: 132px;
-    margin-bottom: 20px;
-    font-size: 58px;
-  }
-
-  .logo-circle small {
-    bottom: 34px;
-    left: 43px;
-  }
-
-.logo-circle img {
-  width: 82%;
-  height: 82%;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-  .profile-title {
-    font-size: 30px;
-  }
-
-  .follow-btn {
-    width: 100%;
-    max-width: 300px;
-    margin-top: 28px;
-  }
-
-  .business-wallet-card {
-    width: min(100%, 300px);
-  }
-
-  .info-row {
-    width: 100%;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .info-card {
-    height: auto;
-    min-height: 92px;
-    padding: 16px 18px;
-    align-items: center !important;
-  }
-
-  .info-card .text-end {
-    text-align: right !important;
-  }
-
-  .info-title,
-  .info-text {
-    line-height: 1.7;
-  }
-
-  .info-text {
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-
-  .tabs {
-    margin-top: 26px;
-    padding-inline: 24px;
-  }
-
-  .tabs ul {
-    gap: 42px;
-    width: max-content;
-    min-width: 100%;
-  }
-
-  .content-grid {
-    grid-template-columns: minmax(280px, .82fr) minmax(0, 1.18fr);
-    gap: 18px;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 900px) {
-  .info-row {
-    grid-template-columns: 1fr;
-  }
-
-  .info-card {
-    min-height: 78px;
-  }
-
-  .content-grid {
-    display: block;
-  }
-
-  .gift-panel,
-  .about-panel,
-  .review-panel {
-    height: auto;
-    margin-top: 18px;
-  }
-}
-
-
-/* Business profile page cleanup */
-.hero-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
-  gap: clamp(22px, 3vw, 42px);
-  align-items: stretch;
-  direction: rtl;
-}
-
-.hero-grid > div:first-child {
-  display: grid;
-  align-content: start;
-  gap: 18px;
-  min-width: 0;
-}
-
-.hero-photo {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 7;
-  min-height: 250px;
-  max-height: 390px;
-  object-fit: cover;
-  border-radius: 14px;
-}
-
-.profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  padding: clamp(22px, 3vw, 34px);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, .045);
-}
-
-.logo-circle {
-  width: clamp(104px, 9vw, 132px);
-  height: clamp(104px, 9vw, 132px);
-  margin-bottom: 18px;
-  font-size: clamp(46px, 5vw, 58px);
-}
-
-.logo-circle small {
-  bottom: 34px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.logo-circle img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.profile-title {
-  margin-bottom: 12px;
-  font-size: clamp(26px, 2.4vw, 32px);
-}
-
-.rating,
-.meta {
-  flex-wrap: wrap;
-  line-height: 1.8;
-}
-
-.follow-btn {
-  width: min(100%, 220px);
-  height: 52px;
-  margin-top: 24px;
-  font-size: 18px;
-}
-
-.business-wallet-card {
-  width: min(100%, 300px);
-  margin-top: 18px;
-}
-
-.info-row {
-  width: 100%;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 0;
-}
-
-.info-card {
-  min-width: 0;
-  height: auto;
-  min-height: 88px;
-  padding: 16px 18px;
-}
-
-.tabs,
-.review-panel {
-  display: none;
-}
-
-.page-shell.theme-dark .profile {
-  background: #0f1712;
-  border-color: rgba(255, 255, 255, .11);
-  box-shadow: 0 18px 38px rgba(0, 0, 0, .24);
-}
-
-@media (max-width: 1100px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .profile {
-    width: min(100%, 520px);
-    margin-inline: auto;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-grid {
-    display: grid;
-    gap: 16px;
-  }
-
-  .hero-photo {
-    min-height: 180px;
-    aspect-ratio: 16 / 9;
-  }
-
-  .profile {
-    padding: 20px 16px;
-  }
-
-  .info-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Remove the old reserved business-page space after the profile sections were simplified. */
-.frame:has(.business-profile-page) {
-  min-height: auto;
-  padding-bottom: clamp(24px, 4vw, 48px);
-}
-
-.business-profile-page {
-  display: grid;
-  gap: 18px;
-}
-
-.business-profile-page .hero-grid {
-  margin-bottom: 0;
-}
-
-.business-profile-page .tabs,
-.business-profile-page .review-panel {
-  display: none !important;
-  height: 0 !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-
-@media (max-width: 768px) {
-  .frame:has(.business-profile-page) {
-    min-height: auto;
-    padding-bottom: 104px;
-  }
-}
-
-.restaurant-frame {
-  min-height: auto;
-  padding-bottom: clamp(24px, 4vw, 48px);
-}
-
-@media (max-width: 768px) {
-  .restaurant-frame {
-    min-height: auto;
-    padding-bottom: 104px;
-  }
-}
-
-.page-shell.restaurant-shell {
-  min-height: auto;
-}
-
-@media (max-width: 768px) {
-  .page-shell.restaurant-shell {
-    min-height: 100vh;
-  }
-}
-
-.business-hero-banner {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 7;
-  min-height: 250px;
-  max-height: 390px;
-  overflow: hidden;
-  border-radius: 14px;
-  border: 1px solid rgba(7, 150, 62, .12);
-  background: linear-gradient(135deg, #f7fff9 0%, #eef8f1 48%, #ffffff 100%);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, .055);
-}
-
-.business-hero-banner .hero-photo {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  max-height: none;
-  border-radius: inherit;
-  object-fit: cover;
-  display: block;
-}
-
-.business-hero-banner-logo {
-  display: grid;
-  place-items: center;
-  padding: clamp(22px, 3.2vw, 42px);
-  isolation: isolate;
-}
-
-.business-hero-banner-logo::before,
-.business-hero-banner-logo::after {
-  content: '';
-  position: absolute;
-  inset: auto;
-  z-index: -1;
-  border-radius: 999px;
-  pointer-events: none;
-}
-
-.business-hero-banner-logo::before {
-  width: 52%;
-  aspect-ratio: 1;
-  right: -12%;
-  top: -34%;
-  background: rgba(7, 150, 62, .14);
-  filter: blur(4px);
-}
-
-.business-hero-banner-logo::after {
-  width: 38%;
-  aspect-ratio: 1;
-  left: -8%;
-  bottom: -28%;
-  background: rgba(7, 150, 62, .09);
-}
-
-.business-hero-banner-logo .hero-photo {
-  width: min(42%, 230px);
-  height: min(78%, 230px);
-  object-fit: contain;
-  padding: clamp(12px, 1.7vw, 20px);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, .88);
-  box-shadow: 0 22px 48px rgba(7, 150, 62, .17);
-}
-
-.business-hero-banner-caption {
-  position: absolute;
-  right: clamp(18px, 3vw, 34px);
-  bottom: clamp(18px, 3vw, 30px);
-  display: grid;
-  gap: 5px;
-  text-align: right;
-  color: #063f1d;
-}
-
-.business-hero-banner-caption span {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--green);
-}
-
-.business-hero-banner-caption strong {
-  font-size: clamp(24px, 3.2vw, 42px);
-  line-height: 1.15;
-  color: #0b2415;
-}
-
-.page-shell.theme-dark .business-hero-banner {
-  border-color: rgba(255, 255, 255, .1);
-  background: linear-gradient(135deg, #0b2115 0%, #10291a 48%, #07100b 100%);
-  box-shadow: 0 22px 48px rgba(0, 0, 0, .28);
-}
-
-.page-shell.theme-dark .business-hero-banner-logo .hero-photo {
-  background: rgba(255, 255, 255, .93);
-  box-shadow: 0 22px 48px rgba(0, 0, 0, .24), 0 0 0 1px rgba(255, 255, 255, .12);
-}
-
-.page-shell.theme-dark .business-hero-banner-caption {
-  color: #f0fff4;
-}
-
-.page-shell.theme-dark .business-hero-banner-caption strong {
-  color: #f2fff7;
-}
-
-@media (max-width: 768px) {
-  .business-hero-banner {
-    min-height: 180px;
-    aspect-ratio: 16 / 9;
-  }
-
-  .business-hero-banner-logo .hero-photo {
-    width: min(54%, 190px);
-    height: min(74%, 190px);
-    border-radius: 22px;
-  }
-
-  .business-hero-banner-caption {
-    right: 16px;
-    bottom: 14px;
-  }
-}
-
-.info-card[href] {
-  color: inherit;
-  text-decoration: none;
-}
-
-.info-card[href]:hover {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Keep business banners fully visible instead of cropping them on narrow screens. */
-.business-hero-banner.business-hero-banner-photo {
-  aspect-ratio: 2.4 / 1;
-  min-height: 0;
-  max-height: none;
-  display: grid;
-  place-items: center;
-  background: #f5f7f3;
-}
-
-.business-hero-banner.business-hero-banner-photo .hero-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: contain !important;
-  background: inherit;
-}
-
-.page-shell.theme-dark .business-hero-banner.business-hero-banner-photo {
-  background: #07100b;
-}
-
-@media (max-width: 900px) {
-  .business-hero-banner.business-hero-banner-photo {
-    aspect-ratio: 2.35 / 1;
-    border-radius: 12px;
-  }
-}
-
-@media (max-width: 560px) {
-  .business-hero-banner.business-hero-banner-photo {
-    aspect-ratio: 2.25 / 1;
-    width: 100%;
-  }
-
-  .business-hero-banner.business-hero-banner-photo .hero-photo {
-    object-position: center center;
-  }
-}
-
-/* Premium dynamic business profile layout */
-.business-profile-layout {
-  display: grid;
-  grid-template-columns: minmax(300px, .82fr) minmax(0, 1.58fr);
-  gap: clamp(20px, 3vw, 34px);
-  align-items: stretch;
-  direction: rtl;
-}
-
-.business-main-panel {
-  min-width: 0;
-  display: grid;
-  gap: 18px;
-  align-content: start;
-}
-
-.business-profile-card {
-  position: relative;
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: clamp(24px, 3vw, 36px);
-  border-radius: 20px;
-  background:
-    radial-gradient(circle at 18% 14%, rgba(7, 150, 62, .12), transparent 34%),
-    linear-gradient(145deg, rgba(255, 255, 255, .97), rgba(248, 253, 250, .94));
-  border: 1px solid rgba(7, 150, 62, .14);
-  box-shadow: 0 24px 60px rgba(12, 36, 24, .08);
-  overflow: hidden;
-}
-
-.business-favorite-button {
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  width: 46px;
-  height: 46px;
-  border: 1px solid rgba(7, 150, 62, .2);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .7);
-  color: #0f2d1d;
-  display: grid;
-  place-items: center;
-  transition: transform .2s ease, border-color .2s ease, background .2s ease;
-}
-
-.business-favorite-button:hover {
-  transform: translateY(-2px);
-  border-color: rgba(7, 150, 62, .45);
-  background: rgba(7, 150, 62, .08);
-}
-
-.business-favorite-button svg,
-.business-social-actions svg,
-.business-info-action svg {
-  width: 20px;
-  height: 20px;
-}
-
-.business-logo-circle {
-  width: clamp(138px, 13vw, 190px);
-  height: clamp(138px, 13vw, 190px);
-  margin: 14px auto 22px;
-  padding: 0;
-  border: 7px solid #fff;
-  outline: 2px solid rgba(7, 150, 62, .32);
-  background: #fff;
-  box-shadow: 0 18px 40px rgba(7, 150, 62, .14);
-}
-
-.business-logo-circle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-}
-
-.business-rating {
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.business-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.business-tags span {
-  padding: 9px 18px;
-  border-radius: 999px;
-  background: rgba(7, 150, 62, .09);
-  color: #0b4321;
-  font-weight: 800;
-  font-size: 14px;
-}
-
-.business-follow-btn {
-  width: min(100%, 290px);
-  margin-top: 24px;
-  min-height: 62px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #11b857, #05943f);
-  box-shadow: 0 16px 34px rgba(7, 150, 62, .24);
-}
-
-.business-wallet-panel {
-  width: 100%;
-  margin-top: 24px;
-  padding: 24px;
+/* Restaurant Mellal wallet card */
+.restaurant-wallet-card {
+  width: min(100%, 330px);
+  margin: 26px auto 0;
+  padding: 22px 24px;
   border-radius: 18px;
-  background: linear-gradient(145deg, rgba(7, 150, 62, .1), rgba(255, 255, 255, .82));
   border: 1px solid rgba(7, 150, 62, .18);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
+  background: linear-gradient(145deg, rgba(7, 150, 62, .1), rgba(255, 255, 255, .92));
+  box-shadow: 0 18px 42px rgba(7, 150, 62, .1), inset 0 1px 0 rgba(255, 255, 255, .75);
+  text-align: right;
 }
 
-.business-wallet-panel div {
+.restaurant-wallet-head {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
   color: var(--green);
-  font-weight: 900;
-}
-
-.business-wallet-panel div svg {
-  width: 26px;
-  height: 26px;
-}
-
-.business-wallet-panel strong {
-  display: block;
-  margin-top: 16px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.2;
-  color: #0d2015;
-}
-
-.business-wallet-panel p {
-  margin: 10px 0 0;
-  color: #486354;
-  font-weight: 800;
-}
-
-.business-social-actions {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  width: 100%;
-  margin-top: auto;
-  padding-top: 28px;
-}
-
-.business-social-actions button {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid rgba(7, 150, 62, .16);
-  background: rgba(255, 255, 255, .72);
-  color: #173222;
-  display: grid;
-  place-items: center;
-  transition: transform .2s ease, border-color .2s ease, color .2s ease;
-}
-
-.business-social-actions button:hover {
-  transform: translateY(-2px);
-  border-color: rgba(7, 150, 62, .45);
-  color: var(--green);
-}
-
-.business-profile-layout .business-hero-banner {
-  min-height: 310px;
-  border-radius: 20px;
-  border-color: rgba(7, 150, 62, .16);
-  box-shadow: 0 24px 60px rgba(12, 36, 24, .08);
-  background: #07100b;
-}
-
-.business-profile-layout .business-hero-banner.business-hero-banner-photo {
-  aspect-ratio: 2.75 / 1;
-  background: #07100b;
-}
-
-.business-profile-layout .business-hero-banner.business-hero-banner-photo .hero-photo {
-  object-fit: cover !important;
-}
-
-.business-banner-badge {
-  position: absolute;
-  right: 24px;
-  bottom: 22px;
-  max-width: min(72%, 560px);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 18px;
-  border-radius: 14px;
-  background: rgba(5, 18, 12, .68);
-  color: #f4fff8;
-  border: 1px solid rgba(255, 255, 255, .12);
-  backdrop-filter: blur(12px);
-  font-weight: 800;
-}
-
-.business-banner-badge svg {
-  width: 24px;
-  height: 24px;
-  color: #36d27b;
-  flex: 0 0 auto;
-}
-
-.business-info-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin: 0;
-}
-
-.business-info-card {
-  min-height: 158px;
-  height: auto;
-  padding: 22px;
-  border-radius: 18px;
-  align-items: flex-start !important;
-  gap: 16px;
-  background: rgba(255, 255, 255, .96);
-  border: 1px solid rgba(7, 150, 62, .14);
-  box-shadow: 0 18px 42px rgba(12, 36, 24, .06);
-}
-
-.business-info-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle, rgba(7, 150, 62, .22), rgba(7, 150, 62, .08));
-  color: var(--green);
-  flex: 0 0 auto;
-}
-
-.business-info-icon svg {
-  width: 30px;
-  height: 30px;
-}
-
-.business-info-copy {
-  display: grid;
-  gap: 8px;
-  min-width: 0;
-}
-
-.business-info-card .info-title {
-  color: #547062;
-  font-size: 14px;
-  font-weight: 900;
-}
-
-.business-info-card .info-text {
-  color: #0d2015;
-  font-size: clamp(16px, 1.7vw, 20px);
-  font-weight: 900;
-  line-height: 1.8;
-}
-
-.business-info-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-  width: fit-content;
-  justify-self: end;
-  margin-top: 6px;
-  color: var(--green);
-  font-weight: 900;
-  font-size: 14px;
-}
-
-.business-feature-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
-  padding: 20px;
-  border-radius: 20px;
-  border: 1px solid rgba(7, 150, 62, .14);
-  background: rgba(255, 255, 255, .96);
-  box-shadow: 0 18px 42px rgba(12, 36, 24, .06);
-}
-
-.business-feature-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-  padding: 10px 16px;
-  border-left: 1px solid rgba(7, 150, 62, .12);
-}
-
-.business-feature-item:last-child {
-  border-left: 0;
-}
-
-.business-feature-item svg {
-  width: 34px;
-  height: 34px;
-  color: var(--green);
-  flex: 0 0 auto;
-}
-
-.business-feature-item div {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-}
-
-.business-feature-item strong {
-  color: #0d2015;
   font-size: 15px;
   font-weight: 900;
 }
 
-.business-feature-item span {
-  color: #526d5d;
+.restaurant-wallet-head svg {
+  width: 25px;
+  height: 25px;
+  stroke-width: 2.3;
+}
+
+.restaurant-wallet-card strong {
+  display: block;
+  margin-top: 15px;
+  color: #0d2015;
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.restaurant-wallet-card p,
+.restaurant-wallet-card small {
+  display: block;
+  margin: 10px 0 0;
+  color: #486354;
   font-size: 13px;
   font-weight: 800;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
-.page-shell.theme-dark .business-profile-card,
-.page-shell.theme-dark .business-info-card,
-.page-shell.theme-dark .business-feature-strip {
-  background:
-    radial-gradient(circle at 18% 12%, rgba(7, 150, 62, .12), transparent 34%),
-    rgba(8, 21, 14, .94);
+.restaurant-wallet-card small {
+  color: var(--green);
+}
+
+.page-shell.theme-dark .restaurant-wallet-card,
+html.theme-dark .page-shell .restaurant-wallet-card {
   border-color: rgba(255, 255, 255, .1);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
-}
-
-.page-shell.theme-dark .business-favorite-button,
-.page-shell.theme-dark .business-social-actions button {
-  background: rgba(255, 255, 255, .05);
-  border-color: rgba(255, 255, 255, .18);
-  color: #f3fff7;
-}
-
-.page-shell.theme-dark .business-tags span {
-  background: rgba(255, 255, 255, .08);
-  color: #f3fff7;
-}
-
-.page-shell.theme-dark .business-wallet-panel {
   background: linear-gradient(145deg, rgba(7, 150, 62, .18), rgba(8, 21, 14, .88));
-  border-color: rgba(255, 255, 255, .1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  box-shadow: 0 22px 52px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .08);
 }
 
-.page-shell.theme-dark .business-wallet-panel strong,
-.page-shell.theme-dark .business-info-card .info-text,
-.page-shell.theme-dark .business-feature-item strong {
+.page-shell.theme-dark .restaurant-wallet-card strong,
+html.theme-dark .page-shell .restaurant-wallet-card strong {
   color: #f4fff8;
 }
 
-.page-shell.theme-dark .business-wallet-panel p,
-.page-shell.theme-dark .business-info-card .info-title,
-.page-shell.theme-dark .business-feature-item span {
-  color: rgba(244, 255, 248, .72);
+.page-shell.theme-dark .restaurant-wallet-card p,
+.page-shell.theme-dark .restaurant-wallet-card small,
+html.theme-dark .page-shell .restaurant-wallet-card p,
+html.theme-dark .page-shell .restaurant-wallet-card small {
+  color: rgba(244, 255, 248, .76);
 }
 
-.page-shell.theme-dark .business-info-icon {
-  background: radial-gradient(circle, rgba(7, 150, 62, .34), rgba(7, 150, 62, .12));
-}
-
-@media (max-width: 1180px) {
-  .business-profile-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .business-profile-card {
-    max-width: none;
-  }
-
-  .business-social-actions {
-    margin-top: 0;
+@media (max-width: 768px) {
+  .restaurant-wallet-card {
+    width: min(100%, 300px);
+    margin-top: 20px;
+    padding: 20px;
   }
 }
 
-@media (max-width: 880px) {
-  .business-info-grid,
-  .business-feature-strip {
-    grid-template-columns: 1fr;
-  }
-
-  .business-feature-item {
-    border-left: 0;
-    border-bottom: 1px solid rgba(7, 150, 62, .12);
-  }
-
-  .business-feature-item:last-child {
-    border-bottom: 0;
-  }
-}
-
-@media (max-width: 640px) {
-  .business-profile-layout {
-    gap: 14px;
-  }
-
-  .business-profile-card {
-    padding: 22px 16px;
-    border-radius: 16px;
-  }
-
-  .business-logo-circle {
-    width: 128px;
-    height: 128px;
-    border-width: 5px;
-  }
-
-  .business-profile-layout .business-hero-banner {
-    min-height: 0;
-    border-radius: 14px;
-  }
-
-  .business-profile-layout .business-hero-banner.business-hero-banner-photo {
-    aspect-ratio: 2.15 / 1;
-  }
-
-  .business-banner-badge {
-    right: 12px;
-    left: 12px;
-    bottom: 12px;
-    max-width: none;
-    padding: 10px 12px;
-    font-size: 12px;
-  }
-
-  .business-info-card {
-    min-height: 136px;
-    padding: 18px;
-  }
-
-  .business-info-icon {
-    width: 52px;
-    height: 52px;
-  }
-}
-
-@media (max-width: 640px) {
-  .business-profile-layout .business-hero-banner.business-hero-banner-photo .hero-photo {
-    object-fit: contain !important;
-  }
-}
-
-/* Business info card refinements */
-.business-banner-badge {
-  display: none !important;
-}
-
-.business-info-card {
-  direction: rtl;
-  min-height: 142px;
-  padding: 18px;
-  gap: 14px;
-}
-
-.business-info-copy {
-  width: 100%;
-  align-content: start;
-  justify-items: end;
-  gap: 6px;
-}
-
-.business-info-card .info-title {
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.business-info-card .info-text {
-  max-width: 100%;
-  font-size: clamp(13px, 1.2vw, 16px);
-  line-height: 1.65;
-  overflow-wrap: anywhere;
-}
-
-.business-phone-text {
+/* Keep the restored restaurant phone number readable inside its card. */
+.restaurant-shell .info-card:has(.restaurant-phone-text) {
   direction: ltr;
-  unicode-bidi: isolate;
-  text-align: right;
-  white-space: nowrap;
-  letter-spacing: .01em;
-}
-
-.business-info-action {
-  justify-self: end;
-  align-self: end;
-  margin-top: 8px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: rgba(7, 150, 62, .12);
-  color: var(--green);
-  text-decoration: none;
-  font-size: 12px;
-  line-height: 1;
-}
-
-.business-info-action:hover {
-  color: var(--green);
-  background: rgba(7, 150, 62, .2);
-  text-decoration: none;
-}
-
-.business-info-action.is-disabled {
-  opacity: .55;
-  cursor: default;
-}
-
-.business-info-action svg {
-  width: 15px;
-  height: 15px;
-}
-
-@media (max-width: 640px) {
-  .business-info-card {
-    min-height: 124px;
-    padding: 16px;
-  }
-
-  .business-info-card .info-text {
-    font-size: 13px;
-  }
-}
-
-/* Final business banner and Instagram action tuning */
-.business-profile-layout .business-hero-banner,
-.business-profile-layout .business-hero-banner.business-hero-banner-photo {
-  background: transparent !important;
-}
-
-.business-profile-layout .business-hero-banner .hero-photo,
-.business-profile-layout .business-hero-banner.business-hero-banner-photo .hero-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover !important;
-  object-position: center center;
-  background: transparent !important;
-}
-
-.business-social-actions {
-  justify-content: center;
-}
-
-.business-instagram-link {
-  min-width: 150px;
-  min-height: 48px;
-  display: inline-flex;
+  display: grid !important;
+  grid-template-columns: 40px minmax(0, 1fr);
   align-items: center;
-  justify-content: center;
+  justify-content: stretch !important;
   gap: 10px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(7, 150, 62, .22);
-  color: #0c7f39;
-  background: linear-gradient(135deg, rgba(7, 150, 62, .12), rgba(255, 255, 255, .86));
-  text-decoration: none;
-  font-weight: 900;
-  box-shadow: 0 14px 28px rgba(7, 150, 62, .1);
-  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  padding-inline: 14px;
 }
 
-.business-instagram-link:hover {
-  transform: translateY(-2px);
-  border-color: rgba(7, 150, 62, .48);
-  color: var(--green);
-  text-decoration: none;
-  background: linear-gradient(135deg, rgba(7, 150, 62, .18), rgba(255, 255, 255, .94));
-}
-
-.business-instagram-link svg {
+.restaurant-shell .info-card:has(.restaurant-phone-text) svg {
+  grid-column: 1;
+  justify-self: center;
   width: 22px;
   height: 22px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
-.business-instagram-link span {
-  font-size: 14px;
-  line-height: 1;
+.restaurant-shell .info-card:has(.restaurant-phone-text) > div {
+  grid-column: 2;
+  width: 100%;
+  min-width: 0;
+  text-align: right !important;
 }
 
-.page-shell.theme-dark .business-instagram-link {
-  color: #f5fff8;
-  border-color: rgba(255, 255, 255, .18);
-  background: linear-gradient(135deg, rgba(7, 150, 62, .24), rgba(255, 255, 255, .06));
-  box-shadow: 0 14px 28px rgba(0, 0, 0, .2);
+.restaurant-shell .restaurant-phone-text {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  color: inherit;
+  font-size: clamp(12px, .95vw, 14px);
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-align: right;
 }
 
-.page-shell.theme-dark .business-instagram-link:hover {
-  border-color: rgba(67, 224, 130, .5);
-  background: linear-gradient(135deg, rgba(7, 150, 62, .32), rgba(255, 255, 255, .08));
-}
-
-@media (max-width: 640px) {
-  .business-profile-layout .business-hero-banner.business-hero-banner-photo .hero-photo {
-    object-fit: cover !important;
+@media (max-width: 980px) and (min-width: 769px) {
+  .restaurant-shell .info-card:has(.restaurant-phone-text) {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 8px;
+    padding-inline: 10px;
   }
 
-  .business-instagram-link {
-    width: 100%;
+  .restaurant-shell .restaurant-phone-text {
+    font-size: 11px;
   }
 }

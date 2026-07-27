@@ -1,9 +1,10 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardPage from "./components/DashboardPage";
 import Header from "./components/Header";
 import LoginModal from "./components/LoginModal";
 import MobileBottomNav from "./components/MobileBottomNav";
 import RestaurantPage from "./components/RestaurantPage";
+import BusinessProfilePage from "./components/BusinessProfilePage";
 import { sendOtp, verifyOtp } from "./api/auth";
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from "./helper/authCookie";
 
@@ -215,11 +216,11 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
   const mobileBottomCurrentPage = currentPage === "dashboard" && dashboardSectionRequest?.section === "gifts" ? "gifts" : currentPage;
 
   return (
-    <main className={`page-shell ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen ? "is-login-open" : ""}`} dir="rtl">
+    <main className={`page-shell ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${currentPage === "business" ? "business-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen ? "is-login-open" : ""}`} dir="rtl">
       <section
         className={`frame ${currentPage === "dashboard" ? "dashboard-frame" : ""} ${
           currentPage === "restaurant" ? "restaurant-frame" : ""
-        }`}
+        } ${currentPage === "business" ? "business-frame" : ""}`}
       >
         <Header
           currentPage={currentPage}
@@ -232,9 +233,13 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
           isDarkMode={isDarkMode}
           onToggleTheme={onToggleTheme}
         />
-
         <RestaurantPage
           isVisible={currentPage === "restaurant"}
+          isLoggedIn={isLoggedIn}
+        />
+
+        <BusinessProfilePage
+          isVisible={currentPage === "business"}
           isLoggedIn={isLoggedIn}
         />
 

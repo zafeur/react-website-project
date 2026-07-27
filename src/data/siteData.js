@@ -1,4 +1,4 @@
-﻿import {
+import {
   CircleHelp,
   ClipboardList,
   Clock3,
@@ -68,7 +68,7 @@ export const infoCards = [
   },
   {
     icon: Phone,
-    text: '۰۹۱۲ ۲۴۵ ۶۷۸۹',
+    text: '0919 404 0911',
   },
 ];
 
@@ -221,7 +221,7 @@ export const businessProfiles = [
   {
     id: 'barial',
     slug: 'barial',
-    aliases: ['باریال', 'بریال'],
+    aliases: ['باریال'],
     title: 'باریال',
     shortTitle: 'باریال',
     category: 'پزشکی زیبایی',
