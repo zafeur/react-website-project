@@ -36,13 +36,13 @@ export const getStaticPaths = async () => {
     new Set(
       businessProfiles
         .flatMap((profile) => [profile.id, profile.slug])
-        .filter(Boolean)
+        .filter((business) => business && String(business).toLowerCase() !== 'melal')
     )
   );
 
   return {
     paths: slugs.map((business) => ({ params: { business } })),
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 

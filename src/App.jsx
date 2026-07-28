@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import DashboardPage from "./components/DashboardPage";
 import Header from "./components/Header";
 import LoginModal from "./components/LoginModal";
@@ -12,7 +12,7 @@ const PAGE_STORAGE_KEY = "keymiyay-current-page";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
 
-function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) {
+function App({ initialPage = "restaurant", initialDashboardSection = null, isDarkMode = false, onToggleTheme }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,7 +32,7 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
     setHasCheckedAuth(true);
 
     if (loggedIn && initialPage === "dashboard") {
-      setDashboardSectionRequest(null);
+      setDashboardSectionRequest(initialDashboardSection ? { section: initialDashboardSection, createdAt: Date.now() } : null);
       setCurrentPage("dashboard");
       return;
     }
@@ -49,7 +49,7 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
     if (initialPage === "dashboard") {
       setIsLoginOpen(true);
     }
-  }, [initialPage]);
+  }, [initialPage, initialDashboardSection]);
 
   useEffect(() => {
     if (!hasCheckedAuth || !canUseStorage()) {
@@ -92,14 +92,14 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
         return true;
       }
 
-      setLoginError("ارسال کد انجام نشد.");
+      setLoginError("Ø§Ø±Ø³Ø§Ù„ Ú©Ø¯ Ø§Ù†Ø¬Ø§Ù… Ù†Ø´Ø¯.");
       return false;
     } catch (error) {
       console.log(error);
 
       setLoginError(
         error.response?.data?.message ||
-          "خطا در ارتباط با سرور"
+          "Ø®Ø·Ø§ Ø¯Ø± Ø§Ø±ØªØ¨Ø§Ø· Ø¨Ø§ Ø³Ø±ÙˆØ±"
       );
 
       return false;
@@ -128,7 +128,7 @@ function App({ initialPage = "restaurant", isDarkMode = false, onToggleTheme }) 
       setIsLoggedIn(true);
       setIsLoginOpen(false);
       setIsUserMenuOpen(false);
-      setDashboardSectionRequest(null);
+      setDashboardSectionRequest(initialDashboardSection ? { section: initialDashboardSection, createdAt: Date.now() } : null);
       setCurrentPage("dashboard");
     } catch (error) {
       console.log(error);

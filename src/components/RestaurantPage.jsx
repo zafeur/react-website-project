@@ -57,10 +57,10 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
     };
   }, [isVisible, isLoggedIn]);
 
-  const walletAmount = isLoggedIn ? melalWallet?.balanceLabel || '۰ تومان' : 'ورود لازم است';
+  const walletAmount = isLoggedIn ? melalWallet?.balanceLabel || '\u06f0 \u062a\u0648\u0645\u0627\u0646' : '\u0648\u0631\u0648\u062f \u0644\u0627\u0632\u0645 \u0627\u0633\u062a';
   const walletStatus = isLoggedIn
-    ? melalWallet?.status || 'هنوز کیف پول این مجموعه شارژ نشده'
-    : 'برای مشاهده کیف پول رستوران ملل وارد حساب شوید.';
+    ? melalWallet?.status || '\u0647\u0646\u0648\u0632 \u06a9\u06cc\u0641 \u067e\u0648\u0644 \u0627\u06cc\u0646 \u0645\u062c\u0645\u0648\u0639\u0647 \u0634\u0627\u0631\u0698 \u0646\u0634\u062f\u0647'
+    : '\u0628\u0631\u0627\u06cc \u0645\u0634\u0627\u0647\u062f\u0647 \u06a9\u06cc\u0641 \u067e\u0648\u0644 \u0631\u0633\u062a\u0648\u0631\u0627\u0646 \u0645\u0644\u0644 \u0648\u0627\u0631\u062f \u062d\u0633\u0627\u0628 \u0634\u0648\u06cc\u062f.';
   const walletPoints = isLoggedIn ? melalWallet?.points : '';
 
   return (
@@ -114,14 +114,14 @@ function RestaurantPage({ isVisible, isLoggedIn = false }) {
           </div>
           <button className="follow-btn">{text.follow}</button>
 
-          <section className="restaurant-wallet-card" aria-label="کیف پول رستوران ملل">
+          <section className="restaurant-wallet-card" aria-label="\u06a9\u06cc\u0641 \u067e\u0648\u0644 \u0631\u0633\u062a\u0648\u0631\u0627\u0646 \u0645\u0644\u0644">
             <div className="restaurant-wallet-head">
               <Wallet />
-              <span>کیف پول این مجموعه</span>
+              <span>{'\u06a9\u06cc\u0641 \u067e\u0648\u0644 \u0627\u06cc\u0646 \u0645\u062c\u0645\u0648\u0639\u0647'}</span>
             </div>
             <strong>{walletAmount}</strong>
             <p>{walletStatus}</p>
-            {walletPoints && <small>امتیاز شما: {walletPoints}</small>}
+            {walletPoints && <small>{'\u0627\u0645\u062a\u06cc\u0627\u0632 \u0634\u0645\u0627:'} {walletPoints}</small>}
           </section>
         </aside>
       </section>
