@@ -3670,3 +3670,609 @@ html.theme-dark .home-shell .home-guide-steps p {
     justify-self: stretch;
   }
 }
+
+/* Discount card modes: VIP, gift+discount, simple discount. */
+.home-offer-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-offer-card--vip-discount {
+  border-color: rgba(126, 87, 255, .32) !important;
+  background:
+    linear-gradient(180deg, rgba(126, 87, 255, .075), rgba(255, 255, 255, .98)) !important;
+  box-shadow: 0 18px 42px rgba(88, 54, 180, .13) !important;
+}
+
+.home-offer-card--vip-discount::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(180deg, #7c4dff, #12b76a);
+}
+
+.home-offer-card--gift-discount {
+  border-color: rgba(7, 150, 62, .26) !important;
+  background:
+    linear-gradient(180deg, rgba(7, 150, 62, .055), rgba(255, 255, 255, .98)) !important;
+}
+
+.home-offer-card--simple-discount {
+  border-color: rgba(15, 23, 42, .08) !important;
+}
+
+.home-offer-kind {
+  position: absolute;
+  top: 9px;
+  inset-inline-start: 9px;
+  z-index: 2;
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .92);
+  color: #0f172a;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .12);
+  font-size: 11px;
+  font-weight: 950;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.home-offer-card--vip-discount .home-offer-kind {
+  background: linear-gradient(135deg, #7c4dff, #5122c8);
+  color: #fff;
+}
+
+.home-offer-card--gift-discount .home-offer-kind {
+  background: linear-gradient(135deg, #07963e, #12b76a);
+  color: #fff;
+}
+
+.home-offer-card--simple-discount .home-offer-kind {
+  background: #eefaf2;
+  color: var(--green);
+}
+
+.home-offer-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 0;
+}
+
+.home-offer-benefits b {
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(7, 150, 62, .09);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.home-offer-card--vip-discount .home-offer-benefits b {
+  background: rgba(124, 77, 255, .1);
+  color: #5836b4;
+}
+
+.home-offer-card--vip-discount .home-offer-benefits b:last-child {
+  background: #5836b4;
+  color: #fff;
+}
+
+.home-shell.theme-dark .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-offer-card--vip-discount {
+  border-color: rgba(155, 125, 255, .38) !important;
+  background: linear-gradient(180deg, rgba(124, 77, 255, .16), rgba(15, 23, 18, .9)) !important;
+}
+
+.home-shell.theme-dark .home-offer-card--gift-discount,
+html.theme-dark .home-shell .home-offer-card--gift-discount {
+  border-color: rgba(109, 240, 155, .28) !important;
+  background: linear-gradient(180deg, rgba(7, 150, 62, .14), rgba(15, 23, 18, .9)) !important;
+}
+
+.home-shell.theme-dark .home-offer-kind,
+html.theme-dark .home-shell .home-offer-kind {
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .28);
+}
+
+.home-shell.theme-dark .home-offer-benefits b,
+html.theme-dark .home-shell .home-offer-benefits b {
+  background: rgba(109, 240, 155, .11);
+  color: #9ff7bb;
+}
+
+.home-shell.theme-dark .home-offer-card--vip-discount .home-offer-benefits b,
+html.theme-dark .home-shell .home-offer-card--vip-discount .home-offer-benefits b {
+  background: rgba(155, 125, 255, .15);
+  color: #d4c8ff;
+}
+
+.home-shell.theme-dark .home-offer-card--vip-discount .home-offer-benefits b:last-child,
+html.theme-dark .home-shell .home-offer-card--vip-discount .home-offer-benefits b:last-child {
+  background: #7c4dff;
+  color: #fff;
+}
+
+/* Final dark-mode offer carousel cleanup: remove the white OS-looking strip and tame overlay badges. */
+.home-offer-grid {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .home-offer-grid {
+    padding: 0 10px 12px !important;
+    margin-inline: -10px !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(7, 150, 62, .75) rgba(7, 150, 62, .12) !important;
+  }
+
+  .home-offer-grid::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .home-offer-grid::-webkit-scrollbar-track {
+    border-radius: 999px !important;
+    background: rgba(7, 150, 62, .12) !important;
+    box-shadow: inset 0 0 0 1px rgba(7, 150, 62, .12) !important;
+  }
+
+  .home-offer-grid::-webkit-scrollbar-thumb {
+    border-radius: 999px !important;
+    border: 2px solid transparent !important;
+    background: linear-gradient(90deg, #07963e, #32d477) border-box !important;
+  }
+
+  .home-offer-grid::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .home-shell.theme-dark .home-offer-grid,
+  html.theme-dark .home-shell .home-offer-grid {
+    scrollbar-color: rgba(109, 240, 155, .8) rgba(255, 255, 255, .07) !important;
+  }
+
+  .home-shell.theme-dark .home-offer-grid::-webkit-scrollbar-track,
+  html.theme-dark .home-shell .home-offer-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, .065) !important;
+    box-shadow: inset 0 0 0 1px rgba(109, 240, 155, .12) !important;
+  }
+
+  .home-shell.theme-dark .home-offer-grid::-webkit-scrollbar-thumb,
+  html.theme-dark .home-shell .home-offer-grid::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #07963e, #6df09b) border-box !important;
+  }
+
+  .home-shell.theme-dark .home-offer-grid::-webkit-scrollbar-corner,
+  html.theme-dark .home-shell .home-offer-grid::-webkit-scrollbar-corner {
+    background: transparent !important;
+  }
+}
+
+.home-offer-kind {
+  top: -12px !important;
+  inset-inline-start: 50% !important;
+  transform: translateX(-50%);
+  max-width: calc(100% - 12px);
+  min-height: 22px !important;
+  padding: 0 9px !important;
+  border: 1px solid rgba(7, 150, 62, .28);
+  background: rgba(7, 150, 62, .92) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 18px rgba(7, 150, 62, .18) !important;
+  font-size: 10px !important;
+}
+
+.home-offer-card--vip-discount .home-offer-kind {
+  border-color: rgba(124, 77, 255, .42);
+  background: linear-gradient(135deg, #7c4dff, #5122c8) !important;
+}
+
+.home-offer-card--simple-discount .home-offer-kind {
+  background: rgba(16, 26, 20, .92) !important;
+  border-color: rgba(255, 255, 255, .12);
+}
+
+.home-shell.theme-dark .home-offer-kind,
+html.theme-dark .home-shell .home-offer-kind,
+.home-shell.theme-dark .home-offer-card--simple-discount .home-offer-kind,
+html.theme-dark .home-shell .home-offer-card--simple-discount .home-offer-kind {
+  background: rgba(10, 30, 18, .96) !important;
+  border-color: rgba(109, 240, 155, .24) !important;
+  color: #eafff0 !important;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .28) !important;
+}
+
+.home-offer-percent {
+  z-index: 3 !important;
+}
+
+.home-offer-status {
+  z-index: 3 !important;
+}
+
+/* Place the offer type chip opposite the percent badge. */
+.home-offer-kind {
+  inset-inline-start: auto !important;
+  inset-inline-end: -8px !important;
+  transform: none !important;
+}
+
+@media (max-width: 520px) {
+  .home-offer-kind {
+    inset-inline-end: -6px !important;
+  }
+}
+
+/* Final placement: offer type belongs to the card, not on top of the logo. */
+.home-offer-card > .home-offer-kind {
+  position: absolute !important;
+  top: 12px !important;
+  inset-inline-start: auto !important;
+  inset-inline-end: 12px !important;
+  transform: none !important;
+  z-index: 4 !important;
+  max-width: calc(100% - 24px);
+}
+
+.home-offer-media .home-offer-kind {
+  display: none !important;
+}
+
+.home-offer-media {
+  isolation: isolate;
+}
+
+.home-offer-percent {
+  top: -7px !important;
+  left: -7px !important;
+  right: auto !important;
+}
+
+.home-offer-status {
+  right: -8px !important;
+  bottom: -3px !important;
+}
+
+@media (max-width: 520px) {
+  .home-offer-card > .home-offer-kind {
+    top: 10px !important;
+    inset-inline-end: 10px !important;
+  }
+}
+
+/* Red-dot placement: offer type chip sits on the logo's top-right, opposite the percent badge. */
+.home-offer-card > .home-offer-kind {
+  display: none !important;
+}
+
+.home-offer-media .home-offer-kind {
+  display: inline-flex !important;
+  position: absolute !important;
+  top: -5px !important;
+  left: auto !important;
+  right: -36px !important;
+  inset-inline-start: auto !important;
+  inset-inline-end: auto !important;
+  transform: none !important;
+  z-index: 4 !important;
+  width: auto !important;
+  max-width: 82px !important;
+  min-height: 24px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(109, 240, 155, .34) !important;
+  background: rgba(10, 30, 18, .94) !important;
+  color: #eafff0 !important;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .24) !important;
+  font-size: 10px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.home-offer-media .home-offer-percent {
+  top: -8px !important;
+  left: -8px !important;
+  right: auto !important;
+  z-index: 5 !important;
+}
+
+.home-shell.theme-dark .home-offer-media .home-offer-kind,
+html.theme-dark .home-shell .home-offer-media .home-offer-kind {
+  background: rgba(8, 24, 15, .96) !important;
+  border-color: rgba(109, 240, 155, .36) !important;
+  color: #f2fff6 !important;
+}
+
+@media (max-width: 520px) {
+  .home-offer-media .home-offer-kind {
+    right: -30px !important;
+    max-width: 76px !important;
+    padding-inline: 8px !important;
+    font-size: 9px !important;
+  }
+}
+
+/* RTL correction: place offer type on the RTL opposite side of the percent badge. */
+.home-offer-media .home-offer-kind {
+  right: auto !important;
+  left: -36px !important;
+}
+
+.home-offer-media .home-offer-percent {
+  left: auto !important;
+  right: -8px !important;
+}
+
+@media (max-width: 520px) {
+  .home-offer-media .home-offer-kind {
+    right: auto !important;
+    left: -30px !important;
+  }
+}
+
+/* Align the two top logo badges to the same height and baseline. */
+.home-offer-media .home-offer-percent,
+.home-offer-media .home-offer-kind {
+  top: -8px !important;
+  min-height: 26px !important;
+  height: 26px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+.home-offer-media .home-offer-percent {
+  padding-inline: 10px !important;
+}
+
+.home-offer-media .home-offer-kind {
+  padding-inline: 12px !important;
+}
+
+@media (max-width: 520px) {
+  .home-offer-media .home-offer-percent,
+  .home-offer-media .home-offer-kind {
+    top: -7px !important;
+    min-height: 24px !important;
+    height: 24px !important;
+  }
+}
+
+/* RTL tablet header correction: keep brand on the right and actions on the left. */
+@media (max-width: 1180px) and (min-width: 769px) {
+  .home-shell .topbar,
+  .home-frame .topbar {
+    grid-template-areas:
+      "brand actions"
+      "nav nav" !important;
+    direction: rtl !important;
+  }
+
+  .home-shell .brand,
+  .home-frame .brand {
+    justify-self: end !important;
+    direction: rtl !important;
+  }
+
+  .home-shell .home-header-actions,
+  .home-frame .home-header-actions {
+    justify-self: start !important;
+    direction: ltr !important;
+  }
+}
+
+/* Final homepage tablet header lock: logo right, actions left, toggle right of login. */
+@media (max-width: 1180px) and (min-width: 769px) {
+  .home-shell .topbar,
+  .home-frame .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "actions spacer brand"
+      "nav nav nav" !important;
+    direction: ltr !important;
+    align-items: center !important;
+    gap: 16px 18px !important;
+    width: 100% !important;
+  }
+
+  .home-shell .topbar > div:first-child,
+  .home-frame .topbar > div:first-child {
+    display: contents !important;
+  }
+
+  .home-shell .brand,
+  .home-frame .brand {
+    grid-area: brand !important;
+    justify-self: end !important;
+    direction: rtl !important;
+    margin: 0 !important;
+    min-width: max-content !important;
+  }
+
+  .home-shell .home-header-actions,
+  .home-frame .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    direction: ltr !important;
+  }
+
+  .home-shell .topbar nav,
+  .home-frame .topbar nav {
+    grid-area: nav !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .home-shell .nav-list,
+  .home-frame .nav-list {
+    justify-content: center !important;
+    margin: 0 !important;
+  }
+}
+
+/* API discount grouping: keep VIP, gift+discount, and simple discounts visually separated. */
+.home-offer-sections {
+  display: grid;
+  gap: 22px;
+}
+
+.home-offer-group {
+  position: relative;
+  padding: 18px;
+  border: 1px solid rgba(7, 150, 62, .12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .62);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, .05);
+  overflow: hidden;
+}
+
+.home-offer-group-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+  direction: rtl;
+}
+
+.home-offer-group-head span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(7, 150, 62, .1);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.home-offer-group-head h3 {
+  margin: 9px 0 0;
+  color: #101820;
+  font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 950;
+  line-height: 1.25;
+}
+
+.home-offer-group-head p {
+  max-width: 360px;
+  margin: 0;
+  color: #60706a;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.9;
+  text-align: left;
+}
+
+.home-offer-group--vip {
+  border-color: rgba(124, 77, 255, .24);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(124, 77, 255, .14), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(239, 255, 245, .88));
+  box-shadow: 0 24px 52px rgba(88, 54, 180, .14);
+}
+
+.home-offer-group--vip::before {
+  content: '';
+  position: absolute;
+  inset-inline: 18px;
+  top: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #12b76a, #7c4dff, #f5b700);
+}
+
+.home-offer-group--vip .home-offer-group-head span {
+  background: linear-gradient(135deg, #7c4dff, #12b76a);
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(88, 54, 180, .2);
+}
+
+.home-offer-group--vip .home-offer-card--vip-discount {
+  transform: translateY(-2px);
+}
+
+.home-offer-group--vip .home-offer-card--vip-discount h3 {
+  font-size: 20px;
+}
+
+.home-offer-group--simple {
+  background: rgba(255, 255, 255, .5);
+}
+
+.home-shell.theme-dark .home-offer-group,
+html.theme-dark .home-shell .home-offer-group {
+  border-color: rgba(109, 240, 155, .16);
+  background: rgba(4, 20, 12, .68);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .18);
+}
+
+.home-shell.theme-dark .home-offer-group-head h3,
+html.theme-dark .home-shell .home-offer-group-head h3 {
+  color: #f5fff7;
+}
+
+.home-shell.theme-dark .home-offer-group-head p,
+html.theme-dark .home-shell .home-offer-group-head p {
+  color: rgba(226, 246, 232, .7);
+}
+
+.home-shell.theme-dark .home-offer-group--vip,
+html.theme-dark .home-shell .home-offer-group--vip {
+  border-color: rgba(155, 125, 255, .32);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(124, 77, 255, .22), transparent 34%),
+    linear-gradient(135deg, rgba(6, 26, 14, .92), rgba(10, 24, 18, .86));
+  box-shadow: 0 24px 54px rgba(0, 0, 0, .34);
+}
+
+@media (max-width: 760px) {
+  .home-offer-group {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .home-offer-group-head {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .home-offer-group-head p {
+    max-width: none;
+    text-align: right;
+    font-size: 12px;
+  }
+}
+

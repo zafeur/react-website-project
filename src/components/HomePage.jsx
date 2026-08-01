@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
@@ -20,7 +20,7 @@ import {
 import LoginModal from './LoginModal';
 import MobileBottomNav from './MobileBottomNav';
 import { sendOtp, verifyOtp } from '../api/auth';
-import { getHomePageData, requestDiscountCode } from '../api/home';
+import { getDiscountCards, getHomePageData, requestDiscountCode } from '../api/home';
 import { getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
 
 const t = {
@@ -151,13 +151,13 @@ const defaultHomeData = {
 ],
 
   offers: [
-  { id: 'melal-discount', businessId: 'melal', title: t.gift1, brand: t.restaurant, tag: t.free, image: asset('img/restaurant-melal.png') },
-  { id: 'barial-discount', businessId: 'barial', title: t.gift2, brand: t.barial, tag: t.discount, image: asset('img/barial.jpg') },
-  { id: 'dorato-discount', businessId: 'dorato', title: t.gift3, brand: t.dorato, tag: t.special, image: asset('img/logo dorato.jpg') },
-  { id: 'ibamo-discount', businessId: 'ibamo', title: 'کد تخفیف خرید از ایبامو', brand: t.ibamo, tag: t.discount, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
-  { id: 'bakhshi-discount', businessId: 'bakhshi', title: 'کد تخفیف خرید از بخشی', brand: t.bakhshi, tag: t.discount, image: asset('img/bakhshi.jpg') },
-  { id: 'bastani-discount', businessId: 'bastani', title: 'کد تخفیف خرید از باستانی', brand: t.bastani, tag: t.discount, image: asset('img/business-banners/bastani-logo-enhanced.png') },
-  { id: 'mojalal-discount', businessId: 'mojalal', title: 'کد تخفیف خرید از مجلل', brand: t.mojalal, tag: t.discount, image: asset('img/mojalal.jpg') },
+  { id: 'melal-discount', businessId: 'melal', title: t.gift1, brand: t.restaurant, tag: t.free, vip: 0, hasGift: true, hasDiscount: false, image: asset('img/restaurant-melal.png') },
+  { id: 'barial-discount', businessId: 'barial', title: t.gift2, brand: t.barial, tag: t.discount, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/barial.jpg') },
+  { id: 'dorato-discount', businessId: 'dorato', title: t.gift3, brand: t.dorato, tag: t.special, vip: 1, hasGift: true, hasDiscount: true, image: asset('img/logo dorato.jpg') },
+  { id: 'ibamo-discount', businessId: 'ibamo', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0627\u06cc\u0628\u0627\u0645\u0648', brand: t.ibamo, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
+  { id: 'bakhshi-discount', businessId: 'bakhshi', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u062e\u0634\u06cc', brand: t.bakhshi, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/bakhshi.jpg') },
+  { id: 'bastani-discount', businessId: 'bastani', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u0627\u0633\u062a\u0627\u0646\u06cc', brand: t.bastani, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/business-banners/bastani-logo-enhanced.png') },
+  { id: 'mojalal-discount', businessId: 'mojalal', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0645\u062c\u0644\u0644', brand: t.mojalal, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/mojalal.jpg') },
 ],
 };
 
@@ -173,7 +173,57 @@ const categoryIcons = {
 const normalizeList = (value, fallback) => (Array.isArray(value) && value.length ? value : fallback);
 
 const firstValue = (item, keys) => keys.map((key) => item?.[key]).find(Boolean);
-const blockedCategoryTerms = ['pet', 'pets', 'animal', 'animals', 'حیوان', 'حیوانات', 'حیوانات خانگی'];
+const firstDefinedValue = (item, keys) => {
+  for (const key of keys) {
+    if (item?.[key] !== undefined && item?.[key] !== null && item?.[key] !== '') {
+      return item[key];
+    }
+  }
+
+  return undefined;
+};
+
+const flagValue = (value) => {
+  if (value === undefined || value === null || value === '') {
+    return undefined;
+  }
+
+  if (typeof value === 'boolean') {
+    return value;
+  }
+
+  if (typeof value === 'number') {
+    return value === 1;
+  }
+
+  const normalized = String(value).trim().toLowerCase();
+
+  if (['1', 'true', 'yes', 'vip', 'v.i.p', '\u0648\u06cc\u200c\u0622\u06cc\u200c\u067e\u06cc', '\u0648\u06cc \u0622\u06cc \u067e\u06cc'].includes(normalized)) {
+    return true;
+  }
+
+  if (['0', 'false', 'no', 'normal', 'simple'].includes(normalized)) {
+    return false;
+  }
+
+  return Boolean(normalized);
+};
+
+const offerHasValue = (offer, keys) => {
+  const value = firstDefinedValue(offer, keys);
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const asFlag = flagValue(value);
+  if (asFlag !== undefined && ['boolean', 'number'].includes(typeof value)) {
+    return asFlag;
+  }
+
+  return String(value).trim() !== '' && String(value).trim() !== '0';
+};
+const blockedCategoryTerms = ['pet', 'pets', 'animal', 'animals', '\u062d\u06cc\u0648\u0627\u0646', '\u062d\u06cc\u0648\u0627\u0646\u0627\u062a', '\u062d\u06cc\u0648\u0627\u0646\u0627\u062a \u062e\u0627\u0646\u06af\u06cc'];
 
 const isAllowedCategory = (category) => {
   const title = String(firstValue(category, ['title', 'name', 'label']) || '').toLowerCase();
@@ -223,11 +273,32 @@ const normalizeCards = (items, fallback) =>
     businessId: firstValue(item, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug']) || fallback[index % fallback.length].businessId,
   }));
 
+const getNormalizedOfferShape = (offer) => {
+  const isVip = flagValue(firstDefinedValue(offer, ['vip', 'is_vip', 'isVip', 'isVIP', 'vip_flag', 'vipFlag', 'vip_status', 'vipStatus', 'vip_discount', 'vipDiscount', 'is_vip_discount', 'isVipDiscount'])) === true;
+  const explicitGift = offerHasValue(offer, ['hasGift', 'has_gift', 'gift', 'gift_title', 'giftTitle', 'gift_name', 'giftName', 'gift_description', 'giftDescription', 'gift_value', 'giftValue']);
+  const explicitDiscount = offerHasValue(offer, ['hasDiscount', 'has_discount', 'discount', 'discount_title', 'discountTitle', 'discount_percent', 'discountPercent', 'discount_value', 'discountValue', 'discount_amount', 'discountAmount', 'percent', 'percentage', 'code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']);
+  const searchableText = `${offer.title || ''} ${offer.tag || ''} ${offer.description || ''}`.toLowerCase();
+  const hasGift = isVip ? true : explicitGift ?? /gift|free|\u0647\u062f\u06cc\u0647|\u0631\u0627\u06cc\u06af\u0627\u0646/.test(searchableText);
+  const hasDiscount = isVip ? true : explicitDiscount ?? /discount|coupon|percent|%|\u066a|\u062a\u062e\u0641\u06cc\u0641|\u06a9\u062f/.test(searchableText);
+  const offerType = isVip
+    ? 'vip-discount'
+    : hasGift && hasDiscount
+      ? 'gift-discount'
+      : 'simple-discount';
+
+  return {
+    isVip,
+    hasGift,
+    hasDiscount,
+    offerType,
+  };
+};
+
 const normalizeOffers = (items) =>
   items.map((offer, index) => {
     const fallback = defaultHomeData.offers[index % defaultHomeData.offers.length];
-
-    return {
+    const normalizedOffer = {
+      ...fallback,
       ...offer,
       id: firstValue(offer, ['id', 'discount_id', 'discountId', 'offer_id', 'offerId']) || fallback.id,
       businessId: firstValue(offer, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug']) || fallback.businessId,
@@ -237,8 +308,53 @@ const normalizeOffers = (items) =>
       image: normalizeImage(offer, fallback.image),
       code: firstValue(offer, ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']) || fallback.code || '',
     };
+
+    return {
+      ...normalizedOffer,
+      ...getNormalizedOfferShape(normalizedOffer),
+    };
   });
 
+
+const findOfferList = (source) => {
+  if (Array.isArray(source)) {
+    return source;
+  }
+
+  if (!source || typeof source !== 'object') {
+    return [];
+  }
+
+  const offerKeys = ['discounts', 'offers', 'gifts', 'cards', 'codes', 'items', 'records', 'list', 'result', 'data'];
+
+  for (const key of offerKeys) {
+    const value = source[key];
+
+    if (Array.isArray(value)) {
+      return value;
+    }
+
+    if (value && typeof value === 'object') {
+      const nested = findOfferList(value);
+      if (nested.length) {
+        return nested;
+      }
+    }
+  }
+
+  return [];
+};
+
+const normalizeDiscountApiOffers = (payload) => normalizeOffers(findOfferList(resolveHomeData(payload)));
+
+const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
+  const normalizedHome = normalizeHomeData(homePayload);
+  const discountOffers = normalizeDiscountApiOffers(discountPayload);
+
+  return discountOffers.length
+    ? { ...normalizedHome, offers: discountOffers }
+    : normalizedHome;
+};
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
   const brands = normalizeCards(
@@ -359,17 +475,40 @@ const getDiscountMessage = (data) =>
   findNestedValue(data, ['message', 'text', 'description']);
 const getOfferPercent = (offer) =>
   firstValue(offer, ['percent', 'discountPercent', 'discount_percent', 'percentage', 'badge']) ||
-  (String(offer.tag || '').includes('رایگان') ? 'رایگان' : String(offer.title || '').match(/[۰-۹0-9]+\s*٪|٪\s*[۰-۹0-9]+|[۰-۹0-9]+\s*%|%\s*[۰-۹0-9]+/)?.[0] || '۱۰٪');
+  (String(offer.tag || '').includes('\u0631\u0627\u06cc\u06af\u0627\u0646') ? '\u0631\u0627\u06cc\u06af\u0627\u0646' : String(offer.title || '').match(/[\u06f0-\u06f90-9]+\s*[\u066a%]|[\u066a%]\s*[\u06f0-\u06f90-9]+/)?.[0] || '\u06f1\u06f0\u066a');
 
 const getOfferStatus = (offer) => {
-  return offer.businessId === "ibamo"
-    ? "فعال"
-    : "غیرفعال";
+  return offer.businessId === 'ibamo'
+    ? '\u0641\u0639\u0627\u0644'
+    : '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644';
+};
+const getOfferTypeLabel = (offer) => {
+  if (offer.offerType === 'vip-discount') {
+    return '\u0648\u06cc\u200c\u0622\u06cc\u200c\u067e\u06cc';
+  }
+
+  if (offer.offerType === 'gift-discount') {
+    return '\u0647\u062f\u06cc\u0647 + \u062a\u062e\u0641\u06cc\u0641';
+  }
+
+  return '\u062a\u062e\u0641\u06cc\u0641 \u0633\u0627\u062f\u0647';
+};
+
+const getOfferBenefits = (offer) => {
+  if (offer.offerType === 'vip-discount') {
+    return ['\u0647\u062f\u06cc\u0647', '\u062a\u062e\u0641\u06cc\u0641', 'VIP'];
+  }
+
+  if (offer.offerType === 'gift-discount') {
+    return ['\u0647\u062f\u06cc\u0647', '\u062a\u062e\u0641\u06cc\u0641'];
+  }
+
+  return ['\u062a\u062e\u0641\u06cc\u0641'];
 };
 
 const getOfferDescription = (offer) =>
   firstValue(offer, ['description', 'subtitle', 'text', 'body']) ||
-  `با خرید از مجموعه‌های همکار کی میای، هدیه یا تخفیف ویژه ${offer.brand || 'این مجموعه'} را دریافت کنید.`;
+  `\u0628\u0627 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0645\u062c\u0645\u0648\u0639\u0647\u200c\u0647\u0627\u06cc \u0647\u0645\u06a9\u0627\u0631 \u06a9\u06cc \u0645\u06cc\u0627\u06cc\u060c \u0647\u062f\u06cc\u0647 \u06cc\u0627 \u062a\u062e\u0641\u06cc\u0641 \u0648\u06cc\u0698\u0647 ${offer.brand || '\u0627\u06cc\u0646 \u0645\u062c\u0645\u0648\u0639\u0647'} \u0631\u0627 \u062f\u0631\u06cc\u0627\u0641\u062a \u06a9\u0646\u06cc\u062f.`;
 
 function HomePage({ isDarkMode = false, onToggleTheme }) {
   const router = useRouter();
@@ -391,6 +530,34 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [discountPopup, setDiscountPopup] = useState(null);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
   const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
+  const offerSections = [
+    {
+      type: 'vip-discount',
+      className: 'home-offer-group--vip',
+      eyebrow: '\u0647\u062f\u06cc\u0647 + \u062a\u062e\u0641\u06cc\u0641',
+      title: '\u062a\u062e\u0641\u06cc\u0641\u200c\u0647\u0627\u06cc \u0648\u06cc\u200c\u0622\u06cc\u200c\u067e\u06cc',
+      description: '\u06a9\u0627\u0631\u062a\u200c\u0647\u0627\u06cc \u0648\u06cc\u0698\u0647 \u0628\u0627 \u0647\u062f\u06cc\u0647 \u0648 \u062a\u062e\u0641\u06cc\u0641 \u0647\u0645\u0632\u0645\u0627\u0646',
+    },
+    {
+      type: 'gift-discount',
+      className: 'home-offer-group--gift',
+      eyebrow: '\u0647\u062f\u06cc\u0647 \u0648 \u062a\u062e\u0641\u06cc\u0641',
+      title: '\u0647\u062f\u06cc\u0647\u200c\u0647\u0627\u06cc \u062a\u062e\u0641\u06cc\u0641\u200c\u062f\u0627\u0631',
+      description: '\u06a9\u0627\u0631\u062a\u200c\u0647\u0627\u06cc \u063a\u06cc\u0631 \u0648\u06cc\u200c\u0622\u06cc\u200c\u067e\u06cc \u06a9\u0647 \u0647\u0645 \u0647\u062f\u06cc\u0647 \u0648 \u0647\u0645 \u062a\u062e\u0641\u06cc\u0641 \u062f\u0627\u0631\u0646\u062f',
+    },
+    {
+      type: 'simple-discount',
+      className: 'home-offer-group--simple',
+      eyebrow: '\u062a\u062e\u0641\u06cc\u0641 \u0633\u0627\u062f\u0647',
+      title: '\u062a\u062e\u0641\u06cc\u0641\u200c\u0647\u0627\u06cc \u0633\u0627\u062f\u0647',
+      description: '\u06a9\u0627\u0631\u062a\u200c\u0647\u0627\u06cc\u06cc \u06a9\u0647 \u0641\u0642\u0637 \u062a\u062e\u0641\u06cc\u0641 \u062f\u0627\u0631\u0646\u062f',
+    },
+  ]
+    .map((section) => ({
+      ...section,
+      offers: homeData.offers.filter((offer) => (offer.offerType || 'simple-discount') === section.type),
+    }))
+    .filter((section) => section.offers.length);
 
 
  useEffect(() => {
@@ -410,17 +577,16 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   useEffect(() => {
     let isMounted = true;
 
-    getHomePageData()
-      .then((data) => {
-        if (isMounted) {
-          setHomeData(normalizeHomeData(data));
-        }
-      })
-      .catch(() => {
-        if (isMounted) {
-          setHomeData(defaultHomeData);
-        }
-      });
+    Promise.allSettled([getHomePageData(), getDiscountCards()]).then(([homeResult, discountResult]) => {
+      if (!isMounted) {
+        return;
+      }
+
+      const homePayload = homeResult.status === 'fulfilled' ? homeResult.value : defaultHomeData;
+      const discountPayload = discountResult.status === 'fulfilled' ? discountResult.value : null;
+
+      setHomeData(mergeHomeAndDiscountData(homePayload, discountPayload));
+    });
 
     return () => {
       isMounted = false;
@@ -664,7 +830,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       setDiscountPopup({
         offer,
         code: '',
-        message: 'این کد تخفیف در حال حاضر غیرفعال است.',
+        message: '\u0627\u06cc\u0646 \u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062f\u0631 \u062d\u0627\u0644 \u062d\u0627\u0636\u0631 \u063a\u06cc\u0631\u0641\u0639\u0627\u0644 \u0627\u0633\u062a.',
       });
       return;
     }
@@ -685,7 +851,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         offer,
         code: receivedCode,
         message: receivedCode
-          ? getDiscountMessage(data) || 'کد تخفیف با موفقیت دریافت شد.'
+          ? getDiscountMessage(data) || '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0628\u0627 \u0645\u0648\u0641\u0642\u06cc\u062a \u062f\u0631\u06cc\u0627\u0641\u062a \u0634\u062f.'
           : getDiscountMessage(data) || t.discountFailed,
       });
     } catch (error) {
@@ -695,7 +861,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         offer,
         code: fallbackCode,
         message: fallbackCode
-          ? 'کد تخفیف با موفقیت دریافت شد.'
+          ? '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0628\u0627 \u0645\u0648\u0641\u0642\u06cc\u062a \u062f\u0631\u06cc\u0627\u0641\u062a \u0634\u062f.'
           : error.response?.data?.message || error.message || t.discountFailed,
       });
     } finally {
@@ -766,7 +932,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
               <span className="home-theme-toggle-thumb" />
               <span className="home-theme-toggle-icon home-theme-toggle-moon"><Moon /></span>
             </button>
-            <button className="login-btn home-login-btn" type="button" onClick={openAccount}>{isLoggedIn ? 'حساب کاربری' : t.login}</button>
+            <button className="login-btn home-login-btn" type="button" onClick={openAccount}>{isLoggedIn ? '\u062d\u0633\u0627\u0628 \u06a9\u0627\u0631\u0628\u0631\u06cc' : t.login}</button>
           </div>
         </header>
 
@@ -908,31 +1074,52 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
             </div>
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
-          <div className="home-offer-grid">
-            {homeData.offers.map((offer, index) => {
-             const offerStatus = getOfferStatus(offer);
-             const isInactive = offerStatus === "غیرفعال";     
+          <div className="home-offer-sections">
+            {offerSections.map((section) => (
+              <div className={`home-offer-group ${section.className}`} key={section.type}>
+                <div className="home-offer-group-head">
+                  <div>
+                    <span>{section.eyebrow}</span>
+                    <h3>{section.title}</h3>
+                  </div>
+                  <p>{section.description}</p>
+                </div>
+                <div className="home-offer-grid">
+                  {section.offers.map((offer, index) => {
+                    const offerStatus = getOfferStatus(offer);
+                    const isInactive = offerStatus === '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644';
+                    const offerType = offer.offerType || 'simple-discount';
+                    const offerBenefits = getOfferBenefits(offer);
 
-              return (
-                <article className={`home-offer-card ${isInactive ? 'is-inactive' : ''}`} key={offer.title}>
-                  <div className="home-offer-media">
-                    <img src={offer.image} alt={offer.brand} />
-                    <span className="home-offer-percent">{getOfferPercent(offer)}</span>
-                    <span className={`home-offer-status ${isInactive ? 'is-inactive' : ''}`}>{offerStatus}</span>
-                  </div>
-                  <div className="home-offer-copy">
-                    <span>{offer.brand}</span>
-                    <h3>{offer.title}</h3>
-                    <p>{getOfferDescription(offer)}</p>
-                  </div>
-                  <div className="home-offer-footer">
-                    <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount || isInactive}>
-                      {isRequestingDiscount ? t.wait : 'کد خرید'}
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
+                    return (
+                      <article className={`home-offer-card home-offer-card--${offerType} ${isInactive ? 'is-inactive' : ''}`} key={offer.id || offer.title || `${section.type}-${index}`}>
+                        <div className="home-offer-media">
+                          <img src={offer.image} alt={offer.brand} />
+                          <span className="home-offer-percent">{getOfferPercent(offer)}</span>
+                          <span className="home-offer-kind">{getOfferTypeLabel(offer)}</span>
+                          <span className={`home-offer-status ${isInactive ? 'is-inactive' : ''}`}>{offerStatus}</span>
+                        </div>
+                        <div className="home-offer-copy">
+                          <span>{offer.brand}</span>
+                          <h3>{offer.title}</h3>
+                          <div className="home-offer-benefits" aria-label="offer benefits">
+                            {offerBenefits.map((benefit) => (
+                              <b key={benefit}>{benefit}</b>
+                            ))}
+                          </div>
+                          <p>{getOfferDescription(offer)}</p>
+                        </div>
+                        <div className="home-offer-footer">
+                          <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount || isInactive}>
+                            {isRequestingDiscount ? t.wait : '\u06a9\u062f \u062e\u0631\u06cc\u062f'}
+                          </button>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
         <section className="home-guide-section" aria-labelledby="home-guide-title">
@@ -1061,6 +1248,10 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 }
 
 export default HomePage;
+
+
+
+
 
 
 

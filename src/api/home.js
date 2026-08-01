@@ -10,6 +10,14 @@ export const getHomePageData = async () => {
 
 const DISCOUNT_ALL_URL = "https://api.didarads.com/api/v1/discount/all";
 
+export const getDiscountCards = async () => {
+  const response = await httpClient.get("/discount/all", {
+    requiresAuth: false,
+  });
+
+  return response.data;
+};
+
 const getOfferValue = (offer, keys) => keys.map((key) => offer?.[key]).find(Boolean);
 
 const buildDiscountPayload = (offer) => ({
@@ -38,3 +46,4 @@ export const requestDiscountCode = async (offer) => {
     return response.data;
   }
 };
+
