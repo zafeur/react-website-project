@@ -844,3 +844,139 @@ html.theme-dark .page-shell .restaurant-wallet-card small {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Permanent restaurant info-card fix: flexible columns, no clipping or text overflow. */
+.restaurant-shell .hero-grid {
+  grid-template-columns: minmax(0, 806px) minmax(260px, 1fr) !important;
+  gap: clamp(28px, 4vw, 50px) !important;
+}
+
+.restaurant-shell .hero-grid > div:first-child {
+  min-width: 0 !important;
+}
+
+.restaurant-shell .hero-photo,
+.restaurant-shell .info-row {
+  width: 100% !important;
+  max-width: 806px !important;
+}
+
+.restaurant-shell .info-row {
+  grid-template-columns: minmax(260px, 1.45fr) minmax(190px, .9fr) minmax(190px, .85fr) !important;
+  gap: clamp(12px, 1.4vw, 15px) !important;
+  align-items: stretch !important;
+}
+
+.restaurant-shell .info-card {
+  min-width: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 97px !important;
+  padding-inline: clamp(18px, 2.2vw, 28px) !important;
+  gap: 14px !important;
+}
+
+.restaurant-shell .info-card > div {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.restaurant-shell .info-title,
+.restaurant-shell .info-text {
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+.restaurant-shell .info-card:first-child .info-text {
+  white-space: normal !important;
+  line-height: 1.9 !important;
+}
+
+.restaurant-shell .restaurant-phone-text {
+  white-space: nowrap !important;
+  direction: ltr !important;
+}
+
+@media (max-width: 1180px) and (min-width: 769px) {
+  .restaurant-shell .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(250px, 320px) !important;
+    gap: 28px !important;
+  }
+
+  .restaurant-shell .info-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .restaurant-shell .info-card {
+    padding-inline: 16px !important;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 769px) {
+  .restaurant-shell .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .restaurant-shell .profile {
+    max-width: 420px !important;
+    justify-self: center !important;
+    width: 100% !important;
+  }
+
+  .restaurant-shell .hero-photo,
+  .restaurant-shell .info-row {
+    max-width: none !important;
+  }
+}
+
+/* Final restaurant info-card correction: all three desktop cards keep the same height. */
+@media (min-width: 769px) {
+  .restaurant-shell .info-row {
+    align-items: stretch !important;
+  }
+
+  .restaurant-shell .info-card {
+    height: 97px !important;
+    min-height: 97px !important;
+    max-height: 97px !important;
+    align-items: center !important;
+    overflow: visible !important;
+  }
+
+  .restaurant-shell .info-card:first-child .info-text {
+    font-size: clamp(13px, 1.05vw, 15px) !important;
+    line-height: 1.55 !important;
+    white-space: normal !important;
+  }
+
+  .restaurant-shell .info-title {
+    font-size: clamp(13px, 1vw, 15px) !important;
+  }
+
+  .restaurant-shell .info-text {
+    font-size: clamp(13px, 1.05vw, 16px) !important;
+  }
+}
+
+/* Final shared contact-card guard for restaurant and business-like pages. */
+@media (min-width: 769px) {
+  .restaurant-shell .info-row {
+    align-items: stretch !important;
+    grid-auto-rows: 97px !important;
+  }
+
+  .restaurant-shell .info-card {
+    height: 97px !important;
+    min-height: 97px !important;
+    max-height: 97px !important;
+    align-items: center !important;
+    overflow: hidden !important;
+  }
+
+  .restaurant-shell .info-card .info-text {
+    max-width: 100% !important;
+    line-height: 1.5 !important;
+    overflow-wrap: anywhere !important;
+  }
+}

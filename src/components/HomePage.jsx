@@ -153,7 +153,7 @@ const defaultHomeData = {
   offers: [
   { id: 'melal-discount', businessId: 'melal', title: t.gift1, brand: t.restaurant, tag: t.free, vip: 0, hasGift: true, hasDiscount: false, image: asset('img/restaurant-melal.png') },
   { id: 'barial-discount', businessId: 'barial', title: t.gift2, brand: t.barial, tag: t.discount, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/barial.jpg') },
-  { id: 'dorato-discount', businessId: 'dorato', title: t.gift3, brand: t.dorato, tag: t.special, vip: 1, hasGift: true, hasDiscount: true, image: asset('img/logo dorato.jpg') },
+  { id: 'dorato-discount', businessId: 'dorato', title: t.gift3, brand: t.dorato, tag: t.special, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/logo dorato.jpg') },
   { id: 'ibamo-discount', businessId: 'ibamo', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0627\u06cc\u0628\u0627\u0645\u0648', brand: t.ibamo, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
   { id: 'bakhshi-discount', businessId: 'bakhshi', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u062e\u0634\u06cc', brand: t.bakhshi, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/bakhshi.jpg') },
   { id: 'bastani-discount', businessId: 'bastani', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u0627\u0633\u062a\u0627\u0646\u06cc', brand: t.bastani, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/business-banners/bastani-logo-enhanced.png') },
@@ -244,26 +244,36 @@ const isRestaurantBrand = (title = '') =>
 
 const normalizeImage = (item, fallback) =>
   normalizeMediaUrl(
-    firstValue(item, ['image', 'image_url', 'imageUrl', 'logo', 'logo_url', 'thumbnail', 'thumbnail_url', 'poster']),
+    firstValue(item, ['image', 'images', 'image_url', 'imageUrl', 'image_path', 'imagePath', 'logo', 'logo_url', 'thumbnail', 'thumbnail_url', 'poster']),
     fallback
   );
 
-const normalizeStories = (items) =>
-  items.map((story, index) => {
-    const rawTitle = firstValue(story, ['title', 'name', 'brand', 'business_name']) || `${t.selectedBrands} ${index + 1}`;
-    const title = getStoryDisplayTitle(rawTitle);
+const getStoryFallback = (story, index) => {
+  const businessKey = getKnownBusinessKey(story);
 
-    return {
-      ...story,
-      title,
-      image: normalizeImage(story, defaultHomeData.stories[index % defaultHomeData.stories.length].image),
-      video: normalizeMediaUrl(
-        firstValue(story, ['video', 'video_url', 'videoUrl', 'media', 'media_url', 'mediaUrl', 'story_video', 'storyVideo']) || storyVideoByTitle[title] || storyVideoByTitle[rawTitle],
-        ''
-      ),
-    };
-  });
+  return defaultHomeData.stories.find((fallbackStory) => getKnownBusinessKey(fallbackStory) === businessKey) ||
+    defaultHomeData.stories[index % defaultHomeData.stories.length];
+};
 
+const normalizeStories = (items, { allowLocalMediaFallback = false } = {}) =>
+  items
+    .map((story, index) => {
+      const fallback = getStoryFallback(story, index);
+      const rawTitle = firstValue(story, ['title', 'name', 'brand', 'business_name']) || fallback?.title || `${t.selectedBrands} ${index + 1}`;
+      const title = getStoryDisplayTitle(rawTitle);
+      const imageValue = firstValue(story, ['image', 'images', 'image_url', 'imageUrl', 'image_path', 'imagePath', 'logo', 'logo_url', 'thumbnail', 'thumbnail_url', 'poster']);
+      const videoValue = firstValue(story, ['video', 'video_url', 'videoUrl', 'media', 'media_url', 'mediaUrl', 'story_video', 'storyVideo']);
+      const fallbackVideo = storyVideoByTitle[title] || storyVideoByTitle[rawTitle] || fallback?.video;
+
+      return {
+        ...story,
+        title,
+        businessId: getKnownBusinessKey(story) || getKnownBusinessKey(fallback) || story.businessId,
+        image: normalizeMediaUrl(imageValue, allowLocalMediaFallback ? fallback?.image || '' : ''),
+        video: normalizeMediaUrl(videoValue, allowLocalMediaFallback ? fallbackVideo || '' : ''),
+      };
+    })
+    .filter((story) => story.image || story.video);
 const normalizeCards = (items, fallback) =>
   items.map((item, index) => ({
     ...item,
@@ -273,6 +283,76 @@ const normalizeCards = (items, fallback) =>
     businessId: firstValue(item, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug']) || fallback[index % fallback.length].businessId,
   }));
 
+const normalizeLookupText = (value) =>
+  String(value || '')
+    .toLowerCase()
+    .replace(/[\s\u200c_\-]+/g, '');
+
+const businessAliases = {
+  melal: ['melal', 'ملل', 'رستورانملل'],
+  barial: ['barial', 'barialbeauty', 'باریال', 'بریال'],
+  dorato: ['dorato', 'دوراتو'],
+  ibamo: ['ibamo', 'ایبامو', 'ایبیبامو', 'ایبیبامو'],
+  bakhshi: ['bakhshi', 'بخشی'],
+  bastani: ['bastani', 'باستانی'],
+  mojalal: ['mojalal', 'mojallal', 'مجلل'],
+};
+
+const findBusinessKeyInText = (value) => {
+  const searchable = normalizeLookupText(value);
+
+  if (!searchable) {
+    return undefined;
+  }
+
+  return Object.entries(businessAliases).find(([, aliases]) =>
+    aliases.some((alias) => searchable.includes(normalizeLookupText(alias)))
+  )?.[0];
+};
+
+const getKnownBusinessKey = (offer) => {
+  const reliableFields = [
+    firstValue(offer, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug', 'prefix']),
+    firstValue(offer, ['brand', 'business', 'business_name', 'place']),
+    firstValue(offer, ['title', 'name', 'gift_title', 'giftTitle']),
+    firstValue(offer, ['image', 'images', 'image_url', 'imageUrl']),
+  ];
+
+  for (const field of reliableFields) {
+    const businessKey = findBusinessKeyInText(field);
+
+    if (businessKey) {
+      return businessKey;
+    }
+  }
+
+  return findBusinessKeyInText(firstValue(offer, ['description', 'subtitle', 'text', 'body']));
+};
+
+const getOfferFallback = (offer, index) => {
+  const businessKey = getKnownBusinessKey(offer);
+
+  return defaultHomeData.offers.find((fallbackOffer) => fallbackOffer.businessId === businessKey) ||
+    defaultHomeData.offers[index % defaultHomeData.offers.length];
+};
+
+const valueMatchesBusiness = (value, businessKey) => {
+  if (!businessKey || !value) {
+    return false;
+  }
+
+  return findBusinessKeyInText(value) === businessKey;
+};
+
+const getBusinessDisplayValue = (offer, keys, fallbackValue, businessKey) => {
+  const value = firstValue(offer, keys);
+
+  if (!businessKey) {
+    return value || fallbackValue;
+  }
+
+  return valueMatchesBusiness(value, businessKey) ? value : fallbackValue;
+};
 const getNormalizedOfferShape = (offer) => {
   const isVip = flagValue(firstDefinedValue(offer, ['vip', 'is_vip', 'isVip', 'isVIP', 'vip_flag', 'vipFlag', 'vip_status', 'vipStatus', 'vip_discount', 'vipDiscount', 'is_vip_discount', 'isVipDiscount'])) === true;
   const explicitGift = offerHasValue(offer, ['hasGift', 'has_gift', 'gift', 'gift_title', 'giftTitle', 'gift_name', 'giftName', 'gift_description', 'giftDescription', 'gift_value', 'giftValue']);
@@ -296,14 +376,15 @@ const getNormalizedOfferShape = (offer) => {
 
 const normalizeOffers = (items) =>
   items.map((offer, index) => {
-    const fallback = defaultHomeData.offers[index % defaultHomeData.offers.length];
+    const businessKey = getKnownBusinessKey(offer);
+    const fallback = getOfferFallback(offer, index);
     const normalizedOffer = {
       ...fallback,
       ...offer,
       id: firstValue(offer, ['id', 'discount_id', 'discountId', 'offer_id', 'offerId']) || fallback.id,
-      businessId: firstValue(offer, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug']) || fallback.businessId,
-      title: firstValue(offer, ['title', 'name', 'gift_title', 'giftTitle']) || fallback.title,
-      brand: firstValue(offer, ['brand', 'business', 'business_name', 'place']) || fallback.brand,
+      businessId: businessKey || firstValue(offer, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug', 'prefix']) || fallback.businessId,
+      title: getBusinessDisplayValue(offer, ['title', 'name', 'gift_title', 'giftTitle'], fallback.title, businessKey),
+      brand: getBusinessDisplayValue(offer, ['brand', 'business', 'business_name', 'place'], fallback.brand, businessKey),
       tag: firstValue(offer, ['tag', 'badge', 'type', 'discount_type']) || fallback.tag,
       image: normalizeImage(offer, fallback.image),
       code: firstValue(offer, ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']) || fallback.code || '',
@@ -311,7 +392,7 @@ const normalizeOffers = (items) =>
 
     return {
       ...normalizedOffer,
-      ...getNormalizedOfferShape(normalizedOffer),
+      ...getNormalizedOfferShape(offer),
     };
   });
 
@@ -345,16 +426,114 @@ const findOfferList = (source) => {
   return [];
 };
 
+const findStoryList = (source) => {
+  if (Array.isArray(source)) {
+    return source;
+  }
+
+  if (!source || typeof source !== 'object') {
+    return [];
+  }
+
+  const storyKeys = ['stories', 'story', 'story_items', 'storyItems'];
+
+  for (const key of storyKeys) {
+    const value = source[key];
+
+    if (Array.isArray(value)) {
+      return value;
+    }
+
+    if (Array.isArray(value?.data)) {
+      return value.data;
+    }
+
+    if (value && typeof value === 'object') {
+      const nested = findStoryList(value);
+      if (nested.length) {
+        return nested;
+      }
+    }
+  }
+
+  return [];
+};
+
+const normalizeApiStories = (payload) => normalizeStories(findStoryList(payload), { allowLocalMediaFallback: false });
 const normalizeDiscountApiOffers = (payload) => normalizeOffers(findOfferList(resolveHomeData(payload)));
+
+const getOfferMergeKey = (offer) =>
+  String(
+    getKnownBusinessKey(offer) ||
+    firstValue(offer, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug', 'prefix']) ||
+    firstValue(offer, ['brand', 'business', 'business_name', 'place']) ||
+    firstValue(offer, ['id', 'discount_id', 'discountId', 'offer_id', 'offerId']) ||
+    firstValue(offer, ['title', 'name', 'gift_title', 'giftTitle']) ||
+    ''
+  )
+    .trim()
+    .toLowerCase();
+
+const mergeOfferLists = (fallbackOffers, apiOffers) => {
+  if (!apiOffers.length) {
+    return fallbackOffers;
+  }
+
+  const mergedOffers = [...apiOffers];
+  const existingKeys = new Set(apiOffers.map(getOfferMergeKey).filter(Boolean));
+
+  fallbackOffers.forEach((offer) => {
+    const key = getOfferMergeKey(offer);
+
+    if (!key || !existingKeys.has(key)) {
+      mergedOffers.push(offer);
+    }
+  });
+
+  return mergedOffers;
+};
 
 const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   const normalizedHome = normalizeHomeData(homePayload);
   const discountOffers = normalizeDiscountApiOffers(discountPayload);
+  const discountStories = normalizeApiStories(discountPayload);
+  const homeStories = normalizeApiStories(resolveHomeData(homePayload));
 
-  return discountOffers.length
-    ? { ...normalizedHome, offers: discountOffers }
-    : normalizedHome;
+  return {
+    ...normalizedHome,
+    stories: discountStories.length ? discountStories : homeStories.length ? homeStories : defaultHomeData.stories,
+    offers: mergeOfferLists(normalizedHome.offers, discountOffers),
+  };
 };
+
+const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v1';
+
+const loadCachedHomeData = () => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    const cached = window.localStorage.getItem(HOME_DATA_CACHE_KEY);
+    return cached ? JSON.parse(cached) : null;
+  } catch {
+    return null;
+  }
+};
+
+const saveCachedHomeData = (data) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(HOME_DATA_CACHE_KEY, JSON.stringify(data));
+  } catch {
+    // Cache is best-effort only; the page should still work without it.
+  }
+};
+
+const hasUsableHomeData = (data) => Boolean(data?.stories?.length || data?.offers?.length || data?.brands?.length || data?.banners?.length);
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
   const brands = normalizeCards(
@@ -367,7 +546,7 @@ const normalizeHomeData = (payload) => {
   );
 
   return {
-    stories: normalizeStories(normalizeList(data?.stories || data?.story || data?.story_items, defaultHomeData.stories)),
+    stories: normalizeStories(defaultHomeData.stories, { allowLocalMediaFallback: true }),
     banners: normalizeCards(normalizeList(data?.banners || data?.sliders || data?.slides, defaultHomeData.banners), defaultHomeData.banners),
     brands,
     categories: normalizeCategories(data?.categories),
@@ -473,30 +652,75 @@ const getDiscountCode = (data, offer) =>
 
 const getDiscountMessage = (data) =>
   findNestedValue(data, ['message', 'text', 'description']);
-const getOfferPercent = (offer) =>
-  firstValue(offer, ['percent', 'discountPercent', 'discount_percent', 'percentage', 'badge']) ||
-  (String(offer.tag || '').includes('\u0631\u0627\u06cc\u06af\u0627\u0646') ? '\u0631\u0627\u06cc\u06af\u0627\u0646' : String(offer.title || '').match(/[\u06f0-\u06f90-9]+\s*[\u066a%]|[\u066a%]\s*[\u06f0-\u06f90-9]+/)?.[0] || '\u06f1\u06f0\u066a');
 
+const toPersianDigits = (value) =>
+  String(value).replace(/[0-9]/g, (digit) => String.fromCharCode(0x06f0 + Number(digit)));
+
+const formatOfferPercent = (value) => {
+  if (value === undefined || value === null || value === '') {
+    return '';
+  }
+
+  const label = String(value).trim();
+
+  if (!label) {
+    return '';
+  }
+
+  if (/^[\u06f0-\u06f90-9]+$/.test(label)) {
+    return `${toPersianDigits(label)}\u066a`;
+  }
+
+  return toPersianDigits(label);
+};
+
+const getOfferPercent = (offer) => {
+  const explicitPercent = formatOfferPercent(firstValue(offer, ['percent', 'discountPercent', 'discount_percent', 'percentage', 'badge']));
+
+  if (explicitPercent) {
+    return explicitPercent;
+  }
+
+  if (String(offer.tag || '').includes('\u0631\u0627\u06cc\u06af\u0627\u0646')) {
+    return '\u0631\u0627\u06cc\u06af\u0627\u0646';
+  }
+
+  return String(offer.title || '').match(/[\u06f0-\u06f90-9]+\s*[\u066a%]|[\u066a%]\s*[\u06f0-\u06f90-9]+/)?.[0] || '\u06f1\u06f0\u066a';
+};
+
+const isLocalDebugHost = () => {
+  if (typeof window === 'undefined') return false;
+
+  return ['localhost', '127.0.0.1'].includes(window.location.hostname);
+};
+
+const getDebugVipValue = (router) => {
+  const value = router.query?.debugVip;
+  return Array.isArray(value) ? value[0] : value;
+};
+
+const shouldPreviewVipOffer = (offer, debugVipValue) => {
+  if (!debugVipValue || !isLocalDebugHost()) return false;
+
+  const normalizedDebugValue = normalizeLookupText(debugVipValue);
+
+  if (normalizedDebugValue === 'all') {
+    return true;
+  }
+
+  return [getKnownBusinessKey(offer), offer.businessId, offer.id, offer.title, offer.brand]
+    .some((value) => normalizeLookupText(value) === normalizedDebugValue || findBusinessKeyInText(value) === normalizedDebugValue);
+};
 const getOfferStatus = (offer) => {
   return offer.businessId === 'ibamo'
     ? '\u0641\u0639\u0627\u0644'
     : '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644';
 };
-const getOfferTypeLabel = (offer) => {
-  if (offer.offerType === 'vip-discount') {
-    return '\u0648\u06cc\u200c\u0622\u06cc\u200c\u067e\u06cc';
-  }
-
-  if (offer.offerType === 'gift-discount') {
-    return '\u0647\u062f\u06cc\u0647 + \u062a\u062e\u0641\u06cc\u0641';
-  }
-
-  return '\u062a\u062e\u0641\u06cc\u0641 \u0633\u0627\u062f\u0647';
-};
+const getOfferTypeLabel = () => '';
 
 const getOfferBenefits = (offer) => {
   if (offer.offerType === 'vip-discount') {
-    return ['\u0647\u062f\u06cc\u0647', '\u062a\u062e\u0641\u06cc\u0641', 'VIP'];
+    return ['\u0647\u062f\u06cc\u0647', '\u062a\u062e\u0641\u06cc\u0641'];
   }
 
   if (offer.offerType === 'gift-discount') {
@@ -506,9 +730,37 @@ const getOfferBenefits = (offer) => {
   return ['\u062a\u062e\u0641\u06cc\u0641'];
 };
 
-const getOfferDescription = (offer) =>
-  firstValue(offer, ['description', 'subtitle', 'text', 'body']) ||
-  `\u0628\u0627 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0645\u062c\u0645\u0648\u0639\u0647\u200c\u0647\u0627\u06cc \u0647\u0645\u06a9\u0627\u0631 \u06a9\u06cc \u0645\u06cc\u0627\u06cc\u060c \u0647\u062f\u06cc\u0647 \u06cc\u0627 \u062a\u062e\u0641\u06cc\u0641 \u0648\u06cc\u0698\u0647 ${offer.brand || '\u0627\u06cc\u0646 \u0645\u062c\u0645\u0648\u0639\u0647'} \u0631\u0627 \u062f\u0631\u06cc\u0627\u0641\u062a \u06a9\u0646\u06cc\u062f.`;
+const businessOfferDescriptions = {
+  melal: 'با خرید از رستوران ملل، هدیه یا تخفیف ویژه غذا و نوشیدنی را دریافت کنید.',
+  barial: 'با خرید از مجموعه زیبایی باریال، از تخفیف ویژه خدمات زیبایی و مراقبت پوست استفاده کنید.',
+  dorato: 'با خرید از دوراتو، هدیه یا تخفیف ویژه بازی و سرگرمی را دریافت کنید.',
+  ibamo: 'با خرید از فروشگاه لباس ایبامو، کد تخفیف ویژه محصولات پوشاک را دریافت کنید.',
+  bakhshi: 'با خرید از فروشگاه بخشی، تخفیف ویژه خرید از این مجموعه را دریافت کنید.',
+  bastani: 'با خرید از باستانی، تخفیف ویژه خدمات زیبایی و مراقبت را دریافت کنید.',
+  mojalal: 'با خرید از کافه و رستوران مجلل، تخفیف ویژه سفارش غذا و نوشیدنی را دریافت کنید.',
+};
+
+const cleanOfferText = (value) =>
+  String(value || '')
+    .replace(/\\n/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const getOfferDescription = (offer) => {
+  const apiDescription = cleanOfferText(firstValue(offer, ['description', 'subtitle', 'text', 'body']));
+
+  if (apiDescription) {
+    return apiDescription;
+  }
+
+  const businessKey = getKnownBusinessKey(offer);
+
+  if (businessKey && businessOfferDescriptions[businessKey]) {
+    return businessOfferDescriptions[businessKey];
+  }
+
+  return `با خرید از ${offer.brand || 'این مجموعه'}، هدیه یا تخفیف ویژه همان مجموعه را دریافت کنید.`;
+};
 
 function HomePage({ isDarkMode = false, onToggleTheme }) {
   const router = useRouter();
@@ -530,37 +782,8 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [discountPopup, setDiscountPopup] = useState(null);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
   const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
-  const offerSections = [
-    {
-      type: 'vip-discount',
-      className: 'home-offer-group--vip',
-      eyebrow: '\u0647\u062f\u06cc\u0647 + \u062a\u062e\u0641\u06cc\u0641',
-      title: '\u062a\u062e\u0641\u06cc\u0641\u200c\u0647\u0627\u06cc \u0648\u06cc\u200c\u0622\u06cc\u200c\u067e\u06cc',
-      description: '\u06a9\u0627\u0631\u062a\u200c\u0647\u0627\u06cc \u0648\u06cc\u0698\u0647 \u0628\u0627 \u0647\u062f\u06cc\u0647 \u0648 \u062a\u062e\u0641\u06cc\u0641 \u0647\u0645\u0632\u0645\u0627\u0646',
-    },
-    {
-      type: 'gift-discount',
-      className: 'home-offer-group--gift',
-      eyebrow: '\u0647\u062f\u06cc\u0647 \u0648 \u062a\u062e\u0641\u06cc\u0641',
-      title: '\u0647\u062f\u06cc\u0647\u200c\u0647\u0627\u06cc \u062a\u062e\u0641\u06cc\u0641\u200c\u062f\u0627\u0631',
-      description: '\u06a9\u0627\u0631\u062a\u200c\u0647\u0627\u06cc \u063a\u06cc\u0631 \u0648\u06cc\u200c\u0622\u06cc\u200c\u067e\u06cc \u06a9\u0647 \u0647\u0645 \u0647\u062f\u06cc\u0647 \u0648 \u0647\u0645 \u062a\u062e\u0641\u06cc\u0641 \u062f\u0627\u0631\u0646\u062f',
-    },
-    {
-      type: 'simple-discount',
-      className: 'home-offer-group--simple',
-      eyebrow: '\u062a\u062e\u0641\u06cc\u0641 \u0633\u0627\u062f\u0647',
-      title: '\u062a\u062e\u0641\u06cc\u0641\u200c\u0647\u0627\u06cc \u0633\u0627\u062f\u0647',
-      description: '\u06a9\u0627\u0631\u062a\u200c\u0647\u0627\u06cc\u06cc \u06a9\u0647 \u0641\u0642\u0637 \u062a\u062e\u0641\u06cc\u0641 \u062f\u0627\u0631\u0646\u062f',
-    },
-  ]
-    .map((section) => ({
-      ...section,
-      offers: homeData.offers.filter((offer) => (offer.offerType || 'simple-discount') === section.type),
-    }))
-    .filter((section) => section.offers.length);
-
-
- useEffect(() => {
+  const debugVipValue = getDebugVipValue(router);
+useEffect(() => {
   const checkAuth = () => {
     setIsLoggedIn(hasAuthToken());
   };
@@ -576,16 +799,37 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
   useEffect(() => {
     let isMounted = true;
+    const cachedHomeData = loadCachedHomeData();
+
+    if (cachedHomeData && hasUsableHomeData(cachedHomeData)) {
+      setHomeData(cachedHomeData);
+    }
 
     Promise.allSettled([getHomePageData(), getDiscountCards()]).then(([homeResult, discountResult]) => {
       if (!isMounted) {
         return;
       }
 
-      const homePayload = homeResult.status === 'fulfilled' ? homeResult.value : defaultHomeData;
-      const discountPayload = discountResult.status === 'fulfilled' ? discountResult.value : null;
+      const hasFreshHome = homeResult.status === 'fulfilled';
+      const hasFreshDiscounts = discountResult.status === 'fulfilled';
 
-      setHomeData(mergeHomeAndDiscountData(homePayload, discountPayload));
+      if (!hasFreshHome && !hasFreshDiscounts) {
+        setHomeData(cachedHomeData && hasUsableHomeData(cachedHomeData) ? cachedHomeData : defaultHomeData);
+        return;
+      }
+
+      const homePayload = hasFreshHome ? homeResult.value : cachedHomeData || defaultHomeData;
+      const discountPayload = hasFreshDiscounts ? discountResult.value : null;
+      const nextHomeData = mergeHomeAndDiscountData(homePayload, discountPayload);
+      const stableHomeData = !hasFreshDiscounts && cachedHomeData?.offers?.length
+        ? { ...nextHomeData, offers: cachedHomeData.offers, stories: cachedHomeData.stories?.length ? cachedHomeData.stories : nextHomeData.stories }
+        : nextHomeData;
+
+      setHomeData(stableHomeData);
+
+      if (hasFreshDiscounts) {
+        saveCachedHomeData(stableHomeData);
+      }
     });
 
     return () => {
@@ -1074,52 +1318,45 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
             </div>
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
-          <div className="home-offer-sections">
-            {offerSections.map((section) => (
-              <div className={`home-offer-group ${section.className}`} key={section.type}>
-                <div className="home-offer-group-head">
-                  <div>
-                    <span>{section.eyebrow}</span>
-                    <h3>{section.title}</h3>
-                  </div>
-                  <p>{section.description}</p>
-                </div>
-                <div className="home-offer-grid">
-                  {section.offers.map((offer, index) => {
-                    const offerStatus = getOfferStatus(offer);
-                    const isInactive = offerStatus === '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644';
-                    const offerType = offer.offerType || 'simple-discount';
-                    const offerBenefits = getOfferBenefits(offer);
+          <div className="home-offer-grid">
+            {homeData.offers.map((offer, index) => {
+              const isDebugVip = shouldPreviewVipOffer(offer, debugVipValue);
+              const displayedOffer = isDebugVip
+                ? { ...offer, offerType: 'vip-discount', isVip: true, hasGift: true, hasDiscount: true }
+                : offer;
+              const offerStatus = getOfferStatus(displayedOffer);
+              const isInactive = offerStatus === '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644';
+              const offerType = displayedOffer.offerType || 'simple-discount';
+              const offerBenefits = getOfferBenefits(displayedOffer);
+              const offerTypeLabel = getOfferTypeLabel(displayedOffer);
 
-                    return (
-                      <article className={`home-offer-card home-offer-card--${offerType} ${isInactive ? 'is-inactive' : ''}`} key={offer.id || offer.title || `${section.type}-${index}`}>
-                        <div className="home-offer-media">
-                          <img src={offer.image} alt={offer.brand} />
-                          <span className="home-offer-percent">{getOfferPercent(offer)}</span>
-                          <span className="home-offer-kind">{getOfferTypeLabel(offer)}</span>
-                          <span className={`home-offer-status ${isInactive ? 'is-inactive' : ''}`}>{offerStatus}</span>
-                        </div>
-                        <div className="home-offer-copy">
-                          <span>{offer.brand}</span>
-                          <h3>{offer.title}</h3>
-                          <div className="home-offer-benefits" aria-label="offer benefits">
-                            {offerBenefits.map((benefit) => (
-                              <b key={benefit}>{benefit}</b>
-                            ))}
-                          </div>
-                          <p>{getOfferDescription(offer)}</p>
-                        </div>
-                        <div className="home-offer-footer">
-                          <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount || isInactive}>
-                            {isRequestingDiscount ? t.wait : '\u06a9\u062f \u062e\u0631\u06cc\u062f'}
-                          </button>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+              return (
+                <article className={`home-offer-card home-offer-card--${offerType} ${isInactive ? 'is-inactive' : ''}`} key={offer.id || offer.title || `offer-${index}`}>
+                  {displayedOffer.offerType === 'vip-discount' ? <strong className="home-offer-vip-banner">وی‌آی‌پی</strong> : null}
+                  <div className="home-offer-media">
+                    <img src={displayedOffer.image} alt={displayedOffer.brand} />
+                    <span className="home-offer-percent">{getOfferPercent(displayedOffer)}</span>
+                    {offerTypeLabel ? <span className="home-offer-kind">{offerTypeLabel}</span> : null}
+                    <span className={`home-offer-status ${isInactive ? 'is-inactive' : ''}`}>{offerStatus}</span>
+                  </div>
+                  <div className="home-offer-copy">
+                    <span>{displayedOffer.brand}</span>
+                    <h3>{displayedOffer.title}</h3>
+                    <div className="home-offer-benefits" aria-label="offer benefits">
+                      {offerBenefits.map((benefit) => (
+                        <b key={benefit}>{benefit}</b>
+                      ))}
+                    </div>
+                    <p>{getOfferDescription(displayedOffer)}</p>
+                  </div>
+                  <div className="home-offer-footer">
+                    <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount || isInactive}>
+                      {isRequestingDiscount ? t.wait : '\u06a9\u062f \u062e\u0631\u06cc\u062f'}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
         <section className="home-guide-section" aria-labelledby="home-guide-title">
@@ -1248,6 +1485,26 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 }
 
 export default HomePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

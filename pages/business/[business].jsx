@@ -1,3 +1,4 @@
+﻿import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import App from '../../src/App';
@@ -21,6 +22,18 @@ const findBusinessTitle = (business) => {
 
 export default function BusinessProfile({ isDarkMode, onToggleTheme }) {
   const router = useRouter();
+  const business = getBusinessValue(router.query.business);
+  const normalized = String(business || '').toLowerCase();
+
+  useEffect(() => {
+    if (!business) {
+      return;
+    }
+
+    if (normalized === 'melal' || normalized === 'restaurant' || normalized.includes('Ù…Ù„Ù„')) {
+      router.replace('/restaurant');
+    }
+  }, [business, normalized, router]);
 
   return (
     <>
@@ -31,32 +44,5 @@ export default function BusinessProfile({ isDarkMode, onToggleTheme }) {
     </>
   );
 }
-export const getStaticPaths = async () => {
-  const slugs = Array.from(
-    new Set(
-      businessProfiles
-        .flatMap((profile) => [profile.id, profile.slug])
-        .filter((business) => business && String(business).toLowerCase() !== 'melal')
-    )
-  );
 
-  return {
-    paths: slugs.map((business) => ({ params: { business } })),
-    fallback: 'blocking',
-  };
-};
 
-export const getStaticProps = async ({ params }) => {
-  const normalized = String(getBusinessValue(params?.business) || '').toLowerCase();
-
-  if (normalized === 'melal' || normalized === 'restaurant' || normalized.includes('ملل')) {
-    return {
-      redirect: {
-        destination: '/restaurant',
-        permanent: false,
-      },
-    };
-  }
-
-  return { props: {} };
-};

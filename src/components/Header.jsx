@@ -1,6 +1,5 @@
-import { ChevronDown, Gift, LayoutDashboard, LogOut, Moon, Sun } from 'lucide-react';
+﻿import { ChevronDown, Gift, LayoutDashboard, LogOut, Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
-import { dashboardNavLinks, navLinks } from '../data/siteData';
 
 const HOME_LABEL = 'صفحه اصلی';
 const BRAND_LABEL = 'کی میای';
@@ -9,10 +8,26 @@ const USER_NAME = 'عباس شایگان';
 const DASHBOARD_LABEL = 'پروفایل داشبورد';
 const LOGOUT_LABEL = 'خروج';
 const LOGIN_LABEL = 'ورود / ثبت نام';
-const FAQ_LABEL = 'سوالات متداول';
 
-function Header({ currentPage, isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme }) {
-  const links = currentPage === 'dashboard' ? dashboardNavLinks : navLinks;
+const navItems = [
+  { label: 'صفحه اصلی', href: '/' },
+  { label: 'هدایا', href: '/#gifts' },
+  { label: 'کسب‌وکارها', href: '/#brands' },
+  { label: 'فروشگاهی', href: '/#categories' },
+  { label: 'سوالات متداول', href: '/faq' },
+  { label: 'باشگاه مشتریان', action: 'account' },
+  { label: 'تماس با ما', href: '/#footer' },
+];
+
+function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme }) {
+  const openAccount = () => {
+    if (isLoggedIn) {
+      onDashboard?.();
+      return;
+    }
+
+    onLogin?.();
+  };
 
   return (
     <header className="topbar d-flex align-items-center justify-content-between">
@@ -23,12 +38,15 @@ function Header({ currentPage, isLoggedIn, isUserMenuOpen, onToggleUserMenu, onD
         </Link>
         <nav>
           <ul className="nav-list d-flex align-items-center">
-            {links.map((link) => (
-              <li key={link}>
-                {link === HOME_LABEL ? <Link href="/">{link}</Link> : link}
+            {navItems.map((item) => (
+              <li key={item.label}>
+                {item.action === 'account' ? (
+                  <button type="button" onClick={openAccount}>{item.label}</button>
+                ) : (
+                  <Link href={item.href}>{item.label}</Link>
+                )}
               </li>
             ))}
-            <li><Link href="/faq">{FAQ_LABEL}</Link></li>
           </ul>
         </nav>
       </div>

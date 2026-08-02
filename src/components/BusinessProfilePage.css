@@ -2681,3 +2681,72 @@ html.theme-dark .restaurant-shell .info-card svg {
   align-self: end !important;
   direction: rtl !important;
 }
+
+/* Final info-card height normalization: all contact cards must align in one row. */
+@media (min-width: 769px) {
+  .business-frame .business-info-grid,
+  .business-frame .info-row.business-info-grid {
+    align-items: stretch !important;
+    grid-auto-rows: 122px !important;
+  }
+
+  .business-frame .business-info-card,
+  .business-frame .info-card.business-info-card {
+    height: 122px !important;
+    min-height: 122px !important;
+    max-height: 122px !important;
+    align-items: center !important;
+    overflow: hidden !important;
+  }
+
+  .business-frame .business-info-copy {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .business-frame .business-info-card .info-title {
+    line-height: 1.35 !important;
+  }
+
+  .business-frame .business-info-card .info-text {
+    max-width: 100% !important;
+    line-height: 1.55 !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+}
+
+/* Final business info-card correction: equal row height without clipping content. */
+@media (min-width: 769px) {
+  .business-frame .business-info-grid,
+  .business-frame .info-row.business-info-grid {
+    align-items: stretch !important;
+    grid-auto-rows: auto !important;
+  }
+
+  .business-frame .business-info-card,
+  .business-frame .info-card.business-info-card {
+    height: 100% !important;
+    min-height: 152px !important;
+    max-height: none !important;
+    overflow: visible !important;
+    align-items: stretch !important;
+  }
+
+  .business-frame .business-info-copy {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .business-frame .business-info-card .info-text {
+    line-height: 1.55 !important;
+    overflow: visible !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .business-frame .business-info-action {
+    align-self: end !important;
+    margin-top: 8px !important;
+  }
+}

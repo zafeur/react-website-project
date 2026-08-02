@@ -594,8 +594,7 @@
   }
 }
 
-.home-text-action,
-.home-offer-footer button {
+.home-text-action {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -612,8 +611,7 @@
   transition: color 180ms ease, transform 180ms ease;
 }
 
-.home-text-action::after,
-.home-offer-footer button::after {
+.home-text-action::after {
   content: '';
   position: absolute;
   right: 0;
@@ -627,14 +625,12 @@
   transition: transform 200ms ease;
 }
 
-.home-text-action:hover,
-.home-offer-footer button:hover {
+.home-text-action:hover {
   color: var(--green);
   transform: translateY(-1px);
 }
 
-.home-text-action:hover::after,
-.home-offer-footer button:hover::after {
+.home-text-action:hover::after {
   transform: scaleX(1);
 }
 
@@ -1168,14 +1164,7 @@
 }
 
 
-.home-offer-footer button {
-  cursor: pointer;
-}
 
-.home-offer-footer button:disabled {
-  opacity: .65;
-  pointer-events: none;
-}
 
 .home-story-popup {
   width: min(100%, 480px);
@@ -1411,7 +1400,6 @@
 .home-shell.theme-dark .home-profile-card h1,
 .home-shell.theme-dark .home-section-head h2,
 .home-shell.theme-dark .home-text-action,
-.home-shell.theme-dark .home-offer-footer button,
 .home-shell.theme-dark .home-footer-links {
   color: #edf7f0;
 }
@@ -2625,22 +2613,7 @@ html.theme-dark .home-shell .home-hero-actions a:not(.home-primary-action):hover
   color: #bfa7ff;
 }
 
-.home-offer-footer button,
-.home-shell.theme-dark .home-offer-footer button {
-  width: 100%;
-  min-height: 58px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #6d00a8, #43006f);
-  color: #fff;
-  font-size: 22px;
-  font-weight: 950;
-  box-shadow: 0 16px 28px rgba(92, 0, 140, .22);
-}
 
-.home-offer-footer button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 34px rgba(92, 0, 140, .28);
-}
 
 .home-shell.theme-dark .home-offer-card {
   background: #201d23;
@@ -2794,21 +2767,7 @@ html.theme-dark .home-shell .home-hero-actions a:not(.home-primary-action):hover
   font-size: 12px;
 }
 
-.home-offer-footer button,
-.home-shell.theme-dark .home-offer-footer button {
-  min-height: 42px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #0ab454, #078a3b);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 900;
-  box-shadow: 0 12px 22px rgba(7, 150, 62, .18);
-}
 
-.home-offer-footer button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 26px rgba(7, 150, 62, .22);
-}
 
 .home-shell.theme-dark .home-offer-card {
   background: linear-gradient(180deg, #101a14, #0d1510);
@@ -2913,11 +2872,6 @@ html.theme-dark .home-shell .home-hero-actions a:not(.home-primary-action):hover
   padding-top: 9px;
 }
 
-.home-offer-footer button,
-.home-shell.theme-dark .home-offer-footer button {
-  min-height: 36px;
-  font-size: 14px;
-}
 
 .home-shell.theme-dark .home-offer-media img,
 .home-shell.theme-dark .home-offer-card > img {
@@ -2949,32 +2903,7 @@ html.theme-dark .home-shell .home-hero-actions a:not(.home-primary-action):hover
   padding-top: 10px;
 }
 
-.home-offer-footer button,
-.home-shell.theme-dark .home-offer-footer button {
-  width: auto;
-  min-width: 112px;
-  max-width: 100%;
-  min-height: 42px;
-  padding: 0 22px;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  line-height: 1;
-  font-size: 15px;
-  letter-spacing: 0;
-}
 
-@media (max-width: 520px) {
-  .home-offer-footer button,
-  .home-shell.theme-dark .home-offer-footer button {
-    min-width: 104px;
-    min-height: 40px;
-    padding-inline: 18px;
-    font-size: 14px;
-  }
-}
 
 /* Make offer logos fill the circular frame */
 .home-offer-media {
@@ -3044,26 +2973,11 @@ html.theme-dark .home-shell .home-hero-actions a:not(.home-primary-action):hover
   color: #fff;
 }
 
-.home-offer-card.is-inactive button {
-  background: #bdbdbd;
-  cursor: not-allowed;
-}
 
-.home-offer-card.is-inactive button:hover {
-  background: #bdbdbd;
-}
 .home-offer-footer {
   padding-top: 7px;
 }
 
-.home-offer-footer button,
-.home-shell.theme-dark .home-offer-footer button {
-  min-width: 96px;
-  min-height: 34px;
-  padding-inline: 16px;
-  border-radius: 10px;
-  font-size: 13px;
-}
 
 @media (max-width: 1100px) {
   .home-offer-card {
@@ -4274,5 +4188,970 @@ html.theme-dark .home-shell .home-offer-group--vip {
     text-align: right;
     font-size: 12px;
   }
+}
+
+
+/* Final correction: discount categories stay inside one shared offers container. */
+.home-section#gifts {
+  overflow: hidden;
+}
+
+.home-section#gifts .home-offer-sections {
+  display: grid !important;
+  gap: 34px !important;
+}
+
+.home-section#gifts .home-offer-group,
+.home-shell.theme-dark .home-section#gifts .home-offer-group,
+html.theme-dark .home-shell .home-section#gifts .home-offer-group,
+.home-section#gifts .home-offer-group--vip,
+.home-section#gifts .home-offer-group--simple,
+.home-shell.theme-dark .home-section#gifts .home-offer-group--vip,
+html.theme-dark .home-shell .home-section#gifts .home-offer-group--vip {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.home-section#gifts .home-offer-group--vip::before {
+  display: none !important;
+}
+
+.home-section#gifts .home-offer-group-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+  direction: rtl !important;
+}
+
+.home-section#gifts .home-offer-group-head > div {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+
+.home-section#gifts .home-offer-group-head span {
+  order: 2 !important;
+  min-height: 28px !important;
+  padding: 0 12px !important;
+  border: 1px solid rgba(7, 150, 62, .2) !important;
+  background: rgba(7, 150, 62, .1) !important;
+  color: var(--green) !important;
+  box-shadow: none !important;
+  font-size: 11px !important;
+}
+
+.home-section#gifts .home-offer-group-head h3 {
+  order: 1 !important;
+  margin: 0 !important;
+  color: #101820 !important;
+  font-size: clamp(22px, 2.4vw, 34px) !important;
+  line-height: 1.25 !important;
+}
+
+.home-section#gifts .home-offer-group-head p {
+  display: none !important;
+}
+
+.home-section#gifts .home-offer-group .home-offer-grid {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.home-section#gifts .home-offer-group--vip .home-offer-card--vip-discount {
+  transform: none !important;
+}
+
+.home-section#gifts .home-offer-group--vip .home-offer-group-head span {
+  border-color: rgba(124, 77, 255, .28) !important;
+  background: linear-gradient(135deg, rgba(124, 77, 255, .14), rgba(7, 150, 62, .12)) !important;
+  color: #4c2fb0 !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-group-head h3,
+html.theme-dark .home-shell .home-section#gifts .home-offer-group-head h3 {
+  color: #f5fff7 !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-group-head span,
+html.theme-dark .home-shell .home-section#gifts .home-offer-group-head span {
+  border-color: rgba(109, 240, 155, .26) !important;
+  background: rgba(109, 240, 155, .1) !important;
+  color: #dfffea !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-group--vip .home-offer-group-head span,
+html.theme-dark .home-shell .home-section#gifts .home-offer-group--vip .home-offer-group-head span {
+  border-color: rgba(155, 125, 255, .32) !important;
+  background: linear-gradient(135deg, rgba(124, 77, 255, .22), rgba(109, 240, 155, .12)) !important;
+  color: #efeaff !important;
+}
+
+@media (max-width: 760px) {
+  .home-section#gifts .home-offer-sections {
+    gap: 28px !important;
+  }
+
+  .home-section#gifts .home-offer-group-head,
+  .home-section#gifts .home-offer-group-head > div {
+    align-items: flex-start !important;
+  }
+
+  .home-section#gifts .home-offer-group-head h3 {
+    font-size: 22px !important;
+  }
+}
+
+/* Final offers layout: one shared container, one grid, VIP indicated only at card level. */
+.home-section#gifts .home-offer-sections,
+.home-section#gifts .home-offer-group,
+.home-section#gifts .home-offer-group-head {
+  display: contents !important;
+}
+
+.home-section#gifts > .home-offer-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 22px !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.home-section#gifts .home-offer-card {
+  min-height: 0 !important;
+  height: 100% !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount {
+  border-color: rgba(124, 77, 255, .48) !important;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(124, 77, 255, .16), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(239, 255, 245, .96)) !important;
+  box-shadow: 0 20px 46px rgba(88, 54, 180, .18) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(245, 183, 0, .2);
+}
+
+.home-section#gifts .home-offer-card:not(.home-offer-card--vip-discount) .home-offer-kind {
+  display: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-kind {
+  display: inline-flex !important;
+  background: linear-gradient(135deg, #7c4dff, #12b76a) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, .36) !important;
+}
+
+.home-section#gifts .home-offer-card--simple-discount .home-offer-benefits b,
+.home-section#gifts .home-offer-card--gift-discount .home-offer-benefits b {
+  background: rgba(7, 150, 62, .09) !important;
+  color: var(--green) !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  border-color: rgba(155, 125, 255, .52) !important;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(124, 77, 255, .26), transparent 42%),
+    linear-gradient(180deg, rgba(11, 35, 20, .96), rgba(7, 22, 14, .95)) !important;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, .28) !important;
+}
+
+@media (max-width: 980px) {
+  .home-section#gifts > .home-offer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-section#gifts > .home-offer-grid {
+    display: flex !important;
+    gap: 14px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    padding: 0 4px 14px !important;
+  }
+
+  .home-section#gifts > .home-offer-grid .home-offer-card {
+    flex: 0 0 min(82vw, 300px) !important;
+    scroll-snap-align: start !important;
+  }
+}
+
+/* Final contour correction: cards stay flat until hover; VIP is shown by badge/content, not permanent border. */
+.home-section#gifts .home-offer-card,
+.home-section#gifts .home-offer-card--vip-discount,
+.home-section#gifts .home-offer-card--gift-discount,
+.home-section#gifts .home-offer-card--simple-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--gift-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--simple-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--gift-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--simple-discount {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  background: transparent !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount::before,
+.home-section#gifts .home-offer-card--vip-discount::after {
+  display: none !important;
+}
+
+.home-section#gifts .home-offer-card:hover,
+.home-section#gifts .home-offer-card--vip-discount:hover,
+.home-section#gifts .home-offer-card--gift-discount:hover,
+.home-section#gifts .home-offer-card--simple-discount:hover {
+  border-color: rgba(7, 150, 62, .35) !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, .08) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount:hover {
+  border-color: rgba(124, 77, 255, .44) !important;
+  box-shadow: 0 20px 42px rgba(88, 54, 180, .18) !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card:hover,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--gift-discount:hover,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--simple-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--gift-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--simple-discount:hover {
+  border-color: rgba(109, 240, 155, .28) !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, .24) !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount:hover {
+  border-color: rgba(155, 125, 255, .46) !important;
+  box-shadow: 0 20px 42px rgba(0, 0, 0, .3) !important;
+}
+
+/* Final idle color correction: every non-hover offer card uses the same surface. */
+.home-section#gifts .home-offer-card,
+.home-section#gifts .home-offer-card--vip-discount,
+.home-section#gifts .home-offer-card--gift-discount,
+.home-section#gifts .home-offer-card--simple-discount {
+  background: rgba(255, 255, 255, .86) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--gift-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--simple-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--gift-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--simple-discount {
+  background: rgba(7, 22, 14, .44) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.home-section#gifts .home-offer-card:hover,
+.home-section#gifts .home-offer-card--gift-discount:hover,
+.home-section#gifts .home-offer-card--simple-discount:hover {
+  background: rgba(255, 255, 255, .94) !important;
+  border-color: rgba(7, 150, 62, .35) !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, .08) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount:hover {
+  background:
+    radial-gradient(circle at 50% -20%, rgba(124, 77, 255, .12), transparent 42%),
+    rgba(255, 255, 255, .94) !important;
+  border-color: rgba(124, 77, 255, .44) !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card:hover,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--gift-discount:hover,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--simple-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--gift-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--simple-discount:hover {
+  background: rgba(8, 27, 17, .68) !important;
+  border-color: rgba(109, 240, 155, .28) !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount:hover {
+  background:
+    radial-gradient(circle at 50% -20%, rgba(124, 77, 255, .2), transparent 42%),
+    rgba(8, 27, 17, .68) !important;
+  border-color: rgba(155, 125, 255, .46) !important;
+}
+
+/* Keep all offer rows visible, including fallback cards appended after API data. */
+.home-section#gifts {
+  overflow: visible !important;
+}
+
+.home-section#gifts > .home-offer-grid {
+  grid-auto-rows: minmax(0, auto) !important;
+}
+
+/* Final VIP visibility: one shared grid, but VIP cards must be unmistakable. */
+.home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  position: relative !important;
+  overflow: hidden !important;
+  border-color: rgba(245, 183, 0, .62) !important;
+  box-shadow: 0 20px 46px rgba(245, 183, 0, .12), inset 0 0 0 1px rgba(255, 255, 255, .06) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount {
+  background:
+    radial-gradient(circle at 85% 8%, rgba(245, 183, 0, .28), transparent 28%),
+    radial-gradient(circle at 16% 0%, rgba(18, 183, 106, .16), transparent 34%),
+    linear-gradient(180deg, rgba(255, 253, 241, .98), rgba(238, 255, 246, .96)) !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  background:
+    radial-gradient(circle at 85% 8%, rgba(245, 183, 0, .22), transparent 30%),
+    radial-gradient(circle at 16% 0%, rgba(109, 240, 155, .12), transparent 34%),
+    linear-gradient(180deg, rgba(13, 36, 22, .92), rgba(6, 21, 13, .96)) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount::before {
+  content: 'VIP' !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: absolute !important;
+  inset-block-start: 12px !important;
+  inset-inline-start: 12px !important;
+  z-index: 8 !important;
+  min-width: 48px !important;
+  height: 24px !important;
+  border-radius: 999px !important;
+  padding: 0 12px !important;
+  background: linear-gradient(135deg, #f8d24b, #12b76a) !important;
+  color: #06140d !important;
+  font-size: 12px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  box-shadow: 0 10px 22px rgba(245, 183, 0, .24) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 10px !important;
+  z-index: 0 !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(245, 183, 0, .2) !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-kind,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount .home-offer-kind,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .home-offer-kind {
+  display: inline-flex !important;
+  background: linear-gradient(135deg, #f8d24b, #12b76a) !important;
+  color: #06140d !important;
+  border-color: rgba(255, 255, 255, .55) !important;
+  font-weight: 950 !important;
+  box-shadow: 0 8px 20px rgba(245, 183, 0, .2) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-benefits b:last-child {
+  background: #f8d24b !important;
+  color: #06140d !important;
+  border-color: rgba(255, 255, 255, .5) !important;
+}
+
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3 {
+  color: #ffffff !important;
+}
+
+/* Final non-home header match: same visual order as homepage, without nav/action overlap. */
+@media (min-width: 769px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-areas: "actions nav brand" !important;
+    align-items: center !important;
+    gap: clamp(20px, 2.6vw, 42px) !important;
+    width: 100% !important;
+    height: 52px !important;
+    min-height: 52px !important;
+    direction: ltr !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar > div:first-child {
+    display: contents !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .brand {
+    grid-area: brand !important;
+    justify-self: end !important;
+    min-width: max-content !important;
+    margin: 0 !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar nav {
+    grid-area: nav !important;
+    display: block !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: clamp(14px, 1.45vw, 24px) !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    font-size: clamp(13px, 1.05vw, 16px) !important;
+    line-height: 1 !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list li {
+    flex: 0 0 auto !important;
+    height: auto !important;
+    white-space: nowrap !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    min-width: max-content !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    direction: ltr !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .login-btn,
+  .page-shell:not(.home-shell):not(.faq-shell) .user-menu-btn,
+  .page-shell:not(.home-shell):not(.faq-shell) .home-theme-toggle {
+    flex: 0 0 auto !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 769px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar {
+    gap: 18px !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list {
+    gap: clamp(10px, 1.1vw, 16px) !important;
+    font-size: clamp(12px, .95vw, 14px) !important;
+  }
+}
+
+@media (max-width: 960px) and (min-width: 769px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar {
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      "actions brand"
+      "nav nav" !important;
+    height: auto !important;
+    min-height: 52px !important;
+    gap: 14px 18px !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar nav {
+    overflow: visible !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    row-gap: 8px !important;
+  }
+}
+
+/* Final action-order correction: non-home headers match homepage action order. */
+@media (min-width: 769px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+    flex-direction: row-reverse !important;
+    margin-inline-start: clamp(18px, 1.8vw, 32px) !important;
+    padding-inline-start: clamp(14px, 1.4vw, 22px) !important;
+    border-inline-start: 1px solid rgba(7, 150, 62, .2) !important;
+  }
+
+  .page-shell.theme-dark:not(.home-shell):not(.faq-shell) .home-header-actions,
+  html.theme-dark .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+    border-inline-start-color: rgba(255, 255, 255, .14) !important;
+  }
+}
+
+/* Final VIP card identity: VIP must be obvious, not just a tiny badge. */
+.home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  border: 2px solid rgba(248, 210, 75, .82) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 24px 52px rgba(248, 210, 75, .18), 0 0 0 1px rgba(248, 210, 75, .18) inset !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: absolute !important;
+  inset-block-start: 14px !important;
+  inset-inline-end: 14px !important;
+  z-index: 12 !important;
+  min-width: 86px !important;
+  height: 30px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #ffe36e, #10b964) !important;
+  color: #06140d !important;
+  font-size: 13px !important;
+  font-weight: 950 !important;
+  letter-spacing: 0 !important;
+  box-shadow: 0 12px 26px rgba(248, 210, 75, .26) !important;
+}
+
+.home-section#gifts .home-offer-card:not(.home-offer-card--vip-discount) .home-offer-vip-banner {
+  display: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-media {
+  padding-top: 22px !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-media::before {
+  border-color: rgba(248, 210, 75, .95) !important;
+  box-shadow: 0 0 0 5px rgba(248, 210, 75, .16), 0 18px 34px rgba(248, 210, 75, .16) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3::before {
+  content: 'VIP';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-end: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #f8d24b;
+  color: #06140d;
+  font-size: 11px;
+  font-weight: 950;
+  vertical-align: middle;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  background:
+    radial-gradient(circle at 82% 6%, rgba(248, 210, 75, .26), transparent 30%),
+    radial-gradient(circle at 15% 10%, rgba(18, 183, 106, .18), transparent 34%),
+    linear-gradient(180deg, rgba(22, 41, 20, .98), rgba(6, 21, 13, .98)) !important;
+}
+
+/* Absolute final: non-home header uses the same desktop/tablet layout model as the homepage. */
+@media (min-width: 1181px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    height: 52px !important;
+    min-height: 52px !important;
+    margin-bottom: 30px !important;
+    gap: 0 !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar > div:first-child {
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .brand {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    min-width: max-content !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar nav {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    overflow: visible !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: clamp(13px, 1.25vw, 24px) !important;
+    margin: 0 clamp(14px, 1.7vw, 28px) 0 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+    font-size: clamp(13px, 1vw, 16px) !important;
+    line-height: 1 !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-direction: row-reverse !important;
+    flex: 0 0 auto !important;
+    gap: 12px !important;
+    margin-inline-start: clamp(18px, 1.8vw, 32px) !important;
+    padding-inline-start: clamp(14px, 1.4vw, 22px) !important;
+    border-inline-start: 1px solid rgba(7, 150, 62, .2) !important;
+    direction: ltr !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 769px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "actions spacer brand"
+      "nav nav nav" !important;
+    direction: ltr !important;
+    align-items: center !important;
+    gap: 16px 18px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 52px !important;
+    margin-bottom: 22px !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar > div:first-child {
+    display: contents !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .brand {
+    grid-area: brand !important;
+    justify-self: end !important;
+    direction: rtl !important;
+    margin: 0 !important;
+    min-width: max-content !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    direction: ltr !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar nav {
+    grid-area: nav !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list {
+    width: 100% !important;
+    margin: 0 !important;
+    gap: clamp(14px, 3vw, 28px) !important;
+    justify-content: center !important;
+    overflow-x: auto !important;
+    padding-bottom: 6px !important;
+    scrollbar-width: none !important;
+    font-size: clamp(13px, 1.8vw, 15px) !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+/* Offer action buttons: one source of truth for base, hover, disabled, and VIP states. */
+.home-section#gifts .home-offer-footer button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 96px;
+  max-width: 100%;
+  min-height: 34px;
+  padding: 0 16px;
+  border: 1px solid rgba(7, 150, 62, .24);
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0ab454, #078a3b);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 1;
+  text-shadow: none;
+  box-shadow: 0 12px 22px rgba(7, 150, 62, .18), inset 0 1px 0 rgba(255, 255, 255, .22);
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.home-section#gifts .home-offer-footer button::after {
+  display: none;
+}
+
+.home-section#gifts .home-offer-footer button:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: linear-gradient(135deg, #09b85a, #047b39);
+  border-color: rgba(6, 185, 95, .72);
+  color: #ffffff;
+  opacity: 1;
+  filter: saturate(1.08);
+  box-shadow: 0 18px 32px rgba(7, 150, 62, .32), 0 0 0 4px rgba(6, 185, 95, .10), inset 0 1px 0 rgba(255, 255, 255, .28);
+}
+
+.home-section#gifts .home-offer-footer button:disabled,
+.home-section#gifts .home-offer-card.is-inactive .home-offer-footer button,
+.home-section#gifts .home-offer-card.is-inactive .home-offer-footer button:hover {
+  background: #8f9792;
+  border-color: #8f9792;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: .72;
+  transform: none;
+  box-shadow: none;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:hover {
+  background: linear-gradient(135deg, #079447, #06b95f);
+  border-color: rgba(6, 185, 95, .72);
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(7, 150, 62, .24), 0 0 0 3px rgba(248, 210, 75, .10);
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-footer button,
+html.theme-dark .home-shell .home-section#gifts .home-offer-footer button {
+  color: #ffffff;
+}
+
+@media (max-width: 520px) {
+  .home-section#gifts .home-offer-footer button {
+    min-width: 104px;
+    min-height: 40px;
+    padding-inline: 18px;
+    font-size: 14px;
+  }
+}
+
+
+
+
+
+/* Final VIP communication: make VIP cards unmistakable in the shared grid. */
+.home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  border: 2px solid rgba(248, 210, 75, .92) !important;
+  background:
+    linear-gradient(135deg, rgba(248, 210, 75, .16), rgba(18, 183, 106, .08) 38%, transparent 68%),
+    rgba(255, 255, 255, .94) !important;
+  box-shadow: 0 22px 52px rgba(248, 210, 75, .20), 0 0 0 1px rgba(248, 210, 75, .18) inset !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  background:
+    linear-gradient(135deg, rgba(248, 210, 75, .22), rgba(18, 183, 106, .10) 38%, transparent 70%),
+    rgba(7, 22, 14, .78) !important;
+  box-shadow: 0 24px 56px rgba(248, 210, 75, .16), 0 0 0 1px rgba(248, 210, 75, .22) inset !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner {
+  display: inline-flex !important;
+  position: absolute !important;
+  inset-block-start: 10px !important;
+  inset-inline-start: 10px !important;
+  inset-inline-end: auto !important;
+  z-index: 20 !important;
+  min-width: 118px !important;
+  height: 34px !important;
+  padding: 0 16px !important;
+  border: 1px solid rgba(255, 255, 255, .58) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #ffe36e, #f8b84b 48%, #12b76a) !important;
+  color: #06140d !important;
+  font-size: 13px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  box-shadow: 0 12px 28px rgba(248, 210, 75, .34) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner::before {
+  content: '★';
+  margin-inline-end: 7px;
+  font-size: 12px;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3::before {
+  content: 'وی‌آی‌پی' !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-inline-end: 8px !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  background: #f8d24b !important;
+  color: #06140d !important;
+  font-size: 11px !important;
+  font-weight: 950 !important;
+  vertical-align: middle !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:hover {
+  min-width: 132px !important;
+  background: linear-gradient(135deg, #f8d24b, #12b76a) !important;
+  border-color: rgba(248, 210, 75, .75) !important;
+  color: #06140d !important;
+  font-weight: 950 !important;
+  box-shadow: 0 16px 30px rgba(248, 210, 75, .24), 0 0 0 4px rgba(248, 210, 75, .10) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount:hover,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount:hover {
+  border-color: rgba(248, 210, 75, 1) !important;
+  box-shadow: 0 28px 62px rgba(248, 210, 75, .26), 0 0 0 1px rgba(248, 210, 75, .32) inset !important;
+}
+
+/* Final VIP tone-down: one clear badge, subtle premium styling. */
+.home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  border: 1px solid rgba(248, 210, 75, .58) !important;
+  background:
+    linear-gradient(135deg, rgba(248, 210, 75, .08), rgba(18, 183, 106, .045) 46%, transparent 74%),
+    rgba(255, 255, 255, .92) !important;
+  box-shadow: 0 16px 34px rgba(12, 50, 30, .08), 0 0 0 1px rgba(248, 210, 75, .10) inset !important;
+  transform: none !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  background:
+    linear-gradient(135deg, rgba(248, 210, 75, .10), rgba(18, 183, 106, .055) 46%, transparent 74%),
+    rgba(7, 22, 14, .52) !important;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, .18), 0 0 0 1px rgba(248, 210, 75, .12) inset !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner {
+  inset-block-start: 12px !important;
+  inset-inline-start: 12px !important;
+  min-width: auto !important;
+  height: 26px !important;
+  padding: 0 11px !important;
+  border-color: rgba(248, 210, 75, .46) !important;
+  background: rgba(248, 210, 75, .86) !important;
+  color: #17351f !important;
+  font-size: 11px !important;
+  box-shadow: 0 8px 18px rgba(248, 210, 75, .16) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner::before,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3::before,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-kind {
+  display: none !important;
+  content: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:hover {
+  min-width: 96px !important;
+  background: linear-gradient(135deg, #0ab454, #078a3b) !important;
+  border-color: rgba(7, 150, 62, .24) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 22px rgba(7, 150, 62, .18), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount:hover,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount:hover {
+  border-color: rgba(248, 210, 75, .72) !important;
+  box-shadow: 0 20px 40px rgba(12, 50, 30, .12), 0 0 0 1px rgba(248, 210, 75, .16) inset !important;
+}
+/* VIP badge cleanup: keep only the real Persian badge, no generated duplicate labels. */
+.home-section#gifts .home-offer-card--vip-discount::before,
+.home-section#gifts .home-offer-card--vip-discount::after,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner::before,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner::after,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3::before,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3::after {
+  display: none !important;
+  content: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner {
+  white-space: nowrap !important;
 }
 
