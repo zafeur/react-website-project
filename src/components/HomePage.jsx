@@ -1298,7 +1298,7 @@ useEffect(() => {
 
               return (
                 <article className="home-category-card" key={title}>
-                  <Link href={href || '#'}>
+                  <Link href={href || '/#categories'}>
                     <span className="home-category-inner">
                       <Icon />
                       <span>{title}</span>
@@ -1485,6 +1485,7 @@ useEffect(() => {
 }
 
 export default HomePage;
+
 
 
 
