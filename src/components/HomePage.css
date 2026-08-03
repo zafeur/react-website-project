@@ -6048,3 +6048,42 @@ html.theme-dark .home-shell .home-vip-section .home-section-head .home-text-acti
   order: 2 !important;
   margin-inline-start: auto !important;
 }
+
+/* Keep VIP buy button pill-shaped in every interaction state. */
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:hover,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:focus,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:focus-visible,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:active,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:hover,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:focus,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:focus-visible,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:active {
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  outline: none !important;
+}
+
+/* VIP button hover should not resize or change shape. */
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button {
+  box-sizing: border-box !important;
+  transform: none !important;
+  transition: background-color .18s ease, box-shadow .18s ease, border-color .18s ease, color .18s ease !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:hover,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:focus,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:active,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:hover,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:focus,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:active {
+  min-width: 122px !important;
+  width: auto !important;
+  height: 42px !important;
+  padding: 0 22px !important;
+  transform: none !important;
+  scale: 1 !important;
+  border-radius: 999px !important;
+}
