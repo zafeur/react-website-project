@@ -1,4 +1,4 @@
-﻿.hero-grid {
+.hero-grid {
   display: grid;
   grid-template-columns: 806px 1fr;
   gap: 50px;
@@ -2749,4 +2749,71 @@ html.theme-dark .restaurant-shell .info-card svg {
     align-self: end !important;
     margin-top: 8px !important;
   }
+}
+.business-follow-message {
+  margin: 10px 0 0;
+  color: #07963e;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.theme-dark .business-follow-message,
+html.theme-dark .business-follow-message {
+  color: #63d68f;
+}
+
+
+.business-profile-loading-page {
+  min-height: 560px;
+  display: grid;
+  place-items: center;
+}
+
+.business-profile-loading-card {
+  width: min(520px, 92vw);
+  min-height: 320px;
+  border: 1px solid var(--business-border);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(5, 150, 80, 0.08), rgba(255, 255, 255, 0.92));
+  box-shadow: 0 24px 70px rgba(6, 95, 70, 0.12);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 18px;
+}
+
+.business-profile-loading-logo,
+.business-profile-loading-line {
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(5, 150, 105, 0.12), rgba(5, 150, 105, 0.28), rgba(5, 150, 105, 0.12));
+  background-size: 220% 100%;
+  animation: businessProfileLoading 1.2s ease-in-out infinite;
+}
+
+.business-profile-loading-logo {
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+}
+
+.business-profile-loading-line {
+  width: min(300px, 68vw);
+  height: 16px;
+}
+
+.business-profile-loading-line-title {
+  width: min(220px, 58vw);
+  height: 24px;
+}
+
+.theme-dark .business-profile-loading-card {
+  background: linear-gradient(135deg, rgba(5, 150, 80, 0.16), rgba(2, 30, 18, 0.94));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+@keyframes businessProfileLoading {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }

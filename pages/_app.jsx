@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { applyPersianDigitsToDocument } from '../src/helper/persianDigits';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/App.css';
 import '../src/components/Header.css';
@@ -30,6 +31,8 @@ export default function MyApp({ Component, pageProps }) {
     setIsDarkMode(getSavedDarkMode());
     setHasHydratedTheme(true);
   }, []);
+
+  useEffect(() => applyPersianDigitsToDocument(), []);
 
   useEffect(() => {
     if (!hasHydratedTheme) {

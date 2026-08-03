@@ -1,4 +1,4 @@
-﻿.page-shell.home-shell {
+.page-shell.home-shell {
   width: 100%;
   max-width: 1256px;
   min-height: 100vh;
@@ -5154,4 +5154,897 @@ html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount:h
 .home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner {
   white-space: nowrap !important;
 }
+/* Dynamic VIP section: API VIP cards sit above the main page content. */
+.home-vip-section {
+  margin-top: clamp(28px, 4vw, 48px) !important;
+  border-color: rgba(248, 210, 75, .35) !important;
+}
 
+.home-vip-section .home-section-head h2 {
+  color: #17351f;
+}
+
+.home-shell.theme-dark .home-vip-section .home-section-head h2,
+html.theme-dark .home-shell .home-vip-section .home-section-head h2 {
+  color: #fff7d6;
+}
+
+.home-vip-offer-grid {
+  margin-top: 18px;
+}
+
+
+/* Classy VIP card polish: calm premium styling, no stacked labels. */
+.home-section#gifts .home-offer-card--vip-discount,
+.home-vip-section .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount {
+  overflow: hidden !important;
+  border: 1px solid rgba(207, 169, 74, .50) !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 82% 12%, rgba(240, 210, 135, .28), transparent 30%),
+    linear-gradient(145deg, rgba(255, 253, 247, .98), rgba(247, 251, 246, .96) 54%, rgba(255, 250, 238, .98)) !important;
+  box-shadow: 0 18px 42px rgba(24, 45, 31, .10), inset 0 0 0 1px rgba(255, 255, 255, .76) !important;
+  transform: none !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount {
+  background:
+    radial-gradient(circle at 82% 12%, rgba(240, 210, 135, .16), transparent 30%),
+    linear-gradient(145deg, rgba(8, 30, 19, .94), rgba(7, 24, 17, .94) 58%, rgba(31, 35, 22, .92)) !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .22), inset 0 0 0 1px rgba(240, 210, 135, .10) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount::before,
+.home-section#gifts .home-offer-card--vip-discount::after,
+.home-vip-section .home-offer-card--vip-discount::before,
+.home-vip-section .home-offer-card--vip-discount::after {
+  display: none !important;
+  content: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner,
+.home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: absolute !important;
+  inset-block-start: 14px !important;
+  inset-inline-start: auto !important;
+  inset-inline-end: 14px !important;
+  z-index: 8 !important;
+  min-width: auto !important;
+  height: 28px !important;
+  padding: 0 13px !important;
+  border: 1px solid rgba(191, 153, 60, .46) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #f7e2a4, #cfa94a) !important;
+  color: #1b2b18 !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  box-shadow: 0 10px 22px rgba(191, 153, 60, .18) !important;
+  white-space: nowrap !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner::before,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner::after,
+.home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner::before,
+.home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner::after,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3::before,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3::after,
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy h3::before,
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy h3::after {
+  display: none !important;
+  content: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-kind,
+.home-vip-section .home-offer-card--vip-discount .home-offer-kind {
+  display: none !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-media,
+.home-vip-section .home-offer-card--vip-discount .home-offer-media {
+  margin-top: 18px !important;
+  box-shadow: 0 16px 34px rgba(14, 42, 25, .14) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-percent,
+.home-vip-section .home-offer-card--vip-discount .home-offer-percent {
+  background: linear-gradient(135deg, #079447, #12b76a) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 18px rgba(18, 183, 106, .24) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-status,
+.home-vip-section .home-offer-card--vip-discount .home-offer-status {
+  background: rgba(19, 35, 27, .82) !important;
+  color: #ffffff !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-benefits b,
+.home-vip-section .home-offer-card--vip-discount .home-offer-benefits b {
+  background: rgba(207, 169, 74, .13) !important;
+  color: #7a5a10 !important;
+  border: 1px solid rgba(207, 169, 74, .20) !important;
+}
+
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount .home-offer-benefits b,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .home-offer-benefits b,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-benefits b,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-benefits b {
+  background: rgba(240, 210, 135, .12) !important;
+  color: #f4dda0 !important;
+  border-color: rgba(240, 210, 135, .18) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:hover,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:hover {
+  min-width: 96px !important;
+  min-height: 34px !important;
+  padding: 0 16px !important;
+  border: 1px solid rgba(7, 150, 62, .24) !important;
+  border-radius: 10px !important;
+  background: linear-gradient(135deg, #0ab454, #078a3b) !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  box-shadow: 0 12px 22px rgba(7, 150, 62, .18), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:hover,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  background: linear-gradient(135deg, #09b85a, #047b39) !important;
+  border-color: rgba(6, 185, 95, .72) !important;
+  box-shadow: 0 18px 32px rgba(7, 150, 62, .32), 0 0 0 4px rgba(6, 185, 95, .10), inset 0 1px 0 rgba(255, 255, 255, .28) !important;
+}
+
+.home-section#gifts .home-offer-card--vip-discount:hover,
+.home-vip-section .home-offer-card--vip-discount:hover,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount:hover,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount:hover,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount:hover,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(207, 169, 74, .78) !important;
+  box-shadow: 0 24px 54px rgba(24, 45, 31, .14), inset 0 0 0 1px rgba(255, 255, 255, .60) !important;
+}
+
+@media (max-width: 640px) {
+  .home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner,
+  .home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner {
+    inset-block-start: 10px !important;
+    inset-inline-end: 10px !important;
+    height: 26px !important;
+    padding-inline: 11px !important;
+  }
+}
+/* Prevent VIP hover from being clipped by the horizontal cards row. */
+.home-vip-section,
+.home-section#gifts {
+  overflow: visible !important;
+}
+
+.home-vip-offer-grid,
+.home-section#gifts > .home-offer-grid {
+  padding-top: 18px !important;
+  padding-bottom: 22px !important;
+  scroll-padding-top: 18px !important;
+}
+
+.home-vip-offer-grid .home-offer-card,
+.home-section#gifts > .home-offer-grid .home-offer-card {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .home-vip-offer-grid,
+  .home-section#gifts > .home-offer-grid {
+    padding-top: 16px !important;
+  }
+}
+/* Final VIP card polish: clear, premium, and calm. */
+.home-vip-section {
+  padding: clamp(22px, 3vw, 32px) !important;
+  border: 1px solid rgba(210, 166, 58, .42) !important;
+  border-radius: 20px !important;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(244, 211, 129, .16), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(255, 253, 247, .9)) !important;
+  overflow: visible !important;
+}
+
+.home-vip-offer-grid,
+.home-section#gifts > .home-offer-grid {
+  padding-top: 22px !important;
+  padding-bottom: 26px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount,
+.home-section#gifts .home-offer-card--vip-discount {
+  position: relative !important;
+  min-height: 390px !important;
+  padding: 30px 28px 26px !important;
+  border: 1px solid rgba(211, 171, 73, .55) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(135deg, rgba(255, 248, 226, .74), rgba(255, 255, 255, .96) 48%, rgba(247, 255, 249, .88)),
+    #ffffff !important;
+  box-shadow:
+    0 22px 42px rgba(27, 43, 24, .09),
+    inset 0 1px 0 rgba(255, 255, 255, .86) !important;
+  overflow: visible !important;
+  isolation: isolate !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount::before,
+.home-section#gifts .home-offer-card--vip-discount::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 12px !important;
+  z-index: -1 !important;
+  border: 1px solid rgba(211, 171, 73, .22) !important;
+  border-radius: 15px !important;
+  background: radial-gradient(circle at 50% 6%, rgba(18, 183, 106, .08), transparent 34%) !important;
+  display: block !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount::after,
+.home-section#gifts .home-offer-card--vip-discount::after {
+  content: '' !important;
+  position: absolute !important;
+  inset-inline: 30px !important;
+  bottom: 74px !important;
+  height: 1px !important;
+  display: block !important;
+  background: linear-gradient(90deg, transparent, rgba(211, 171, 73, .32), transparent) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-vip-banner {
+  position: absolute !important;
+  inset-block-start: 18px !important;
+  inset-inline-end: 18px !important;
+  z-index: 10 !important;
+  height: 32px !important;
+  padding: 0 16px !important;
+  border: 1px solid rgba(161, 120, 25, .22) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #fff1b8, #e5bf58) !important;
+  color: #26371d !important;
+  font-size: 12px !important;
+  font-weight: 950 !important;
+  box-shadow: 0 12px 22px rgba(180, 136, 35, .18) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-media,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-media {
+  width: 96px !important;
+  height: 96px !important;
+  margin-top: 4px !important;
+  margin-bottom: 14px !important;
+  border: 4px solid rgba(255, 255, 255, .92) !important;
+  box-shadow: 0 18px 34px rgba(7, 150, 62, .15), 0 0 0 1px rgba(211, 171, 73, .24) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-percent,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-percent {
+  top: -10px !important;
+  inset-inline-end: -10px !important;
+  min-width: 44px !important;
+  height: 34px !important;
+  background: linear-gradient(135deg, #0bbf63, #078f42) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 22px rgba(7, 150, 62, .24) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-status,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-status {
+  bottom: -8px !important;
+  background: rgba(19, 31, 24, .9) !important;
+  color: #ffffff !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy {
+  gap: 8px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy > span,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy > span {
+  color: #07963f !important;
+  font-size: 13px !important;
+  font-weight: 950 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy h3,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3 {
+  color: #152018 !important;
+  font-size: 20px !important;
+  line-height: 1.55 !important;
+  margin-bottom: 2px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-benefits,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-benefits {
+  justify-content: center !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-benefits b,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-benefits b {
+  min-height: 30px !important;
+  padding: 0 13px !important;
+  border: 1px solid rgba(211, 171, 73, .28) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 247, 220, .86) !important;
+  color: #7b5a10 !important;
+  font-size: 12px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy p,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-copy p {
+  max-width: 300px !important;
+  margin: 8px auto 0 !important;
+  color: #5f6b63 !important;
+  font-size: 14px !important;
+  line-height: 1.9 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer {
+  margin-top: auto !important;
+  padding-top: 18px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button {
+  min-width: 118px !important;
+  height: 42px !important;
+  border: 0 !important;
+  border-radius: 11px !important;
+  background: linear-gradient(135deg, #10b65a, #079447) !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 950 !important;
+  box-shadow: 0 14px 28px rgba(7, 150, 62, .22) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button:hover,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-footer button:hover {
+  transform: translateY(-2px) !important;
+  background: linear-gradient(135deg, #13c667, #07883f) !important;
+  box-shadow: 0 18px 34px rgba(7, 150, 62, .28), 0 0 0 4px rgba(16, 182, 90, .10) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount:hover,
+.home-section#gifts .home-offer-card--vip-discount:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(211, 171, 73, .78) !important;
+  box-shadow: 0 28px 58px rgba(27, 43, 24, .14), inset 0 1px 0 rgba(255, 255, 255, .9) !important;
+}
+
+.home-shell.theme-dark .home-vip-section,
+html.theme-dark .home-shell .home-vip-section {
+  background:
+    radial-gradient(circle at 88% 8%, rgba(244, 211, 129, .12), transparent 32%),
+    linear-gradient(180deg, rgba(9, 29, 19, .98), rgba(6, 24, 16, .95)) !important;
+}
+
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
+  background:
+    linear-gradient(135deg, rgba(50, 44, 22, .78), rgba(7, 28, 18, .97) 48%, rgba(6, 25, 17, .98)),
+    #061811 !important;
+  color: #f8fff8 !important;
+  box-shadow: 0 24px 54px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .06) !important;
+}
+
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-copy h3,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-copy h3,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .home-offer-copy h3 {
+  color: #ffffff !important;
+}
+
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-copy p,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-copy p,
+.home-shell.theme-dark .home-section#gifts .home-offer-card--vip-discount .home-offer-copy p,
+html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .home-offer-copy p {
+  color: rgba(245, 255, 246, .76) !important;
+}
+
+@media (max-width: 640px) {
+  .home-vip-section .home-offer-card--vip-discount,
+  .home-section#gifts .home-offer-card--vip-discount {
+    min-height: 370px !important;
+    padding: 28px 22px 24px !important;
+  }
+}
+
+/* Compact VIP redesign: premium horizontal cards instead of tall stacked cards. */
+.home-vip-section {
+  padding: clamp(18px, 2.5vw, 26px) !important;
+}
+
+.home-vip-offer-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)) !important;
+  gap: 18px !important;
+  padding-top: 16px !important;
+  padding-bottom: 18px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 112px !important;
+  grid-template-rows: auto 1fr auto !important;
+  column-gap: 18px !important;
+  row-gap: 8px !important;
+  align-items: center !important;
+  min-height: 238px !important;
+  padding: 24px 24px 22px !important;
+  text-align: right !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 88% 14%, rgba(246, 212, 124, .18), transparent 34%),
+    linear-gradient(135deg, rgba(255, 251, 238, .96), rgba(255, 255, 255, .98) 54%, rgba(245, 255, 249, .92)) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount::before {
+  inset: 10px !important;
+  border-radius: 14px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount::after {
+  inset-inline: 24px !important;
+  bottom: 68px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner {
+  inset-block-start: 16px !important;
+  inset-inline-end: 16px !important;
+  height: 28px !important;
+  padding: 0 13px !important;
+  font-size: 11px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-media {
+  grid-column: 2 !important;
+  grid-row: 1 / span 3 !important;
+  width: 94px !important;
+  height: 94px !important;
+  margin: 34px 0 0 !important;
+  justify-self: center !important;
+  align-self: start !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy {
+  grid-column: 1 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+  text-align: right !important;
+  align-items: flex-start !important;
+  gap: 7px !important;
+  padding-top: 6px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy > span,
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy h3,
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy p {
+  text-align: right !important;
+  margin-inline: 0 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy h3 {
+  max-width: 100% !important;
+  font-size: clamp(17px, 1.45vw, 21px) !important;
+  line-height: 1.45 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-benefits {
+  justify-content: flex-start !important;
+  margin-top: 2px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy p {
+  max-width: 100% !important;
+  margin-top: 2px !important;
+  font-size: 13px !important;
+  line-height: 1.75 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer {
+  grid-column: 1 !important;
+  grid-row: 3 !important;
+  justify-content: flex-start !important;
+  padding-top: 12px !important;
+  margin-top: 0 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button {
+  min-width: 116px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-percent {
+  min-width: 40px !important;
+  height: 30px !important;
+  top: -8px !important;
+  inset-inline-end: -8px !important;
+}
+
+@media (max-width: 780px) {
+  .home-vip-offer-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-vip-section .home-offer-card--vip-discount {
+    grid-template-columns: 88px minmax(0, 1fr) !important;
+    min-height: 230px !important;
+    padding: 22px 18px 20px !important;
+    column-gap: 14px !important;
+  }
+
+  .home-vip-section .home-offer-card--vip-discount .home-offer-media {
+    grid-column: 1 !important;
+    width: 78px !important;
+    height: 78px !important;
+    margin-top: 36px !important;
+  }
+
+  .home-vip-section .home-offer-card--vip-discount .home-offer-copy,
+  .home-vip-section .home-offer-card--vip-discount .home-offer-footer {
+    grid-column: 2 !important;
+  }
+}
+
+/* VIP redesign v2: make VIP cards a distinct premium pass, not a decorated normal card. */
+.home-vip-section {
+  border-color: rgba(198, 154, 54, .34) !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(255, 211, 105, .16), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(250, 253, 248, .92)) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount {
+  grid-template-columns: 130px minmax(0, 1fr) !important;
+  grid-template-rows: auto 1fr auto !important;
+  min-height: 224px !important;
+  padding: 22px 24px 20px !important;
+  column-gap: 22px !important;
+  border: 1px solid rgba(218, 182, 85, .72) !important;
+  border-radius: 22px !important;
+  color: #ffffff !important;
+  background:
+    radial-gradient(circle at 16% 10%, rgba(255, 211, 105, .24), transparent 30%),
+    radial-gradient(circle at 92% 78%, rgba(17, 183, 101, .24), transparent 34%),
+    linear-gradient(135deg, #061d14 0%, #0b3420 52%, #071810 100%) !important;
+  box-shadow:
+    0 22px 46px rgba(7, 28, 18, .22),
+    inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 12px !important;
+  z-index: 0 !important;
+  display: block !important;
+  border: 1px solid rgba(232, 199, 106, .22) !important;
+  border-radius: 17px !important;
+  background:
+    linear-gradient(90deg, rgba(232, 199, 106, .16), transparent 28%, transparent 72%, rgba(232, 199, 106, .12)) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount::after {
+  content: '' !important;
+  position: absolute !important;
+  inset-block: 28px !important;
+  inset-inline-start: 154px !important;
+  width: 1px !important;
+  height: auto !important;
+  display: block !important;
+  background: linear-gradient(180deg, transparent, rgba(232, 199, 106, .35), transparent) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner {
+  inset-block-start: 18px !important;
+  inset-inline-start: 18px !important;
+  inset-inline-end: auto !important;
+  height: 30px !important;
+  padding: 0 14px !important;
+  border: 1px solid rgba(255, 236, 169, .55) !important;
+  background: linear-gradient(135deg, #fff2b8, #d6ab3f) !important;
+  color: #152018 !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, .18) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-media {
+  grid-column: 1 !important;
+  grid-row: 1 / span 3 !important;
+  width: 112px !important;
+  height: 112px !important;
+  margin: 42px 0 0 !important;
+  justify-self: center !important;
+  align-self: start !important;
+  border: 6px solid rgba(255, 255, 255, .92) !important;
+  background: #fff !important;
+  box-shadow:
+    0 18px 34px rgba(0, 0, 0, .26),
+    0 0 0 1px rgba(232, 199, 106, .38) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-percent {
+  top: -12px !important;
+  inset-inline-end: -12px !important;
+  min-width: 44px !important;
+  height: 34px !important;
+  border: 1px solid rgba(255, 255, 255, .22) !important;
+  background: linear-gradient(135deg, #13c76b, #06893d) !important;
+  color: #ffffff !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-status {
+  bottom: -9px !important;
+  background: rgba(6, 15, 11, .92) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, .24) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy {
+  grid-column: 2 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+  align-items: flex-start !important;
+  text-align: right !important;
+  padding: 12px 0 0 !important;
+  gap: 8px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy > span {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 28px !important;
+  padding: 0 12px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, .08) !important;
+  color: #b8f6d0 !important;
+  font-size: 12px !important;
+  font-weight: 950 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy h3 {
+  color: #ffffff !important;
+  font-size: clamp(19px, 1.55vw, 24px) !important;
+  line-height: 1.45 !important;
+  text-shadow: 0 8px 22px rgba(0, 0, 0, .18) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-benefits {
+  justify-content: flex-start !important;
+  gap: 8px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-benefits b {
+  min-height: 30px !important;
+  border: 1px solid rgba(255, 224, 146, .42) !important;
+  background: rgba(255, 226, 154, .13) !important;
+  color: #ffe9ac !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy p {
+  max-width: 100% !important;
+  color: rgba(245, 255, 248, .82) !important;
+  font-size: 13px !important;
+  line-height: 1.8 !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer {
+  grid-column: 2 !important;
+  grid-row: 3 !important;
+  justify-content: flex-start !important;
+  padding-top: 10px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer button {
+  min-width: 122px !important;
+  height: 42px !important;
+  border: 1px solid rgba(255, 236, 169, .34) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #10b65a, #079447) !important;
+  color: #ffffff !important;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, .24), 0 0 0 4px rgba(16, 182, 90, .08) !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(255, 221, 128, .86) !important;
+  box-shadow: 0 30px 62px rgba(7, 28, 18, .28), inset 0 1px 0 rgba(255, 255, 255, .10) !important;
+}
+
+@media (max-width: 560px) {
+  .home-vip-section .home-offer-card--vip-discount {
+    grid-template-columns: 96px minmax(0, 1fr) !important;
+    min-height: 218px !important;
+    padding: 20px 16px 18px !important;
+    column-gap: 14px !important;
+  }
+
+  .home-vip-section .home-offer-card--vip-discount::after {
+    inset-inline-start: 118px !important;
+  }
+
+  .home-vip-section .home-offer-card--vip-discount .home-offer-media {
+    width: 82px !important;
+    height: 82px !important;
+    margin-top: 42px !important;
+  }
+
+  .home-vip-section .home-offer-card--vip-discount .home-offer-copy h3 {
+    font-size: 17px !important;
+  }
+}
+
+/* Dark mode VIP section fixes: keep RTL layout stable and make the header readable. */
+.home-shell.theme-dark .home-vip-section .home-section-head,
+html.theme-dark .home-shell .home-vip-section .home-section-head {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  direction: rtl !important;
+}
+
+.home-shell.theme-dark .home-vip-section .home-section-head > div,
+html.theme-dark .home-shell .home-vip-section .home-section-head > div {
+  text-align: right !important;
+  margin-inline-start: auto !important;
+}
+
+.home-shell.theme-dark .home-vip-section .home-section-head span,
+html.theme-dark .home-shell .home-vip-section .home-section-head span {
+  color: #dff7e7 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.home-shell.theme-dark .home-vip-section .home-section-head h2,
+html.theme-dark .home-shell .home-vip-section .home-section-head h2 {
+  color: #fff7d6 !important;
+  text-shadow: 0 10px 28px rgba(0, 0, 0, .24) !important;
+}
+
+.home-shell.theme-dark .home-vip-section .home-text-action,
+html.theme-dark .home-shell .home-vip-section .home-text-action {
+  color: #dff7e7 !important;
+  background: rgba(255, 255, 255, .08) !important;
+  border: 1px solid rgba(223, 247, 231, .14) !important;
+  opacity: 1 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount {
+  direction: rtl !important;
+  grid-template-columns: minmax(0, 1fr) 130px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount::after,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount::after,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount::after {
+  inset-inline-start: auto !important;
+  inset-inline-end: 154px !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-media,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-media,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-media {
+  grid-column: 2 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-copy,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-copy,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-copy,
+.home-vip-section .home-offer-card--vip-discount .home-offer-footer,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-footer,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-footer {
+  grid-column: 1 !important;
+}
+
+.home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner,
+.home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner,
+html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-vip-banner {
+  inset-inline-start: auto !important;
+  inset-inline-end: 18px !important;
+}
+
+@media (max-width: 560px) {
+  .home-vip-section .home-offer-card--vip-discount,
+  .home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount,
+  html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount {
+    grid-template-columns: minmax(0, 1fr) 96px !important;
+  }
+
+  .home-vip-section .home-offer-card--vip-discount::after,
+  .home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount::after,
+  html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount::after {
+    inset-inline-end: 118px !important;
+  }
+
+  .home-vip-section .home-offer-card--vip-discount .home-offer-media,
+  .home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-media,
+  html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-media {
+    grid-column: 2 !important;
+  }
+
+  .home-vip-section .home-offer-card--vip-discount .home-offer-copy,
+  .home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-copy,
+  html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-copy,
+  .home-vip-section .home-offer-card--vip-discount .home-offer-footer,
+  .home-shell.theme-dark .home-vip-section .home-offer-card--vip-discount .home-offer-footer,
+  html.theme-dark .home-shell .home-vip-section .home-offer-card--vip-discount .home-offer-footer {
+    grid-column: 1 !important;
+  }
+}
+
+/* Keep VIP section header layout identical in light and dark mode. */
+.home-vip-section .home-section-head,
+.home-shell.theme-dark .home-vip-section .home-section-head,
+html.theme-dark .home-shell .home-vip-section .home-section-head {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  direction: rtl !important;
+}
+
+.home-vip-section .home-section-head > div,
+.home-shell.theme-dark .home-vip-section .home-section-head > div,
+html.theme-dark .home-shell .home-vip-section .home-section-head > div {
+  order: 1 !important;
+  text-align: right !important;
+  margin-inline-start: 0 !important;
+  margin-inline-end: 0 !important;
+}
+
+.home-vip-section .home-section-head .home-text-action,
+.home-shell.theme-dark .home-vip-section .home-section-head .home-text-action,
+html.theme-dark .home-shell .home-vip-section .home-section-head .home-text-action {
+  order: 2 !important;
+  margin-inline-start: auto !important;
+}

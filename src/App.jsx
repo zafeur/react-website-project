@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardPage from "./components/DashboardPage";
 import Header from "./components/Header";
 import LoginModal from "./components/LoginModal";
@@ -92,14 +92,14 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
         return true;
       }
 
-      setLoginError("Ø§Ø±Ø³Ø§Ù„ Ú©Ø¯ Ø§Ù†Ø¬Ø§Ù… Ù†Ø´Ø¯.");
+      setLoginError("ارسال کد انجام نشد.");
       return false;
     } catch (error) {
       console.log(error);
 
       setLoginError(
         error.response?.data?.message ||
-          "Ø®Ø·Ø§ Ø¯Ø± Ø§Ø±ØªØ¨Ø§Ø· Ø¨Ø§ Ø³Ø±ÙˆØ±"
+          "خطا در ارتباط با سرور"
       );
 
       return false;
@@ -107,7 +107,6 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
       setIsLoading(false);
     }
   };
-
   const handleVerifyOtp = async (mobile, otp) => {
     try {
       setIsLoading(true);
@@ -249,6 +248,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
         <BusinessProfilePage
           isVisible={currentPage === "business"}
           isLoggedIn={isLoggedIn}
+          onRequireLogin={openLogin}
         />
 
         <DashboardPage
@@ -278,6 +278,9 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 }
 
 export default App;
+
+
+
 
 
 

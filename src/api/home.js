@@ -8,8 +8,6 @@ export const getHomePageData = async () => {
   return response.data;
 };
 
-const DISCOUNT_ALL_URL = "https://api.didarads.com/api/v1/discount/all";
-
 export const getDiscountCards = async () => {
   const response = await httpClient.get("/discount/all", {
     requiresAuth: false,
@@ -21,29 +19,18 @@ export const getDiscountCards = async () => {
 const getOfferValue = (offer, keys) => keys.map((key) => offer?.[key]).find(Boolean);
 
 const buildDiscountPayload = (offer) => ({
-  business_id: getOfferValue(offer, ["businessId", "business_id", "businessSlug", "business_slug"]),
+  collection_id: getOfferValue(offer, ["collectionId", "collection_id", "id", "discount_id", "discountId"]),
   discount_id: getOfferValue(offer, ["id", "discount_id", "discountId"]),
   offer_id: getOfferValue(offer, ["offer_id", "offerId", "id"]),
-  title: offer?.title,
-  brand: offer?.brand,
+  token: offer?.token,
+  mobile: offer?.mobile,
 });
 
 export const requestDiscountCode = async (offer) => {
   const payload = buildDiscountPayload(offer);
+  const response = await httpClient.post("/discount/generate", payload, {
+    requiresAuth: true,
+  });
 
-  try {
-    const response = await httpClient.post(DISCOUNT_ALL_URL, payload, {
-      requiresAuth: true,
-    });
-
-    return response.data;
-  } catch (postError) {
-    const response = await httpClient.get(DISCOUNT_ALL_URL, {
-      requiresAuth: true,
-      params: payload,
-    });
-
-    return response.data;
-  }
+  return response.data;
 };
-

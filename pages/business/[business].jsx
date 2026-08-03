@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import App from '../../src/App';
@@ -30,7 +30,7 @@ export default function BusinessProfile({ isDarkMode, onToggleTheme }) {
       return;
     }
 
-    if (normalized === 'melal' || normalized === 'restaurant' || normalized.includes('Ù…Ù„Ù„')) {
+    if (normalized === 'melal' || normalized === 'restaurant' || normalized.includes('ملل')) {
       router.replace('/restaurant');
     }
   }, [business, normalized, router]);
