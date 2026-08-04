@@ -822,6 +822,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [pendingOffer, setPendingOffer] = useState(null);
   const [discountPopup, setDiscountPopup] = useState(null);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
+  const [expandedOfferIds, setExpandedOfferIds] = useState({});
   const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
   const debugVipValue = getDebugVipValue(router);
   const vipOffers = homeData.offers.filter((offer) => offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue));
@@ -1165,9 +1166,13 @@ useEffect(() => {
     const offerType = displayedOffer.offerType || 'simple-discount';
     const offerBenefits = getOfferBenefits(displayedOffer);
     const offerTypeLabel = getOfferTypeLabel(displayedOffer);
+    const offerKey = String(displayedOffer.id || displayedOffer.title || `offer-${index}`);
+    const offerDescription = getOfferDescription(displayedOffer);
+    const hasLongDescription = displayedOffer.offerType === 'vip-discount' && offerDescription.length > 80;
+    const isDescriptionExpanded = Boolean(expandedOfferIds[offerKey]);
 
     return (
-      <article className={`home-offer-card home-offer-card--${offerType} ${isInactive ? 'is-inactive' : ''}`} key={offer.id || offer.title || `offer-${index}`}>
+      <article className={`home-offer-card home-offer-card--${offerType} ${isInactive ? 'is-inactive' : ''}`} key={offerKey}>
         {displayedOffer.offerType === 'vip-discount' ? <strong className="home-offer-vip-banner">وی‌آی‌پی</strong> : null}
         <div className="home-offer-media">
           <img src={displayedOffer.image} alt={displayedOffer.brand} />
@@ -1183,7 +1188,16 @@ useEffect(() => {
               <b key={benefit}>{benefit}</b>
             ))}
           </div>
-          <p>{getOfferDescription(displayedOffer)}</p>
+          <p className={`home-offer-description ${isDescriptionExpanded ? 'is-expanded' : ''}`}>{offerDescription}</p>
+          {hasLongDescription ? (
+            <button
+              className="home-offer-read-more"
+              type="button"
+              onClick={() => setExpandedOfferIds((current) => ({ ...current, [offerKey]: !current[offerKey] }))}
+            >
+              {isDescriptionExpanded ? 'کمتر' : 'بیشتر'}
+            </button>
+          ) : null}
         </div>
         <div className="home-offer-footer">
           <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount || isInactive}>

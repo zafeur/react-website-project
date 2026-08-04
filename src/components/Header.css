@@ -747,3 +747,158 @@
     row-gap: 8px !important;
   }
 }
+
+/* Mobile collection/business header: prevent logo, login, and theme toggle overlap. */
+@media (max-width: 768px) {
+  .business-shell .topbar,
+  .restaurant-shell .topbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "brand"
+      "actions" !important;
+    justify-items: center !important;
+    align-items: center !important;
+    gap: 14px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin-bottom: 22px !important;
+    padding: 8px 4px 0 !important;
+    direction: rtl !important;
+  }
+
+  .business-shell .topbar > div:first-child,
+  .restaurant-shell .topbar > div:first-child {
+    display: contents !important;
+  }
+
+  .business-shell .brand,
+  .restaurant-shell .brand {
+    grid-area: brand !important;
+    justify-self: center !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    transform: none !important;
+  }
+
+  .business-shell .brand span,
+  .restaurant-shell .brand span {
+    max-width: calc(100vw - 56px) !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .business-shell .topbar nav,
+  .restaurant-shell .topbar nav {
+    display: none !important;
+  }
+
+  .business-shell .home-header-actions,
+  .restaurant-shell .home-header-actions {
+    grid-area: actions !important;
+    justify-self: center !important;
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    direction: ltr !important;
+  }
+
+  .business-shell .login-btn,
+  .business-shell .user-menu-btn,
+  .restaurant-shell .login-btn,
+  .restaurant-shell .user-menu-btn {
+    width: auto !important;
+    min-width: 150px !important;
+    height: 52px !important;
+    padding-inline: 20px !important;
+    font-size: 15px !important;
+    white-space: nowrap !important;
+  }
+
+  .business-shell .home-theme-toggle,
+  .restaurant-shell .home-theme-toggle {
+    flex: 0 0 auto !important;
+  }
+}
+
+/* Tablet header restore: only true phone should stack. Tablet stays like homepage. */
+@media (min-width: 481px) and (max-width: 768px) {
+  .business-shell .topbar,
+  .restaurant-shell .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-areas: "actions spacer brand" !important;
+    align-items: center !important;
+    justify-items: stretch !important;
+    gap: 14px !important;
+    height: auto !important;
+    min-height: 54px !important;
+    margin-bottom: 24px !important;
+    padding: 4px 0 0 !important;
+    direction: ltr !important;
+  }
+
+  .business-shell .topbar > div:first-child,
+  .restaurant-shell .topbar > div:first-child {
+    display: contents !important;
+  }
+
+  .business-shell .brand,
+  .restaurant-shell .brand {
+    grid-area: brand !important;
+    justify-self: end !important;
+    max-width: 100% !important;
+    min-width: max-content !important;
+    margin: 0 !important;
+    direction: rtl !important;
+    transform: none !important;
+  }
+
+  .business-shell .brand span,
+  .restaurant-shell .brand span {
+    max-width: none !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  .business-shell .topbar nav,
+  .restaurant-shell .topbar nav {
+    display: none !important;
+  }
+
+  .business-shell .home-header-actions,
+  .restaurant-shell .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    direction: ltr !important;
+  }
+}
+
+/* Phone header: stack only at small smartphone widths. */
+@media (max-width: 480px) {
+  .business-shell .topbar,
+  .restaurant-shell .topbar {
+    grid-template-areas:
+      "brand"
+      "actions" !important;
+  }
+}
