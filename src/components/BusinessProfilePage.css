@@ -1,4 +1,4 @@
-.hero-grid {
+﻿.hero-grid {
   display: grid;
   grid-template-columns: 806px 1fr;
   gap: 50px;
@@ -1203,28 +1203,6 @@
   overflow: hidden;
 }
 
-.business-favorite-button {
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  width: 46px;
-  height: 46px;
-  border: 1px solid rgba(7, 150, 62, .2);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .7);
-  color: #0f2d1d;
-  display: grid;
-  place-items: center;
-  transition: transform .2s ease, border-color .2s ease, background .2s ease;
-}
-
-.business-favorite-button:hover {
-  transform: translateY(-2px);
-  border-color: rgba(7, 150, 62, .45);
-  background: rgba(7, 150, 62, .08);
-}
-
-.business-favorite-button svg,
 .business-social-actions svg,
 .business-info-action svg {
   width: 20px;
@@ -1515,7 +1493,6 @@
   box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
 }
 
-.page-shell.theme-dark .business-favorite-button,
 .page-shell.theme-dark .business-social-actions button {
   background: rgba(255, 255, 255, .05);
   border-color: rgba(255, 255, 255, .18);

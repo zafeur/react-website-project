@@ -341,3 +341,47 @@
     background: rgba(5, 48, 29, 0.76);
   }
 }
+
+.profile-completion-modal {
+  width: min(94vw, 720px);
+  min-height: auto;
+}
+
+.profile-completion-form {
+  display: grid;
+  gap: 4px;
+}
+
+.profile-completion-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.login-field > span {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 14px;
+  font-weight: 850;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.34);
+}
+
+.profile-completion-modal .input-shell input {
+  direction: rtl;
+}
+
+.profile-completion-modal .login-submit {
+  margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .profile-completion-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .profile-completion-modal {
+    width: min(100%, 390px);
+  }
+}

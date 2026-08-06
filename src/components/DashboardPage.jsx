@@ -1,62 +1,127 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
-import { ArrowDownLeft, ArrowUpRight, Check, ChevronLeft, Clock3, Copy, Crown, LogOut, RefreshCw, ShieldCheck, Wallet } from 'lucide-react';
+import { Crown, LogOut } from 'lucide-react';
 import userAvatarImage from '../assets/images/user-avatar.jpg';
-import { getMockWallet, getUserWallet } from '../api/wallet';
-import { activeGifts, dashboardActions, giftHistory, mobileProfileLinks, stats } from '../data/siteData';
+import { extractActiveGiftsFromReport, getDiscountReport } from '../api/user';
+import { dashboardActions, mobileProfileLinks } from '../data/siteData';
 
 const getImageSrc = (image) => image?.src || image;
-const formatToman = (amount) => `${new Intl.NumberFormat('fa-IR').format(Number(amount) || 0)} تومان`;
-const REFERRAL_CODE = 'KEYMIAY2024';
+const toPersianDigits = (value) =>
+  String(value ?? '').replace(/[0-9]/g, (digit) => '??????????'[Number(digit)]);
+
+const firstValue = (source, keys) => {
+  for (const key of keys) {
+    const value = source?.[key];
+    if (value !== undefined && value !== null && value !== '') {
+      return value;
+    }
+  }
+
+  return '';
+};
+
+const getNestedValue = (source, paths) => {
+  for (const path of paths) {
+    const value = path.split('.').reduce((current, key) => current?.[key], source);
+    if (value !== undefined && value !== null && value !== '') {
+      return value;
+    }
+  }
+
+  return '';
+};
+
+const getProfileField = (profile, keys) => firstValue(profile || {}, keys);
+
+const getProfileName = (profile) => {
+  const firstName = getProfileField(profile, ['firstName', 'first_name', 'name']);
+  const lastName = getProfileField(profile, ['lastName', 'last_name', 'family', 'family_name']);
+  const fullName = getProfileField(profile, ['fullName', 'full_name']);
+
+  return fullName || [firstName, lastName].filter(Boolean).join(' ') || 'کاربر کی میای';
+};
 
 const getActionSection = (title) => {
-  if (title === 'کیف پول') return 'wallet';
-  if (title === 'هدیه‌های من') return 'gifts';
-  if (title === 'کد معرف') return 'referral';
-  if (title === 'فرآیندها') return 'processes';
+  const label = String(title || '');
+  if (label.includes('کیف') || label.includes('Ú©ÛŒÙ')) return 'wallet';
+  if (label.includes('هدیه') || label.includes('Ù‡Ø¯ÛŒÙ‡')) return 'gifts';
+  if (label.includes('معرف') || label.includes('Ù…Ø¹Ø±Ù')) return 'referral';
+  if (label.includes('تاریخ') || label.includes('ØªØ§Ø±ÛŒØ®')) return 'history';
+  if (label.includes('آمار') || label.includes('Ø¢Ù…Ø§Ø±')) return 'stats';
+  if (label.includes('فرآیند') || label.includes('فرایند') || label.includes('ÙØ±Ø¢') || label.includes('ÙØ±Ø§ÛŒ')) return 'processes';
   return 'account';
 };
 
-function DashboardPage({ isVisible, sectionRequest, onLogout }) {
-  const [walletData, setWalletData] = useState(getMockWallet);
-  const [walletStatus, setWalletStatus] = useState('mock');
-  const [isWalletLoading, setIsWalletLoading] = useState(false);
+const disabledSections = new Set(['wallet', 'processes', 'referral', 'history', 'stats']);
+
+const isEnabledDashboardItem = (item) => !disabledSections.has(getActionSection(item.title));
+
+const normalizeGift = (gift, index) => {
+  const title = firstValue(gift, ['title', 'name', 'gift_title', 'discount_title', 'code_title']) || 'هدیه فعال';
+  const place =
+    getNestedValue(gift, ['collection.name', 'business.name', 'brand.name', 'code.collection.name']) ||
+    firstValue(gift, ['place', 'business_name', 'collection_name', 'brand', 'prefix']) ||
+    'مجموعه کی میای';
+  const time = firstValue(gift, ['expires_at', 'expire_at', 'expiresAt', 'used_at', 'created_at', 'date']) || 'فعال';
+  const image =
+    getNestedValue(gift, ['collection.images', 'collection.image', 'business.image', 'brand.image']) ||
+    firstValue(gift, ['image', 'images', 'logo']) ||
+    getImageSrc(userAvatarImage);
+
+  return {
+    id: firstValue(gift, ['id', 'code', 'token']) || `${title}-${index}`,
+    title,
+    place,
+    time,
+    image,
+  };
+};
+
+function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, onLogout }) {
   const [activeSection, setActiveSection] = useState('gifts');
-  const [hasCopiedReferral, setHasCopiedReferral] = useState(false);
+  const [activeGiftItems, setActiveGiftItems] = useState([]);
+  const [isReportLoading, setIsReportLoading] = useState(false);
+  const [reportError, setReportError] = useState('');
 
-  const walletTotalLabel = useMemo(() => formatToman(walletData.totalBalance), [walletData.totalBalance]);
-  const chargedWalletsCount = walletData.wallets.filter((wallet) => wallet.balance > 0).length;
-  const walletStatusLabel = walletStatus === 'api' ? 'همگام با پایگاه داده' : 'اطلاعات آزمایشی تا زمان اتصال API';
+  const profileName = useMemo(() => getProfileName(userProfile), [userProfile]);
+  const profileMobile = toPersianDigits(getProfileField(userProfile, ['mobile', 'phone', 'phone_number', 'mobile_number']));
+  const profileEmail = getProfileField(userProfile, ['email']);
+  const profileBirthDate = toPersianDigits(getProfileField(userProfile, ['birthDate', 'birth_date', 'birthday']));
+  const profileLevel = getProfileField(userProfile, ['level', 'rank', 'membership_level']) || 'تکمیل نشده';
+  const profileScore = getProfileField(userProfile, ['score', 'points', 'credit']) || 'تکمیل نشده';
 
-  const loadWallet = async () => {
+  const loadActiveGifts = async () => {
     try {
-      setIsWalletLoading(true);
-      const data = await getUserWallet();
-      setWalletData(data);
-      setWalletStatus(data.source === 'api' ? 'api' : 'mock');
+      setIsReportLoading(true);
+      setReportError('');
+      const data = await getDiscountReport();
+      setActiveGiftItems(extractActiveGiftsFromReport(data).map(normalizeGift));
     } catch (error) {
-      setWalletData(getMockWallet());
-      setWalletStatus('mock');
+      setActiveGiftItems([]);
+      setReportError(error.response?.data?.message || error.message || 'دریافت هدیه‌های فعال انجام نشد.');
     } finally {
-      setIsWalletLoading(false);
+      setIsReportLoading(false);
     }
   };
 
   useEffect(() => {
     if (isVisible) {
-      loadWallet();
+      loadActiveGifts();
     }
   }, [isVisible]);
 
   const showSection = (section) => {
+    if (disabledSections.has(section)) {
+      setActiveSection('gifts');
+      return;
+    }
+
     setActiveSection(section);
     window.setTimeout(() => {
       const isMobile = window.matchMedia?.('(max-width: 768px)').matches;
       const targetId = isMobile
-        ? section === 'wallet'
-          ? 'mobile-wallet'
-          : section === 'account'
-            ? 'mobile-account'
-            : 'mobile-dashboard-section'
+        ? section === 'account'
+          ? 'mobile-account'
+          : 'mobile-dashboard-section'
         : 'dashboard-active-section';
 
       document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -69,49 +134,50 @@ function DashboardPage({ isVisible, sectionRequest, onLogout }) {
     }
   }, [isVisible, sectionRequest]);
 
-  const copyReferralCode = async () => {
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(REFERRAL_CODE);
-      }
-      setHasCopiedReferral(true);
-      window.setTimeout(() => setHasCopiedReferral(false), 1800);
-    } catch (error) {
-      setHasCopiedReferral(false);
-    }
-  };
-
   if (!isVisible) {
     return null;
   }
+
+  const renderActiveGifts = (mobile = false) => {
+    if (isReportLoading) {
+      return <p className="dashboard-empty-state">در حال دریافت هدیه‌های فعال...</p>;
+    }
+
+    if (reportError) {
+      return <p className="dashboard-empty-state">{reportError}</p>;
+    }
+
+    if (!activeGiftItems.length) {
+      return <p className="dashboard-empty-state">هدیه فعالی برای این حساب ثبت نشده است.</p>;
+    }
+
+    const listClass = mobile ? 'mobile-active-gifts-list' : 'active-gifts-grid';
+    const itemClass = mobile ? 'mobile-active-gift' : 'active-gift-card';
+
+    return (
+      <div className={listClass}>
+        {activeGiftItems.map((gift) => (
+          <article className={itemClass} key={gift.id}>
+            <img src={gift.image} alt={gift.title} />
+            <div>
+              <h3>{gift.title}</h3>
+              <p>{gift.place}</p>
+              <span>{gift.time}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <section className="dashboard-page">
       <section className="mobile-dashboard">
         <section className="mobile-profile-card" id="mobile-account">
-          <img src={getImageSrc(userAvatarImage)} alt="عباس شایگان" />
+          <img src={getImageSrc(userAvatarImage)} alt={profileName} />
           <div>
-            <h1>عباس شایگان</h1>
-            <button type="button">مشاهده پروفایل</button>
-          </div>
-        </section>
-
-        <section className="mobile-wallet-card" id="mobile-wallet">
-          <div className="mobile-wallet-head">
-            <span><Wallet /> کیف پول من</span>
-            <strong>{walletTotalLabel}</strong>
-          </div>
-          <small className="wallet-sync-note">{walletStatusLabel}</small>
-          <div className="mobile-wallet-list">
-            {walletData.wallets.map((wallet) => (
-              <article className="mobile-wallet-business" key={wallet.id}>
-                <img src={wallet.image} alt={wallet.title} />
-                <div>
-                  <h3>{wallet.title}</h3>
-                  <p>{wallet.balanceLabel}</p>
-                </div>
-              </article>
-            ))}
+            <h1>{profileName}</h1>
+            <button type="button" onClick={onEditProfile}>تکمیل / ویرایش اطلاعات</button>
           </div>
         </section>
 
@@ -120,48 +186,15 @@ function DashboardPage({ isVisible, sectionRequest, onLogout }) {
             <section className="mobile-section-card">
               <div className="mobile-section-head">
                 <h2>هدیه‌های فعال من</h2>
-                <span>{activeGifts.length} هدیه</span>
+                <span>{activeGiftItems.length} هدیه</span>
               </div>
-              <div className="mobile-active-gifts-list">
-                {activeGifts.map((gift) => (
-                  <article className="mobile-active-gift" key={gift.title}>
-                    <img src={gift.image} alt={gift.title} />
-                    <div>
-                      <h3>{gift.title}</h3>
-                      <p>{gift.place}</p>
-                      <span>{gift.time}</span>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {activeSection === 'processes' && (
-            <section className="mobile-section-card">
-              <div className="mobile-section-head">
-                <h2>فرآیندها</h2>
-                <span>۳ فعال</span>
-              </div>
-              <div className="mobile-process-list">
-                <article><Clock3 /><div><h3>در انتظار تایید خرید ایبامو</h3><p>پس از تایید مجموعه، کیف پول ایبامو شارژ می‌شود.</p></div></article>
-                <article><ShieldCheck /><div><h3>کش‌بک رستوران ملل</h3><p>اعتبار بعد از ثبت نهایی سفارش اضافه می‌شود.</p></div></article>
-                <article><Check /><div><h3>هدیه باستانی</h3><p>کد هدیه آماده استفاده است.</p></div></article>
-              </div>
-            </section>
-          )}
-
-          {activeSection === 'referral' && (
-            <section className="mobile-section-card mobile-referral-card">
-              <h2>کد معرف شما</h2>
-              <strong>{REFERRAL_CODE}</strong>
-              <button type="button" onClick={copyReferralCode}>{hasCopiedReferral ? 'کپی شد' : 'اشتراک گذاری'}</button>
+              {renderActiveGifts(true)}
             </section>
           )}
         </section>
 
         <section className="mobile-profile-menu">
-          {mobileProfileLinks.map(({ title, icon: Icon }) => {
+          {mobileProfileLinks.filter(isEnabledDashboardItem).map(({ title, icon: Icon }) => {
             const section = getActionSection(title);
 
             return (
@@ -185,16 +218,17 @@ function DashboardPage({ isVisible, sectionRequest, onLogout }) {
 
       <section className="dashboard-hero desktop-dashboard-block" id="dashboard-account">
         <div className="hero-lines" />
-        <img className="dashboard-avatar" src={getImageSrc(userAvatarImage)} alt="عباس شایگان" />
+        <img className="dashboard-avatar" src={getImageSrc(userAvatarImage)} alt={profileName} />
         <div className="dashboard-user-copy">
-          <h1><Crown /> عباس شایگان</h1>
-          <p>سطح شما: <span>طلایی</span></p>
-          <strong>۲۸,۵۰۰ امتیاز</strong>
+          <h1><Crown /> {profileName}</h1>
+          <p>سطح شما: <span>{profileLevel}</span></p>
+          <strong>{profileScore}</strong>
+          <button className="dashboard-inline-action" type="button" onClick={onEditProfile}>تکمیل / ویرایش اطلاعات</button>
         </div>
       </section>
 
       <section className="dashboard-actions desktop-dashboard-block" aria-label="بخش‌های داشبورد">
-        {dashboardActions.map(({ title, icon: Icon }) => {
+        {dashboardActions.filter(isEnabledDashboardItem).map(({ title, icon: Icon }) => {
           const section = getActionSection(title);
 
           return (
@@ -217,69 +251,13 @@ function DashboardPage({ isVisible, sectionRequest, onLogout }) {
           <section className="panel account-panel">
             <div className="panel-head-row">
               <h2>اطلاعات حساب</h2>
-              <span className="dashboard-section-badge">فعال</span>
+              <button className="dashboard-inline-action" type="button" onClick={onEditProfile}>ویرایش اطلاعات</button>
             </div>
             <div className="account-info-grid">
-              <article><span>نام کاربر</span><strong>عباس شایگان</strong></article>
-              <article><span>سطح عضویت</span><strong>طلایی</strong></article>
-              <article><span>امتیاز کل</span><strong>۲۸,۵۰۰</strong></article>
-            </div>
-          </section>
-        )}
-
-        {activeSection === 'wallet' && (
-          <section className="panel wallet-panel" id="wallet">
-            <div className="wallet-summary">
-              <div>
-                <span className="wallet-eyebrow">کیف پول اختصاصی کسب‌وکارها</span>
-                <h2><Wallet /> کیف پول من</h2>
-                <p>اعتبار هر کسب‌وکار جداگانه شارژ می‌شود و فقط برای همان مجموعه قابل استفاده است.</p>
-                <div className="wallet-sync-row">
-                  <span className="wallet-sync-note">{walletStatusLabel}</span>
-                  <button className="wallet-refresh-btn" type="button" onClick={loadWallet} disabled={isWalletLoading}>
-                    <RefreshCw />
-                    {isWalletLoading ? 'در حال بروزرسانی' : 'بروزرسانی'}
-                  </button>
-                </div>
-              </div>
-              <div className="wallet-total-card">
-                <span>موجودی کل قابل مشاهده</span>
-                <strong>{walletTotalLabel}</strong>
-                <small>{chargedWalletsCount} کیف پول شارژ شده</small>
-              </div>
-            </div>
-
-            <div className="wallet-business-grid">
-              {walletData.wallets.map((wallet) => (
-                <article className={`wallet-business-card ${wallet.balance === 0 ? 'is-empty' : ''}`} key={wallet.id}>
-                  <img src={wallet.image} alt={wallet.title} />
-                  <div>
-                    <h3>{wallet.title}</h3>
-                    <strong>{wallet.balanceLabel}</strong>
-                    <span>{wallet.status}</span>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <div className="wallet-history">
-              <h3>تراکنش‌های اخیر کیف پول</h3>
-              {walletData.transactions.map((transaction) => {
-                const isCredit = transaction.amount.startsWith('+');
-                const Icon = isCredit ? ArrowDownLeft : ArrowUpRight;
-
-                return (
-                  <article className="wallet-history-item" key={`${transaction.business}-${transaction.date}-${transaction.amount}`}>
-                    <Icon />
-                    <div>
-                      <strong>{transaction.business}</strong>
-                      <span>{transaction.type}</span>
-                    </div>
-                    <p>{transaction.date}</p>
-                    <b className={isCredit ? 'is-credit' : 'is-debit'}>{transaction.amount}</b>
-                  </article>
-                );
-              })}
+              <article><span>نام کاربر</span><strong>{profileName}</strong></article>
+              <article><span>شماره تماس</span><strong>{profileMobile || 'ثبت نشده'}</strong></article>
+              <article><span>ایمیل</span><strong>{profileEmail || 'ثبت نشده'}</strong></article>
+              <article><span>تاریخ تولد</span><strong>{profileBirthDate || 'ثبت نشده'}</strong></article>
             </div>
           </section>
         )}
@@ -288,90 +266,14 @@ function DashboardPage({ isVisible, sectionRequest, onLogout }) {
           <section className="panel active-gifts-panel" id="all-active-gifts">
             <div className="panel-head-row">
               <h2>هدیه‌های فعال من</h2>
-              <button type="button" className="dashboard-inline-action">مشاهده همه</button>
+              <button type="button" className="dashboard-inline-action" onClick={loadActiveGifts}>بروزرسانی</button>
             </div>
-            <div className="active-gifts-grid">
-              {activeGifts.map((gift) => (
-                <article className="active-gift-card" key={gift.title}>
-                  <img src={gift.image} alt={gift.title} />
-                  <div>
-                    <h3>{gift.title}</h3>
-                    <p>{gift.place}</p>
-                    <span>{gift.time}</span>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {activeSection === 'processes' && (
-          <section className="panel process-panel">
-            <div className="panel-head-row">
-              <h2>فرآیندها و کش‌بک‌ها</h2>
-              <span className="dashboard-section-badge">۳ مورد فعال</span>
-            </div>
-            <div className="process-list">
-              <article><Clock3 /><div><h3>در انتظار تایید خرید ایبامو</h3><p>پس از تایید مجموعه، کیف پول ایبامو شارژ می‌شود.</p></div><span>در حال بررسی</span></article>
-              <article><ShieldCheck /><div><h3>کش‌بک رستوران ملل</h3><p>اعتبار پس از ثبت نهایی سفارش به کیف پول همان مجموعه اضافه می‌شود.</p></div><span>فعال</span></article>
-              <article><Check /><div><h3>هدیه باستانی</h3><p>کد هدیه دریافت شده و آماده استفاده است.</p></div><span>آماده استفاده</span></article>
-            </div>
-          </section>
-        )}
-
-        {activeSection === 'referral' && (
-          <section className="invite-card referral-panel">
-            <h2><ChevronLeft /> دعوت از دوستان</h2>
-            <p>دوستان خود را دعوت کنید و امتیاز بگیرید</p>
-            <div className="invite-row">
-              <div className="invite-code">{REFERRAL_CODE}</div>
-              <div>
-                <span>کد معرف شما</span>
-                <button type="button" onClick={copyReferralCode}>
-                  {hasCopiedReferral ? <Check /> : <Copy />}
-                  {hasCopiedReferral ? 'کپی شد' : 'اشتراک گذاری'}
-                </button>
-              </div>
-            </div>
+            {renderActiveGifts(false)}
           </section>
         )}
       </div>
-
-      <section className="dashboard-bottom-grid desktop-dashboard-block">
-        <section className="panel history-panel">
-          <h2>تاریخچه هدایا</h2>
-          <div className="history-list">
-            {giftHistory.map((item) => (
-              <article className="history-item" key={item.title}>
-                <img src={item.image} alt={item.title} />
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.date}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <div className="dashboard-side-stack">
-          <section className="panel stats-panel">
-            <h2>آمار شما</h2>
-            <div className="stats-row">
-              {stats.map((stat) => (
-                <div className="stat-item" key={stat.label}>
-                  <span>{stat.label}</span>
-                  <strong>{stat.value}</strong>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      </section>
     </section>
   );
 }
 
 export default DashboardPage;
-
-
-

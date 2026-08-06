@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import DashboardPage from "./components/DashboardPage";
 import Header from "./components/Header";
 import LoginModal from "./components/LoginModal";
 import MobileBottomNav from "./components/MobileBottomNav";
+import ProfileCompletionModal from "./components/ProfileCompletionModal";
 import RestaurantPage from "./components/RestaurantPage";
 import BusinessProfilePage from "./components/BusinessProfilePage";
 import { sendOtp, verifyOtp } from "./api/auth";
+import { updateUserProfile } from "./api/user";
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from "./helper/authCookie";
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
+const PROFILE_STORAGE_KEY = "keymiyay-user-profile";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
 
@@ -25,6 +28,26 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 
   const [loginError, setLoginError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [profileMobile, setProfileMobile] = useState("");
+  const [userProfile, setUserProfile] = useState(null);
+  const [isProfileCompletionOpen, setIsProfileCompletionOpen] = useState(false);
+  const [profileCompletionError, setProfileCompletionError] = useState("");
+  const [isProfileSaving, setIsProfileSaving] = useState(false);
+
+  useEffect(() => {
+    if (!canUseStorage()) {
+      return;
+    }
+
+    try {
+      const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
+      if (savedProfile) {
+        setUserProfile(JSON.parse(savedProfile));
+      }
+    } catch (error) {
+      localStorage.removeItem(PROFILE_STORAGE_KEY);
+    }
+  }, []);
 
   useEffect(() => {
     const loggedIn = hasAuthToken();
@@ -127,6 +150,8 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
       setIsLoggedIn(true);
       setIsLoginOpen(false);
       setIsUserMenuOpen(false);
+      setProfileMobile(mobile);
+      setIsProfileCompletionOpen(true);
       setDashboardSectionRequest(initialDashboardSection ? { section: initialDashboardSection, createdAt: Date.now() } : null);
       setCurrentPage("dashboard");
     } catch (error) {
@@ -149,10 +174,15 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
     setIsUserMenuOpen(false);
     setDashboardSectionRequest(null);
     setIsLoginOpen(false);
+    setIsProfileCompletionOpen(false);
     setLoginError("");
+    setProfileCompletionError("");
+    setUserProfile(null);
+    setProfileMobile("");
 
     if (canUseStorage()) {
       localStorage.removeItem(PAGE_STORAGE_KEY);
+      localStorage.removeItem(PROFILE_STORAGE_KEY);
     }
 
     if (typeof window !== "undefined") {
@@ -222,6 +252,31 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 
   const mobileBottomCurrentPage = currentPage === "dashboard" && dashboardSectionRequest?.section === "gifts" ? "gifts" : currentPage;
 
+  const handleSaveProfile = async (profile) => {
+    try {
+      setIsProfileSaving(true);
+      setProfileCompletionError("");
+
+      const data = await updateUserProfile(profile);
+      const nextProfile = {
+        ...profile,
+        ...(data?.data?.user || data?.data || data?.user || {}),
+      };
+
+      setUserProfile(nextProfile);
+
+      if (canUseStorage()) {
+        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(nextProfile));
+      }
+
+      setIsProfileCompletionOpen(false);
+    } catch (error) {
+      setProfileCompletionError(error.response?.data?.message || error.message || "ذخیره اطلاعات انجام نشد.");
+    } finally {
+      setIsProfileSaving(false);
+    }
+  };
+
   return (
     <main className={`page-shell ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${currentPage === "business" ? "business-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen ? "is-login-open" : ""}`} dir="rtl">
       <section
@@ -254,6 +309,8 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
         <DashboardPage
           isVisible={currentPage === "dashboard"}
           sectionRequest={dashboardSectionRequest}
+          userProfile={userProfile}
+          onEditProfile={() => setIsProfileCompletionOpen(true)}
           onLogout={handleLogout}
         />
       </section>
@@ -271,6 +328,17 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
           onClose={closeLogin}
           onSendOtp={handleSendOtp}
           onVerifyOtp={handleVerifyOtp}
+        />
+      )}
+
+      {isProfileCompletionOpen && (
+        <ProfileCompletionModal
+          initialMobile={profileMobile}
+          initialProfile={userProfile || {}}
+          isLoading={isProfileSaving}
+          error={profileCompletionError}
+          onClose={() => setIsProfileCompletionOpen(false)}
+          onSubmit={handleSaveProfile}
         />
       )}
     </main>

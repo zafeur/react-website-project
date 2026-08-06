@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Award,
   ChevronLeft,
   Gamepad2,
-  Heart,
   Navigation,
   Star,
   Users,
@@ -42,7 +41,6 @@ const uiText = {
   walletTitle: '\u06a9\u06cc\u0641 \u067e\u0648\u0644 \u0627\u062e\u062a\u0635\u0627\u0635\u06cc',
   specialOffer: '\u067e\u06cc\u0634\u0646\u0647\u0627\u062f \u0648\u06cc\u0698\u0647',
   activeGiftDiscount: '\u0647\u062f\u06cc\u0647 \u0648 \u062a\u062e\u0641\u06cc\u0641 \u0641\u0639\u0627\u0644',
-  favoriteLabel: '\u0627\u0641\u0632\u0648\u062f\u0646 \u0628\u0647 \u0639\u0644\u0627\u0642\u0647\u200c\u0645\u0646\u062f\u06cc\u200c\u0647\u0627',
   defaultRating: '\u06f4.\u06f8',
   defaultVotes: '\u06f2\u06f3\u06f4 \u0631\u0627\u06cc',
   collectionWallet: '\u06a9\u06cc\u0641 \u067e\u0648\u0644 \u0627\u06cc\u0646 \u0645\u062c\u0645\u0648\u0639\u0647',
@@ -106,13 +104,37 @@ const findCollectionList = (source) => {
 };
 
 const findBusinessProfile = (businessId = DEFAULT_BUSINESS_ID) => {
-  const normalizedBusinessId = normalizeKey(businessId || DEFAULT_BUSINESS_ID);
+  const rawBusinessId = String(businessId || '').trim();
+  const normalizedBusinessId = normalizeKey(rawBusinessId || DEFAULT_BUSINESS_ID);
+  const isNumericCollection = /^\d+$/.test(rawBusinessId);
 
-  return businessProfiles.find((profile) => {
+  const matchedProfile = businessProfiles.find((profile) => {
     const aliases = Array.isArray(profile.aliases) ? profile.aliases : [];
-    const values = [profile.id, profile.slug, profile.title, profile.shortTitle, ...aliases].map(normalizeKey);
-    return values.some((value) => value && (value === normalizedBusinessId || value.includes(normalizedBusinessId) || normalizedBusinessId.includes(value)));
-  }) || businessProfiles.find((profile) => profile.id === DEFAULT_BUSINESS_ID) || businessProfiles[0];
+    const values = [profile.id, profile.slug, profile.collectionId, profile.title, profile.shortTitle, ...aliases].map(normalizeKey);
+    return values.some((value) => value && (value === normalizedBusinessId || (!isNumericCollection && (value.includes(normalizedBusinessId) || normalizedBusinessId.includes(value)))));
+  });
+
+  if (matchedProfile) return matchedProfile;
+
+  if (isNumericCollection) {
+    return {
+      ...(businessProfiles[0] || {}),
+      id: `collection-${rawBusinessId}`,
+      slug: `collection-${rawBusinessId}`,
+      collectionId: rawBusinessId,
+      title: `${uiText.collectionFallback} ${toPersianDigits(rawBusinessId)}`,
+      shortTitle: `${uiText.collectionFallback} ${toPersianDigits(rawBusinessId)}`,
+      logoText: '',
+      logoSmall: '',
+      category: uiText.collectionFallback,
+      specialty: uiText.servicesFallback,
+      description: '',
+      image: getImageSrc(restaurantInteriorImage),
+      bannerImage: getImageSrc(restaurantInteriorImage),
+    };
+  }
+
+  return businessProfiles.find((profile) => profile.id === DEFAULT_BUSINESS_ID) || businessProfiles[0];
 };
 
 const findBusinessProfileFromApiData = (data, fallbackProfile) => {
@@ -394,10 +416,6 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
     <div className={isVisible ? 'business-profile-page' : 'business-profile-page d-none'} id="restaurant-top">
       <section className="business-profile-layout">
         <aside className="profile business-profile-card">
-          <button className="business-favorite-button" type="button" aria-label={uiText.favoriteLabel}>
-            <Heart />
-          </button>
-
           <div className="logo-circle business-logo-circle">
             {businessProfile.logoText ? (
               <>
@@ -539,3 +557,5 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
 }
 
 export default BusinessProfilePage;
+
+

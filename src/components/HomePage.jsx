@@ -18,10 +18,15 @@ import {
   Trophy,
 } from 'lucide-react';
 import LoginModal from './LoginModal';
+import ProfileCompletionModal from './ProfileCompletionModal';
 import MobileBottomNav from './MobileBottomNav';
 import { sendOtp, verifyOtp } from '../api/auth';
+import { updateUserProfile } from '../api/user';
 import { getDiscountCards, getHomePageData, requestDiscountCode } from '../api/home';
 import { getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
+
+const PROFILE_STORAGE_KEY = 'keymiyay-user-profile';
+const canUseStorage = () => typeof window !== 'undefined' && window.localStorage;
 
 const t = {
   brand: "\u06a9\u06cc \u0645\u06cc\u0627\u06cc",
@@ -324,6 +329,14 @@ const businessAliases = {
   mojalal: ['mojalal', 'mojallal', 'مجلل'],
 };
 
+const knownCollectionIdByBusiness = {
+  ibamo: '1',
+  melal: '2',
+  mojalal: '3',
+  barial: '4',
+  dorato: '5',
+};
+
 const findBusinessKeyInText = (value) => {
   const searchable = normalizeLookupText(value);
 
@@ -353,6 +366,11 @@ const getKnownBusinessKey = (offer) => {
   }
 
   return findBusinessKeyInText(firstValue(offer, ['description', 'subtitle', 'text', 'body']));
+};
+
+const getCollectionIdForOffer = (offer) => {
+  const businessKey = getKnownBusinessKey(offer);
+  return knownCollectionIdByBusiness[businessKey] || firstValue(offer, ['collectionId', 'collection_id', 'id']);
 };
 
 const getOfferFallback = (offer, index) => {
@@ -404,7 +422,7 @@ const normalizeOffers = (items) =>
       ...fallback,
       ...offer,
       id: firstValue(offer, ['id', 'discount_id', 'discountId', 'offer_id', 'offerId']) || fallback.id,
-      collectionId: firstValue(offer, ['collectionId', 'collection_id', 'id']) || fallback.collectionId,
+      collectionId: getCollectionIdForOffer(offer) || fallback.collectionId,
       businessId: businessKey || firstValue(offer, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug', 'prefix']) || fallback.businessId,
       title: getBusinessDisplayValue(offer, ['title', 'name', 'gift_title', 'giftTitle'], fallback.title, businessKey),
       brand: getBusinessDisplayValue(offer, ['brand', 'business', 'business_name', 'place'], fallback.brand, businessKey),
@@ -487,7 +505,7 @@ const normalizeApiStories = (payload) => normalizeStories(findStoryList(payload)
 const normalizeDiscountApiOffers = (payload) => normalizeOffers(findOfferList(resolveHomeData(payload)));
 
 const getCollectionHref = (item) => {
-  const collectionId = firstValue(item, ['collectionId', 'collection_id', 'id']);
+  const collectionId = getCollectionIdForOffer(item);
   return collectionId ? `/collections/${collectionId}` : undefined;
 };
 
@@ -496,7 +514,7 @@ const buildBrandsFromOffers = (offers) => {
 
   return offers
     .map((offer) => {
-      const collectionId = firstValue(offer, ['collectionId', 'collection_id', 'id']);
+      const collectionId = getCollectionIdForOffer(offer);
       const businessId = getKnownBusinessKey(offer) || firstValue(offer, ['prefix', 'slug', 'businessId', 'business_id']) || collectionId;
       const key = String(businessId || collectionId || offer.title || '').toLowerCase();
 
@@ -823,10 +841,30 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [discountPopup, setDiscountPopup] = useState(null);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
+  const [profileMobile, setProfileMobile] = useState('');
+  const [userProfile, setUserProfile] = useState(null);
+  const [isProfileCompletionOpen, setIsProfileCompletionOpen] = useState(false);
+  const [profileCompletionError, setProfileCompletionError] = useState('');
+  const [isProfileSaving, setIsProfileSaving] = useState(false);
   const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
   const debugVipValue = getDebugVipValue(router);
   const vipOffers = homeData.offers.filter((offer) => offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue));
   const regularOffers = homeData.offers.filter((offer) => !(offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue)));
+useEffect(() => {
+  if (!canUseStorage()) {
+    return;
+  }
+
+  try {
+    const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
+    if (savedProfile) {
+      setUserProfile(JSON.parse(savedProfile));
+    }
+  } catch (error) {
+    localStorage.removeItem(PROFILE_STORAGE_KEY);
+  }
+}, []);
+
 useEffect(() => {
   const checkAuth = () => {
     setIsLoggedIn(hasAuthToken());
@@ -1081,6 +1119,31 @@ useEffect(() => {
     }
   };
 
+  const handleSaveProfile = async (profile) => {
+    try {
+      setIsProfileSaving(true);
+      setProfileCompletionError('');
+
+      const data = await updateUserProfile(profile);
+      const nextProfile = {
+        ...profile,
+        ...(data?.data?.user || data?.data || data?.user || {}),
+      };
+
+      setUserProfile(nextProfile);
+
+      if (canUseStorage()) {
+        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(nextProfile));
+      }
+
+      setIsProfileCompletionOpen(false);
+    } catch (error) {
+      setProfileCompletionError(error.response?.data?.message || error.message || '????? ??????? ????? ???.');
+    } finally {
+      setIsProfileSaving(false);
+    }
+  };
+
   const handleVerifyOtp = async (mobile, otp) => {
     try {
       setIsLoading(true);
@@ -1097,6 +1160,8 @@ useEffect(() => {
 
       setIsLoggedIn(true);
       setIsLoginOpen(false);
+      setProfileMobile(mobile);
+      setIsProfileCompletionOpen(true);
       if (pendingOffer) {
         const offerToClaim = pendingOffer;
         setPendingOffer(null);
@@ -1482,6 +1547,17 @@ useEffect(() => {
           onClose={closeLogin}
           onSendOtp={handleSendOtp}
           onVerifyOtp={handleVerifyOtp}
+        />
+      )}
+
+      {isProfileCompletionOpen && (
+        <ProfileCompletionModal
+          initialMobile={profileMobile}
+          initialProfile={userProfile || {}}
+          isLoading={isProfileSaving}
+          error={profileCompletionError}
+          onClose={() => setIsProfileCompletionOpen(false)}
+          onSubmit={handleSaveProfile}
         />
       )}
 

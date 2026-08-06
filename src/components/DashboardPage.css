@@ -978,3 +978,22 @@ html.theme-dark .page-shell .dashboard-page :where(.account-info-grid span, .pro
     color: #d8ffe5;
   }
 }
+
+.dashboard-empty-state {
+  width: 100%;
+  margin: 0;
+  padding: 28px 18px;
+  border: 1px dashed rgba(0, 151, 74, 0.28);
+  border-radius: 18px;
+  color: rgba(18, 40, 31, 0.72);
+  background: rgba(0, 151, 74, 0.05);
+  text-align: center;
+  font-weight: 850;
+  line-height: 1.9;
+}
+
+.theme-dark .dashboard-empty-state {
+  color: rgba(245, 255, 249, 0.78);
+  border-color: rgba(85, 226, 140, 0.26);
+  background: rgba(85, 226, 140, 0.06);
+}
