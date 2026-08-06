@@ -2827,3 +2827,23 @@ html.theme-dark .business-follow-message {
     margin-top: 6px !important;
   }
 }
+
+
+/* Remove the dark contour around business page hero banners. */
+.business-frame .business-profile-layout .business-hero-banner,
+.business-frame .business-profile-layout .business-hero-banner.business-hero-banner-photo,
+.business-frame .business-profile-layout .business-hero-banner .hero-photo,
+.business-frame .business-profile-layout .business-hero-banner.business-hero-banner-photo .hero-photo {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+
+.business-frame .business-info-card .info-text.business-phone-text,
+.business-profile-page .business-info-card .info-text.business-phone-text {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}

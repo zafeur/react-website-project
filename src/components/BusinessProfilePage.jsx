@@ -84,7 +84,15 @@ const normalizePhoneHref = (phone = '') => String(phone)
   .replace(/[\u0660-\u0669]/g, (digit) => String(digit.charCodeAt(0) - 1632))
   .replace(/[^0-9+]/g, '');
 
+const replaceBrokenImage = (event, fallback) => {
+  if (!fallback) return;
+  event.currentTarget.onerror = null;
+  event.currentTarget.src = fallback;
+};
+
 const resolveApiData = (payload) => payload?.data || payload?.collection || payload?.details || payload;
+
+const formatWalletBalance = (amount) => `${new Intl.NumberFormat('fa-IR').format(Number(amount) || 0)} \u062a\u0648\u0645\u0627\u0646`;
 
 const findCollectionList = (source) => {
   if (Array.isArray(source)) return source;
@@ -175,8 +183,11 @@ const normalizeApiCollectionProfile = (source, fallbackProfile) => {
   const collectionId = firstValue(data, ['collection_id', 'collectionId', 'id']) || matchedFallbackProfile.collectionId;
   const slug = firstValue(data, ['prefix', 'slug', 'businessSlug', 'business_slug']) || matchedFallbackProfile.slug || matchedFallbackProfile.id;
   const title = firstValue(data, ['title', 'name', 'business_name', 'collection_name']) || matchedFallbackProfile.title;
-  const image = normalizeMediaUrl(firstValue(data, ['profile_image', 'profileImage', 'image', 'images', 'logo', 'logo_url', 'image_url']), matchedFallbackProfile.image);
-  const bannerImage = normalizeMediaUrl(firstValue(data, ['banner_image', 'bannerImage', 'banner', 'cover_image', 'coverImage']), matchedFallbackProfile.bannerImage || fallbackProfile.bannerImage || getImageSrc(restaurantInteriorImage));
+  const imageFallback = matchedFallbackProfile.image || fallbackProfile.image || getImageSrc(restaurantInteriorImage);
+  const bannerFallbackImage = matchedFallbackProfile.bannerImage || fallbackProfile.bannerImage || getImageSrc(restaurantInteriorImage);
+  const image = normalizeMediaUrl(firstValue(data, ['profile_image', 'profileImage', 'image', 'images', 'logo', 'logo_url', 'image_url']), imageFallback);
+  const bannerImage = normalizeMediaUrl(firstValue(data, ['banner_image', 'bannerImage', 'banner', 'cover_image', 'coverImage']), bannerFallbackImage);
+  const walletBalance = firstValue(data, ['wallet_balance', 'walletBalance', 'walletBalanceAmount', 'balance', 'credit']);
 
   return {
     ...matchedFallbackProfile,
@@ -189,16 +200,20 @@ const normalizeApiCollectionProfile = (source, fallbackProfile) => {
     title,
     shortTitle: firstValue(data, ['shortTitle', 'short_title', 'short_name']) || title,
     image,
+    imageFallback,
     bannerImage,
+    bannerFallbackImage,
     bannerMode: matchedFallbackProfile.bannerMode || 'photo',
     description: firstValue(data, ['description', 'about', 'body', 'text']) || matchedFallbackProfile.description,
     category: firstValue(data, ['category', 'type', 'business_type']) || matchedFallbackProfile.category,
     specialty: firstValue(data, ['specialty', 'sub_category', 'subtitle']) || matchedFallbackProfile.specialty,
     rating: toPersianDigits(firstValue(data, ['rating', 'rate', 'score']) || matchedFallbackProfile.rating),
     votes: toPersianDigits(firstValue(data, ['votes', 'reviews_count', 'rate_count']) || matchedFallbackProfile.votes),
-    address: toPersianDigits(firstValue(data, ['address', 'location', 'full_address']) || matchedFallbackProfile.address),
+    address: toPersianDigits(firstValue(data, ['address', 'full_address', 'fullAddress', 'street_address', 'streetAddress']) || matchedFallbackProfile.address),
     phone: toPersianDigits(firstValue(data, ['phone_number', 'phoneNumber', 'phone', 'mobile', 'tel', 'telephone']) || matchedFallbackProfile.phone),
     hours: toPersianDigits(firstValue(data, ['hours', 'working_hours', 'work_time']) || matchedFallbackProfile.hours),
+    walletBalance: walletBalance !== undefined ? Number(walletBalance) || 0 : matchedFallbackProfile.walletBalance,
+    walletBalanceLabel: walletBalance !== undefined ? formatWalletBalance(walletBalance) : matchedFallbackProfile.walletBalanceLabel,
     mapUrl: firstValue(data, ['mapUrl', 'map_url', 'location_url', 'google_map', 'googleMap']) || matchedFallbackProfile.mapUrl,
     instagramUrl: firstValue(data, ['instagramUrl', 'instagram_url', 'instagram']) || matchedFallbackProfile.instagramUrl,
     isFollowed: Boolean(firstValue(data, ['is_followed', 'isFollowed', 'followed'])) || Boolean(matchedFallbackProfile.isFollowed),
@@ -372,7 +387,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
       </div>
     );
   }
-  const walletAmount = toPersianDigits(isLoggedIn ? businessWallet?.balanceLabel || businessProfile.walletBalanceLabel || uiText.walletEmpty : uiText.walletRequired);
+  const walletAmount = toPersianDigits(isLoggedIn ? businessProfile.walletBalanceLabel || businessWallet?.balanceLabel || uiText.walletEmpty : uiText.walletRequired);
   const walletStatus = isLoggedIn
     ? businessWallet?.status || businessProfile.walletStatus || uiText.walletUsable
     : uiText.walletLoginText;
@@ -381,7 +396,6 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
   const walletCashback = toPersianDigits(isLoggedIn ? businessWallet?.cashbackLabel || businessProfile.cashbackLabel : '');
   const bannerImage = businessProfile.bannerImage || getImageSrc(restaurantInteriorImage);
   const bannerMode = businessProfile.bannerMode || 'photo';
-
   const displayedInfoCards = [
     {
       icon: Navigation,
@@ -423,7 +437,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
                 {businessProfile.logoSmall && <small>{businessProfile.logoSmall}</small>}
               </>
             ) : (
-              <img src={businessProfile.image} alt={businessProfile.title} />
+              <img src={businessProfile.image} alt={businessProfile.title} onError={(event) => replaceBrokenImage(event, businessProfile.imageFallback)} />
             )}
           </div>
 
@@ -483,7 +497,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
 
         <div className="business-main-panel">
           <div className={`business-hero-banner business-hero-banner-${bannerMode}`}>
-            <img className="hero-photo" src={bannerImage} alt={`${uiText.banner} ${businessProfile.title}`} />
+            <img className="hero-photo" src={bannerImage} alt={`${uiText.banner} ${businessProfile.title}`} onError={(event) => replaceBrokenImage(event, businessProfile.bannerFallbackImage)} />
           </div>
 
           <div className="info-row business-info-grid">
