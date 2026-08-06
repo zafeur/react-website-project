@@ -175,8 +175,8 @@ const normalizeApiCollectionProfile = (source, fallbackProfile) => {
   const collectionId = firstValue(data, ['collection_id', 'collectionId', 'id']) || matchedFallbackProfile.collectionId;
   const slug = firstValue(data, ['prefix', 'slug', 'businessSlug', 'business_slug']) || matchedFallbackProfile.slug || matchedFallbackProfile.id;
   const title = firstValue(data, ['title', 'name', 'business_name', 'collection_name']) || matchedFallbackProfile.title;
-  const image = normalizeMediaUrl(firstValue(data, ['image', 'images', 'logo', 'logo_url', 'image_url']), matchedFallbackProfile.image);
-  const bannerImage = matchedFallbackProfile.bannerImage || fallbackProfile.bannerImage || getImageSrc(restaurantInteriorImage);
+  const image = normalizeMediaUrl(firstValue(data, ['profile_image', 'profileImage', 'image', 'images', 'logo', 'logo_url', 'image_url']), matchedFallbackProfile.image);
+  const bannerImage = normalizeMediaUrl(firstValue(data, ['banner_image', 'bannerImage', 'banner', 'cover_image', 'coverImage']), matchedFallbackProfile.bannerImage || fallbackProfile.bannerImage || getImageSrc(restaurantInteriorImage));
 
   return {
     ...matchedFallbackProfile,
@@ -197,7 +197,7 @@ const normalizeApiCollectionProfile = (source, fallbackProfile) => {
     rating: toPersianDigits(firstValue(data, ['rating', 'rate', 'score']) || matchedFallbackProfile.rating),
     votes: toPersianDigits(firstValue(data, ['votes', 'reviews_count', 'rate_count']) || matchedFallbackProfile.votes),
     address: toPersianDigits(firstValue(data, ['address', 'location', 'full_address']) || matchedFallbackProfile.address),
-    phone: toPersianDigits(firstValue(data, ['phone', 'mobile', 'tel', 'telephone']) || matchedFallbackProfile.phone),
+    phone: toPersianDigits(firstValue(data, ['phone_number', 'phoneNumber', 'phone', 'mobile', 'tel', 'telephone']) || matchedFallbackProfile.phone),
     hours: toPersianDigits(firstValue(data, ['hours', 'working_hours', 'work_time']) || matchedFallbackProfile.hours),
     mapUrl: firstValue(data, ['mapUrl', 'map_url', 'location_url', 'google_map', 'googleMap']) || matchedFallbackProfile.mapUrl,
     instagramUrl: firstValue(data, ['instagramUrl', 'instagram_url', 'instagram']) || matchedFallbackProfile.instagramUrl,

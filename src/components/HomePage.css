@@ -3865,7 +3865,7 @@ html.theme-dark .home-shell .home-offer-card--simple-discount .home-offer-kind {
 
 @media (max-width: 520px) {
   .home-offer-card > .home-offer-kind {
-    top: 10px !important;
+    top: -34px !important;
     inset-inline-end: 10px !important;
   }
 }
@@ -6932,4 +6932,162 @@ html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount:h
   transform: none !important;
   border-color: rgba(255, 221, 128, .86) !important;
   box-shadow: 0 24px 54px rgba(7, 28, 18, .24), inset 0 1px 0 rgba(255, 255, 255, .10) !important;
+}
+
+
+/* Discount popup polish: make the close control intentional and keep the code card on-theme. */
+.home-discount-popup .home-popup-close {
+  top: 14px;
+  left: 14px;
+  width: 42px;
+  height: 42px;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(7, 150, 62, .16);
+  border-radius: 50%;
+  background: rgba(7, 150, 62, .08);
+  color: #063f27;
+  box-shadow: none;
+  backdrop-filter: blur(8px);
+}
+
+.home-shell.theme-dark .home-discount-popup .home-popup-close,
+html.theme-dark .home-shell .home-discount-popup .home-popup-close {
+  border-color: rgba(255, 255, 255, .16);
+  background: rgba(255, 255, 255, .08);
+  color: rgba(237, 247, 240, .94);
+}
+
+.home-discount-popup .home-popup-close svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.5;
+}
+
+.home-discount-popup .home-popup-close:hover {
+  background: rgba(7, 150, 62, .14);
+  transform: translateY(-1px);
+}
+
+.home-shell.theme-dark .home-discount-popup .home-popup-close:hover,
+html.theme-dark .home-shell .home-discount-popup .home-popup-close:hover {
+  background: rgba(255, 255, 255, .14);
+}
+
+.home-discount-popup .home-discount-code {
+  border: 1px dashed rgba(7, 150, 62, .44);
+  background: linear-gradient(180deg, #f7fffa, #ecfff3);
+  color: #07963e;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9), 0 14px 30px rgba(7, 150, 62, .12);
+}
+
+.home-shell.theme-dark .home-discount-popup .home-discount-code,
+html.theme-dark .home-shell .home-discount-popup .home-discount-code {
+  border-color: rgba(109, 240, 155, .62);
+  background: linear-gradient(180deg, rgba(10, 38, 27, .96), rgba(5, 24, 18, .98));
+  color: #6df09b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 14px 30px rgba(0, 0, 0, .22);
+}
+
+
+/* Small coin-style offer percent badge, placed on top of the logo. */
+.home-offer-media .home-offer-percent,
+.home-section#gifts .home-offer-card .home-offer-percent,
+.home-vip-section .home-offer-card .home-offer-percent,
+.home-section#gifts .home-offer-card--vip-discount .home-offer-percent,
+.home-vip-section .home-offer-card--vip-discount .home-offer-percent {
+  top: -14px !important;
+  left: 86px !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  max-width: 38px !important;
+  max-height: 38px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  aspect-ratio: 1 / 1 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  font-size: 10px !important;
+  box-shadow: 0 8px 18px rgba(18, 183, 106, .24) !important;
+}
+
+@media (max-width: 640px) {
+  .home-offer-media .home-offer-percent,
+  .home-section#gifts .home-offer-card .home-offer-percent,
+  .home-vip-section .home-offer-card .home-offer-percent {
+    top: -12px !important;
+    left: 72px !important;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    max-width: 34px !important;
+    max-height: 34px !important;
+    font-size: 9px !important;
+  }
+}
+
+
+/* Allow raised offer badges to sit above the media edge. */
+.home-section#gifts .home-offer-card,
+.home-vip-section .home-offer-card,
+.home-section#gifts .home-offer-media,
+.home-vip-section .home-offer-media {
+  overflow: visible !important;
+}
+
+
+.home-discount-code-wrap {
+  display: grid;
+  gap: 10px;
+  margin: 18px auto;
+}
+
+.home-discount-code-wrap .home-discount-code {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.home-discount-copy {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(7, 150, 62, .18);
+  border-radius: 12px;
+  background: rgba(7, 150, 62, .08);
+  color: #063f27;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.home-discount-copy svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+}
+
+.home-discount-copy:hover {
+  background: rgba(7, 150, 62, .13);
+  transform: translateY(-1px);
+}
+
+.home-shell.theme-dark .home-discount-copy,
+html.theme-dark .home-shell .home-discount-copy {
+  border-color: rgba(109, 240, 155, .22);
+  background: rgba(109, 240, 155, .10);
+  color: #dfffe9;
+}
+
+.home-shell.theme-dark .home-discount-copy:hover,
+html.theme-dark .home-shell .home-discount-copy:hover {
+  background: rgba(109, 240, 155, .16);
 }

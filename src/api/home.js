@@ -18,16 +18,16 @@ export const getDiscountCards = async () => {
 
 const getOfferValue = (offer, keys) => keys.map((key) => offer?.[key]).find(Boolean);
 
-const buildDiscountPayload = (offer) => ({
+const buildDiscountPayload = (offer, context = {}) => ({
   collection_id: getOfferValue(offer, ["collectionId", "collection_id", "id", "discount_id", "discountId"]),
   discount_id: getOfferValue(offer, ["id", "discount_id", "discountId"]),
   offer_id: getOfferValue(offer, ["offer_id", "offerId", "id"]),
-  token: offer?.token,
-  mobile: offer?.mobile,
+  mobile: context.mobile || offer?.mobile || "",
+  token: context.token || offer?.token || offer?.code_token || offer?.codeToken || "",
 });
 
-export const requestDiscountCode = async (offer) => {
-  const payload = buildDiscountPayload(offer);
+export const requestDiscountCode = async (offer, context = {}) => {
+  const payload = buildDiscountPayload(offer, context);
   const response = await httpClient.post("/discount/generate", payload, {
     requiresAuth: true,
   });

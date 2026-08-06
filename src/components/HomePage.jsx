@@ -16,6 +16,8 @@ import {
   Sun,
   TicketPercent,
   Trophy,
+  Copy,
+  Check,
 } from 'lucide-react';
 import LoginModal from './LoginModal';
 import ProfileCompletionModal from './ProfileCompletionModal';
@@ -67,6 +69,8 @@ const t = {
   discountCode: "\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0634\u0645\u0627",
   discountRequested: "\u062f\u0631\u062e\u0648\u0627\u0633\u062a \u0634\u0645\u0627 \u062b\u0628\u062a \u0634\u062f.",
   discountFailed: "\u062f\u0631\u06cc\u0627\u0641\u062a \u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0627\u0646\u062c\u0627\u0645 \u0646\u0634\u062f.",
+  copyCode: "\u06a9\u067e\u06cc \u06a9\u062f",
+  copiedCode: "\u06a9\u067e\u06cc \u0634\u062f",
   search: "\u062c\u0633\u062a\u062c\u0648\u06cc \u0628\u0631\u0646\u062f\u060c \u0647\u062f\u06cc\u0647 \u06cc\u0627 \u067e\u06cc\u0634\u0646\u0647\u0627\u062f...",
   bannerAlt: "\u0628\u0646\u0631 \u067e\u06cc\u0634\u0646\u0647\u0627\u062f \u0648\u06cc\u0698\u0647",
   footerText: "\u0647\u062f\u06cc\u0647\u200c\u0647\u0627\u060c \u062a\u062e\u0641\u06cc\u0641\u200c\u0647\u0627 \u0648 \u0628\u0627\u0634\u06af\u0627\u0647 \u0645\u0634\u062a\u0631\u06cc\u0627\u0646 \u062f\u0631 \u06cc\u06a9 \u062a\u062c\u0631\u0628\u0647 \u0633\u0627\u062f\u0647 \u0648 \u0647\u0645\u0627\u0647\u0646\u06af.",
@@ -331,7 +335,6 @@ const businessAliases = {
 
 const knownCollectionIdByBusiness = {
   ibamo: '1',
-  melal: '2',
   mojalal: '3',
   barial: '4',
   dorato: '5',
@@ -368,9 +371,16 @@ const getKnownBusinessKey = (offer) => {
   return findBusinessKeyInText(firstValue(offer, ['description', 'subtitle', 'text', 'body']));
 };
 
+const getExplicitCollectionId = (item) => firstValue(item, ['collectionId', 'collection_id']);
+
 const getCollectionIdForOffer = (offer) => {
+  const explicitCollectionId = getExplicitCollectionId(offer);
+  if (explicitCollectionId) return explicitCollectionId;
+
   const businessKey = getKnownBusinessKey(offer);
-  return knownCollectionIdByBusiness[businessKey] || firstValue(offer, ['collectionId', 'collection_id', 'id']);
+  if (businessKey === 'melal') return undefined;
+
+  return knownCollectionIdByBusiness[businessKey] || firstValue(offer, ['id']);
 };
 
 const getOfferFallback = (offer, index) => {
@@ -653,25 +663,53 @@ const findNestedValue = (source, keys) => {
 };
 
 const discountCodeKeys = ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode'];
+const generatedDiscountCodeKeys = [...discountCodeKeys, 'token'];
+
+const getOfferMatchValues = (offer) => {
+  const businessKey = getKnownBusinessKey(offer);
+  const collectionId = getCollectionIdForOffer(offer);
+
+  return [
+    businessKey,
+    collectionId,
+    knownCollectionIdByBusiness[businessKey],
+    offer?.collectionId,
+    offer?.collection_id,
+    offer?.businessId,
+    offer?.business_id,
+    offer?.businessSlug,
+    offer?.business_slug,
+    offer?.slug,
+    offer?.prefix,
+    offer?.brand,
+    offer?.business,
+    offer?.business_name,
+    offer?.title,
+    offer?.name,
+  ].filter(Boolean).map(normalizeLookupText);
+};
+
+const getGeneratedCodeItemValues = (item) => [
+  firstValue(item, ['collection_id', 'collectionId', 'id']),
+  firstValue(item, ['prefix', 'slug', 'businessSlug', 'business_slug']),
+  firstValue(item, ['collection', 'collection_name', 'business', 'business_name', 'brand']),
+  firstValue(item, ['title', 'name', 'gift_title', 'giftTitle']),
+  firstValue(item, ['description', 'subtitle', 'text', 'body']),
+].filter(Boolean).map(normalizeLookupText);
 
 const isOfferMatch = (item, offer) => {
   if (!item || typeof item !== 'object' || !offer) {
     return false;
   }
 
-  const itemBusiness = String(firstValue(item, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug', 'business', 'business_name', 'brand']) || '').toLowerCase();
-  const offerBusinessCandidates = [offer.businessId, offer.business_id, offer.businessSlug, offer.business_slug, offer.brand]
-    .filter(Boolean)
-    .map((value) => String(value).toLowerCase());
-  const itemTitle = String(firstValue(item, ['title', 'name', 'gift_title', 'giftTitle']) || '').toLowerCase();
-  const offerTitle = String(offer.title || '').toLowerCase();
-  const businessMatches = offerBusinessCandidates.some((offerBusiness) =>
-    itemBusiness && (itemBusiness.includes(offerBusiness) || offerBusiness.includes(itemBusiness))
-  );
+  const offerValues = getOfferMatchValues(offer);
+  const itemValues = getGeneratedCodeItemValues(item);
 
-  return Boolean(
-    businessMatches ||
-    (itemTitle && offerTitle && (itemTitle.includes(offerTitle) || offerTitle.includes(itemTitle)))
+  return itemValues.some((itemValue) =>
+    offerValues.some((offerValue) =>
+      itemValue === offerValue ||
+      (itemValue.length > 2 && offerValue.length > 2 && (itemValue.includes(offerValue) || offerValue.includes(itemValue)))
+    )
   );
 };
 
@@ -711,7 +749,13 @@ const findOfferDiscountCode = (source, offer) => {
 };
 
 const getDiscountCode = (data, offer) =>
-  findOfferDiscountCode(data, offer) || findNestedValue(data, discountCodeKeys);
+  findOfferDiscountCode(data, offer) ||
+  findOfferDiscountCode(data?.data, offer) ||
+  findOfferDiscountCode(data?.result, offer) ||
+  firstValue(data, generatedDiscountCodeKeys) ||
+  firstValue(data?.data, generatedDiscountCodeKeys) ||
+  firstValue(data?.result, generatedDiscountCodeKeys) ||
+  firstValue(data?.discount, generatedDiscountCodeKeys);
 
 const getDiscountMessage = (data) =>
   findNestedValue(data, ['message', 'text', 'description']);
@@ -839,6 +883,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [storyDurationMs, setStoryDurationMs] = useState(4200);
   const [pendingOffer, setPendingOffer] = useState(null);
   const [discountPopup, setDiscountPopup] = useState(null);
+  const [isDiscountCodeCopied, setIsDiscountCodeCopied] = useState(false);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
   const [profileMobile, setProfileMobile] = useState('');
@@ -846,6 +891,15 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [isProfileCompletionOpen, setIsProfileCompletionOpen] = useState(false);
   const [profileCompletionError, setProfileCompletionError] = useState('');
   const [isProfileSaving, setIsProfileSaving] = useState(false);
+
+  useEffect(() => {
+    if (!discountPopup?.code) {
+      setIsDiscountCodeCopied(false);
+      return;
+    }
+
+    setIsDiscountCodeCopied(false);
+  }, [discountPopup?.code]);
   const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
   const debugVipValue = getDebugVipValue(router);
   const vipOffers = homeData.offers.filter((offer) => offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue));
@@ -1165,7 +1219,7 @@ useEffect(() => {
       if (pendingOffer) {
         const offerToClaim = pendingOffer;
         setPendingOffer(null);
-        await handleReceiveOffer(offerToClaim, true);
+        await handleReceiveOffer(offerToClaim, true, mobile);
         return;
       }
 
@@ -1176,7 +1230,17 @@ useEffect(() => {
       setIsLoading(false);
     }
   };
-  const handleReceiveOffer = async (offer, skipAuthCheck = false) => {
+
+  const getCurrentMobile = (mobileOverride = '') =>
+    mobileOverride ||
+    userProfile?.mobile ||
+    userProfile?.phone ||
+    userProfile?.phone_number ||
+    userProfile?.mobile_number ||
+    profileMobile ||
+    '';
+
+  const handleReceiveOffer = async (offer, skipAuthCheck = false, mobileOverride = '') => {
     if (offer.isActive === false) {
       setDiscountPopup({
         offer,
@@ -1195,8 +1259,8 @@ useEffect(() => {
 
     try {
       setIsRequestingDiscount(true);
-      const data = await requestDiscountCode(offer);
-      const receivedCode = getDiscountCode(data, offer) || offer.code || '';
+      const data = await requestDiscountCode(offer, { mobile: getCurrentMobile(mobileOverride) });
+      const receivedCode = getDiscountCode(data, offer) || '';
 
       setDiscountPopup({
         offer,
@@ -1206,14 +1270,10 @@ useEffect(() => {
           : getDiscountMessage(data) || t.discountFailed,
       });
     } catch (error) {
-      const fallbackCode = offer.code || '';
-
       setDiscountPopup({
         offer,
-        code: fallbackCode,
-        message: fallbackCode
-          ? '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0628\u0627 \u0645\u0648\u0641\u0642\u06cc\u062a \u062f\u0631\u06cc\u0627\u0641\u062a \u0634\u062f.'
-          : error.response?.data?.message || error.message || t.discountFailed,
+        code: '',
+        message: error.response?.data?.message || error.message || t.discountFailed,
       });
     } finally {
       setIsRequestingDiscount(false);
@@ -1272,6 +1332,17 @@ useEffect(() => {
       </article>
     );
   };
+  const copyDiscountCode = async () => {
+    if (!discountPopup?.code) return;
+
+    try {
+      await navigator.clipboard.writeText(discountPopup.code);
+      setIsDiscountCodeCopied(true);
+    } catch {
+      setIsDiscountCodeCopied(false);
+    }
+  };
+
   const handleMobileNav = (id) => {
     if (id === 'home') {
       router.push('/');
@@ -1620,10 +1691,18 @@ useEffect(() => {
       {discountPopup && (
         <div className="home-popup-backdrop" onClick={() => setDiscountPopup(null)}>
           <section className="home-discount-popup" onClick={(event) => event.stopPropagation()}>
-            <button type="button" className="home-popup-close" onClick={() => setDiscountPopup(null)}>{t.close}</button>
+            <button type="button" className="home-popup-close" aria-label={t.close} onClick={() => setDiscountPopup(null)}><ChevronLeft /></button>
             <span className="home-eyebrow">{discountPopup.offer?.brand}</span>
             <h2>{discountPopup.code ? t.discountCode : discountPopup.offer?.title}</h2>
-            {discountPopup.code && <div className="home-discount-code">{discountPopup.code}</div>}
+            {discountPopup.code && (
+              <div className="home-discount-code-wrap">
+                <div className="home-discount-code">{discountPopup.code}</div>
+                <button className="home-discount-copy" type="button" onClick={copyDiscountCode}>
+                  {isDiscountCodeCopied ? <Check /> : <Copy />}
+                  <span>{isDiscountCodeCopied ? t.copiedCode : t.copyCode}</span>
+                </button>
+              </div>
+            )}
             <p>{discountPopup.message}</p>
           </section>
         </div>
