@@ -1,12 +1,11 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { Crown, LogOut } from 'lucide-react';
 import userAvatarImage from '../assets/images/user-avatar.jpg';
-import { extractActiveGiftsFromReport, getDiscountReport } from '../api/user';
+import { extractActiveGiftsFromReport, extractUserProfileFromReport, getDiscountReport } from '../api/user';
 import { dashboardActions, mobileProfileLinks } from '../data/siteData';
+import { toPersianDigits } from '../helper/persianDigits';
 
 const getImageSrc = (image) => image?.src || image;
-const toPersianDigits = (value) =>
-  String(value ?? '').replace(/[0-9]/g, (digit) => '??????????'[Number(digit)]);
 
 const firstValue = (source, keys) => {
   for (const key of keys) {
@@ -76,7 +75,7 @@ const normalizeGift = (gift, index) => {
   };
 };
 
-function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, onLogout }) {
+function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, onLogout, onProfileFromReport }) {
   const [activeSection, setActiveSection] = useState('gifts');
   const [activeGiftItems, setActiveGiftItems] = useState([]);
   const [isReportLoading, setIsReportLoading] = useState(false);
@@ -85,7 +84,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
   const profileName = useMemo(() => getProfileName(userProfile), [userProfile]);
   const profileMobile = toPersianDigits(getProfileField(userProfile, ['mobile', 'phone', 'phone_number', 'mobile_number']));
   const profileEmail = getProfileField(userProfile, ['email']);
-  const profileBirthDate = toPersianDigits(getProfileField(userProfile, ['birthDate', 'birth_date', 'birthday']));
+  const profileBirthDate = toPersianDigits(getProfileField(userProfile, ['birthDate', 'birth_date', 'date', 'birthday']));
   const profileLevel = getProfileField(userProfile, ['level', 'rank', 'membership_level']) || 'تکمیل نشده';
   const profileScore = getProfileField(userProfile, ['score', 'points', 'credit']) || 'تکمیل نشده';
 
@@ -94,6 +93,10 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
       setIsReportLoading(true);
       setReportError('');
       const data = await getDiscountReport();
+      const reportProfile = extractUserProfileFromReport(data);
+      if (reportProfile) {
+        onProfileFromReport?.(reportProfile);
+      }
       setActiveGiftItems(extractActiveGiftsFromReport(data).map(normalizeGift));
     } catch (error) {
       setActiveGiftItems([]);

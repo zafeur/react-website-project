@@ -7,7 +7,7 @@ import ProfileCompletionModal from "./components/ProfileCompletionModal";
 import RestaurantPage from "./components/RestaurantPage";
 import BusinessProfilePage from "./components/BusinessProfilePage";
 import { sendOtp, verifyOtp } from "./api/auth";
-import { updateUserProfile } from "./api/user";
+import { normalizeUserProfile, updateUserProfile } from "./api/user";
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from "./helper/authCookie";
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
@@ -252,6 +252,29 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 
   const mobileBottomCurrentPage = currentPage === "dashboard" && dashboardSectionRequest?.section === "gifts" ? "gifts" : currentPage;
 
+  const persistUserProfile = (profile, options = {}) => {
+    if (!profile) return;
+
+    setUserProfile((current) => {
+      const incomingProfile = normalizeUserProfile(profile);
+      const shouldKeepRecentLocalEdit =
+        options.source === "report" &&
+        current?._profileUpdatedAt &&
+        Date.now() - current._profileUpdatedAt < 60000;
+      const nextProfile = normalizeUserProfile(
+        shouldKeepRecentLocalEdit
+          ? { ...incomingProfile, ...current }
+          : { ...(current || {}), ...incomingProfile }
+      );
+
+      if (canUseStorage()) {
+        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(nextProfile));
+      }
+
+      return nextProfile;
+    });
+  };
+
   const handleSaveProfile = async (profile) => {
     try {
       setIsProfileSaving(true);
@@ -259,15 +282,11 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 
       const data = await updateUserProfile(profile);
       const nextProfile = {
-        ...profile,
         ...(data?.data?.user || data?.data || data?.user || {}),
+        ...profile,
       };
 
-      setUserProfile(nextProfile);
-
-      if (canUseStorage()) {
-        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(nextProfile));
-      }
+      persistUserProfile({ ...nextProfile, _profileUpdatedAt: Date.now() });
 
       setIsProfileCompletionOpen(false);
     } catch (error) {
@@ -278,7 +297,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
   };
 
   return (
-    <main className={`page-shell ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${currentPage === "business" ? "business-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen ? "is-login-open" : ""}`} dir="rtl">
+    <main className={`page-shell ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${currentPage === "business" ? "business-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen || isProfileCompletionOpen ? "is-login-open" : ""}`} dir="rtl">
       <section
         className={`frame ${currentPage === "dashboard" ? "dashboard-frame" : ""} ${
           currentPage === "restaurant" ? "restaurant-frame" : ""
@@ -294,6 +313,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
           onLogin={openLogin}
           isDarkMode={isDarkMode}
           onToggleTheme={onToggleTheme}
+          userProfile={userProfile}
         />
         <RestaurantPage
           isVisible={currentPage === "restaurant"}
@@ -312,6 +332,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
           userProfile={userProfile}
           onEditProfile={() => setIsProfileCompletionOpen(true)}
           onLogout={handleLogout}
+          onProfileFromReport={(profile) => persistUserProfile(profile, { source: "report" })}
         />
       </section>
 

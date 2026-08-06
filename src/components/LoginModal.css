@@ -385,3 +385,326 @@
     width: min(100%, 390px);
   }
 }
+
+
+/* Profile completion is a larger form, so keep it opaque and scroll-safe. */
+.profile-completion-backdrop {
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(7, 150, 62, 0.2), transparent 30%),
+    rgba(2, 8, 5, 0.72);
+}
+
+.profile-completion-modal {
+  width: min(92vw, 640px);
+  max-height: calc(100dvh - 40px);
+  min-height: 0;
+  overflow-y: auto;
+  padding: 28px;
+  border-radius: 24px;
+  border-color: rgba(219, 255, 233, 0.34);
+  background:
+    linear-gradient(145deg, rgba(16, 64, 43, 0.98), rgba(5, 35, 27, 0.98)),
+    #08251d;
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.48),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.profile-completion-modal::before,
+.profile-completion-modal::after {
+  opacity: 0.38;
+}
+
+.profile-completion-modal .modal-head {
+  margin-bottom: 24px;
+}
+
+.profile-completion-modal .modal-mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+}
+
+.profile-completion-modal .login-title-block {
+  margin-bottom: 22px;
+  text-align: right;
+}
+
+.profile-completion-modal h2 {
+  margin-bottom: 8px;
+  font-size: 30px;
+  line-height: 1.35;
+}
+
+.profile-completion-modal .login-title-block p {
+  max-width: 520px;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.profile-completion-form {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-completion-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.profile-completion-modal .login-field {
+  margin-bottom: 0;
+}
+
+.profile-completion-modal .login-field > span {
+  margin-bottom: 7px;
+}
+
+.profile-completion-modal .input-shell {
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.profile-completion-modal .input-shell input {
+  direction: rtl;
+  text-align: right;
+}
+
+.profile-completion-modal .input-shell input[type="email"] {
+  direction: ltr;
+  text-align: left;
+}
+
+.profile-completion-modal .login-error {
+  min-height: 20px;
+  margin: -2px 0 0;
+}
+
+.profile-completion-modal .login-submit {
+  height: 58px;
+  margin-top: 0;
+}
+
+@media (max-width: 640px) {
+  .profile-completion-backdrop {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .profile-completion-modal {
+    width: 100%;
+    max-height: calc(100dvh - 28px);
+    padding: 22px 18px 20px;
+    border-radius: 22px;
+  }
+
+  .profile-completion-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .profile-completion-modal .modal-head {
+    margin-bottom: 20px;
+  }
+
+  .profile-completion-modal h2 {
+    font-size: 25px;
+  }
+
+  .profile-completion-modal .login-title-block p {
+    font-size: 13px;
+  }
+
+  .profile-completion-modal .input-shell {
+    height: 54px;
+  }
+}
+
+
+/* Keep profile completion content-sized; avoid the inner scrollbar and empty modal tail. */
+.profile-completion-backdrop {
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: max(18px, env(safe-area-inset-top));
+  padding-bottom: max(18px, env(safe-area-inset-bottom));
+}
+
+.profile-completion-modal {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.profile-completion-modal .login-submit {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .profile-completion-backdrop {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .profile-completion-modal {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+
+html.keymiyay-modal-open,
+body.keymiyay-modal-open {
+  overflow: hidden;
+}
+
+.profile-completion-backdrop {
+  overflow: hidden;
+}
+
+.profile-date-field {
+  position: relative;
+}
+
+.birth-date-trigger {
+  width: 100%;
+  border: 1px solid rgba(219, 255, 233, 0.48);
+  color: rgba(255, 255, 255, 0.68);
+  text-align: right;
+}
+
+.birth-date-trigger.has-value {
+  color: #fff;
+}
+
+.birth-date-trigger > span {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.birth-date-picker {
+  position: absolute;
+  z-index: 4;
+  inset-inline: 0;
+  top: calc(100% + 10px);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(219, 255, 233, 0.28);
+  border-radius: 18px;
+  background: rgba(5, 31, 24, 0.98);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.birth-date-picker label {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+}
+
+.birth-date-picker label > span {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.birth-date-picker select {
+  width: 100%;
+  height: 42px;
+  border: 1px solid rgba(219, 255, 233, 0.34);
+  border-radius: 12px;
+  outline: 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.birth-date-picker select:focus {
+  border-color: rgba(187, 255, 211, 0.86);
+  box-shadow: 0 0 0 3px rgba(7, 150, 62, 0.22);
+}
+
+.birth-date-picker option {
+  background: #08251d;
+  color: #fff;
+}
+
+.birth-date-confirm {
+  grid-column: 1 / -1;
+  min-height: 42px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #23c65f, #079a4b);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 950;
+  box-shadow: 0 10px 20px rgba(0, 126, 52, 0.26);
+}
+
+.birth-date-confirm:hover {
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .birth-date-picker {
+    position: static;
+    margin-top: 10px;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (max-width: 390px) {
+  .birth-date-picker {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.birth-date-calendar-toggle {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid rgba(219, 255, 233, 0.22);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.birth-date-calendar-toggle button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.birth-date-calendar-toggle button.is-active {
+  background: linear-gradient(135deg, #23c65f, #079a4b);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(0, 126, 52, 0.24);
+}
+
+
+@media (max-height: 720px) {
+  .profile-completion-backdrop {
+    overflow-y: auto;
+  }
+}

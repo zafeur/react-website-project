@@ -1,25 +1,47 @@
-﻿import { ChevronDown, Gift, LayoutDashboard, LogOut, Moon, Sun } from 'lucide-react';
+import { ChevronDown, Gift, LayoutDashboard, LogOut, Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
 
-const HOME_LABEL = 'صفحه اصلی';
-const BRAND_LABEL = 'کی میای';
-const USER_INITIAL = 'ع';
-const USER_NAME = 'عباس شایگان';
-const DASHBOARD_LABEL = 'پروفایل داشبورد';
-const LOGOUT_LABEL = 'خروج';
-const LOGIN_LABEL = 'ورود / ثبت نام';
+const HOME_LABEL = '\u0635\u0641\u062d\u0647 \u0627\u0635\u0644\u06cc';
+const BRAND_LABEL = '\u06a9\u06cc \u0645\u06cc\u0627\u06cc';
+const DASHBOARD_LABEL = '\u067e\u0631\u0648\u0641\u0627\u06cc\u0644 \u062f\u0627\u0634\u0628\u0648\u0631\u062f';
+const LOGOUT_LABEL = '\u062e\u0631\u0648\u062c';
+const LOGIN_LABEL = '\u0648\u0631\u0648\u062f / \u062b\u0628\u062a \u0646\u0627\u0645';
+const DEFAULT_USER_NAME = '\u06a9\u0627\u0631\u0628\u0631 \u06a9\u06cc \u0645\u06cc\u0627\u06cc';
 
 const navItems = [
-  { label: 'صفحه اصلی', href: '/' },
-  { label: 'هدایا', href: '/#gifts' },
-  { label: 'کسب‌وکارها', href: '/#brands' },
-  { label: 'فروشگاهی', href: '/#categories' },
-  { label: 'سوالات متداول', href: '/faq' },
-  { label: 'باشگاه مشتریان', action: 'account' },
-  { label: 'تماس با ما', href: '/#footer' },
+  { label: '\u0635\u0641\u062d\u0647 \u0627\u0635\u0644\u06cc', href: '/' },
+  { label: '\u0647\u062f\u0627\u06cc\u0627', href: '/#gifts' },
+  { label: '\u06a9\u0633\u0628\u200c\u0648\u06a9\u0627\u0631\u0647\u0627', href: '/#brands' },
+  { label: '\u0641\u0631\u0648\u0634\u06af\u0627\u0647\u06cc', href: '/#categories' },
+  { label: '\u0633\u0648\u0627\u0644\u0627\u062a \u0645\u062a\u062f\u0627\u0648\u0644', href: '/faq' },
+  { label: '\u0628\u0627\u0634\u06af\u0627\u0647 \u0645\u0634\u062a\u0631\u06cc\u0627\u0646', action: 'account' },
+  { label: '\u062a\u0645\u0627\u0633 \u0628\u0627 \u0645\u0627', href: '/#footer' },
 ];
 
-function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme }) {
+const firstValue = (source, keys) => {
+  for (const key of keys) {
+    const value = source?.[key];
+    if (value !== undefined && value !== null && value !== '') {
+      return value;
+    }
+  }
+
+  return '';
+};
+
+const getProfileName = (profile) => {
+  const firstName = firstValue(profile, ['firstName', 'first_name', 'name']);
+  const lastName = firstValue(profile, ['lastName', 'last_name', 'family', 'family_name']);
+  const fullName = firstValue(profile, ['fullName', 'full_name', 'display_name', 'displayName', 'username']);
+  return fullName || [firstName, lastName].filter(Boolean).join(' ') || DEFAULT_USER_NAME;
+};
+
+const getProfileInitial = (name) => [...String(name || DEFAULT_USER_NAME).trim()][0] || '\u06a9';
+
+function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme, userProfile }) {
+  const userName = getProfileName(userProfile);
+  const userInitial = getProfileInitial(userName);
+
   const openAccount = () => {
     if (isLoggedIn) {
       onDashboard?.();
@@ -53,7 +75,7 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
 
       <div className="home-header-actions">
         <button
-          className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
+          className={`home-theme-toggle \${isDarkMode ? 'is-dark' : ''}`}
           type="button"
           onClick={onToggleTheme}
           aria-label={isDarkMode ? 'Light mode' : 'Dark mode'}
@@ -66,9 +88,9 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
 
         {isLoggedIn ? (
           <div className="user-menu-wrap">
-            <button className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`} type="button" onClick={onToggleUserMenu}>
-              <span className="user-mini-avatar">{USER_INITIAL}</span>
-              <span>{USER_NAME}</span>
+            <button className={`user-menu-btn \${isUserMenuOpen ? 'is-open' : ''}`} type="button" onClick={onToggleUserMenu}>
+              <span className="user-mini-avatar">{userInitial}</span>
+              <span>{userName}</span>
               <ChevronDown />
             </button>
             {isUserMenuOpen && (

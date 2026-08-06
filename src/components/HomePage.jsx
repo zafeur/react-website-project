@@ -1126,8 +1126,8 @@ useEffect(() => {
 
       const data = await updateUserProfile(profile);
       const nextProfile = {
-        ...profile,
         ...(data?.data?.user || data?.data || data?.user || {}),
+        ...profile,
       };
 
       setUserProfile(nextProfile);
@@ -1303,7 +1303,7 @@ useEffect(() => {
 
 
   return (
-    <main className={`page-shell home-shell ${isDarkMode ? 'theme-dark' : ''} ${isLoginOpen ? 'is-login-open' : ''}`} dir="rtl">
+    <main className={`page-shell home-shell ${isDarkMode ? 'theme-dark' : ''} ${isLoginOpen || isProfileCompletionOpen ? 'is-login-open' : ''}`} dir="rtl">
       <section className="frame home-frame">
         <header className="topbar d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
