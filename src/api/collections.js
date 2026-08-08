@@ -2,7 +2,7 @@
 
 export const getCollectionDetails = async (collectionId) => {
   const response = await httpClient.get(`/collections/${collectionId}/details`, {
-    requiresAuth: false,
+    requiresAuth: true,
     headers: { Accept: "application/json" },
   });
 

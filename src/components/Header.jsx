@@ -37,10 +37,30 @@ const getProfileName = (profile) => {
 };
 
 const getProfileInitial = (name) => [...String(name || DEFAULT_USER_NAME).trim()][0] || '\u06a9';
+const normalizeMediaUrl = (value = '') => {
+  const text = String(value || '').trim().replace(/^\"|\"$/g, '');
+  if (!text || text === '[]') return '';
+  if (/^(https?:|data:|blob:|\/)/.test(text)) return text;
+  return 'https://api.keymiay.com/images/' + encodeURIComponent(text).replace(/%2F/g, '/');
+};
+const getProfileAvatar = (profile) => normalizeMediaUrl(firstValue(profile, [
+  'avatarPreview',
+  'avatar_preview',
+  'avatar',
+  'avatar_url',
+  'avatarUrl',
+  'profile_image',
+  'profileImage',
+  'profile_photo',
+  'profilePhoto',
+  'image',
+  'photo',
+]));
 
 function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme, userProfile }) {
   const userName = getProfileName(userProfile);
   const userInitial = getProfileInitial(userName);
+  const userAvatar = getProfileAvatar(userProfile);
 
   const openAccount = () => {
     if (isLoggedIn) {
@@ -89,7 +109,7 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
         {isLoggedIn ? (
           <div className="user-menu-wrap">
             <button className={`user-menu-btn \${isUserMenuOpen ? 'is-open' : ''}`} type="button" onClick={onToggleUserMenu}>
-              <span className="user-mini-avatar">{userInitial}</span>
+              <span className="user-mini-avatar">{userAvatar ? <img src={userAvatar} alt={userName} /> : userInitial}</span>
               <span>{userName}</span>
               <ChevronDown />
             </button>

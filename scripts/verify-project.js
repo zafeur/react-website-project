@@ -9,6 +9,10 @@ const requiredFiles = [
     reason: 'Required for /business/dorato, /business/bastani, /business/barial, and all other business profile pages.',
   },
   {
+    path: 'pages/collections/[id].jsx',
+    reason: 'Required for dynamic collection URLs such as /collections/1, /collections/2, and API-backed business pages.',
+  },
+  {
     path: 'pages/restaurant.jsx',
     reason: 'Required for the Melal restaurant page.',
   },

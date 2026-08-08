@@ -453,6 +453,76 @@
   gap: 14px;
 }
 
+.profile-avatar-picker {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  min-height: 88px;
+  padding: 10px 14px;
+  border: 1px solid rgba(219, 255, 233, 0.28);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.profile-avatar-picker input {
+  display: none;
+}
+
+.profile-avatar-preview {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 2px solid rgba(109, 240, 155, .42);
+  border-radius: 50%;
+  background: rgba(109, 240, 155, .12);
+  color: #dfffe9;
+}
+
+.profile-avatar-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-avatar-preview svg {
+  width: 31px;
+  height: 31px;
+}
+
+.profile-avatar-copy {
+  display: grid;
+  gap: 8px;
+  text-align: right;
+}
+
+.profile-avatar-copy strong {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.profile-avatar-copy small {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(109, 240, 155, .14);
+  color: #dfffe9;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.profile-avatar-copy small svg {
+  width: 15px;
+  height: 15px;
+}
+
 .profile-completion-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

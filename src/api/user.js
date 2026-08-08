@@ -37,7 +37,7 @@ const firstObject = (...values) => {
 
 export const updateUserProfile = async (profile) => {
   const birthDate = profile.birthDate || profile.birth_date || profile.date || "";
-
+  const avatarFile = profile.avatarFile || profile.profileImageFile || profile.imageFile || null;
   const payload = {
     first_name: profile.firstName || "",
     last_name: profile.lastName || "",
@@ -50,8 +50,18 @@ export const updateUserProfile = async (profile) => {
     mobile: profile.mobile || "",
   };
 
-  const response = await httpClient.post("/user/update-profile", payload, {
+  const body = avatarFile ? new FormData() : payload;
+
+  if (avatarFile) {
+    Object.entries(payload).forEach(([key, value]) => {
+      body.append(key, value);
+    });
+    body.append("profile_image", avatarFile);
+  }
+
+  const response = await httpClient.post("/user/update-profile", body, {
     requiresAuth: true,
+    headers: avatarFile ? { "Content-Type": "multipart/form-data" } : undefined,
   });
 
   return response.data;
@@ -65,21 +75,56 @@ export const getDiscountReport = async () => {
   return response.data;
 };
 
-export const extractActiveGiftsFromReport = (payload) =>
-  firstArray(
-    payload?.active_gifts,
-    payload?.activeGifts,
-    payload?.gifts,
-    payload?.codes,
-    payload?.discounts,
-    payload?.data?.active_gifts,
-    payload?.data?.activeGifts,
-    payload?.data?.gifts,
-    payload?.data?.codes,
-    payload?.data?.discounts,
-    payload?.data
+export const extractActiveGiftsFromReport = (payload) => {
+  const data = payload?.data || payload;
+  const report = data?.report || data?.discount_report || data?.discountReport;
+  const user = data?.user || report?.user || payload?.user;
+  const preferredCodes = firstArray(
+    user?.discount_codes,
+    user?.discountCodes,
+    report?.user?.discount_codes,
+    report?.user?.discountCodes,
+    payload?.user?.discount_codes,
+    payload?.user?.discountCodes,
+    payload?.data?.user?.discount_codes,
+    payload?.data?.user?.discountCodes
   );
 
+  const activeUnusedCodes = preferredCodes.filter((item) => {
+    const isActive = item?.active === 1 || item?.active === true || item?.active === "1";
+    const isUsed = item?.is_used === 1 || item?.is_used === true || item?.is_used === "1" || Boolean(item?.used_at);
+    return isActive && !isUsed;
+  });
+
+  if (activeUnusedCodes.length) {
+    return activeUnusedCodes;
+  }
+
+  return firstArray(
+    payload?.active_gifts,
+    payload?.activeGifts,
+    payload?.codes,
+    payload?.discounts,
+    payload?.discount_codes,
+    payload?.discountCodes,
+    payload?.data?.active_gifts,
+    payload?.data?.activeGifts,
+    payload?.data?.codes,
+    payload?.data?.discounts,
+    payload?.data?.discount_codes,
+    payload?.data?.discountCodes,
+    report?.active_gifts,
+    report?.activeGifts,
+    report?.codes,
+    report?.discounts,
+    report?.discount_codes,
+    report?.discountCodes,
+    payload?.gifts,
+    payload?.data?.gifts,
+    report?.gifts,
+    Array.isArray(data) ? data : undefined
+  );
+};
 
 export const normalizeUserProfile = (source = {}) => {
   const firstName = firstValue(source, ["firstName", "first_name", "name", "first", "given_name"]);
@@ -95,6 +140,8 @@ export const normalizeUserProfile = (source = {}) => {
     birthDate: firstValue(source, ["birthDate", "birth_date", "date", "birthday", "date_of_birth"]),
     birthDateCalendar: firstValue(source, ["birthDateCalendar", "birth_date_calendar", "calendar_type"]),
     mobile: firstValue(source, ["mobile", "phone", "phone_number", "mobile_number", "cellphone"]),
+    avatar: firstValue(source, ["avatar", "avatar_url", "avatarUrl", "profile_image", "profileImage", "profile_photo", "profilePhoto", "image", "photo"]),
+    avatarPreview: firstValue(source, ["avatarPreview", "avatar_preview"]),
     level: firstValue(source, ["level", "rank", "membership_level", "membershipLevel", "status"]),
     score: firstValue(source, ["score", "points", "credit", "wallet", "balance"]),
   };

@@ -152,11 +152,11 @@ const defaultHomeData = {
 ],
 
   categories: [
-  { title: t.gifts, icon: 'Gift' },
-  { title: t.restaurant, icon: 'Store' },
-  { title: t.shop, icon: 'ShoppingBag' },
-  { title: t.club, icon: 'Star' },
-  { title: t.special, icon: 'Sparkles' },
+  { title: t.gifts, icon: 'Gift', href: '#gifts' },
+  { title: t.restaurant, icon: 'Store', href: '/restaurant' },
+  { title: t.shop, icon: 'ShoppingBag', disabled: true },
+  { title: t.club, icon: 'Star', disabled: true },
+  { title: t.special, icon: 'Sparkles', href: '#vip-gifts' },
 ],
 
   offers: [
@@ -225,13 +225,63 @@ const offerHasValue = (offer, keys) => {
     return undefined;
   }
 
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
+
   const asFlag = flagValue(value);
   if (asFlag !== undefined && ['boolean', 'number'].includes(typeof value)) {
     return asFlag;
   }
 
-  return String(value).trim() !== '' && String(value).trim() !== '0';
+  const normalizedValue = String(value).trim().toLowerCase();
+
+  if (!normalizedValue || ['0', '[]', '{}', 'null', 'undefined', 'false', 'no'].includes(normalizedValue)) {
+    return false;
+  }
+
+  return true;
 };
+
+const hasMeaningfulGiftValue = (value) => {
+  if (value === undefined || value === null || value === '') {
+    return false;
+  }
+
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
+
+  const normalizedValue = String(value).trim().replace(/^"+|"+$/g, '').trim().toLowerCase();
+
+  return Boolean(normalizedValue && !['0', '[]', '{}', 'null', 'undefined', 'false', 'no'].includes(normalizedValue));
+};
+
+const getOfferGiftPresence = (offer) => {
+  const explicitGift = offerHasValue(offer, ['hasGift', 'has_gift']);
+
+  if (explicitGift !== undefined) {
+    return explicitGift;
+  }
+
+  const giftFieldKeys = ['gift', 'gifts', 'gift_title', 'giftTitle', 'gift_name', 'giftName', 'gift_description', 'giftDescription', 'gift_value', 'giftValue'];
+  const hasGiftFieldValue = giftFieldKeys.some((key) => hasMeaningfulGiftValue(offer?.[key]));
+  const hasExplicitGiftField = giftFieldKeys.some((key) => offer?.[key] !== undefined && offer?.[key] !== null && offer?.[key] !== '');
+
+  if (hasGiftFieldValue) {
+    return true;
+  }
+
+  if (hasExplicitGiftField) {
+    return false;
+  }
+
+  const giftActive = flagValue(firstDefinedValue(offer, ['gift_active', 'giftActive']));
+  const giftCount = Number(firstDefinedValue(offer, ['gift_count', 'giftCount']));
+
+  return giftActive === true && giftCount > 0;
+};
+
 const normalizeOfferActive = (offer) => {
   const explicitActive = flagValue(firstDefinedValue(offer, [
     'gift_active',
@@ -404,11 +454,10 @@ const getBusinessDisplayValue = (offer, keys, fallbackValue) => {
 };
 const getNormalizedOfferShape = (offer) => {
   const isVip = flagValue(firstDefinedValue(offer, ['vip', 'is_vip', 'isVip', 'isVIP', 'vip_flag', 'vipFlag', 'vip_status', 'vipStatus', 'vip_discount', 'vipDiscount', 'is_vip_discount', 'isVipDiscount'])) === true;
-  const explicitGift = offerHasValue(offer, ['hasGift', 'has_gift', 'gift', 'gift_title', 'giftTitle', 'gift_name', 'giftName', 'gift_description', 'giftDescription', 'gift_value', 'giftValue']);
   const explicitDiscount = offerHasValue(offer, ['hasDiscount', 'has_discount', 'discount', 'discount_title', 'discountTitle', 'discount_percent', 'discountPercent', 'discount_value', 'discountValue', 'discount_amount', 'discountAmount', 'percent', 'percentage', 'code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']);
-  const searchableText = `${offer.title || ''} ${offer.tag || ''} ${offer.description || ''}`.toLowerCase();
-  const hasGift = isVip ? true : explicitGift ?? /gift|free|\u0647\u062f\u06cc\u0647|\u0631\u0627\u06cc\u06af\u0627\u0646/.test(searchableText);
-  const hasDiscount = isVip ? true : explicitDiscount ?? /discount|coupon|percent|%|\u066a|\u062a\u062e\u0641\u06cc\u0641|\u06a9\u062f/.test(searchableText);
+  const searchableText = `${offer.title || ''} ${offer.tag || ''} ${offer.description || ''} ${offer.gifts || ''}`.toLowerCase();
+  const hasGift = isVip ? true : getOfferGiftPresence(offer);
+  const hasDiscount = isVip ? true : Boolean(explicitDiscount || /discount|coupon|percent|%|\u066a|\u062a\u062e\u0641\u06cc\u0641|\u06a9\u062f/.test(searchableText));
   const offerType = isVip
     ? 'vip-discount'
     : hasGift && hasDiscount
@@ -440,11 +489,13 @@ const normalizeOffers = (items) =>
       image: normalizeImage(offer, fallback.image),
       code: firstValue(offer, ['code', 'discount_code', 'discountCode', 'coupon', 'coupon_code', 'couponCode']) || fallback.code || '',
       href: getCollectionHref(offer) || fallback.href,
+      hasGift: firstDefinedValue(offer, ['hasGift', 'has_gift']),
+      hasDiscount: firstDefinedValue(offer, ['hasDiscount', 'has_discount']),
     };
 
     return {
       ...normalizedOffer,
-      ...getNormalizedOfferShape(offer),
+      ...getNormalizedOfferShape(normalizedOffer),
     };
   });
 
@@ -579,7 +630,7 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   };
 };
 
-const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v1';
+const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v2';
 
 const loadCachedHomeData = () => {
   if (typeof window === 'undefined') {
@@ -903,7 +954,8 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const bannerItems = mergeExtraBanners(homeData.banners.length ? homeData.banners : defaultHomeData.banners);
   const debugVipValue = getDebugVipValue(router);
   const vipOffers = homeData.offers.filter((offer) => offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue));
-  const regularOffers = homeData.offers.filter((offer) => !(offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue)));
+  const giftDiscountOffers = homeData.offers.filter((offer) => offer.offerType === 'gift-discount' && !shouldPreviewVipOffer(offer, debugVipValue));
+  const simpleDiscountOffers = homeData.offers.filter((offer) => offer.offerType === 'simple-discount' && !shouldPreviewVipOffer(offer, debugVipValue));
 useEffect(() => {
   if (!canUseStorage()) {
     return;
@@ -1332,6 +1384,22 @@ useEffect(() => {
       </article>
     );
   };
+
+  const renderOfferSection = ({ id, className = '', kicker, title, offers }) => offers.length ? (
+    <section className={`home-section home-offer-section ${className}`} id={id}>
+      <div className="home-section-head">
+        <div>
+          <span>{kicker}</span>
+          <h2>{title}</h2>
+        </div>
+        <button className="home-text-action" type="button">{t.all}</button>
+      </div>
+      <div className="home-offer-grid">
+        {offers.map(renderOfferCard)}
+      </div>
+    </section>
+  ) : null;
+
   const copyDiscountCode = async () => {
     if (!discountPopup?.code) return;
 
@@ -1437,21 +1505,6 @@ useEffect(() => {
           ))}
         </section>
 
-
-        {vipOffers.length ? (
-          <section className="home-section home-vip-section" id="vip-gifts">
-            <div className="home-section-head">
-              <div>
-                <span>پیشنهادهای ویژه</span>
-                <h2>کارت‌های وی‌آی‌پی</h2>
-              </div>
-              <a className="home-text-action" href="#gifts">مشاهده باقی کارت‌ها</a>
-            </div>
-            <div className="home-offer-grid home-vip-offer-grid">
-              {vipOffers.map(renderOfferCard)}
-            </div>
-          </section>
-        ) : null}
         <section className="home-hero-grid">
           <div className="home-banner-slider" aria-label={t.bannerAlt}>
             <div
@@ -1505,6 +1558,21 @@ useEffect(() => {
           </aside>
         </section>
 
+        {vipOffers.length ? (
+          <section className="home-section home-vip-section" id="vip-gifts">
+            <div className="home-section-head">
+              <div>
+                <span>پیشنهادهای ویژه</span>
+                <h2>کارت‌های وی‌آی‌پی</h2>
+              </div>
+              <a className="home-text-action" href="#gifts">مشاهده باقی کارت‌ها</a>
+            </div>
+            <div className="home-offer-grid home-vip-offer-grid">
+              {vipOffers.map(renderOfferCard)}
+            </div>
+          </section>
+        ) : null}
+
         <section className="home-section" id="brands">
           <div className="home-section-head">
             <div>
@@ -1538,35 +1606,47 @@ useEffect(() => {
             </div>
           </div>
           <div className="home-category-grid">
-            {homeData.categories.map(({ title, icon, href }) => {
+            {homeData.categories.map(({ title, icon, href, disabled }) => {
               const Icon = categoryIcons[icon] || Gift;
+              const isDisabled = disabled || !href;
 
               return (
-                <article className="home-category-card" key={title}>
-                  <Link href={href || '/#categories'}>
+                <article className={`home-category-card ${isDisabled ? 'is-disabled' : ''}`} key={title} aria-disabled={isDisabled}>
+                  {isDisabled ? (
+                    <button type="button" disabled aria-label={title}>
+                      <span className="home-category-inner">
+                        <Icon />
+                        <span>{title}</span>
+                      </span>
+                    </button>
+                  ) : (
+                  <Link href={href}>
                     <span className="home-category-inner">
                       <Icon />
                       <span>{title}</span>
                     </span>
                   </Link>
+                  )}
                 </article>
               );
             })}
           </div>
         </section>
 
-        <section className="home-section" id="gifts">
-          <div className="home-section-head">
-            <div>
-              <span>{t.freshOffers}</span>
-              <h2>{t.activeGifts}</h2>
-            </div>
-            <button className="home-text-action" type="button">{t.all}</button>
-          </div>
-          <div className="home-offer-grid">
-            {regularOffers.map(renderOfferCard)}
-          </div>
-        </section>
+        {renderOfferSection({
+          id: 'gifts',
+          className: 'home-gift-discount-section',
+          kicker: 'هدیه و تخفیف',
+          title: 'کارت‌های هدیه‌دار و تخفیفی',
+          offers: giftDiscountOffers,
+        })}
+        {renderOfferSection({
+          id: 'simple-discounts',
+          className: 'home-simple-discount-section',
+          kicker: 'تخفیف ساده',
+          title: 'کارت‌های فقط تخفیف',
+          offers: simpleDiscountOffers,
+        })}
         <section className="home-guide-section" aria-labelledby="home-guide-title">
           <div className="home-guide-head">
             <span>{'\u0631\u0627\u0647\u0646\u0645\u0627\u06cc \u0633\u0631\u06cc\u0639'}</span>

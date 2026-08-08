@@ -32,6 +32,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
   const [userProfile, setUserProfile] = useState(null);
   const [isProfileCompletionOpen, setIsProfileCompletionOpen] = useState(false);
   const [profileCompletionError, setProfileCompletionError] = useState("");
+  const [profileCompletionSuccess, setProfileCompletionSuccess] = useState("");
   const [isProfileSaving, setIsProfileSaving] = useState(false);
 
   useEffect(() => {
@@ -268,7 +269,14 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
       );
 
       if (canUseStorage()) {
-        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(nextProfile));
+        const profileForStorage = { ...nextProfile };
+        delete profileForStorage.avatarFile;
+        delete profileForStorage.profileImageFile;
+        delete profileForStorage.imageFile;
+        if (String(profileForStorage.avatarPreview || "").startsWith("blob:")) {
+          delete profileForStorage.avatarPreview;
+        }
+        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profileForStorage));
       }
 
       return nextProfile;
@@ -279,16 +287,20 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
     try {
       setIsProfileSaving(true);
       setProfileCompletionError("");
+      setProfileCompletionSuccess("");
 
       const data = await updateUserProfile(profile);
+      const apiProfile = data?.data?.user || data?.data || data?.user || {};
+      const { avatarFile, profileImageFile, imageFile, ...profileFields } = profile;
       const nextProfile = {
-        ...(data?.data?.user || data?.data || data?.user || {}),
-        ...profile,
+        ...apiProfile,
+        ...profileFields,
       };
 
       persistUserProfile({ ...nextProfile, _profileUpdatedAt: Date.now() });
 
       setIsProfileCompletionOpen(false);
+      setProfileCompletionSuccess("\u0627\u0637\u0644\u0627\u0639\u0627\u062a \u0628\u0627 \u0645\u0648\u0641\u0642\u06cc\u062a \u062b\u0628\u062a \u0634\u062f.");
     } catch (error) {
       setProfileCompletionError(error.response?.data?.message || error.message || "ذخیره اطلاعات انجام نشد.");
     } finally {
@@ -296,8 +308,18 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
     }
   };
 
+  useEffect(() => {
+    if (!profileCompletionSuccess) return undefined;
+
+    const timeoutId = window.setTimeout(() => {
+      setProfileCompletionSuccess("");
+    }, 3500);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [profileCompletionSuccess]);
+
   return (
-    <main className={`page-shell ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${currentPage === "business" ? "business-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen || isProfileCompletionOpen ? "is-login-open" : ""}`} dir="rtl">
+    <main className={`page-shell ${currentPage === "dashboard" ? "dashboard-shell" : ""} ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${currentPage === "business" ? "business-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen || isProfileCompletionOpen ? "is-login-open" : ""}`} dir="rtl">
       <section
         className={`frame ${currentPage === "dashboard" ? "dashboard-frame" : ""} ${
           currentPage === "restaurant" ? "restaurant-frame" : ""
@@ -341,6 +363,12 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
         isLoggedIn={isLoggedIn}
         onNavigate={handleMobileNav}
       />
+
+      {profileCompletionSuccess && (
+        <div className="profile-save-success" role="status">
+          {profileCompletionSuccess}
+        </div>
+      )}
 
       {isLoginOpen && (
         <LoginModal
