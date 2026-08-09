@@ -14,11 +14,17 @@ export const runRequestAuthMiddleware = (config) => {
     return Promise.reject(new Error("This user is not allowed to perform this request."));
   }
 
+  const isFormData = typeof FormData !== "undefined" && config.data instanceof FormData;
+
   config.headers = {
     Accept: "application/json",
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...config.headers,
   };
+
+  if (isFormData) {
+    delete config.headers["Content-Type"];
+  }
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

@@ -7,7 +7,7 @@ function MobileBottomNav({ currentPage, isLoggedIn, onNavigate }) {
         const isActive =
           id === currentPage ||
           (id === 'account' && currentPage === 'dashboard') ||
-          (id === 'shop' && currentPage === 'restaurant');
+          (id === 'shop' && currentPage === 'business');
 
         return (
           <button className={isActive ? 'active' : ''} type="button" key={id} onClick={() => onNavigate(id)}>

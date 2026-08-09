@@ -2998,7 +2998,7 @@ html.theme-dark .home-shell .home-hero-actions a:not(.home-primary-action):hover
 }
 
 .home-offer-card.is-inactive {
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .home-offer-status.is-inactive {
@@ -4667,6 +4667,7 @@ html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .
     min-width: 0 !important;
     width: 100% !important;
     overflow: hidden !important;
+    padding-left: clamp(18px, 2vw, 34px) !important;
     direction: rtl !important;
   }
 
@@ -4675,13 +4676,13 @@ html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .
     align-items: center !important;
     justify-content: flex-start !important;
     flex-wrap: nowrap !important;
-    gap: clamp(14px, 1.45vw, 24px) !important;
+    gap: clamp(12px, 1.25vw, 22px) !important;
     width: 100% !important;
     min-width: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     white-space: nowrap !important;
-    font-size: clamp(13px, 1.05vw, 16px) !important;
+    font-size: clamp(12px, .98vw, 15px) !important;
     line-height: 1 !important;
     direction: rtl !important;
   }
@@ -4690,6 +4691,12 @@ html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .
     flex: 0 0 auto !important;
     height: auto !important;
     white-space: nowrap !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list a,
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list button {
+    font-size: inherit !important;
+    line-height: 1 !important;
   }
 
   .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
@@ -7123,4 +7130,353 @@ html.theme-dark .home-shell .home-discount-copy {
 .home-shell.theme-dark .home-discount-copy:hover,
 html.theme-dark .home-shell .home-discount-copy:hover {
   background: rgba(109, 240, 155, .16);
+}
+
+/* Inactive offers stay visually normal; only the action is disabled by API state. */
+.home-offer-card.is-inactive,
+.home-offer-card.is-inactive :where(.home-offer-media, .home-offer-copy, .home-offer-benefits, .home-offer-description) {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.home-offer-footer button:disabled,
+.home-offer-footer button[disabled],
+.home-offer-card.is-inactive .home-offer-footer button {
+  min-width: 122px !important;
+  height: 42px !important;
+  padding: 0 22px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #0ba746 0%, #008b38 100%) !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  box-shadow: 0 8px 18px rgba(0, 126, 52, .16) !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  cursor: default !important;
+}
+
+.home-offer-footer button:disabled:hover,
+.home-offer-footer button[disabled]:hover,
+.home-offer-card.is-inactive .home-offer-footer button:hover {
+  background: linear-gradient(180deg, #0ba746 0%, #008b38 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(0, 126, 52, .16) !important;
+  transform: none !important;
+}
+
+/* Non-home headers follow the homepage responsive header instead of reserving fake gutters. */
+@media (max-width: 1320px) and (min-width: 769px) {
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "actions spacer brand"
+      "nav nav nav" !important;
+    direction: ltr !important;
+    align-items: center !important;
+    gap: 16px 18px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 52px !important;
+    margin-bottom: 22px !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar > div:first-child {
+    display: contents !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .brand {
+    grid-area: brand !important;
+    justify-self: end !important;
+    direction: rtl !important;
+    margin: 0 !important;
+    min-width: max-content !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    direction: ltr !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .topbar nav {
+    grid-area: nav !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    direction: rtl !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 0 6px !important;
+    justify-content: center !important;
+    gap: clamp(14px, 3vw, 28px) !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    font-size: clamp(13px, 1.8vw, 15px) !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .page-shell:not(.home-shell):not(.faq-shell) .nav-list li {
+    margin: 0 !important;
+  }
+}
+
+/* Final restaurant/business header reset: use the same simple desktop flow as the home page. */
+@media (min-width: 769px) {
+  .restaurant-shell .topbar,
+  .business-shell .topbar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: clamp(18px, 2.4vw, 34px) !important;
+    height: 52px !important;
+    min-height: 52px !important;
+    margin-bottom: 30px !important;
+    direction: rtl !important;
+  }
+
+  .restaurant-shell .topbar > div:first-child,
+  .business-shell .topbar > div:first-child {
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    gap: 0 !important;
+    direction: rtl !important;
+  }
+
+  .restaurant-shell .brand,
+  .business-shell .brand {
+    flex: 0 0 auto !important;
+    min-width: max-content !important;
+    margin: 0 !important;
+  }
+
+  .restaurant-shell .topbar nav,
+  .business-shell .topbar nav {
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  .restaurant-shell .nav-list,
+  .business-shell .nav-list {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: clamp(13px, 1.35vw, 24px) !important;
+    margin: 0 clamp(18px, 2.2vw, 34px) 0 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    font-size: clamp(12px, .98vw, 15px) !important;
+    line-height: 1 !important;
+    direction: rtl !important;
+  }
+
+  .restaurant-shell .nav-list li,
+  .business-shell .nav-list li {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+  }
+
+  .restaurant-shell .home-header-actions,
+  .business-shell .home-header-actions {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    flex-direction: row-reverse !important;
+    gap: 12px !important;
+    margin: 0 0 0 clamp(22px, 2vw, 36px) !important;
+    padding: 0 0 0 clamp(16px, 1.4vw, 22px) !important;
+    border: 0 !important;
+    border-left: 1px solid rgba(7, 150, 62, .2) !important;
+    direction: ltr !important;
+  }
+}
+
+/* Real final non-home header lock: mirror the homepage breakpoints after the older overrides. */
+@media (min-width: 1181px) {
+  .restaurant-shell .topbar nav,
+  .business-shell .topbar nav {
+    overflow: visible !important;
+  }
+
+  .restaurant-shell .nav-list,
+  .business-shell .nav-list {
+    overflow: visible !important;
+    gap: clamp(13px, 1.25vw, 24px) !important;
+    margin: 0 clamp(14px, 1.7vw, 28px) 0 0 !important;
+    font-size: clamp(13px, 1vw, 16px) !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 769px) {
+  .restaurant-shell .topbar,
+  .business-shell .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "actions spacer brand"
+      "nav nav nav" !important;
+    direction: ltr !important;
+    align-items: center !important;
+    gap: 16px 18px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 52px !important;
+    margin-bottom: 22px !important;
+  }
+
+  .restaurant-shell .topbar > div:first-child,
+  .business-shell .topbar > div:first-child {
+    display: contents !important;
+  }
+
+  .restaurant-shell .brand,
+  .business-shell .brand {
+    grid-area: brand !important;
+    justify-self: end !important;
+    direction: rtl !important;
+    margin: 0 !important;
+    min-width: max-content !important;
+  }
+
+  .restaurant-shell .home-header-actions,
+  .business-shell .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    direction: ltr !important;
+  }
+
+  .restaurant-shell .topbar nav,
+  .business-shell .topbar nav {
+    grid-area: nav !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    direction: rtl !important;
+  }
+
+  .restaurant-shell .nav-list,
+  .business-shell .nav-list {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 0 6px !important;
+    justify-content: center !important;
+    gap: clamp(14px, 3vw, 28px) !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    font-size: clamp(13px, 1.8vw, 15px) !important;
+  }
+
+  .restaurant-shell .nav-list::-webkit-scrollbar,
+  .business-shell .nav-list::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+/* Logged-in internal headers need the protected homepage nav row at zoomed desktop widths. */
+@media (min-width: 769px) {
+  .restaurant-shell .topbar:has(.user-menu-wrap),
+  .business-shell .topbar:has(.user-menu-wrap) {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "actions spacer brand"
+      "nav nav nav" !important;
+    direction: ltr !important;
+    align-items: center !important;
+    gap: 16px 18px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 52px !important;
+    margin-bottom: 22px !important;
+  }
+
+  .restaurant-shell .topbar:has(.user-menu-wrap) > div:first-child,
+  .business-shell .topbar:has(.user-menu-wrap) > div:first-child {
+    display: contents !important;
+  }
+
+  .restaurant-shell .topbar:has(.user-menu-wrap) .brand,
+  .business-shell .topbar:has(.user-menu-wrap) .brand {
+    grid-area: brand !important;
+    justify-self: end !important;
+    direction: rtl !important;
+    margin: 0 !important;
+    min-width: max-content !important;
+  }
+
+  .restaurant-shell .topbar:has(.user-menu-wrap) .home-header-actions,
+  .business-shell .topbar:has(.user-menu-wrap) .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    direction: ltr !important;
+  }
+
+  .restaurant-shell .topbar:has(.user-menu-wrap) nav,
+  .business-shell .topbar:has(.user-menu-wrap) nav {
+    grid-area: nav !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    direction: rtl !important;
+  }
+
+  .restaurant-shell .topbar:has(.user-menu-wrap) .nav-list,
+  .business-shell .topbar:has(.user-menu-wrap) .nav-list {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 0 6px !important;
+    justify-content: center !important;
+    gap: clamp(14px, 3vw, 28px) !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    font-size: clamp(13px, 1.8vw, 15px) !important;
+  }
+
+  .restaurant-shell .topbar:has(.user-menu-wrap) .nav-list::-webkit-scrollbar,
+  .business-shell .topbar:has(.user-menu-wrap) .nav-list::-webkit-scrollbar {
+    display: none !important;
+  }
 }

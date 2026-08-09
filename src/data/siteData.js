@@ -169,7 +169,7 @@ export const businessProfiles = decodeSiteDataText([
   {
     id: 'melal',
     slug: 'melal',
-    collectionId: '2',
+    collectionId: '',
     aliases: ['restaurant', 'Ø±Ø³ØªÙˆØ±Ø§Ù† Ù…Ù„Ù„', 'Ù…Ù„Ù„'],
     title: 'Ø±Ø³ØªÙˆØ±Ø§Ù† Ù…Ù„Ù„',
     shortTitle: 'Ù…Ù„Ù„',
@@ -240,6 +240,7 @@ export const businessProfiles = decodeSiteDataText([
   {
     id: 'bastani',
     slug: 'bastani',
+    collectionId: '2',
     aliases: ['Ø¨Ø§Ø³ØªØ§Ù†ÛŒ'],
     title: 'Ø¨Ø§Ø³ØªØ§Ù†ÛŒ',
     shortTitle: 'Ø¨Ø§Ø³ØªØ§Ù†ÛŒ',
@@ -261,6 +262,7 @@ export const businessProfiles = decodeSiteDataText([
   {
     id: 'bakhshi',
     slug: 'bakhshi',
+    collectionId: '6',
     aliases: ['Ø¨Ø®Ø´ÛŒ'],
     title: 'Ø¨Ø®Ø´ÛŒ',
     shortTitle: 'Ø¨Ø®Ø´ÛŒ',

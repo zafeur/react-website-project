@@ -1,9 +1,11 @@
-﻿import httpClient from "../helper/httpClient";
+import httpClient from "../helper/httpClient";
+import { toFormData } from "../helper/formData";
 
 export const getCollectionDetails = async (collectionId) => {
   const response = await httpClient.get(`/collections/${collectionId}/details`, {
     requiresAuth: true,
     headers: { Accept: "application/json" },
+    params: { collection_id: collectionId },
   });
 
   if (typeof response.data === "string") {
@@ -16,7 +18,7 @@ export const getCollectionDetails = async (collectionId) => {
 export const toggleCollectionFollow = async (collectionId) => {
   const response = await httpClient.post(
     `/collections/${collectionId}/toggle-follow`,
-    { collection_id: collectionId },
+    toFormData({ collection_id: collectionId }),
     { requiresAuth: true }
   );
 

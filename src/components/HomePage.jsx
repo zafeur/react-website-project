@@ -111,7 +111,7 @@ const normalizeMediaUrl = (value, fallback) => {
     return fallback;
   }
 
-  if (/^(https?:|data:|blob:|\/)/.test(value)) {
+  if (/^(https?:|data:|blob:)/.test(value)) {
     return value;
   }
 
@@ -143,17 +143,17 @@ const defaultHomeData = {
 ],
 
   brands: [
-  { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/restaurant' },
-  { title: t.barial, businessId: 'barial', image: asset('img/barial.jpg'), href: '/business/barial' },
-  { title: t.dorato, businessId: 'dorato', image: asset('img/logo dorato.jpg'), href: '/business/dorato' },
-  { title: t.bastani, businessId: 'bastani', image: asset('img/business-banners/bastani-logo-enhanced.png'), href: '/business/bastani' },
-  { title: t.ibamo, businessId: 'ibamo', image: asset('img/logo ibamo.jpg'), href: '/business/ibamo' },
-  { title: t.mojalal, businessId: 'mojalal', image: asset('img/mojalal.jpg'), href: '/business/mojalal' },
+  { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/collections/melal' },
+  { title: t.barial, businessId: 'barial', collectionId: '4', image: asset('img/barial.jpg'), href: '/collections/4' },
+  { title: t.dorato, businessId: 'dorato', collectionId: '5', image: asset('img/logo dorato.jpg'), href: '/collections/5' },
+  { title: t.bastani, businessId: 'bastani', collectionId: '2', image: asset('img/business-banners/bastani-logo-enhanced.png'), href: '/collections/2' },
+  { title: t.ibamo, businessId: 'ibamo', collectionId: '1', image: asset('img/logo ibamo.jpg'), href: '/collections/1' },
+  { title: t.mojalal, businessId: 'mojalal', collectionId: '3', image: asset('img/mojalal.jpg'), href: '/collections/3' },
 ],
 
   categories: [
   { title: t.gifts, icon: 'Gift', href: '#gifts' },
-  { title: t.restaurant, icon: 'Store', href: '/restaurant' },
+  { title: t.restaurant, icon: 'Store', href: '/collections/melal' },
   { title: t.shop, icon: 'ShoppingBag', disabled: true },
   { title: t.club, icon: 'Star', disabled: true },
   { title: t.special, icon: 'Sparkles', href: '#vip-gifts' },
@@ -161,12 +161,12 @@ const defaultHomeData = {
 
   offers: [
   { id: 'melal-discount', businessId: 'melal', title: t.gift1, brand: t.restaurant, tag: t.free, vip: 0, hasGift: true, hasDiscount: false, image: asset('img/restaurant-melal.png') },
-  { id: 'barial-discount', businessId: 'barial', title: t.gift2, brand: t.barial, tag: t.discount, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/barial.jpg') },
-  { id: 'dorato-discount', businessId: 'dorato', title: t.gift3, brand: t.dorato, tag: t.special, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/logo dorato.jpg') },
-  { id: 'ibamo-discount', businessId: 'ibamo', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0627\u06cc\u0628\u0627\u0645\u0648', brand: t.ibamo, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
-  { id: 'bakhshi-discount', businessId: 'bakhshi', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u062e\u0634\u06cc', brand: t.bakhshi, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/bakhshi.jpg') },
-  { id: 'bastani-discount', businessId: 'bastani', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u0627\u0633\u062a\u0627\u0646\u06cc', brand: t.bastani, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/business-banners/bastani-logo-enhanced.png') },
-  { id: 'mojalal-discount', businessId: 'mojalal', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0645\u062c\u0644\u0644', brand: t.mojalal, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/mojalal.jpg') },
+  { id: 'barial-discount', businessId: 'barial', collectionId: '4', title: t.gift2, brand: t.barial, tag: t.discount, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/barial.jpg') },
+  { id: 'dorato-discount', businessId: 'dorato', collectionId: '5', title: t.gift3, brand: t.dorato, tag: t.special, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/logo dorato.jpg') },
+  { id: 'ibamo-discount', businessId: 'ibamo', collectionId: '1', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0627\u06cc\u0628\u0627\u0645\u0648', brand: t.ibamo, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
+  { id: 'bakhshi-discount', businessId: 'bakhshi', collectionId: '6', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u062e\u0634\u06cc', brand: t.bakhshi, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/bakhshi.jpg') },
+  { id: 'bastani-discount', businessId: 'bastani', collectionId: '2', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u0627\u0633\u062a\u0627\u0646\u06cc', brand: t.bastani, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/business-banners/bastani-logo-enhanced.png') },
+  { id: 'mojalal-discount', businessId: 'mojalal', collectionId: '3', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0645\u062c\u0644\u0644', brand: t.mojalal, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/mojalal.jpg') },
 ],
 };
 
@@ -264,6 +264,14 @@ const getOfferGiftPresence = (offer) => {
     return explicitGift;
   }
 
+  const giftActive = flagValue(firstDefinedValue(offer, ['gift_active', 'giftActive']));
+  const giftCountValue = firstDefinedValue(offer, ['gift_count', 'giftCount']);
+  const giftCount = Number(giftCountValue);
+
+  if (giftActive !== undefined) {
+    return giftActive && (giftCountValue === undefined || giftCount > 0);
+  }
+
   const giftFieldKeys = ['gift', 'gifts', 'gift_title', 'giftTitle', 'gift_name', 'giftName', 'gift_description', 'giftDescription', 'gift_value', 'giftValue'];
   const hasGiftFieldValue = giftFieldKeys.some((key) => hasMeaningfulGiftValue(offer?.[key]));
   const hasExplicitGiftField = giftFieldKeys.some((key) => offer?.[key] !== undefined && offer?.[key] !== null && offer?.[key] !== '');
@@ -276,10 +284,7 @@ const getOfferGiftPresence = (offer) => {
     return false;
   }
 
-  const giftActive = flagValue(firstDefinedValue(offer, ['gift_active', 'giftActive']));
-  const giftCount = Number(firstDefinedValue(offer, ['gift_count', 'giftCount']));
-
-  return giftActive === true && giftCount > 0;
+  return false;
 };
 
 const normalizeOfferActive = (offer) => {
@@ -383,11 +388,13 @@ const businessAliases = {
   mojalal: ['mojalal', 'mojallal', 'مجلل'],
 };
 
-const knownCollectionIdByBusiness = {
+const fallbackCollectionIdByBusiness = {
   ibamo: '1',
+  bastani: '2',
   mojalal: '3',
   barial: '4',
   dorato: '5',
+  bakhshi: '6',
 };
 
 const findBusinessKeyInText = (value) => {
@@ -421,16 +428,26 @@ const getKnownBusinessKey = (offer) => {
   return findBusinessKeyInText(firstValue(offer, ['description', 'subtitle', 'text', 'body']));
 };
 
+const isNumericCollectionId = (value) => /^\d+$/.test(String(value || '').trim());
+
 const getExplicitCollectionId = (item) => firstValue(item, ['collectionId', 'collection_id']);
 
-const getCollectionIdForOffer = (offer) => {
-  const explicitCollectionId = getExplicitCollectionId(offer);
+const getApiCollectionId = (item) => {
+  const explicitCollectionId = getExplicitCollectionId(item);
   if (explicitCollectionId) return explicitCollectionId;
+
+  const id = firstValue(item, ['id']);
+  return isNumericCollectionId(id) ? id : undefined;
+};
+
+const getCollectionIdForOffer = (offer) => {
+  const apiCollectionId = getApiCollectionId(offer);
+  if (apiCollectionId) return apiCollectionId;
 
   const businessKey = getKnownBusinessKey(offer);
   if (businessKey === 'melal') return undefined;
 
-  return knownCollectionIdByBusiness[businessKey] || firstValue(offer, ['id']);
+  return fallbackCollectionIdByBusiness[businessKey];
 };
 
 const getOfferFallback = (offer, index) => {
@@ -567,7 +584,9 @@ const normalizeDiscountApiOffers = (payload) => normalizeOffers(findOfferList(re
 
 const getCollectionHref = (item) => {
   const collectionId = getCollectionIdForOffer(item);
-  return collectionId ? `/collections/${collectionId}` : undefined;
+  const fallbackKey = getKnownBusinessKey(item) || firstValue(item, ['businessId', 'business_id', 'businessSlug', 'business_slug', 'slug', 'prefix']);
+  const routeKey = collectionId || fallbackKey;
+  return routeKey ? `/collections/${routeKey}` : undefined;
 };
 
 const buildBrandsFromOffers = (offers) => {
@@ -590,7 +609,7 @@ const buildBrandsFromOffers = (offers) => {
         businessId,
         collectionId,
         image: offer.image,
-        href: collectionId ? `/collections/${collectionId}` : isRestaurantBrand(offer.brand || offer.title) ? '/restaurant' : `/business/${businessId}`,
+        href: getCollectionHref(offer) || `/collections/${businessId}`,
       };
     })
     .filter(Boolean);
@@ -630,7 +649,7 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   };
 };
 
-const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v2';
+const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v3';
 
 const loadCachedHomeData = () => {
   if (typeof window === 'undefined') {
@@ -665,8 +684,8 @@ const normalizeHomeData = (payload) => {
     defaultHomeData.brands
   ).map((brand) =>
     isRestaurantBrand(brand.title)
-      ? { ...brand, image: defaultHomeData.brands[0].image, businessId: brand.businessId || 'melal', href: '/restaurant' }
-      : brand
+      ? { ...brand, image: defaultHomeData.brands[0].image, businessId: brand.businessId || 'melal', href: getCollectionHref(brand) || '/collections/melal' }
+      : { ...brand, href: getCollectionHref(brand) || brand.href }
   );
 
   return {
@@ -723,7 +742,7 @@ const getOfferMatchValues = (offer) => {
   return [
     businessKey,
     collectionId,
-    knownCollectionIdByBusiness[businessKey],
+    fallbackCollectionIdByBusiness[businessKey],
     offer?.collectionId,
     offer?.collection_id,
     offer?.businessId,
@@ -1418,7 +1437,7 @@ useEffect(() => {
     }
 
     if (id === 'shop') {
-      router.push('/restaurant');
+      router.push('/collections/melal');
       return;
     }
 
@@ -1552,7 +1571,7 @@ useEffect(() => {
             <h1>{t.heroTitle}</h1>
             <p>{t.heroText}</p>
             <div className="home-hero-actions">
-              <Link className="home-primary-action" href="/restaurant">{t.viewRestaurant}</Link>
+              <Link className="home-primary-action" href="/collections/melal">{t.viewRestaurant}</Link>
               <a href="#gifts">{t.seeGifts}</a>
             </div>
           </aside>
@@ -1583,7 +1602,7 @@ useEffect(() => {
           </div>
           <div className="home-brand-grid">
             {homeData.brands.map((brand) => (
-              <Link className="home-brand-card" href={brand.href || `/business/${brand.businessId || 'melal'}`} key={brand.title}>
+              <Link className="home-brand-card" href={brand.href || `/collections/${brand.collectionId || brand.businessId || 'melal'}`} key={brand.title}>
                 {isRestaurantBrand(brand.title) ? (
                   <span className="home-brand-melal-logo" aria-label={brand.title}>
                     <span>{'\u0645\u0644\u0644'}</span>
@@ -1683,7 +1702,7 @@ useEffect(() => {
           </div>
           <div className="home-footer-links">
             <Link href="/">{t.home}</Link>
-            <Link href="/restaurant">{t.restaurant}</Link>
+            <Link href="/collections/melal">{t.restaurant}</Link>
             <button type="button" onClick={openAccount}>{t.club}</button>
           </div>
         </footer>

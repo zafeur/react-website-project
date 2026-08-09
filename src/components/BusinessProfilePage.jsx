@@ -16,6 +16,7 @@ import { getCollectionDetails, toggleCollectionFollow } from '../api/collections
 import { getBusinessWallet } from '../api/wallet';
 import { toPersianDigits } from '../helper/persianDigits';
 import { businessProfiles, stars } from '../data/siteData';
+import BusinessProfileEmptyState from './BusinessProfileEmptyState.jsx';
 
 const getImageSrc = (image) => image?.src || image;
 const DEFAULT_BUSINESS_ID = 'melal';
@@ -71,7 +72,7 @@ const normalizeMediaUrl = (value, fallback) => {
   if (!value) return fallback;
   const text = String(value).trim();
   const encodedText = text.replace(/\s/g, '%20');
-  if (/^(https?:|data:|blob:|\/)/.test(text)) return encodedText;
+  if (/^(https?:|data:|blob:)/.test(text)) return encodedText;
 
   try {
     return new URL(text, API_MEDIA_BASE_URL).toString();
@@ -92,8 +93,9 @@ const collectionImageMirrors = new Map([
   ['1', '/home/img/logo ibamo.jpg'],
   ['2', '/home/img/logo bastani.jpg'],
   ['3', '/home/img/mojalal.jpg'],
+  ['4', '/home/img/barial.jpg'],
   ['5', '/home/img/logo dorato.jpg'],
-  ['6', '/home/img/logo dorato.jpg'],
+  ['6', '/home/img/logo bakhshi.jpeg'],
 ]);
 
 const getLocalApiImageMirror = (value) => {
@@ -286,12 +288,11 @@ const normalizeApiCollectionProfile = (source, fallbackProfile) => {
   const rawBannerImage = firstValue(data, ['banner_image', 'bannerImage', 'banner', 'cover_image', 'coverImage']);
   const imageFallback = getLocalApiImageMirror(rawImage) || getCollectionImageMirror(collectionId, slug) || DEFAULT_BUSINESS_IMAGE;
   const bannerFallbackImage = getLocalApiImageMirror(rawBannerImage) || DEFAULT_BUSINESS_IMAGE;
-  const image = rawImage ? normalizeMediaUrl(rawImage, imageFallback) : getCollectionImageFromApiMirror(collectionId, slug);
+  const image = rawImage ? normalizeMediaUrl(rawImage, imageFallback) : '';
   const bannerImage = normalizeMediaUrl(rawBannerImage, bannerFallbackImage);
   const walletBalance = firstValue(data, ['wallet_balance', 'walletBalance', 'walletBalanceAmount', 'balance', 'credit']);
 
   return {
-    ...matchedFallbackProfile,
     ...data,
     id: slug || collectionId || matchedFallbackProfile.id,
     slug,
@@ -304,7 +305,7 @@ const normalizeApiCollectionProfile = (source, fallbackProfile) => {
     imageFallback,
     bannerImage,
     bannerFallbackImage,
-    bannerMode: matchedFallbackProfile.bannerMode || 'photo',
+    bannerMode: rawBannerImage ? matchedFallbackProfile.bannerMode || 'photo' : 'fallback',
     description: firstValue(data, ['description', 'about', 'body', 'text']) || '',
     category: firstValue(data, ['category', 'type', 'business_type']) || '',
     specialty: firstValue(data, ['specialty', 'sub_category', 'subtitle']) || '',
@@ -581,15 +582,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
   const isMelalComingSoon = isMelalPage && apiBusinessProfile && !apiBusinessProfile.title;
 
   if (isMelalComingSoon) {
-    return (
-      <div className={isVisible ? 'business-profile-page business-coming-soon-page' : 'business-profile-page business-coming-soon-page d-none'} id="restaurant-top">
-        <section className="business-coming-soon-card">
-          <span className="business-coming-soon-icon"><Sparkles /></span>
-          <h1>{uiText.comingSoonTitle}</h1>
-          <p>{uiText.comingSoonText}</p>
-        </section>
-      </div>
-    );
+    return <BusinessProfileEmptyState isVisible={isVisible} />;
   }
 
   return (

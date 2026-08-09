@@ -4,7 +4,6 @@ import Header from "./components/Header";
 import LoginModal from "./components/LoginModal";
 import MobileBottomNav from "./components/MobileBottomNav";
 import ProfileCompletionModal from "./components/ProfileCompletionModal";
-import RestaurantPage from "./components/RestaurantPage";
 import BusinessProfilePage from "./components/BusinessProfilePage";
 import { sendOtp, verifyOtp } from "./api/auth";
 import { normalizeUserProfile, updateUserProfile } from "./api/user";
@@ -15,7 +14,7 @@ const PROFILE_STORAGE_KEY = "keymiyay-user-profile";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
 
-function App({ initialPage = "restaurant", initialDashboardSection = null, isDarkMode = false, onToggleTheme }) {
+function App({ initialPage = "business", initialDashboardSection = null, isDarkMode = false, onToggleTheme }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +22,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(initialPage === "dashboard" ? "restaurant" : initialPage);
+  const [currentPage, setCurrentPage] = useState(initialPage === "dashboard" ? "business" : initialPage);
   const [dashboardSectionRequest, setDashboardSectionRequest] = useState(null);
 
   const [loginError, setLoginError] = useState("");
@@ -68,7 +67,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
     }
 
     setDashboardSectionRequest(null);
-    setCurrentPage(initialPage === "dashboard" ? "restaurant" : initialPage);
+    setCurrentPage(initialPage === "dashboard" ? "business" : initialPage);
 
     if (initialPage === "dashboard") {
       setIsLoginOpen(true);
@@ -82,7 +81,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 
     localStorage.setItem(
       PAGE_STORAGE_KEY,
-      isLoggedIn ? currentPage : "restaurant"
+      isLoggedIn ? currentPage : "business"
     );
   }, [hasCheckedAuth, isLoggedIn, currentPage]);
 
@@ -91,7 +90,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
       return;
     }
 
-    setCurrentPage("restaurant");
+    setCurrentPage("business");
     setIsLoginOpen(true);
   }, [hasCheckedAuth, initialPage, isLoggedIn]);
 
@@ -198,7 +197,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 
   const goHome = () => {
     setDashboardSectionRequest(null);
-    setCurrentPage("restaurant");
+    setCurrentPage("business");
     setIsUserMenuOpen(false);
   };
 
@@ -218,7 +217,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
 
     if (id === "shop") {
       setDashboardSectionRequest(null);
-      setCurrentPage("restaurant");
+      setCurrentPage("business");
       scrollToSection("restaurant-top");
       return;
     }
@@ -230,7 +229,7 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
       }
 
       setDashboardSectionRequest(null);
-      setCurrentPage("restaurant");
+      setCurrentPage("business");
       scrollToSection("restaurant-gifts");
       return;
     }
@@ -319,11 +318,9 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
   }, [profileCompletionSuccess]);
 
   return (
-    <main className={`page-shell ${currentPage === "dashboard" ? "dashboard-shell" : ""} ${currentPage === "restaurant" ? "restaurant-shell" : ""} ${currentPage === "business" ? "business-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen || isProfileCompletionOpen ? "is-login-open" : ""}`} dir="rtl">
+    <main className={`page-shell ${currentPage === "dashboard" ? "dashboard-shell" : ""} ${currentPage === "business" ? "business-shell" : ""} ${isDarkMode ? "theme-dark" : ""} ${isLoginOpen || isProfileCompletionOpen ? "is-login-open" : ""}`} dir="rtl">
       <section
-        className={`frame ${currentPage === "dashboard" ? "dashboard-frame" : ""} ${
-          currentPage === "restaurant" ? "restaurant-frame" : ""
-        } ${currentPage === "business" ? "business-frame" : ""}`}
+        className={`frame ${currentPage === "dashboard" ? "dashboard-frame" : ""} ${currentPage === "business" ? "business-frame" : ""}`}
       >
         <Header
           currentPage={currentPage}
@@ -337,11 +334,6 @@ function App({ initialPage = "restaurant", initialDashboardSection = null, isDar
           onToggleTheme={onToggleTheme}
           userProfile={userProfile}
         />
-        <RestaurantPage
-          isVisible={currentPage === "restaurant"}
-          isLoggedIn={isLoggedIn}
-        />
-
         <BusinessProfilePage
           isVisible={currentPage === "business"}
           isLoggedIn={isLoggedIn}

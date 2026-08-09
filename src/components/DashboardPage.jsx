@@ -12,7 +12,8 @@ const normalizeMediaUrl = (value = '') => {
   const raw = Array.isArray(value) ? value[0] : value;
   const text = String(raw).trim().replace(/^\"|\"$/g, '');
   if (!text || text === '[]') return '';
-  if (/^(https?:|data:|blob:|\/)/.test(text)) return text;
+  if (/^(https?:|data:|blob:)/.test(text)) return text;
+  if (text.startsWith('/')) return 'https://api.didarads.com' + text.replace(/\s/g, '%20');
 
   return 'https://api.keymiay.com/images/' + encodeURIComponent(text).replace(/%2F/g, '/');
 };

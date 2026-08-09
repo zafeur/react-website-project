@@ -166,7 +166,7 @@ function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
     }
 
     if (id === 'shop') {
-      window.location.href = '/restaurant';
+      window.location.href = '/collections/melal';
       return;
     }
 
@@ -180,7 +180,7 @@ function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
       return;
     }
 
-    window.location.href = isLoggedIn ? '/dashboard' : '/restaurant';
+    window.location.href = isLoggedIn ? '/dashboard' : '/collections/melal';
   };
 
   const handleSubmit = async (event) => {

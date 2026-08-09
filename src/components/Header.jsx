@@ -40,7 +40,8 @@ const getProfileInitial = (name) => [...String(name || DEFAULT_USER_NAME).trim()
 const normalizeMediaUrl = (value = '') => {
   const text = String(value || '').trim().replace(/^\"|\"$/g, '');
   if (!text || text === '[]') return '';
-  if (/^(https?:|data:|blob:|\/)/.test(text)) return text;
+  if (/^(https?:|data:|blob:)/.test(text)) return text;
+  if (text.startsWith('/')) return 'https://api.didarads.com' + text.replace(/\s/g, '%20');
   return 'https://api.keymiay.com/images/' + encodeURIComponent(text).replace(/%2F/g, '/');
 };
 const getProfileAvatar = (profile) => normalizeMediaUrl(firstValue(profile, [
@@ -95,7 +96,7 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
 
       <div className="home-header-actions">
         <button
-          className={`home-theme-toggle \${isDarkMode ? 'is-dark' : ''}`}
+          className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
           type="button"
           onClick={onToggleTheme}
           aria-label={isDarkMode ? 'Light mode' : 'Dark mode'}
@@ -108,7 +109,7 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
 
         {isLoggedIn ? (
           <div className="user-menu-wrap">
-            <button className={`user-menu-btn \${isUserMenuOpen ? 'is-open' : ''}`} type="button" onClick={onToggleUserMenu}>
+            <button className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`} type="button" onClick={onToggleUserMenu}>
               <span className="user-mini-avatar">{userAvatar ? <img src={userAvatar} alt={userName} /> : userInitial}</span>
               <span>{userName}</span>
               <ChevronDown />

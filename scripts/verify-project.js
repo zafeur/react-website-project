@@ -5,24 +5,20 @@ const root = process.cwd();
 
 const requiredFiles = [
   {
-    path: 'pages/business/[business].jsx',
-    reason: 'Required for /business/dorato, /business/bastani, /business/barial, and all other business profile pages.',
-  },
-  {
     path: 'pages/collections/[id].jsx',
-    reason: 'Required for dynamic collection URLs such as /collections/1, /collections/2, and API-backed business pages.',
-  },
-  {
-    path: 'pages/restaurant.jsx',
-    reason: 'Required for the Melal restaurant page.',
+    reason: 'Required for all collection-backed business profile pages.',
   },
   {
     path: 'src/components/BusinessProfilePage.jsx',
     reason: 'Required to render business profile pages.',
   },
   {
-    path: 'src/components/RestaurantPage.jsx',
-    reason: 'Required to render the restaurant page.',
+    path: 'src/components/BusinessProfileEmptyState.jsx',
+    reason: 'Required to render empty business placeholders until API data exists.',
+  },
+  {
+    path: 'src/components/BusinessProfileEmptyState.css',
+    reason: 'Required to style empty business placeholders until API data exists.',
   },
   {
     path: 'src/data/siteData.js',
