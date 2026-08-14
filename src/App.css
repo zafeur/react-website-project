@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --green: #07963e;
-  --green-dark: #008638;
+  --brand-dark: #1b1023;
+  --brand-purple: #7433a3;
+  --brand-pink: #eb078a;
+  --brand-confirm: #41a883;
+  --green: var(--brand-purple);
+  --green-dark: var(--brand-pink);
   --text: #191919;
   --muted: #6c7074;
   --line: #e8e8e8;
@@ -74,12 +78,12 @@ button {
 
 
 .page-shell.theme-dark {
-  --text: #edf7f0;
-  --muted: #d8e8de;
+  --text: #f7f1fb;
+  --muted: #efe0f7;
   --line: rgba(255, 255, 255, .11);
-  --soft: #101a14;
-  background: #090f0c;
-  color: #edf7f0;
+  --soft: #1b1023;
+  background: #1b1023;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .frame,
@@ -108,9 +112,9 @@ button {
 .page-shell.theme-dark .faq-field textarea,
 .page-shell.theme-dark .faq-field select,
 .page-shell.theme-dark .faq-secondary-btn {
-  background: #0f1712;
+  background: #1b1023;
   border-color: rgba(255, 255, 255, .11);
-  color: #edf7f0;
+  color: #f7f1fb;
   box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
 }
 
@@ -137,7 +141,7 @@ button {
 .page-shell.theme-dark .faq-form-progress span,
 .page-shell.theme-dark .faq-form-title,
 .page-shell.theme-dark .faq-field span {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .meta,
@@ -153,14 +157,14 @@ button {
 .page-shell.theme-dark .faq-step-card p,
 .page-shell.theme-dark .faq-item p,
 .page-shell.theme-dark .faq-hero-card span {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .tabs li,
 .page-shell.theme-dark .panel-head-row a,
 .page-shell.theme-dark .all-gifts,
 .page-shell.theme-dark .mobile-profile-item {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .tabs li.active,
@@ -173,25 +177,25 @@ button {
 .page-shell.theme-dark .logo-circle,
 .page-shell.theme-dark .faq-hero-card svg,
 .page-shell.theme-dark .faq-business-flow li::before {
-  background: rgba(7, 150, 62, .16);
+  background: rgba(116, 51, 163, .16);
 }
 
 .page-shell.theme-dark .user-dropdown {
-  background: #0f1712;
+  background: #1b1023;
   border-color: rgba(255, 255, 255, .11);
   box-shadow: 0 18px 36px rgba(0, 0, 0, .4);
 }
 
 .page-shell.theme-dark .user-dropdown button {
   background: transparent;
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .user-dropdown button:hover,
 .page-shell.theme-dark .mobile-profile-item:hover,
 .page-shell.theme-dark .faq-secondary-btn:hover {
-  background: rgba(7, 150, 62, .14);
-  color: #4ade80;
+  background: rgba(116, 51, 163, .14);
+  color: #7433a3;
 }
 
 .page-shell.theme-dark .mobile-bottom-nav {
@@ -201,14 +205,14 @@ button {
 }
 
 .page-shell.theme-dark .mobile-bottom-nav button {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .mobile-bottom-nav button:hover,
 .page-shell.theme-dark .mobile-bottom-nav .active {
-  color: #6df09b;
-  background: rgba(37, 196, 99, .1);
-  box-shadow: inset 0 0 0 1px rgba(109, 240, 155, .18);
+  color: #f7d7ea;
+  background: rgba(235, 7, 138, .1);
+  box-shadow: inset 0 0 0 1px rgba(235, 7, 138, .18);
 }
 
 .page-shell.theme-dark .mobile-bottom-nav .active svg {
@@ -221,9 +225,9 @@ button {
 }
 
 .page-shell.theme-dark .faq-status-success {
-  background: rgba(7, 150, 62, .14);
-  border-color: rgba(7, 150, 62, .35);
-  color: #7bed9f;
+  background: rgba(116, 51, 163, .14);
+  border-color: rgba(116, 51, 163, .35);
+  color: #f7d7ea;
 }
 
 .profile-save-success {
@@ -234,11 +238,11 @@ button {
   transform: translateX(-50%);
   min-width: min(360px, calc(100vw - 36px));
   padding: 14px 22px;
-  border: 1px solid rgba(7, 150, 62, .28);
+  border: 1px solid rgba(116, 51, 163, .28);
   border-radius: 999px;
   background: rgba(255, 255, 255, .96);
   color: var(--green);
-  box-shadow: 0 18px 38px rgba(7, 150, 62, .16);
+  box-shadow: 0 18px 38px rgba(116, 51, 163, .16);
   text-align: center;
   font-size: 15px;
   font-weight: 900;
@@ -246,8 +250,8 @@ button {
 
 .page-shell.theme-dark .profile-save-success {
   background: rgba(12, 28, 18, .96);
-  border-color: rgba(109, 240, 155, .28);
-  color: #7bed9f;
+  border-color: rgba(235, 7, 138, .28);
+  color: #f7d7ea;
   box-shadow: 0 18px 38px rgba(0, 0, 0, .34);
 }
 
@@ -264,37 +268,37 @@ html.theme-dark .page-shell :where(h1, h2, h3, h4, strong, label, summary, butto
 
 .page-shell.theme-dark :where(p, span, li),
 html.theme-dark .page-shell :where(p, span, li) {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark :where(input, textarea, select),
 html.theme-dark .page-shell :where(input, textarea, select) {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 @media (max-width: 768px) {
   body:has(.page-shell.theme-dark) {
-    background: #090f0c;
+    background: #1b1023;
   }
 
   .page-shell.theme-dark {
-    background: #090f0c;
+    background: #1b1023;
   }
 }
 
 
 html.theme-dark body {
-  background: #090f0c;
-  color: #edf7f0;
+  background: #1b1023;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell:not(.theme-dark) {
-  --text: #edf7f0;
-  --muted: #d8e8de;
+  --text: #f7f1fb;
+  --muted: #efe0f7;
   --line: rgba(255, 255, 255, .11);
-  --soft: #101a14;
-  background: #090f0c;
-  color: #edf7f0;
+  --soft: #1b1023;
+  background: #1b1023;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell:not(.theme-dark) .frame,
@@ -313,9 +317,9 @@ html.theme-dark .page-shell:not(.theme-dark) .home-brand-card,
 html.theme-dark .page-shell:not(.theme-dark) .home-category-card,
 html.theme-dark .page-shell:not(.theme-dark) .home-offer-card,
 html.theme-dark .page-shell:not(.theme-dark) .home-banner-slide {
-  background: #0f1712;
+  background: #1b1023;
   border-color: rgba(255, 255, 255, .11);
-  color: #edf7f0;
+  color: #f7f1fb;
   box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
 }
 
@@ -329,11 +333,11 @@ html.theme-dark .page-shell:not(.theme-dark) .profile-title,
 html.theme-dark .page-shell:not(.theme-dark) .section-title,
 html.theme-dark .page-shell:not(.theme-dark) .gift-copy h3,
 html.theme-dark .page-shell:not(.theme-dark) .review-name {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell:not(.theme-dark) .home-theme-toggle {
-  background: linear-gradient(135deg, #0f172a 0%, #07351e 100%);
+  background: linear-gradient(135deg, #1b1023 0%, #1b1023 100%);
 }
 
 html.theme-dark .page-shell:not(.theme-dark) .home-theme-toggle::before {
@@ -341,7 +345,7 @@ html.theme-dark .page-shell:not(.theme-dark) .home-theme-toggle::before {
 }
 
 html.theme-dark .page-shell:not(.theme-dark) .home-theme-toggle-thumb {
-  background: #d9ffe7;
+  background: #f7f1fb;
   transform: translateX(-36px);
 }
 
@@ -350,7 +354,7 @@ html.theme-dark .page-shell:not(.theme-dark) .home-theme-toggle-sun {
 }
 
 html.theme-dark .page-shell:not(.theme-dark) .home-theme-toggle-moon {
-  color: #b8ffd0;
+  color: #eb078a;
 }
 
 html.theme-dark .mobile-bottom-nav,
@@ -362,16 +366,16 @@ html.theme-dark .page-shell:not(.theme-dark) .mobile-bottom-nav {
 
 html.theme-dark .mobile-bottom-nav button,
 html.theme-dark .page-shell:not(.theme-dark) .mobile-bottom-nav button {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 html.theme-dark .mobile-bottom-nav button:hover,
 html.theme-dark .page-shell:not(.theme-dark) .mobile-bottom-nav button:hover,
 html.theme-dark .mobile-bottom-nav .active,
 html.theme-dark .page-shell:not(.theme-dark) .mobile-bottom-nav .active {
-  color: #6df09b;
-  background: rgba(37, 196, 99, .1);
-  box-shadow: inset 0 0 0 1px rgba(109, 240, 155, .18);
+  color: #f7d7ea;
+  background: rgba(235, 7, 138, .1);
+  box-shadow: inset 0 0 0 1px rgba(235, 7, 138, .18);
 }
 
 html.theme-dark .mobile-bottom-nav .active svg,

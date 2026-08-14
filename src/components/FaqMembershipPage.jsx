@@ -5,7 +5,6 @@ import {
   ArrowRight,
   BarChart3,
   CheckCircle2,
-  Gift,
   Handshake,
   HelpCircle,
   Megaphone,
@@ -17,6 +16,7 @@ import {
 import { submitMembershipRequest } from '../api/membership';
 import MobileBottomNav from './MobileBottomNav';
 import { hasAuthToken } from '../helper/authCookie';
+import { brandAssets } from '../data/brandAssets';
 
 const nav = {
   brand: 'کی میای',
@@ -244,8 +244,8 @@ function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
         <header className="topbar d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
             <Link className="brand d-flex align-items-center" href="/" aria-label={nav.home}>
-              <Gift className="brand-icon" />
-              <span>{nav.brand}</span>
+              <img className="brand-logo-mark" src={brandAssets.logoMark} alt="" aria-hidden="true" />
+              <img className="brand-logo-type" src={brandAssets.logoType} alt={nav.brand} />
             </Link>
             <nav>
               <ul className="nav-list d-flex align-items-center">
@@ -253,7 +253,7 @@ function FaqMembershipPage({ isDarkMode = false, onToggleTheme }) {
                 <li><Link href="/#gifts">{nav.gifts}</Link></li>
                 <li><Link href="/#brands">{nav.businesses}</Link></li>
                 <li><Link href="/faq" className="active-link">{nav.faq}</Link></li>
-                <li><Link href="/#footer">{nav.contact}</Link></li>
+                <li><Link href="/contact">{nav.contact}</Link></li>
               </ul>
             </nav>
           </div>

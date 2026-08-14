@@ -1,4 +1,4 @@
-﻿.hero-grid {
+.hero-grid {
   display: grid;
   grid-template-columns: 806px 1fr;
   gap: 50px;
@@ -17,18 +17,18 @@
 .restaurant-empty-hero {
   display: grid;
   place-items: center;
-  border: 1px solid rgba(7, 150, 62, .12);
+  border: 1px solid rgba(116, 51, 163, .12);
   background:
-    radial-gradient(circle at 28% 24%, rgba(7, 150, 62, .12), transparent 30%),
-    linear-gradient(135deg, rgba(7, 150, 62, .06), rgba(255, 255, 255, .82));
+    radial-gradient(circle at 28% 24%, rgba(116, 51, 163, .12), transparent 30%),
+    linear-gradient(135deg, rgba(116, 51, 163, .06), rgba(255, 255, 255, .82));
   box-shadow: none;
 }
 
 .restaurant-empty-logo {
   background:
-    radial-gradient(circle at 30% 25%, rgba(7, 150, 62, .10), transparent 45%),
+    radial-gradient(circle at 30% 25%, rgba(116, 51, 163, .10), transparent 45%),
     #f6fbf8;
-  border: 1px solid rgba(7, 150, 62, .18);
+  border: 1px solid rgba(116, 51, 163, .18);
   box-shadow: none;
 }
 
@@ -37,7 +37,7 @@
   height: 10px;
   display: inline-block;
   border-radius: 999px;
-  background: rgba(7, 150, 62, .12);
+  background: rgba(116, 51, 163, .12);
 }
 
 .restaurant-empty-title {
@@ -69,7 +69,7 @@
   height: 154px;
   margin: 0 auto 30px;
   border-radius: 50%;
-  background: #132a47;
+  background: #1b1023;
   color: #f3ad2f;
   box-shadow: 0 9px 19px rgba(14, 35, 66, 0.12);
   display: grid;
@@ -96,10 +96,10 @@
 
 .restaurant-empty-profile .restaurant-empty-logo {
   background:
-    radial-gradient(circle at 34% 28%, rgba(7, 150, 62, .14), transparent 45%),
-    linear-gradient(135deg, rgba(7, 150, 62, .08), rgba(255, 255, 255, .88));
-  border: 1px solid rgba(7, 150, 62, .16);
-  box-shadow: 0 12px 28px rgba(7, 150, 62, .08);
+    radial-gradient(circle at 34% 28%, rgba(116, 51, 163, .14), transparent 45%),
+    linear-gradient(135deg, rgba(116, 51, 163, .08), rgba(255, 255, 255, .88));
+  border: 1px solid rgba(116, 51, 163, .16);
+  box-shadow: 0 12px 28px rgba(116, 51, 163, .08);
 }
 
 .restaurant-empty-profile .restaurant-empty-logo::before,
@@ -108,7 +108,7 @@
   position: absolute;
   right: 50%;
   border-radius: 999px;
-  background: rgba(7, 150, 62, .12);
+  background: rgba(116, 51, 163, .12);
   transform: translateX(50%);
 }
 
@@ -289,8 +289,8 @@
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 78% 10%, rgba(7, 150, 62, .055), transparent 28%),
-    linear-gradient(180deg, rgba(7, 150, 62, .018), transparent 42%);
+    radial-gradient(circle at 78% 10%, rgba(116, 51, 163, .055), transparent 28%),
+    linear-gradient(180deg, rgba(116, 51, 163, .018), transparent 42%);
 }
 
 .restaurant-empty-panel h2,
@@ -318,7 +318,7 @@
   gap: 14px;
   min-height: 98px;
   padding-bottom: 18px;
-  border-bottom: 1px solid rgba(7, 150, 62, .10);
+  border-bottom: 1px solid rgba(116, 51, 163, .10);
 }
 
 .restaurant-empty-gift:last-child {
@@ -328,7 +328,7 @@
 .restaurant-empty-gift svg {
   width: 20px;
   height: 20px;
-  color: rgba(7, 150, 62, .78);
+  color: rgba(116, 51, 163, .78);
   stroke-width: 2.1;
 }
 
@@ -337,9 +337,9 @@
 .restaurant-empty-review-avatar {
   display: block;
   background:
-    radial-gradient(circle at 34% 26%, rgba(7, 150, 62, .13), transparent 46%),
-    linear-gradient(135deg, rgba(7, 150, 62, .08), rgba(255, 255, 255, .84));
-  border: 1px solid rgba(7, 150, 62, .12);
+    radial-gradient(circle at 34% 26%, rgba(116, 51, 163, .13), transparent 46%),
+    linear-gradient(135deg, rgba(116, 51, 163, .08), rgba(255, 255, 255, .84));
+  border: 1px solid rgba(116, 51, 163, .12);
 }
 
 .restaurant-empty-gift-media {
@@ -373,7 +373,7 @@
   height: 28px;
   display: inline-block;
   border-radius: 999px;
-  background: rgba(7, 150, 62, .08);
+  background: rgba(116, 51, 163, .08);
 }
 
 .restaurant-empty-copy {
@@ -519,7 +519,7 @@
 }
 
 .gift-discount {
-  background: #78bd2c;
+  background: #7433a3;
 }
 
 .gift-item svg {
@@ -626,7 +626,7 @@
 .follow-btn:hover,
 .login-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 18px rgba(0, 126, 52, 0.28);
+  box-shadow: 0 10px 18px rgba(116, 51, 163, 0.28);
   filter: brightness(1.03);
 }
 
@@ -818,7 +818,7 @@
 }
 
 .info-card:hover {
-  border-color: rgba(7, 150, 62, 0.28);
+  border-color: rgba(116, 51, 163, 0.28);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
   transform: translateY(-2px);
 }
@@ -841,9 +841,9 @@
   margin: 26px auto 0;
   padding: 22px 24px;
   border-radius: 18px;
-  border: 1px solid rgba(7, 150, 62, .18);
-  background: linear-gradient(145deg, rgba(7, 150, 62, .1), rgba(255, 255, 255, .92));
-  box-shadow: 0 18px 42px rgba(7, 150, 62, .1), inset 0 1px 0 rgba(255, 255, 255, .75);
+  border: 1px solid rgba(116, 51, 163, .18);
+  background: linear-gradient(145deg, rgba(116, 51, 163, .1), rgba(255, 255, 255, .92));
+  box-shadow: 0 18px 42px rgba(116, 51, 163, .1), inset 0 1px 0 rgba(255, 255, 255, .75);
   text-align: right;
 }
 
@@ -866,7 +866,7 @@
 .restaurant-wallet-card strong {
   display: block;
   margin-top: 15px;
-  color: #0d2015;
+  color: #1b1023;
   font-size: clamp(28px, 3vw, 36px);
   font-weight: 900;
   line-height: 1.2;
@@ -876,7 +876,7 @@
 .restaurant-wallet-card small {
   display: block;
   margin: 10px 0 0;
-  color: #486354;
+  color: #7433a3;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.8;
@@ -889,20 +889,20 @@
 .page-shell.theme-dark .restaurant-wallet-card,
 html.theme-dark .page-shell .restaurant-wallet-card {
   border-color: rgba(255, 255, 255, .1);
-  background: linear-gradient(145deg, rgba(7, 150, 62, .18), rgba(8, 21, 14, .88));
+  background: linear-gradient(145deg, rgba(116, 51, 163, .18), rgba(27, 16, 35, .88));
   box-shadow: 0 22px 52px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .08);
 }
 
 .page-shell.theme-dark .restaurant-wallet-card strong,
 html.theme-dark .page-shell .restaurant-wallet-card strong {
-  color: #f4fff8;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .restaurant-wallet-card p,
 .page-shell.theme-dark .restaurant-wallet-card small,
 html.theme-dark .page-shell .restaurant-wallet-card p,
 html.theme-dark .page-shell .restaurant-wallet-card small {
-  color: rgba(244, 255, 248, .76);
+  color: rgba(247, 241, 251, .76);
 }
 
 @media (max-width: 768px) {
@@ -1249,4 +1249,82 @@ html.theme-dark .page-shell .restaurant-wallet-card small {
     line-height: 1.5 !important;
     overflow-wrap: anywhere !important;
   }
+}
+
+/* Final dark-mode empty restaurant/business skeleton. */
+.page-shell.theme-dark .restaurant-empty-profile,
+html.theme-dark .page-shell .restaurant-empty-profile {
+  color: #ffffff !important;
+}
+
+.page-shell.theme-dark .restaurant-empty-hero,
+html.theme-dark .page-shell .restaurant-empty-hero {
+  border-color: rgba(116, 51, 163, .40) !important;
+  background:
+    radial-gradient(circle at 32% 24%, rgba(235, 7, 138, .13), transparent 34%),
+    radial-gradient(circle at 72% 38%, rgba(116, 51, 163, .18), transparent 36%),
+    linear-gradient(135deg, rgba(38, 18, 52, .98), rgba(27, 16, 35, .98)) !important;
+  box-shadow: none !important;
+}
+
+.page-shell.theme-dark .restaurant-empty-profile .profile,
+html.theme-dark .page-shell .restaurant-empty-profile .profile,
+.page-shell.theme-dark .restaurant-empty-panel,
+html.theme-dark .page-shell .restaurant-empty-panel,
+.page-shell.theme-dark .restaurant-empty-features,
+html.theme-dark .page-shell .restaurant-empty-features {
+  border-color: rgba(116, 51, 163, .42) !important;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(235, 7, 138, .10), transparent 34%),
+    linear-gradient(145deg, rgba(38, 18, 52, .98), rgba(27, 16, 35, .98)) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .22) !important;
+}
+
+.page-shell.theme-dark .restaurant-empty-logo,
+.page-shell.theme-dark .restaurant-empty-profile .restaurant-empty-logo,
+html.theme-dark .page-shell .restaurant-empty-logo,
+html.theme-dark .page-shell .restaurant-empty-profile .restaurant-empty-logo {
+  border-color: rgba(116, 51, 163, .42) !important;
+  background:
+    radial-gradient(circle at 40% 28%, rgba(235, 7, 138, .14), transparent 46%),
+    linear-gradient(145deg, rgba(54, 24, 72, .96), rgba(32, 15, 42, .98)) !important;
+  box-shadow: none !important;
+}
+
+.page-shell.theme-dark .restaurant-empty-line,
+.page-shell.theme-dark .restaurant-empty-profile .restaurant-empty-logo::before,
+.page-shell.theme-dark .restaurant-empty-profile .restaurant-empty-logo::after,
+.page-shell.theme-dark .restaurant-empty-gift-title,
+.page-shell.theme-dark .restaurant-empty-gift-line,
+.page-shell.theme-dark .restaurant-empty-copy-line,
+.page-shell.theme-dark .restaurant-empty-review-name,
+.page-shell.theme-dark .restaurant-empty-review-stars,
+.page-shell.theme-dark .restaurant-empty-review-text,
+html.theme-dark .page-shell .restaurant-empty-line,
+html.theme-dark .page-shell .restaurant-empty-profile .restaurant-empty-logo::before,
+html.theme-dark .page-shell .restaurant-empty-profile .restaurant-empty-logo::after,
+html.theme-dark .page-shell .restaurant-empty-gift-title,
+html.theme-dark .page-shell .restaurant-empty-gift-line,
+html.theme-dark .page-shell .restaurant-empty-copy-line,
+html.theme-dark .page-shell .restaurant-empty-review-name,
+html.theme-dark .page-shell .restaurant-empty-review-stars,
+html.theme-dark .page-shell .restaurant-empty-review-text {
+  background: rgba(116, 51, 163, .34) !important;
+}
+
+.page-shell.theme-dark .restaurant-empty-profile .follow-btn,
+html.theme-dark .page-shell .restaurant-empty-profile .follow-btn {
+  background: linear-gradient(135deg, rgba(116, 51, 163, .82), rgba(235, 7, 138, .72)) !important;
+  color: rgba(255, 255, 255, .78) !important;
+  opacity: .58 !important;
+  box-shadow: none !important;
+}
+
+.page-shell.theme-dark .restaurant-wallet-card,
+html.theme-dark .page-shell .restaurant-wallet-card {
+  border-color: rgba(116, 51, 163, .42) !important;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(235, 7, 138, .10), transparent 34%),
+    linear-gradient(145deg, rgba(38, 18, 52, .98), rgba(27, 16, 35, .98)) !important;
+  box-shadow: none !important;
 }

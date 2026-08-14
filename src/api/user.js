@@ -35,6 +35,34 @@ const firstObject = (...values) => {
   return null;
 };
 
+const PROFILE_SAVE_FALLBACK_MESSAGE = "ذخیره اطلاعات انجام نشد.";
+const DUPLICATE_EMAIL_MESSAGE = "این ایمیل قبلا برای حساب دیگری ثبت شده است. لطفا ایمیل دیگری وارد کنید.";
+
+export const getProfileSaveErrorMessage = (error) => {
+  const message = String(
+    error?.response?.data?.message ||
+    error?.response?.data?.error ||
+    error?.message ||
+    ""
+  );
+  const normalized = message.toLowerCase();
+
+  if (
+    normalized.includes("users_email_unique") ||
+    normalized.includes("duplicate entry") && normalized.includes("email") ||
+    normalized.includes("email has already") ||
+    normalized.includes("email already")
+  ) {
+    return DUPLICATE_EMAIL_MESSAGE;
+  }
+
+  if (/sqlstate|integrity constraint violation|mysql|duplicate entry|users_/.test(normalized)) {
+    return PROFILE_SAVE_FALLBACK_MESSAGE;
+  }
+
+  return message || PROFILE_SAVE_FALLBACK_MESSAGE;
+};
+
 export const updateUserProfile = async (profile) => {
   const birthDate = profile.birthDate || profile.birth_date || profile.date || "";
   const avatarFile = profile.avatarFile || profile.profileImageFile || profile.imageFile || null;
@@ -69,6 +97,20 @@ export const updateUserProfile = async (profile) => {
 
 export const getDiscountReport = async () => {
   const response = await httpClient.get("/discount/report", {
+    requiresAuth: true,
+  });
+
+  return response.data;
+};
+
+const USER_GIFTS_ENDPOINT = process.env.NEXT_PUBLIC_USER_GIFTS_API_PATH || "";
+
+export const getUserGifts = async () => {
+  if (!USER_GIFTS_ENDPOINT) {
+    return null;
+  }
+
+  const response = await httpClient.get(USER_GIFTS_ENDPOINT, {
     requiresAuth: true,
   });
 
@@ -122,6 +164,46 @@ export const extractActiveGiftsFromReport = (payload) => {
     payload?.gifts,
     payload?.data?.gifts,
     report?.gifts,
+    Array.isArray(data) ? data : undefined
+  );
+};
+
+export const extractUserGifts = (payload) => {
+  if (!payload) {
+    return [];
+  }
+
+  const data = payload?.data || payload;
+  const report = data?.report || data?.discount_report || data?.discountReport;
+  const user = data?.user || report?.user || payload?.user;
+
+  return firstArray(
+    payload?.gifts,
+    payload?.all_gifts,
+    payload?.allGifts,
+    payload?.user_gifts,
+    payload?.userGifts,
+    payload?.discounts,
+    payload?.discount_codes,
+    payload?.discountCodes,
+    payload?.data?.gifts,
+    payload?.data?.all_gifts,
+    payload?.data?.allGifts,
+    payload?.data?.user_gifts,
+    payload?.data?.userGifts,
+    payload?.data?.discounts,
+    payload?.data?.discount_codes,
+    payload?.data?.discountCodes,
+    user?.gifts,
+    user?.discount_codes,
+    user?.discountCodes,
+    report?.gifts,
+    report?.all_gifts,
+    report?.allGifts,
+    report?.user_gifts,
+    report?.userGifts,
+    report?.discount_codes,
+    report?.discountCodes,
     Array.isArray(data) ? data : undefined
   );
 };

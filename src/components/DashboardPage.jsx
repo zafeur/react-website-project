@@ -1,7 +1,8 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { CalendarDays, Crown, Gift, LogOut, Mail, PencilLine, Phone, UserRound } from 'lucide-react';
-import userAvatarImage from '../assets/images/user-avatar.jpg';
-import { extractActiveGiftsFromReport, extractUserProfileFromReport, getDiscountReport } from '../api/user';
+import { extractActiveGiftsFromReport, extractUserGifts, extractUserProfileFromReport, getDiscountReport, getUserGifts } from '../api/user';
+import { defaultProfileAvatar } from '../data/brandAssets';
 import { businessProfiles, dashboardActions, mobileProfileLinks } from '../data/siteData';
 import { toPersianDigits } from '../helper/persianDigits';
 
@@ -13,7 +14,7 @@ const normalizeMediaUrl = (value = '') => {
   const text = String(raw).trim().replace(/^\"|\"$/g, '');
   if (!text || text === '[]') return '';
   if (/^(https?:|data:|blob:)/.test(text)) return text;
-  if (text.startsWith('/')) return 'https://api.didarads.com' + text.replace(/\s/g, '%20');
+  if (text.startsWith('/')) return text;
 
   return 'https://api.keymiay.com/images/' + encodeURIComponent(text).replace(/%2F/g, '/');
 };
@@ -89,6 +90,7 @@ const getActionSection = (title) => {
   if (label.includes('تاریخ') || label.includes('ØªØ§Ø±ÛŒØ®')) return 'history';
   if (label.includes('آمار') || label.includes('Ø¢Ù…Ø§Ø±')) return 'stats';
   if (label.includes('فرآیند') || label.includes('فرایند') || label.includes('ÙØ±Ø¢') || label.includes('ÙØ±Ø§ÛŒ')) return 'processes';
+  if (label.includes('پشتیبانی') || label.includes('سوال') || label.includes('سؤال') || label.includes('متداول')) return 'faq';
   return 'account';
 };
 
@@ -128,6 +130,8 @@ const normalizeComparable = (value = '') => String(value).trim().toLowerCase().r
 
 const cleanReportText = (value = '') => String(value)
   .replace(/\r?\n/g, ' ')
+  .replace(/\\+"/g, '')
+  .replace(/["'`“”]+/g, '')
   .replace(/:\s*"?\[\]"?/g, '')
   .replace(/"?\[\]"?/g, '')
   .replace(/^[:\s"']+|[:\s"']+$/g, '')
@@ -201,6 +205,25 @@ const getGiftImage = (gift, matchedProfile) => {
   return normalizeMediaUrl(image || matchedProfile?.image || matchedProfile?.bannerImage || '');
 };
 
+const getGiftProfileHref = (gift, matchedProfile) => {
+  if (isPrimitiveValue(gift)) {
+    const primitiveRouteKey = matchedProfile?.collectionId || matchedProfile?.id || matchedProfile?.slug;
+    return primitiveRouteKey ? `/collections/${primitiveRouteKey}` : '';
+  }
+
+  const collection = gift?.collection || gift?.business || gift?.brand || gift?.code?.collection;
+  const collectionRouteKey = collection && typeof collection === 'object'
+    ? firstValue(collection, ['collection_id', 'collectionId', 'id', 'prefix', 'slug'])
+    : '';
+  const directRouteKey =
+    firstValue(gift, ['collection_id', 'collectionId', 'business_id', 'businessId', 'prefix', 'slug']) ||
+    getDeepValue(gift, ['collection_id', 'collectionId', 'business_id', 'businessId']);
+  const matchedRouteKey = matchedProfile?.collectionId || matchedProfile?.id || matchedProfile?.slug;
+  const routeKey = directRouteKey || collectionRouteKey || matchedRouteKey;
+
+  return routeKey ? `/collections/${routeKey}` : '';
+};
+
 const normalizeGift = (gift, index) => {
   const primitiveCode = isPrimitiveValue(gift) ? String(gift) : '';
   const matchedProfile = findBusinessProfileForGift(gift);
@@ -213,6 +236,7 @@ const normalizeGift = (gift, index) => {
 
   const apiImage = getGiftImage(gift, null);
   const fallbackImage = getGiftImage({}, matchedProfile);
+  const href = getGiftProfileHref(gift, matchedProfile);
 
   return {
     id: getDeepValue(gift, ['id', 'discount_id', 'discountId', 'code_id', 'codeId']) || code || `${title}-${index}`,
@@ -221,6 +245,7 @@ const normalizeGift = (gift, index) => {
     time: toPersianDigits(time),
     image: apiImage || fallbackImage,
     imageFallback: fallbackImage,
+    href,
     code,
   };
 };
@@ -236,23 +261,29 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
   const profileEmail = getProfileField(userProfile, ['email']);
   const profileBirthDate = toPersianDigits(getProfileField(userProfile, ['birthDate', 'birth_date', 'date', 'birthday']));
   const profileIsComplete = isProfileComplete(userProfile);
+  const rawProfilePoints = getProfileField(userProfile, ['points', 'score']);
+  const profilePoints = rawProfilePoints === undefined || rawProfilePoints === null || rawProfilePoints === ''
+    ? 0
+    : rawProfilePoints;
   const profileLevel = profileIsComplete ? 'اطلاعات تکمیل شده' : 'تکمیل نشده';
-  const profileScore = profileIsComplete ? 'تکمیل شده' : 'تکمیل نشده';
-  const profileAvatar = getProfileAvatar(userProfile) || getImageSrc(userAvatarImage);
+  const profileScore = `${toPersianDigits(profilePoints)} امتیاز`;
+  const profileAvatar = getProfileAvatar(userProfile) || defaultProfileAvatar;
 
   const loadActiveGifts = async () => {
     try {
       setIsReportLoading(true);
       setReportError('');
-      const data = await getDiscountReport();
+      const giftsData = await getUserGifts();
+      const data = giftsData || (await getDiscountReport());
       const reportProfile = extractUserProfileFromReport(data);
       if (reportProfile) {
         onProfileFromReport?.(reportProfile);
       }
-      setActiveGiftItems(extractActiveGiftsFromReport(data).map(normalizeGift));
+      const giftItems = extractUserGifts(data);
+      setActiveGiftItems((giftItems.length ? giftItems : extractActiveGiftsFromReport(data)).map(normalizeGift));
     } catch (error) {
       setActiveGiftItems([]);
-      setReportError(error.response?.data?.message || error.message || 'دریافت هدیه‌های فعال انجام نشد.');
+      setReportError(error.response?.data?.message || error.message || 'دریافت هدیه‌ها انجام نشد.');
     } finally {
       setIsReportLoading(false);
     }
@@ -300,6 +331,11 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
   };
 
   const showSection = (section, { shouldScroll = true, alignToTop = false } = {}) => {
+    if (section === 'faq') {
+      window.location.href = '/faq';
+      return;
+    }
+
     if (disabledSections.has(section)) {
       setActiveSection('gifts');
       return;
@@ -334,7 +370,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
 
   const renderActiveGifts = (mobile = false) => {
     if (isReportLoading) {
-      return <p className="dashboard-empty-state">در حال دریافت هدیه‌های فعال...</p>;
+      return <p className="dashboard-empty-state">در حال دریافت هدیه‌ها...</p>;
     }
 
     if (reportError) {
@@ -342,7 +378,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
     }
 
     if (!activeGiftItems.length) {
-      return <p className="dashboard-empty-state">هدیه فعالی برای این حساب ثبت نشده است.</p>;
+      return <p className="dashboard-empty-state">هدیه‌ای برای این حساب ثبت نشده است.</p>;
     }
 
     const listClass = mobile ? 'mobile-active-gifts-list' : 'active-gifts-grid';
@@ -352,7 +388,11 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
       <div className={listClass}>
         {activeGiftItems.map((gift) => (
           <article className={itemClass} key={gift.id}>
-            {gift.image ? <img src={gift.image} alt={gift.title} onError={(event) => handleGiftImageError(event, gift.imageFallback)} /> : <div className="active-gift-fallback"><Gift /></div>}
+            {gift.href ? (
+              <Link className="active-gift-media-link" href={gift.href} aria-label={`مشاهده پروفایل ${gift.place || gift.title}`}>
+                {gift.image ? <img src={gift.image} alt={gift.title} onError={(event) => handleGiftImageError(event, gift.imageFallback)} /> : <div className="active-gift-fallback"><Gift /></div>}
+              </Link>
+            ) : gift.image ? <img src={gift.image} alt={gift.title} onError={(event) => handleGiftImageError(event, gift.imageFallback)} /> : <div className="active-gift-fallback"><Gift /></div>}
             <div className="active-gift-fallback active-gift-fallback-broken"><Gift /></div>
             <div>
               <h3>{gift.title}</h3>
@@ -372,6 +412,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
           <img src={profileAvatar} alt={profileName} />
           <div>
             <h1>{profileName}</h1>
+            <strong className="mobile-profile-points">{profileScore}</strong>
             <button type="button" onClick={onEditProfile}>تکمیل / ویرایش اطلاعات</button>
           </div>
         </section>
@@ -380,7 +421,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
           {activeSection === 'gifts' && (
             <section className="mobile-section-card">
               <div className="mobile-section-head">
-                <h2>هدیه‌های فعال من</h2>
+                <h2>هدیه‌های من</h2>
                 <span>{activeGiftItems.length} هدیه</span>
               </div>
               {renderActiveGifts(true)}
@@ -479,6 +520,13 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
                   <strong>{profileBirthDate || '\u062b\u0628\u062a \u0646\u0634\u062f\u0647'}</strong>
                 </div>
               </article>
+              <article>
+                <span className="account-info-icon"><Crown /></span>
+                <div>
+                  <span>{'\u0627\u0645\u062a\u06cc\u0627\u0632 \u06a9\u0627\u0631\u0628\u0631'}</span>
+                  <strong>{profileScore}</strong>
+                </div>
+              </article>
             </div>
           </section>
         )}
@@ -486,7 +534,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
         {activeSection === 'gifts' && (
           <section className="panel active-gifts-panel" id="all-active-gifts">
             <div className="panel-head-row">
-              <h2>هدیه‌های فعال من</h2>
+              <h2>هدیه‌های من</h2>
               <button type="button" className="dashboard-inline-action" onClick={loadActiveGifts}>بروزرسانی</button>
             </div>
             {renderActiveGifts(false)}

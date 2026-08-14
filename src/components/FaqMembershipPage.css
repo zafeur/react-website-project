@@ -84,12 +84,12 @@
   min-height: 48px;
   padding: 0 22px;
   color: #fff;
-  background: linear-gradient(#0ba746 0%, #008b38 100%);
+  background: linear-gradient(#7433a3 0%, #7433a3 100%);
   border: 0;
   border-radius: 10px;
   font-size: 16px;
   font-weight: 800;
-  box-shadow: 0 8px 18px rgba(0, 126, 52, 0.24);
+  box-shadow: 0 8px 18px rgba(116, 51, 163, 0.24);
 }
 
 .faq-primary-link {
@@ -326,7 +326,7 @@
   height: 8px;
   overflow: hidden;
   border-radius: 999px;
-  background: #edf0ee;
+  background: #f4eef8;
 }
 
 .faq-form-progress i {
@@ -414,8 +414,8 @@
 .faq-field input:focus,
 .faq-field textarea:focus,
 .faq-field select:focus {
-  border-color: rgba(7, 150, 62, 0.7);
-  box-shadow: 0 0 0 4px rgba(7, 150, 62, 0.12);
+  border-color: rgba(116, 51, 163, 0.7);
+  box-shadow: 0 0 0 4px rgba(116, 51, 163, 0.12);
 }
 
 .faq-form-actions {
@@ -461,9 +461,9 @@
 }
 
 .faq-status-success {
-  color: #047a31;
-  background: #eefaf3;
-  border: 1px solid rgba(7, 150, 62, 0.2);
+  color: #1b1023;
+  background: #f7f1fb;
+  border: 1px solid rgba(116, 51, 163, 0.2);
 }
 
 .faq-status-error {
@@ -490,8 +490,72 @@
 .faq-secondary-btn:hover,
 .faq-item:hover,
 .faq-step-card:hover {
-  border-color: rgba(7, 150, 62, 0.35);
+  border-color: rgba(116, 51, 163, 0.35);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.07);
+}
+
+/* Dark mode for FAQ on every viewport, including first paint after refresh. */
+.faq-shell.theme-dark,
+html.theme-dark .faq-shell,
+.faq-shell.theme-dark .faq-frame,
+html.theme-dark .faq-shell .faq-frame {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(235, 7, 138, .08), transparent 34%),
+    linear-gradient(180deg, #1b1023 0%, #1b1023 100%) !important;
+  color: #f7f1fb !important;
+}
+
+.faq-shell.theme-dark :where(.faq-hero-copy, .faq-hero-card, .faq-section, .faq-step-card, .faq-item, .faq-trust-card),
+html.theme-dark .faq-shell :where(.faq-hero-copy, .faq-hero-card, .faq-section, .faq-step-card, .faq-item, .faq-trust-card) {
+  border-color: rgba(235, 7, 138, .22) !important;
+  background: rgba(255, 255, 255, .045) !important;
+  color: #f7f1fb !important;
+  box-shadow: none !important;
+}
+
+.faq-shell.theme-dark :where(.faq-hero h1, .faq-section-head h2, .faq-form-intro h2, .faq-step-card h3, .faq-item summary, .faq-trust-card li, .faq-form-title, .faq-field span, .faq-form-progress span),
+html.theme-dark .faq-shell :where(.faq-hero h1, .faq-section-head h2, .faq-form-intro h2, .faq-step-card h3, .faq-item summary, .faq-trust-card li, .faq-form-title, .faq-field span, .faq-form-progress span) {
+  color: #ffffff !important;
+}
+
+.faq-shell.theme-dark :where(.faq-hero p, .faq-form-intro p, .faq-step-card p, .faq-item p, .faq-hero-card span),
+html.theme-dark .faq-shell :where(.faq-hero p, .faq-form-intro p, .faq-step-card p, .faq-item p, .faq-hero-card span) {
+  color: rgba(247, 241, 251, .78) !important;
+}
+
+.faq-shell.theme-dark :where(.faq-eyebrow, .faq-section-head span, .faq-form-intro span, .faq-trust-card span),
+html.theme-dark .faq-shell :where(.faq-eyebrow, .faq-section-head span, .faq-form-intro span, .faq-trust-card span) {
+  color: #c084fc !important;
+}
+
+.faq-shell.theme-dark :where(.faq-hero-card svg, .faq-step-number, .faq-business-flow li::before, .faq-trust-icon),
+html.theme-dark .faq-shell :where(.faq-hero-card svg, .faq-step-number, .faq-business-flow li::before, .faq-trust-icon) {
+  background: rgba(116, 51, 163, .22) !important;
+  color: #f7d7ea !important;
+}
+
+.faq-shell.theme-dark :where(.faq-field input, .faq-field textarea, .faq-field select),
+html.theme-dark .faq-shell :where(.faq-field input, .faq-field textarea, .faq-field select) {
+  border-color: rgba(235, 7, 138, .24) !important;
+  background: rgba(255, 255, 255, .07) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 0 0 1px rgba(116, 51, 163, .14) !important;
+}
+
+.faq-shell.theme-dark :where(.faq-field input, .faq-field textarea, .faq-field select):focus,
+html.theme-dark .faq-shell :where(.faq-field input, .faq-field textarea, .faq-field select):focus {
+  border-color: rgba(235, 7, 138, .72) !important;
+  box-shadow: 0 0 0 4px rgba(235, 7, 138, .14), inset 0 0 0 1px rgba(116, 51, 163, .2) !important;
+}
+
+.faq-shell.theme-dark .faq-form-progress div,
+html.theme-dark .faq-shell .faq-form-progress div {
+  background: rgba(255, 255, 255, .18) !important;
+}
+
+.faq-shell.theme-dark .faq-form-progress i,
+html.theme-dark .faq-shell .faq-form-progress i {
+  background: linear-gradient(90deg, var(--brand-purple, #7433a3), var(--brand-pink, #eb078a)) !important;
 }
 
 @media (max-width: 1200px) {
@@ -533,5 +597,116 @@
 
   .faq-form-progress {
     min-width: 0;
+  }
+}
+
+/* Mobile dark mode: keep FAQ surfaces dark and readable. */
+@media (max-width: 768px) {
+  .faq-shell.theme-dark,
+  html.theme-dark .faq-shell,
+  .faq-shell.theme-dark .faq-frame,
+  html.theme-dark .faq-shell .faq-frame {
+    background:
+      radial-gradient(circle at 20% 0%, rgba(235, 7, 138, .08), transparent 34%),
+      linear-gradient(180deg, #1b1023 0%, #1b1023 100%) !important;
+    color: #f7f1fb !important;
+  }
+
+  .faq-shell.theme-dark .faq-hero-copy,
+  .faq-shell.theme-dark .faq-hero-card,
+  .faq-shell.theme-dark .faq-section,
+  .faq-shell.theme-dark .faq-step-card,
+  .faq-shell.theme-dark .faq-item,
+  .faq-shell.theme-dark .faq-trust-card,
+  html.theme-dark .faq-shell .faq-hero-copy,
+  html.theme-dark .faq-shell .faq-hero-card,
+  html.theme-dark .faq-shell .faq-section,
+  html.theme-dark .faq-shell .faq-step-card,
+  html.theme-dark .faq-shell .faq-item,
+  html.theme-dark .faq-shell .faq-trust-card {
+    border-color: rgba(235, 7, 138, .22) !important;
+    background: rgba(255, 255, 255, .045) !important;
+    color: #f7f1fb !important;
+    box-shadow: none !important;
+  }
+
+  .faq-shell.theme-dark :where(.faq-hero h1, .faq-section-head h2, .faq-form-intro h2, .faq-step-card h3, .faq-item summary, .faq-trust-card li),
+  html.theme-dark .faq-shell :where(.faq-hero h1, .faq-section-head h2, .faq-form-intro h2, .faq-step-card h3, .faq-item summary, .faq-trust-card li) {
+    color: #ffffff !important;
+  }
+
+  .faq-shell.theme-dark :where(.faq-hero p, .faq-form-intro p, .faq-step-card p, .faq-item p, .faq-hero-card span),
+  html.theme-dark .faq-shell :where(.faq-hero p, .faq-form-intro p, .faq-step-card p, .faq-item p, .faq-hero-card span) {
+    color: rgba(247, 241, 251, .78) !important;
+  }
+
+  .faq-shell.theme-dark :where(.faq-eyebrow, .faq-section-head span, .faq-form-intro span, .faq-trust-card span),
+  html.theme-dark .faq-shell :where(.faq-eyebrow, .faq-section-head span, .faq-form-intro span, .faq-trust-card span) {
+    color: #c084fc !important;
+  }
+
+  .faq-shell.theme-dark :where(.faq-hero-card svg, .faq-step-number, .faq-business-flow li::before, .faq-trust-icon),
+  html.theme-dark .faq-shell :where(.faq-hero-card svg, .faq-step-number, .faq-business-flow li::before, .faq-trust-icon) {
+    background: rgba(116, 51, 163, .22) !important;
+    color: #f7d7ea !important;
+  }
+
+  .faq-shell.theme-dark .faq-field span,
+  .faq-shell.theme-dark .faq-form-title,
+  .faq-shell.theme-dark .faq-form-progress span,
+  html.theme-dark .faq-shell .faq-field span,
+  html.theme-dark .faq-shell .faq-form-title,
+  html.theme-dark .faq-shell .faq-form-progress span {
+    color: #ffffff !important;
+  }
+
+  .faq-shell.theme-dark .faq-field input,
+  .faq-shell.theme-dark .faq-field textarea,
+  .faq-shell.theme-dark .faq-field select,
+  html.theme-dark .faq-shell .faq-field input,
+  html.theme-dark .faq-shell .faq-field textarea,
+  html.theme-dark .faq-shell .faq-field select {
+    border-color: rgba(235, 7, 138, .24) !important;
+    background: rgba(255, 255, 255, .07) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 0 0 1px rgba(116, 51, 163, .14) !important;
+  }
+
+  .faq-shell.theme-dark .faq-field input::placeholder,
+  .faq-shell.theme-dark .faq-field textarea::placeholder,
+  html.theme-dark .faq-shell .faq-field input::placeholder,
+  html.theme-dark .faq-shell .faq-field textarea::placeholder {
+    color: rgba(247, 241, 251, .48) !important;
+  }
+
+  .faq-shell.theme-dark .faq-field input:focus,
+  .faq-shell.theme-dark .faq-field textarea:focus,
+  .faq-shell.theme-dark .faq-field select:focus,
+  html.theme-dark .faq-shell .faq-field input:focus,
+  html.theme-dark .faq-shell .faq-field textarea:focus,
+  html.theme-dark .faq-shell .faq-field select:focus {
+    border-color: rgba(235, 7, 138, .72) !important;
+    box-shadow: 0 0 0 4px rgba(235, 7, 138, .14), inset 0 0 0 1px rgba(116, 51, 163, .2) !important;
+  }
+
+  .faq-shell.theme-dark .faq-form-progress div,
+  html.theme-dark .faq-shell .faq-form-progress div {
+    background: rgba(255, 255, 255, .18) !important;
+  }
+
+  .faq-shell.theme-dark .faq-form-progress i,
+  html.theme-dark .faq-shell .faq-form-progress i {
+    background: linear-gradient(90deg, var(--brand-purple, #7433a3), var(--brand-pink, #eb078a)) !important;
+  }
+
+  .faq-shell.theme-dark .faq-secondary-btn,
+  html.theme-dark .faq-shell .faq-secondary-btn {
+    border-color: rgba(235, 7, 138, .24) !important;
+    background: rgba(255, 255, 255, .07) !important;
+    color: #f7f1fb !important;
+  }
+
+  .faq-form-section {
+    padding-bottom: calc(136px + env(safe-area-inset-bottom, 0px)) !important;
   }
 }

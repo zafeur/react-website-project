@@ -6,13 +6,29 @@ import MobileBottomNav from "./components/MobileBottomNav";
 import ProfileCompletionModal from "./components/ProfileCompletionModal";
 import BusinessProfilePage from "./components/BusinessProfilePage";
 import { sendOtp, verifyOtp } from "./api/auth";
-import { normalizeUserProfile, updateUserProfile } from "./api/user";
+import { getProfileSaveErrorMessage, normalizeUserProfile, updateUserProfile } from "./api/user";
+import { brandAssets } from "./data/brandAssets";
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from "./helper/authCookie";
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
 const PROFILE_STORAGE_KEY = "keymiyay-user-profile";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
+const localAvatarChoices = new Set([brandAssets.maleProfile, brandAssets.femaleProfile]);
+
+const hasIncomingAvatar = (profile = {}) => Boolean(
+  profile.avatarPreview ||
+    profile.avatar_preview ||
+    profile.avatar ||
+    profile.avatar_url ||
+    profile.avatarUrl ||
+    profile.profile_image ||
+    profile.profileImage ||
+    profile.profile_photo ||
+    profile.profilePhoto ||
+    profile.image ||
+    profile.photo
+);
 
 function App({ initialPage = "business", initialDashboardSection = null, isDarkMode = false, onToggleTheme }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -223,14 +239,13 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
     }
 
     if (id === "gifts") {
-      if (currentPage === "dashboard") {
-        setDashboardSectionRequest({ section: "gifts", createdAt: Date.now() });
+      if (!isLoggedIn) {
+        openLogin();
         return;
       }
 
-      setDashboardSectionRequest(null);
-      setCurrentPage("business");
-      scrollToSection("restaurant-gifts");
+      setDashboardSectionRequest({ section: "gifts", createdAt: Date.now() });
+      setCurrentPage("dashboard");
       return;
     }
 
@@ -267,6 +282,14 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
           : { ...(current || {}), ...incomingProfile }
       );
 
+      if (
+        current?.avatarPreview &&
+        localAvatarChoices.has(current.avatarPreview) &&
+        !hasIncomingAvatar(profile)
+      ) {
+        nextProfile.avatarPreview = current.avatarPreview;
+      }
+
       if (canUseStorage()) {
         const profileForStorage = { ...nextProfile };
         delete profileForStorage.avatarFile;
@@ -301,7 +324,7 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
       setIsProfileCompletionOpen(false);
       setProfileCompletionSuccess("\u0627\u0637\u0644\u0627\u0639\u0627\u062a \u0628\u0627 \u0645\u0648\u0641\u0642\u06cc\u062a \u062b\u0628\u062a \u0634\u062f.");
     } catch (error) {
-      setProfileCompletionError(error.response?.data?.message || error.message || "ذخیره اطلاعات انجام نشد.");
+      setProfileCompletionError(getProfileSaveErrorMessage(error));
     } finally {
       setIsProfileSaving(false);
     }

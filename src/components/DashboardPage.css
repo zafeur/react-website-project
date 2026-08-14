@@ -10,7 +10,7 @@
   gap: 52px;
   padding: 0 80px;
   border-radius: 14px;
-  background: radial-gradient(circle at 20% 25%, rgba(8,112,62,.38), transparent 34%), linear-gradient(135deg, #062f26 0%, #04231f 55%, #031916 100%);
+  background: radial-gradient(circle at 20% 25%, rgba(27, 16, 35, .38), transparent 34%), linear-gradient(135deg, #1b1023 0%, #1b1023 55%, #1b1023 100%);
   color: #fff;
 }
 
@@ -27,10 +27,14 @@
   height: 168px;
   position: relative;
   z-index: 1;
-  border: 4px solid #18b94e;
+  border: 4px solid var(--brand-pink, #eb078a);
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 16px 32px rgba(0,0,0,.3);
+}
+
+.dashboard-avatar[src$=".svg"] {
+  object-fit: contain;
 }
 
 .dashboard-user-copy { position: relative; z-index: 1; text-align: right; }
@@ -42,7 +46,7 @@
 
 .dashboard-actions { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; margin: 34px 17px 33px; }
 .dashboard-action-card { height: 162px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: #111; box-shadow: 0 8px 18px rgba(0,0,0,.025); }
-.dashboard-action-card:hover { transform: translateY(-4px); border-color: rgba(7,150,62,.32); box-shadow: 0 16px 28px rgba(0,0,0,.08); color: var(--green); }
+.dashboard-action-card:hover { transform: translateY(-4px); border-color: rgba(116, 51, 163, .32); box-shadow: 0 16px 28px rgba(0,0,0,.08); color: var(--green); }
 .dashboard-action-card svg { width: 46px; height: 46px; stroke-width: 2.2; }
 .dashboard-action-card span { font-size: 18px; font-weight: 800; }
 
@@ -62,7 +66,7 @@
   align-items: center;
   justify-content: center;
   padding: 0 !important;
-  background: linear-gradient(145deg, rgba(8, 155, 73, .1), rgba(8, 155, 73, .02));
+  background: linear-gradient(145deg, rgba(116, 51, 163, .1), rgba(116, 51, 163, .02));
   color: var(--green);
 }
 
@@ -82,9 +86,40 @@
 }
 
 .active-gift-card > div:last-child { min-height: 0; display: grid; align-content: center; padding: 17px 16px 20px; text-align: center; }
-.active-gift-card h3 { margin: 0 0 13px; color: #171717; font-size: 20px; font-weight: 800; }
-.active-gift-card p { margin: 0 0 15px; color: #6e7175; font-size: 16px; font-weight: 600; }
-.active-gift-card span { color: #cc1e1e; font-size: 17px; font-weight: 800; }
+.active-gift-card h3 {
+  min-height: 58px;
+  margin: 0 0 10px;
+  overflow: hidden;
+  color: #171717;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.6;
+  text-wrap: balance;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.active-gift-card p {
+  margin: 0 0 10px;
+  overflow: hidden;
+  color: #6e7175;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.7;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.active-gift-card span {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: #cc1e1e;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.6;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .dashboard-bottom-grid { display: grid; grid-template-columns: 1fr 576px; gap: 22px; margin-top: 18px; direction: ltr; }
 .history-panel, .dashboard-side-stack { direction: rtl; }
@@ -99,7 +134,7 @@
 .history-item p { margin: 0; color: #6f7377; font-size: 14px; font-weight: 600; }
 
 .dashboard-side-stack { display: grid; gap: 20px; }
-.invite-card { min-height: 253px; padding: 34px 41px 24px; overflow: hidden; border-radius: 14px; color: #fff; background: radial-gradient(circle at 25% 30%, rgba(8,112,62,.46), transparent 34%), linear-gradient(135deg, #062f26 0%, #04231f 60%, #031916 100%); box-shadow: 0 8px 19px rgba(0,0,0,.025); }
+.invite-card { min-height: 253px; padding: 34px 41px 24px; overflow: hidden; border-radius: 14px; color: #fff; background: radial-gradient(circle at 25% 30%, rgba(27, 16, 35, .46), transparent 34%), linear-gradient(135deg, #1b1023 0%, #1b1023 60%, #1b1023 100%); box-shadow: 0 8px 19px rgba(0,0,0,.025); }
 .invite-card h2 { display: flex; align-items: center; gap: 8px; color: #fff; margin-bottom: 25px; }
 .invite-card h2 svg { width: 23px; height: 23px; }
 .invite-card p { margin: 0 0 24px; color: #fff; font-size: 17px; font-weight: 600; }
@@ -107,7 +142,7 @@
 .invite-code { height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: rgba(255,255,255,.14); color: #fff; font-size: 25px; font-weight: 800; letter-spacing: .4px; }
 .invite-row > div:last-child { direction: rtl; }
 .invite-row span { display: block; margin-bottom: 17px; color: #fff; font-size: 16px; font-weight: 800; }
-.invite-card button { width: 198px; height: 47px; border: 0; border-radius: 8px; background: linear-gradient(180deg, #0ba746 0%, #008b38 100%); color: #fff; font-size: 17px; font-weight: 800; box-shadow: 0 5px 10px rgba(0, 126, 52, 0.23); }
+.invite-card button { width: 198px; height: 47px; border: 0; border-radius: 8px; background: linear-gradient(135deg, var(--brand-purple, #7433a3), var(--brand-pink, #eb078a)); color: #fff; font-size: 17px; font-weight: 800; box-shadow: 0 5px 10px rgba(116, 51, 163, 0.23); }
 .stats-panel { min-height: 150px; padding: 20px 33px 18px; }
 .stats-panel h2 { margin-bottom: 23px; text-align: right; font-size: 21px; }
 .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
@@ -169,6 +204,14 @@
     color: #050505;
   }
 
+  .mobile-profile-points {
+    display: block;
+    margin: -6px 0 12px;
+    color: var(--brand-purple, #7433a3);
+    font-size: 18px;
+    font-weight: 900;
+  }
+
   .mobile-profile-card button {
     padding: 0;
     border: 0;
@@ -200,7 +243,7 @@
   }
 
   .mobile-profile-item:hover {
-    border-color: rgba(7,150,62,.35);
+    border-color: rgba(116, 51, 163, .35);
     color: var(--green);
     transform: translateY(-2px);
   }
@@ -230,7 +273,7 @@
 
 .invite-card button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 18px rgba(0, 126, 52, 0.28);
+  box-shadow: 0 10px 18px rgba(116, 51, 163, 0.28);
   filter: brightness(1.04);
 }
 
@@ -287,9 +330,9 @@
   min-height: 130px;
   padding: 20px 24px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #0ba746 0%, #087b35 100%);
+  background: linear-gradient(135deg, #7433a3 0%, #7433a3 100%);
   color: #fff;
-  box-shadow: 0 14px 26px rgba(7, 150, 62, .24);
+  box-shadow: 0 14px 26px rgba(116, 51, 163, .24);
 }
 
 .wallet-total-card span,
@@ -332,7 +375,7 @@
 .wallet-business-card img {
   width: 68px;
   height: 68px;
-  border: 2px solid rgba(7, 150, 62, .28);
+  border: 2px solid rgba(116, 51, 163, .28);
   border-radius: 50%;
   object-fit: cover;
   background: #fff;
@@ -389,7 +432,7 @@
   height: 38px;
   padding: 8px;
   border-radius: 50%;
-  background: rgba(7, 150, 62, .1);
+  background: rgba(116, 51, 163, .1);
   color: var(--green);
 }
 
@@ -428,9 +471,9 @@
   gap: 16px;
   margin-top: 18px;
   padding: 20px;
-  border: 1px solid rgba(7, 150, 62, .18);
+  border: 1px solid rgba(116, 51, 163, .18);
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(7, 150, 62, .09), #fff 52%);
+  background: linear-gradient(135deg, rgba(116, 51, 163, .09), #fff 52%);
   box-shadow: 0 7px 17px rgba(0, 0, 0, .055);
 }
 
@@ -511,9 +554,9 @@
 .page-shell.theme-dark .wallet-business-card,
 .page-shell.theme-dark .mobile-wallet-card,
 .page-shell.theme-dark .mobile-wallet-business {
-  background: #0f1712;
+  background: #1b1023;
   border-color: rgba(255, 255, 255, .11);
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .wallet-summary h2,
@@ -522,14 +565,14 @@
 .page-shell.theme-dark .wallet-history-item strong,
 .page-shell.theme-dark .mobile-wallet-head span,
 .page-shell.theme-dark .mobile-wallet-business h3 {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .wallet-summary p,
 .page-shell.theme-dark .wallet-business-card span,
 .page-shell.theme-dark .wallet-history-item span,
 .page-shell.theme-dark .wallet-history-item p {
-  color: #d8e8de;
+  color: #efe0f7;
 }
 
 .page-shell.theme-dark .wallet-history-item {
@@ -585,29 +628,29 @@ html.theme-dark .page-shell .dashboard-page .mobile-wallet-business,
 .page-shell.theme-dark .dashboard-page .wallet-business-card,
 .page-shell.theme-dark .dashboard-page .mobile-wallet-card,
 .page-shell.theme-dark .dashboard-page .mobile-wallet-business {
-  background: #0f1712;
+  background: #1b1023;
   border-color: rgba(255, 255, 255, .11);
-  color: #edf7f0;
+  color: #f7f1fb;
   box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
 }
 
 html.theme-dark .page-shell .dashboard-page :where(.panel-head-row h2, .history-panel h2, .stats-panel h2, .dashboard-action-card span, .dashboard-action-card svg, .active-gift-card h3, .history-item h3, .history-item strong, .stat-item strong, .wallet-summary h2, .wallet-history h3, .wallet-business-card h3, .wallet-history-item strong, .mobile-profile-card h1, .mobile-profile-item span, .mobile-wallet-head span, .mobile-wallet-business h3),
 .page-shell.theme-dark .dashboard-page :where(.panel-head-row h2, .history-panel h2, .stats-panel h2, .dashboard-action-card span, .dashboard-action-card svg, .active-gift-card h3, .history-item h3, .history-item strong, .stat-item strong, .wallet-summary h2, .wallet-history h3, .wallet-business-card h3, .wallet-history-item strong, .mobile-profile-card h1, .mobile-profile-item span, .mobile-wallet-head span, .mobile-wallet-business h3) {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell .dashboard-page :where(.active-gift-card p, .history-item p, .history-item span, .stat-item span, .wallet-summary p, .wallet-business-card span, .wallet-history-item span, .wallet-history-item p),
 .page-shell.theme-dark .dashboard-page :where(.active-gift-card p, .history-item p, .history-item span, .stat-item span, .wallet-summary p, .wallet-business-card span, .wallet-history-item span, .wallet-history-item p) {
-  color: #d8e8de;
+  color: #efe0f7;
 }
 
 html.theme-dark .page-shell .dashboard-page .dashboard-action-card:hover,
 .page-shell.theme-dark .dashboard-page .dashboard-action-card:hover,
 html.theme-dark .page-shell .dashboard-page .mobile-profile-item:hover,
 .page-shell.theme-dark .dashboard-page .mobile-profile-item:hover {
-  color: #6df09b;
-  background: rgba(7, 150, 62, .14);
-  border-color: rgba(109, 240, 155, .22);
+  color: #f7d7ea;
+  background: rgba(116, 51, 163, .14);
+  border-color: rgba(235, 7, 138, .22);
 }
 
 html.theme-dark .page-shell .dashboard-page .wallet-history-item,
@@ -619,7 +662,7 @@ html.theme-dark .page-shell .dashboard-page .history-item,
 
 html.theme-dark .page-shell .dashboard-page .wallet-total-card,
 .page-shell.theme-dark .dashboard-page .wallet-total-card {
-  background: linear-gradient(135deg, #0ba746 0%, #087b35 100%);
+  background: linear-gradient(135deg, #7433a3 0%, #7433a3 100%);
   color: #fff;
 }
 
@@ -639,7 +682,7 @@ html.theme-dark .page-shell .dashboard-page .wallet-total-card,
   min-height: 30px;
   padding: 5px 11px;
   border-radius: 999px;
-  background: rgba(7, 150, 62, .1);
+  background: rgba(116, 51, 163, .1);
   color: var(--green);
   font-size: 13px;
   font-weight: 900;
@@ -652,7 +695,7 @@ html.theme-dark .page-shell .dashboard-page .wallet-total-card,
   gap: 7px;
   min-height: 34px;
   padding: 0 12px;
-  border: 1px solid rgba(7, 150, 62, .22);
+  border: 1px solid rgba(116, 51, 163, .22);
   border-radius: 999px;
   background: #fff;
   color: var(--green);
@@ -676,9 +719,9 @@ html.theme-dark .page-shell .dashboard-page .wallet-total-card,
 
 html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-sync-note),
 .page-shell.theme-dark .dashboard-page :where(.wallet-refresh-btn, .wallet-sync-note) {
-  background: rgba(7, 150, 62, .14);
-  border-color: rgba(109, 240, 155, .18);
-  color: #6df09b;
+  background: rgba(116, 51, 163, .14);
+  border-color: rgba(235, 7, 138, .18);
+  color: #f7d7ea;
 }
 
 .dashboard-dynamic-section {
@@ -687,10 +730,10 @@ html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-
 }
 
 .dashboard-action-card.is-active {
-  border-color: rgba(7, 150, 62, .5);
-  background: linear-gradient(180deg, rgba(7, 150, 62, .1), #fff 82%);
+  border-color: rgba(116, 51, 163, .5);
+  background: linear-gradient(180deg, rgba(116, 51, 163, .1), #fff 82%);
   color: var(--green);
-  box-shadow: 0 18px 32px rgba(7, 150, 62, .12);
+  box-shadow: 0 18px 32px rgba(116, 51, 163, .12);
 }
 
 .dashboard-action-card.is-active svg,
@@ -705,13 +748,13 @@ html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-
   gap: 8px;
   min-height: 38px;
   padding: 0 15px;
-  border: 1px solid rgba(7, 150, 62, .22);
+  border: 1px solid rgba(116, 51, 163, .22);
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(7, 150, 62, .1), rgba(7, 150, 62, .04));
+  background: linear-gradient(180deg, rgba(116, 51, 163, .1), rgba(116, 51, 163, .04));
   color: var(--green);
   font-size: 14px;
   font-weight: 900;
-  box-shadow: 0 10px 20px rgba(7, 150, 62, .08);
+  box-shadow: 0 10px 20px rgba(116, 51, 163, .08);
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 
@@ -723,21 +766,21 @@ html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-
 
 .dashboard-inline-action:hover {
   transform: translateY(-2px);
-  border-color: rgba(7, 150, 62, .38);
-  background: linear-gradient(180deg, rgba(7, 150, 62, .16), rgba(7, 150, 62, .07));
-  box-shadow: 0 14px 24px rgba(7, 150, 62, .13);
+  border-color: rgba(116, 51, 163, .38);
+  background: linear-gradient(180deg, rgba(116, 51, 163, .16), rgba(116, 51, 163, .07));
+  box-shadow: 0 14px 24px rgba(116, 51, 163, .13);
 }
 
 .dashboard-user-copy .dashboard-inline-action {
-  color: #7af1a0;
-  border-color: rgba(122, 241, 160, .3);
+  color: #eb078a;
+  border-color: rgba(235, 7, 138, .3);
   background: rgba(4, 30, 24, .42);
   box-shadow: 0 12px 22px rgba(0, 0, 0, .16);
 }
 
 .dashboard-user-copy .dashboard-inline-action:hover {
-  border-color: rgba(122, 241, 160, .55);
-  background: rgba(8, 155, 73, .18);
+  border-color: rgba(235, 7, 138, .55);
+  background: rgba(116, 51, 163, .18);
 }
 
 .dashboard-section-badge {
@@ -746,7 +789,7 @@ html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-
   min-height: 32px;
   padding: 4px 12px;
   border-radius: 999px;
-  background: rgba(7, 150, 62, .1);
+  background: rgba(116, 51, 163, .1);
   color: var(--green);
   font-size: 13px;
   font-weight: 900;
@@ -780,10 +823,10 @@ html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-
   align-items: center;
   gap: 14px;
   padding: 18px 16px;
-  border: 1px solid rgba(8, 155, 73, .16);
+  border: 1px solid rgba(116, 51, 163, .16);
   border-radius: 12px;
   background:
-    linear-gradient(135deg, rgba(8, 155, 73, .075), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(135deg, rgba(116, 51, 163, .075), rgba(255, 255, 255, 0) 58%),
     #fff;
   box-shadow: 0 14px 30px rgba(0, 0, 0, .035);
   overflow: hidden;
@@ -808,7 +851,7 @@ html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-
   align-items: center;
   justify-content: center;
   border-radius: 14px;
-  background: rgba(8, 155, 73, .12);
+  background: rgba(116, 51, 163, .12);
   color: var(--green);
 }
 
@@ -868,7 +911,7 @@ html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-
   height: 42px;
   padding: 9px;
   border-radius: 50%;
-  background: rgba(7, 150, 62, .1);
+  background: rgba(116, 51, 163, .1);
   color: var(--green);
 }
 
@@ -913,25 +956,25 @@ html.theme-dark .page-shell .dashboard-page :where(.wallet-refresh-btn, .wallet-
 
 html.theme-dark .page-shell .dashboard-page :where(.dashboard-action-card.is-active, .account-info-grid article, .process-list article),
 .page-shell.theme-dark .dashboard-page :where(.dashboard-action-card.is-active, .account-info-grid article, .process-list article) {
-  background: rgba(7, 150, 62, .12);
-  border-color: rgba(109, 240, 155, .22);
-  color: #edf7f0;
+  background: rgba(116, 51, 163, .12);
+  border-color: rgba(235, 7, 138, .22);
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell .dashboard-page :where(.account-info-grid strong, .process-list h3),
 .page-shell.theme-dark .dashboard-page :where(.account-info-grid strong, .process-list h3) {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell .dashboard-page :where(.account-info-grid span, .process-list p),
 .page-shell.theme-dark .dashboard-page :where(.account-info-grid span, .process-list p) {
-  color: #d8e8de;
+  color: #efe0f7;
 }
 
 html.theme-dark .page-shell .dashboard-page .account-info-icon,
 .page-shell.theme-dark .dashboard-page .account-info-icon {
-  background: rgba(109, 240, 155, .14);
-  color: #6df09b;
+  background: rgba(235, 7, 138, .14);
+  color: #f7d7ea;
 }
 
 @media (max-width: 1024px) and (min-width: 769px) {
@@ -981,7 +1024,7 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
   .mobile-section-head span {
     padding: 7px 12px;
     border-radius: 999px;
-    background: rgba(7,150,62,.1);
+    background: rgba(116, 51, 163, .1);
     color: var(--green);
     font-size: 13px;
     font-weight: 900;
@@ -999,9 +1042,9 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
     align-items: center;
     gap: 14px;
     padding: 12px;
-    border: 1px solid #edf0ed;
+    border: 1px solid #f4eef8;
     border-radius: 12px;
-    background: rgba(7,150,62,.035);
+    background: rgba(116, 51, 163, .035);
   }
 
   .mobile-active-gift img {
@@ -1015,23 +1058,36 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
   .mobile-active-gift h3,
   .mobile-process-list h3 {
     margin: 0 0 5px;
+    overflow: hidden;
     font-size: 17px;
     font-weight: 900;
+    line-height: 1.55;
     color: #111;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
   .mobile-active-gift p,
   .mobile-process-list p {
     margin: 0 0 5px;
+    overflow: hidden;
     color: #6f776f;
     font-size: 14px;
     font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .mobile-active-gift span {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
     color: #9a2f2f;
     font-size: 13px;
     font-weight: 900;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .mobile-process-list svg {
@@ -1050,8 +1106,8 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
     display: block;
     padding: 16px;
     border-radius: 12px;
-    background: linear-gradient(135deg, rgba(7,150,62,.16), rgba(7,150,62,.06));
-    color: #0c5f2f;
+    background: linear-gradient(135deg, rgba(116, 51, 163, .16), rgba(116, 51, 163, .06));
+    color: #1b1023;
     font-size: 22px;
     font-weight: 900;
     text-align: center;
@@ -1069,21 +1125,21 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
   }
 
   .mobile-profile-item.is-active {
-    border-color: rgba(7,150,62,.55);
-    background: rgba(7,150,62,.08);
+    border-color: rgba(116, 51, 163, .55);
+    background: rgba(116, 51, 163, .08);
     color: var(--green);
   }
 
   html.theme-dark .page-shell .dashboard-page .mobile-section-card,
   .page-shell.theme-dark .dashboard-page .mobile-section-card {
     border-color: rgba(255,255,255,.12);
-    background: #0b1710;
+    background: #1b1023;
     box-shadow: none;
   }
 
   html.theme-dark .page-shell .dashboard-page :where(.mobile-section-head h2, .mobile-referral-card h2, .mobile-active-gift h3, .mobile-process-list h3),
   .page-shell.theme-dark .dashboard-page :where(.mobile-section-head h2, .mobile-referral-card h2, .mobile-active-gift h3, .mobile-process-list h3) {
-    color: #f4fff8;
+    color: #f7f1fb;
   }
 
   html.theme-dark .page-shell .dashboard-page :where(.mobile-active-gift, .mobile-process-list article),
@@ -1099,8 +1155,8 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
 
   html.theme-dark .page-shell .dashboard-page .mobile-referral-card strong,
   .page-shell.theme-dark .dashboard-page .mobile-referral-card strong {
-    background: rgba(7,150,62,.16);
-    color: #d8ffe5;
+    background: rgba(116, 51, 163, .16);
+    color: #f7f1fb;
   }
 }
 
@@ -1108,10 +1164,10 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
   width: 100%;
   margin: 0;
   padding: 28px 18px;
-  border: 1px dashed rgba(0, 151, 74, 0.28);
+  border: 1px dashed rgba(116, 51, 163, 0.28);
   border-radius: 18px;
   color: rgba(18, 40, 31, 0.72);
-  background: rgba(0, 151, 74, 0.05);
+  background: rgba(116, 51, 163, 0.05);
   text-align: center;
   font-weight: 850;
   line-height: 1.9;
@@ -1119,6 +1175,421 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
 
 .theme-dark .dashboard-empty-state {
   color: rgba(245, 255, 249, 0.78);
-  border-color: rgba(85, 226, 140, 0.26);
-  background: rgba(85, 226, 140, 0.06);
+  border-color: rgba(235, 7, 138, 0.26);
+  background: rgba(235, 7, 138, 0.06);
+}
+
+/* Keymiay palette application pass. */
+.dashboard-hero {
+  background:
+    radial-gradient(circle at 20% 25%, rgba(235, 7, 138, .22), transparent 34%),
+    linear-gradient(135deg, var(--brand-dark, #1b1023) 0%, var(--brand-purple, #7433a3) 58%, #2b1438 100%) !important;
+}
+
+.dashboard-avatar {
+  border-color: var(--brand-pink, #eb078a) !important;
+  box-shadow: 0 16px 34px rgba(116, 51, 163, .32) !important;
+}
+
+.dashboard-action-card:hover,
+.account-info-card:hover,
+.active-gift-card:hover {
+  border-color: rgba(235, 7, 138, .30) !important;
+  color: var(--brand-purple, #7433a3) !important;
+}
+
+.invite-card button,
+.dashboard-edit-btn,
+.active-gift-code button {
+  background: linear-gradient(135deg, var(--brand-purple, #7433a3), var(--brand-pink, #eb078a)) !important;
+  color: #fff !important;
+  box-shadow: 0 12px 26px rgba(116, 51, 163, .22) !important;
+}
+
+.dashboard-action-card svg,
+.account-info-icon,
+.active-gift-code strong,
+.active-gift-fallback,
+.active-gift-fallback svg,
+.mobile-active-gift .active-gift-fallback,
+.mobile-active-gift .active-gift-fallback svg {
+  color: var(--brand-purple, #7433a3) !important;
+}
+
+.account-info-card,
+.active-gift-card,
+.wallet-summary-card,
+.dashboard-empty-state {
+  border-color: rgba(116, 51, 163, .14) !important;
+  background: linear-gradient(135deg, rgba(116, 51, 163, .06), #fff 56%) !important;
+}
+
+.active-gift-fallback {
+  background: linear-gradient(145deg, rgba(116, 51, 163, .10), rgba(235, 7, 138, .035)) !important;
+}
+
+.dashboard-action-card.is-active {
+  border-color: rgba(116, 51, 163, .45) !important;
+  background: linear-gradient(180deg, rgba(116, 51, 163, .10), rgba(235, 7, 138, .04) 82%) !important;
+  box-shadow: 0 18px 32px rgba(116, 51, 163, .12) !important;
+}
+
+.dashboard-action-card.is-active,
+.dashboard-action-card.is-active svg,
+.dashboard-action-card.is-active span {
+  color: var(--brand-purple, #7433a3) !important;
+}
+
+.panel-head-row a,
+.mobile-section-head span,
+.dashboard-section-badge,
+.wallet-eyebrow,
+.wallet-summary h2 svg,
+.wallet-business-card strong,
+.wallet-history-item svg,
+.mobile-process-list svg,
+.mobile-profile-item.is-active,
+.mobile-profile-card button {
+  color: var(--brand-purple, #7433a3) !important;
+}
+
+/* Final dark-mode contrast fix for active gift cards. */
+html.theme-dark .page-shell .dashboard-page .active-gifts-panel,
+.page-shell.theme-dark .dashboard-page .active-gifts-panel {
+  border-color: rgba(116, 51, 163, .30) !important;
+  background: rgba(27, 16, 35, .92) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .active-gift-card,
+.page-shell.theme-dark .dashboard-page .active-gift-card,
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift {
+  border-color: rgba(116, 51, 163, .42) !important;
+  background:
+    radial-gradient(circle at 24% 0%, rgba(235, 7, 138, .12), transparent 34%),
+    linear-gradient(180deg, rgba(38, 18, 52, .98), rgba(27, 16, 35, .98)) !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, .30) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .active-gift-fallback,
+.page-shell.theme-dark .dashboard-page .active-gift-fallback {
+  background:
+    radial-gradient(circle at 50% 28%, rgba(235, 7, 138, .16), transparent 34%),
+    linear-gradient(145deg, rgba(116, 51, 163, .22), rgba(27, 16, 35, .72)) !important;
+  color: var(--brand-pink, #eb078a) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .active-gift-card h3,
+.page-shell.theme-dark .dashboard-page .active-gift-card h3,
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift h3,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift h3 {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .active-gift-card p,
+.page-shell.theme-dark .dashboard-page .active-gift-card p,
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift p,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift p {
+  color: rgba(247, 241, 251, .78) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .active-gift-card span,
+.page-shell.theme-dark .dashboard-page .active-gift-card span,
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift span,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift span {
+  color: var(--brand-pink, #eb078a) !important;
+}
+
+/* Final mobile active-gift layout fix: readable text with controlled media size. */
+@media (max-width: 768px) {
+  .dashboard-page .mobile-active-gift {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) clamp(116px, 34vw, 150px) !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    min-height: 138px !important;
+    padding: 12px !important;
+    direction: rtl !important;
+    overflow: hidden !important;
+  }
+
+  .dashboard-page .mobile-active-gift > img,
+  .dashboard-page .mobile-active-gift > .active-gift-fallback {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 114px !important;
+    border-radius: 12px !important;
+    object-fit: cover !important;
+  }
+
+  .dashboard-page .mobile-active-gift > .active-gift-fallback-broken {
+    display: none !important;
+  }
+
+  .dashboard-page .mobile-active-gift.has-broken-image > .active-gift-fallback-broken {
+    display: flex !important;
+  }
+
+  .dashboard-page .mobile-active-gift > div:last-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+    padding: 0 !important;
+  }
+
+  .dashboard-page .mobile-active-gift h3 {
+    width: 100% !important;
+    min-height: 0 !important;
+    margin: 0 0 8px !important;
+    font-size: clamp(16px, 4.3vw, 20px) !important;
+    line-height: 1.45 !important;
+    text-align: right !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  .dashboard-page .mobile-active-gift p,
+  .dashboard-page .mobile-active-gift span {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: right !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-page .mobile-active-gift {
+    grid-template-columns: 1fr !important;
+    min-height: 0 !important;
+  }
+
+  .dashboard-page .mobile-active-gift > img,
+  .dashboard-page .mobile-active-gift > .active-gift-fallback,
+  .dashboard-page .mobile-active-gift > div:last-child {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+
+  .dashboard-page .mobile-active-gift > img,
+  .dashboard-page .mobile-active-gift > .active-gift-fallback {
+    height: 132px !important;
+  }
+}
+
+/* Final mobile dashboard viewport fix: no clipped content behind browser/bottom nav. */
+@media (max-width: 768px) {
+  .page-shell.dashboard-shell,
+  .page-shell.dashboard-shell .dashboard-frame,
+  .dashboard-shell .dashboard-page,
+  .dashboard-shell .mobile-dashboard {
+    min-height: 100dvh !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .page-shell.dashboard-shell .dashboard-frame {
+    padding: 0 !important;
+  }
+
+  .dashboard-shell .dashboard-page {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .dashboard-shell .mobile-dashboard {
+    display: block !important;
+    padding: 24px 14px calc(170px + env(safe-area-inset-bottom, 0px)) !important;
+    background: #ffffff !important;
+  }
+
+  .dashboard-shell .mobile-profile-card {
+    min-height: 132px !important;
+    gap: 18px !important;
+    padding: 20px 22px !important;
+  }
+
+  .dashboard-shell .mobile-profile-card img {
+    width: 72px !important;
+    height: 72px !important;
+    flex: 0 0 72px !important;
+  }
+
+  .dashboard-shell .mobile-profile-card h1 {
+    font-size: clamp(24px, 6vw, 30px) !important;
+    line-height: 1.35 !important;
+  }
+
+  .dashboard-shell .mobile-profile-menu {
+    margin-top: 18px !important;
+    padding-bottom: 12px !important;
+  }
+
+  .dashboard-shell .mobile-profile-item {
+    min-height: 72px !important;
+    padding: 0 22px !important;
+    gap: 18px !important;
+  }
+
+  .dashboard-shell .mobile-profile-item span {
+    min-width: 0 !important;
+    overflow: hidden !important;
+    font-size: clamp(18px, 5vw, 22px) !important;
+    text-overflow: ellipsis !important;
+    white-space: normal !important;
+    line-height: 1.45 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-shell .mobile-dashboard {
+    padding-inline: 12px !important;
+  }
+
+  .dashboard-shell .mobile-profile-card {
+    align-items: center !important;
+    padding: 18px !important;
+  }
+}
+
+/* Final mobile dashboard edge breathing room. */
+@media (max-width: 768px) {
+  .dashboard-shell .mobile-dashboard {
+    box-sizing: border-box !important;
+    padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)) !important;
+  }
+
+  .dashboard-shell .mobile-profile-card,
+  .dashboard-shell .mobile-section-card,
+  .dashboard-shell .mobile-profile-menu {
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-shell .mobile-dashboard {
+    padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)) !important;
+  }
+}
+
+/* Final mobile dashboard dark-mode lock: remove white gutters from late mobile overrides. */
+@media (max-width: 768px) {
+  html.theme-dark body:has(.dashboard-shell),
+  html.theme-dark .page-shell.dashboard-shell,
+  html.theme-dark .page-shell.dashboard-shell .dashboard-frame,
+  html.theme-dark .dashboard-shell .dashboard-page,
+  html.theme-dark .dashboard-shell .mobile-dashboard,
+  .page-shell.dashboard-shell.theme-dark,
+  .page-shell.dashboard-shell.theme-dark .dashboard-frame,
+  .page-shell.dashboard-shell.theme-dark .dashboard-page,
+  .page-shell.dashboard-shell.theme-dark .mobile-dashboard {
+    background:
+      radial-gradient(circle at 20% 0%, rgba(235, 7, 138, .08), transparent 34%),
+      linear-gradient(180deg, #1b1023 0%, #1b1023 100%) !important;
+    color: #f7f1fb !important;
+  }
+
+  html.theme-dark .dashboard-shell .mobile-profile-card,
+  html.theme-dark .dashboard-shell .mobile-section-card,
+  html.theme-dark .dashboard-shell .mobile-active-gift,
+  html.theme-dark .dashboard-shell .mobile-profile-item,
+  .page-shell.dashboard-shell.theme-dark .mobile-profile-card,
+  .page-shell.dashboard-shell.theme-dark .mobile-section-card,
+  .page-shell.dashboard-shell.theme-dark .mobile-active-gift,
+  .page-shell.dashboard-shell.theme-dark .mobile-profile-item {
+    border-color: rgba(235, 7, 138, .22) !important;
+    background: rgba(255, 255, 255, .045) !important;
+    color: #f7f1fb !important;
+    box-shadow: none !important;
+  }
+
+  html.theme-dark .dashboard-shell .mobile-profile-card h1,
+  html.theme-dark .dashboard-shell .mobile-section-head h2,
+  html.theme-dark .dashboard-shell .mobile-active-gift h3,
+  html.theme-dark .dashboard-shell .mobile-profile-item span,
+  .page-shell.dashboard-shell.theme-dark .mobile-profile-card h1,
+  .page-shell.dashboard-shell.theme-dark .mobile-section-head h2,
+  .page-shell.dashboard-shell.theme-dark .mobile-active-gift h3,
+  .page-shell.dashboard-shell.theme-dark .mobile-profile-item span {
+    color: #ffffff !important;
+  }
+
+  html.theme-dark .dashboard-shell .mobile-active-gift p,
+  .page-shell.dashboard-shell.theme-dark .mobile-active-gift p {
+    color: rgba(247, 241, 251, .78) !important;
+  }
+}
+
+/* Collection logos inside dashboard gifts should be navigational without changing card layout. */
+.active-gift-media-link,
+.active-gift-media-link:hover,
+.active-gift-media-link:focus {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.active-gift-card > .active-gift-media-link {
+  display: block !important;
+  width: 100% !important;
+  height: 190px !important;
+  min-height: 190px !important;
+  overflow: hidden !important;
+}
+
+.active-gift-media-link > img,
+.active-gift-media-link > .active-gift-fallback {
+  width: 100% !important;
+  height: 100% !important;
+  cursor: pointer !important;
+}
+
+.active-gift-media-link > img {
+  display: block !important;
+  object-fit: cover !important;
+}
+
+.active-gift-media-link:focus-visible {
+  outline: 3px solid rgba(235, 7, 138, .45) !important;
+  outline-offset: 4px !important;
+}
+
+@media (max-width: 768px) {
+  .dashboard-page .mobile-active-gift > .active-gift-media-link {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 114px !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+  }
+
+  .dashboard-page .mobile-active-gift > .active-gift-media-link > img,
+  .dashboard-page .mobile-active-gift > .active-gift-media-link > .active-gift-fallback {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 114px !important;
+    border-radius: 12px !important;
+    object-fit: cover !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-page .mobile-active-gift > .active-gift-media-link {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    height: 132px !important;
+  }
+
+  .dashboard-page .mobile-active-gift > .active-gift-media-link > img,
+  .dashboard-page .mobile-active-gift > .active-gift-media-link > .active-gift-fallback {
+    height: 132px !important;
+  }
 }

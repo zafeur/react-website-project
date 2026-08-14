@@ -1,0 +1,249 @@
+.contact-shell {
+  min-height: auto;
+}
+
+.contact-frame {
+  display: grid;
+  grid-auto-rows: max-content;
+  align-content: start;
+  min-height: auto;
+  gap: 14px;
+  padding-bottom: 24px;
+}
+
+.contact-shell .topbar {
+  margin-bottom: 8px !important;
+}
+
+.contact-shell .active-link {
+  color: var(--brand-purple, #7433a3);
+}
+
+.contact-hero {
+  min-height: 210px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+  gap: 18px;
+  align-items: center;
+  padding: 28px 32px;
+  border: 1px solid rgba(116, 51, 163, .18);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 16% 20%, rgba(235, 7, 138, .10), transparent 32%),
+    linear-gradient(135deg, rgba(116, 51, 163, .08), rgba(255, 255, 255, .96));
+  box-shadow: 0 22px 52px rgba(27, 16, 35, .08);
+}
+
+.contact-hero-copy span {
+  color: var(--brand-purple, #7433a3);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.contact-hero-copy h1 {
+  margin: 6px 0 10px;
+  color: var(--brand-dark, #1b1023);
+  font-size: clamp(34px, 3.6vw, 52px);
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.contact-hero-copy p {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(27, 16, 35, .76);
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.9;
+}
+
+.contact-hero-mark {
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 26px;
+  background: linear-gradient(135deg, var(--brand-purple, #7433a3), var(--brand-pink, #eb078a));
+  color: #fff;
+  box-shadow: 0 24px 42px rgba(116, 51, 163, .24);
+}
+
+.contact-hero-mark svg {
+  width: 48px;
+  height: 48px;
+  stroke-width: 1.8;
+}
+
+.contact-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.contact-card {
+  min-height: 132px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid rgba(116, 51, 163, .16);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--brand-dark, #1b1023);
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 16px 36px rgba(27, 16, 35, .06);
+}
+
+.contact-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(235, 7, 138, .36);
+  box-shadow: 0 22px 42px rgba(27, 16, 35, .09);
+}
+
+.contact-card-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(116, 51, 163, .1);
+  color: var(--brand-purple, #7433a3);
+}
+
+.contact-card-primary .contact-card-icon {
+  background: rgba(235, 7, 138, .12);
+  color: var(--brand-pink, #eb078a);
+}
+
+.contact-card-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-card span:not(.contact-card-icon) {
+  color: rgba(27, 16, 35, .62);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.contact-card strong {
+  color: var(--brand-purple, #7433a3);
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.contact-shell.theme-dark,
+html.theme-dark .contact-shell {
+  background: var(--brand-dark, #1b1023);
+}
+
+.contact-shell.theme-dark .contact-hero,
+html.theme-dark .contact-shell .contact-hero {
+  border-color: rgba(235, 7, 138, .26);
+  background:
+    radial-gradient(circle at 16% 20%, rgba(235, 7, 138, .16), transparent 32%),
+    linear-gradient(135deg, rgba(116, 51, 163, .16), rgba(27, 16, 35, .92));
+  box-shadow: none;
+}
+
+.contact-shell.theme-dark .contact-hero-copy h1,
+html.theme-dark .contact-shell .contact-hero-copy h1,
+.contact-shell.theme-dark .contact-hero-copy p,
+html.theme-dark .contact-shell .contact-hero-copy p {
+  color: #fff;
+}
+
+.contact-shell.theme-dark .contact-hero-copy span,
+html.theme-dark .contact-shell .contact-hero-copy span {
+  color: var(--brand-pink, #eb078a);
+}
+
+.contact-shell.theme-dark .contact-card,
+html.theme-dark .contact-shell .contact-card {
+  border-color: rgba(235, 7, 138, .22);
+  background: rgba(255, 255, 255, .045);
+  box-shadow: none;
+}
+
+.contact-shell.theme-dark .contact-card,
+html.theme-dark .contact-shell .contact-card,
+.contact-shell.theme-dark .contact-card span:not(.contact-card-icon),
+html.theme-dark .contact-shell .contact-card span:not(.contact-card-icon) {
+  color: rgba(255, 255, 255, .82);
+}
+
+.contact-shell.theme-dark .contact-card strong,
+html.theme-dark .contact-shell .contact-card strong {
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .contact-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 28px;
+  }
+
+  .contact-hero-mark {
+    width: 94px;
+    height: 94px;
+    border-radius: 26px;
+  }
+
+  .contact-hero-mark svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .contact-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-frame {
+    gap: 14px;
+  }
+
+  .contact-hero {
+    padding: 20px;
+    border-radius: 14px;
+  }
+
+  .contact-hero-copy h1 {
+    font-size: 38px;
+  }
+
+  .contact-hero-copy p {
+    font-size: 14px;
+    line-height: 1.9;
+  }
+
+  .contact-card {
+    min-height: 132px;
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .contact-card-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 15px;
+  }
+
+  .contact-card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .contact-card strong {
+    font-size: 20px;
+  }
+}

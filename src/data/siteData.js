@@ -6,7 +6,6 @@
   Home,
   MapPin,
   Phone,
-  Settings,
   Shirt,
   Store,
   SquareX,
@@ -347,7 +346,6 @@ export const mobileProfileLinks = decodeSiteDataText([
   { title: 'ÙØ±Ø§ÛŒÙ†Ø¯Ù‡Ø§ Ùˆ Ú©Ø´â€ŒØ¨Ú©â€ŒÙ‡Ø§', icon: Shirt },
   { title: 'Ú©ÛŒÙ Ù¾ÙˆÙ„', icon: Wallet },
   { title: 'Ú©Ø¯ Ù…Ø¹Ø±Ù', icon: SquareX },
-  { title: 'ØªÙ†Ø¸ÛŒÙ…Ø§Øª', icon: Settings },
   { title: 'Ù¾Ø´ØªÛŒØ¨Ø§Ù†ÛŒ Ùˆ Ø³ÙˆØ§Ù„Ø§Øª Ù…ØªØ¯Ø§ÙˆÙ„', icon: CircleHelp },
 ]);
 

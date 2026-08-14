@@ -1,14 +1,14 @@
-﻿/* Global first-paint dark mode overrides.
+/* Global first-paint dark mode overrides.
    This file is imported last so html.theme-dark and hydrated .theme-dark render the same. */
 html.theme-dark body,
 html.theme-dark .page-shell,
 .page-shell.theme-dark {
-  --text: #edf7f0;
-  --muted: #d8e8de;
+  --text: #f7f1fb;
+  --muted: #efe0f7;
   --line: rgba(255, 255, 255, .11);
-  --soft: #101a14;
-  background: #090f0c;
-  color: #edf7f0;
+  --soft: #1b1023;
+  background: #1b1023;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell :where(
@@ -107,9 +107,9 @@ html.theme-dark .page-shell :where(
   .faq-secondary-btn,
   .business-wallet-card
 ) {
-  background-color: #0f1712;
+  background-color: #1b1023;
   border-color: rgba(255, 255, 255, .11);
-  color: #edf7f0;
+  color: #f7f1fb;
   box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
 }
 
@@ -209,7 +209,7 @@ html.theme-dark .page-shell :where(
   .faq-field span,
   .business-wallet-card strong
 ) {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell :where(
@@ -262,14 +262,14 @@ html.theme-dark .page-shell :where(
   .faq-hero-card span,
   .business-wallet-card p
 ) {
-  color: #d8e8de;
+  color: #efe0f7;
 }
 
 html.theme-dark .page-shell :where(input, textarea, select),
 .page-shell.theme-dark :where(input, textarea, select) {
-  background: #0f1712;
+  background: #1b1023;
   border-color: rgba(255, 255, 255, .12);
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell :where(input::placeholder, textarea::placeholder),
@@ -288,7 +288,7 @@ html.theme-dark .page-shell .mobile-bottom-nav,
 html.theme-dark .mobile-bottom-nav button,
 html.theme-dark .page-shell .mobile-bottom-nav button,
 .page-shell.theme-dark .mobile-bottom-nav button {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 html.theme-dark .mobile-bottom-nav button:hover,
@@ -297,26 +297,26 @@ html.theme-dark .page-shell .mobile-bottom-nav button:hover,
 html.theme-dark .page-shell .mobile-bottom-nav .active,
 .page-shell.theme-dark .mobile-bottom-nav button:hover,
 .page-shell.theme-dark .mobile-bottom-nav .active {
-  color: #6df09b;
-  background: rgba(37, 196, 99, .1);
-  box-shadow: inset 0 0 0 1px rgba(109, 240, 155, .18);
+  color: #f7d7ea;
+  background: rgba(235, 7, 138, .1);
+  box-shadow: inset 0 0 0 1px rgba(235, 7, 138, .18);
 }
 
 html.theme-dark .page-shell :where(.dashboard-action-card:hover, .mobile-profile-item:hover, .faq-secondary-btn:hover),
 .page-shell.theme-dark :where(.dashboard-action-card:hover, .mobile-profile-item:hover, .faq-secondary-btn:hover) {
-  color: #6df09b;
-  background: rgba(7, 150, 62, .14);
-  border-color: rgba(109, 240, 155, .22);
+  color: #f7d7ea;
+  background: rgba(116, 51, 163, .14);
+  border-color: rgba(235, 7, 138, .22);
 }
 
 html.theme-dark .page-shell :where(.logo-circle, .faq-hero-card svg, .faq-business-flow li::before),
 .page-shell.theme-dark :where(.logo-circle, .faq-hero-card svg, .faq-business-flow li::before) {
-  background: rgba(7, 150, 62, .16);
+  background: rgba(116, 51, 163, .16);
 }
 
 html.theme-dark .page-shell :where(.wallet-total-card, .invite-card),
 .page-shell.theme-dark :where(.wallet-total-card, .invite-card) {
-  background: linear-gradient(135deg, #0ba746 0%, #087b35 100%);
+  background: linear-gradient(135deg, #7433a3 0%, #7433a3 100%);
   color: #fff;
 }
 
@@ -335,13 +335,13 @@ html.theme-dark .page-shell .dashboard-page .mobile-dashboard,
 .page-shell.theme-dark .frame,
 .page-shell.theme-dark .dashboard-page,
 .page-shell.theme-dark .dashboard-page .mobile-dashboard {
-  background: #090f0c;
-  color: #edf7f0;
+  background: #1b1023;
+  color: #f7f1fb;
 }
 
 html.theme-dark .page-shell .dashboard-page .mobile-dashboard,
 .page-shell.theme-dark .dashboard-page .mobile-dashboard {
-  background-color: #090f0c;
+  background-color: #1b1023;
 }
 
 @media (max-width: 768px) {
@@ -354,7 +354,7 @@ html.theme-dark .page-shell .dashboard-page .mobile-dashboard,
   .page-shell.theme-dark .frame,
   .page-shell.theme-dark .dashboard-page,
   .page-shell.theme-dark .dashboard-page .mobile-dashboard {
-    background: #090f0c;
+    background: #1b1023;
   }
 }
 
@@ -362,13 +362,13 @@ html.theme-dark .page-shell .dashboard-page .mobile-dashboard,
 html.theme-dark .page-shell .login-modal .input-shell,
 .page-shell.theme-dark .login-modal .input-shell {
   background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(219, 255, 233, 0.48);
+  border-color: rgba(247, 241, 251, 0.48);
 }
 
 html.theme-dark .page-shell .login-modal .input-shell:focus-within,
 .page-shell.theme-dark .login-modal .input-shell:focus-within {
   background: rgba(255, 255, 255, 0.17);
-  border-color: rgba(187, 255, 211, 0.86);
+  border-color: rgba(235, 7, 138, 0.86);
 }
 
 html.theme-dark .page-shell .login-modal .input-shell input,
@@ -415,7 +415,7 @@ html.theme-dark .page-shell .login-modal .input-shell input:disabled,
     margin: 0 auto;
     overflow: visible;
     padding: 0 10px;
-    border: 1px solid rgba(109, 240, 155, .16);
+    border: 1px solid rgba(235, 7, 138, .16);
     border-radius: 28px;
     background: rgba(15, 23, 18, .82);
     backdrop-filter: blur(18px) saturate(140%);
@@ -434,14 +434,14 @@ html.theme-dark .page-shell .login-modal .input-shell input:disabled,
   html.theme-dark .mobile-bottom-nav button::before,
   html.theme-dark .page-shell .mobile-bottom-nav button::before,
   .page-shell.theme-dark .mobile-bottom-nav button::before {
-    background: linear-gradient(135deg, #6df09b 0%, #07963e 100%);
-    box-shadow: 0 14px 28px rgba(7, 150, 62, .38);
+    background: linear-gradient(135deg, #f7d7ea 0%, #7433a3 100%);
+    box-shadow: 0 14px 28px rgba(116, 51, 163, .38);
   }
 
   html.theme-dark .mobile-bottom-nav button:hover,
   html.theme-dark .page-shell .mobile-bottom-nav button:hover,
   .page-shell.theme-dark .mobile-bottom-nav button:hover {
-    color: #6df09b;
+    color: #f7d7ea;
     background: transparent;
     box-shadow: none;
   }
@@ -449,7 +449,7 @@ html.theme-dark .page-shell .login-modal .input-shell input:disabled,
   html.theme-dark .mobile-bottom-nav .active,
   html.theme-dark .page-shell .mobile-bottom-nav .active,
   .page-shell.theme-dark .mobile-bottom-nav .active {
-    color: #6df09b;
+    color: #f7d7ea;
     background: transparent;
     box-shadow: none;
   }
@@ -459,7 +459,7 @@ html.theme-dark .page-shell .login-modal .input-shell input:disabled,
   .page-shell.theme-dark .mobile-bottom-nav .active::before {
     width: 62px;
     height: 62px;
-    border: 7px solid #090f0c;
+    border: 7px solid #1b1023;
     opacity: 1;
     transform: translateX(-50%) scale(1);
   }
@@ -476,7 +476,7 @@ html.theme-dark .page-shell .login-modal .input-shell input:disabled,
   html.theme-dark .mobile-bottom-nav .active span,
   html.theme-dark .page-shell .mobile-bottom-nav .active span,
   .page-shell.theme-dark .mobile-bottom-nav .active span {
-    color: #6df09b;
+    color: #f7d7ea;
     transform: translateY(-6px);
   }
 }
@@ -556,7 +556,7 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
     margin: 0 auto;
     overflow: visible;
     padding: 0 10px;
-    border: 1px solid rgba(109, 240, 155, .16);
+    border: 1px solid rgba(235, 7, 138, .16);
     border-radius: 28px;
     background: rgba(15, 23, 18, .82);
     backdrop-filter: blur(18px) saturate(140%);
@@ -582,7 +582,7 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   html.theme-dark .page-shell .mobile-bottom-nav .active,
   .page-shell.theme-dark .mobile-bottom-nav .active,
   .home-shell.theme-dark .mobile-bottom-nav .active {
-    color: #6df09b;
+    color: #f7d7ea;
     background: transparent;
     box-shadow: none;
   }
@@ -593,7 +593,7 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   .home-shell.theme-dark .mobile-bottom-nav .active::before {
     width: 62px;
     height: 62px;
-    border: 7px solid #090f0c;
+    border: 7px solid #1b1023;
     opacity: 1;
     transform: translateX(-50%) scale(1);
   }
@@ -612,7 +612,7 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   html.theme-dark .page-shell .mobile-bottom-nav .active span,
   .page-shell.theme-dark .mobile-bottom-nav .active span,
   .home-shell.theme-dark .mobile-bottom-nav .active span {
-    color: #6df09b;
+    color: #f7d7ea;
     transform: translateY(-6px);
   }
 }
@@ -697,9 +697,9 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
     height: 62px !important;
     opacity: 1 !important;
     transform: translateX(-50%) scale(1) !important;
-    background: linear-gradient(135deg, #6df09b 0%, #07963e 100%) !important;
-    border: 7px solid #090f0c !important;
-    box-shadow: 0 14px 28px rgba(7, 150, 62, .38) !important;
+    background: linear-gradient(135deg, #f7d7ea 0%, #7433a3 100%) !important;
+    border: 7px solid #1b1023 !important;
+    box-shadow: 0 14px 28px rgba(116, 51, 163, .38) !important;
   }
 
   .mobile-bottom-nav button.active svg,
@@ -718,7 +718,7 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   html.theme-dark .page-shell .mobile-bottom-nav button.active span,
   .page-shell.theme-dark .mobile-bottom-nav button.active span,
   .home-shell.theme-dark .mobile-bottom-nav button.active span {
-    color: #6df09b !important;
+    color: #f7d7ea !important;
     transform: translateY(-6px) !important;
   }
 }
@@ -777,7 +777,7 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   height: 154px !important;
   margin: 0 auto 30px !important;
   border-radius: 50% !important;
-  background: #132a47 !important;
+  background: #1b1023 !important;
   color: #f3ad2f !important;
   box-shadow: 0 9px 19px rgba(14, 35, 66, 0.12) !important;
   font-size: 68px !important;
@@ -803,7 +803,7 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   background: var(--green) !important;
   color: #fff !important;
   border: 0 !important;
-  box-shadow: 0 10px 22px rgba(0, 158, 72, 0.18) !important;
+  box-shadow: 0 10px 22px rgba(116, 51, 163, 0.18) !important;
   font-size: 20px !important;
   font-weight: 800 !important;
 }
@@ -812,9 +812,9 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   width: min(100%, 226px) !important;
   margin: 18px auto 0 !important;
   padding: 15px 16px 17px !important;
-  border: 1px solid rgba(0, 158, 72, 0.18) !important;
+  border: 1px solid rgba(116, 51, 163, 0.18) !important;
   border-radius: 10px !important;
-  background: linear-gradient(180deg, rgba(0, 158, 72, 0.08), rgba(0, 158, 72, 0.025)) !important;
+  background: linear-gradient(180deg, rgba(116, 51, 163, 0.08), rgba(116, 51, 163, 0.025)) !important;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.035) !important;
   text-align: right !important;
 }
@@ -906,7 +906,7 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
 html.theme-dark .page-shell.restaurant-shell .profile-title,
 .page-shell.restaurant-shell.theme-dark .restaurant-wallet-card strong,
 html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card strong {
-  color: #f7fff9 !important;
+  color: #f7f1fb !important;
 }
 
 .page-shell.restaurant-shell.theme-dark .restaurant-wallet-card,
@@ -917,7 +917,7 @@ html.theme-dark .page-shell.restaurant-shell .info-card,
 html.theme-dark .page-shell.restaurant-shell .tabs,
 .page-shell.restaurant-shell.theme-dark .panel,
 html.theme-dark .page-shell.restaurant-shell .panel {
-  border-color: rgba(93, 215, 142, 0.22) !important;
+  border-color: rgba(235, 7, 138, 0.22) !important;
   background: rgba(8, 29, 18, 0.88) !important;
 }
 
@@ -1032,7 +1032,7 @@ html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card small {
   width: 154px !important;
   height: 154px !important;
   margin: 0 auto 30px !important;
-  background: #132a47 !important;
+  background: #1b1023 !important;
   color: #f3ad2f !important;
   border-radius: 50% !important;
   font-size: 68px !important;
@@ -1158,7 +1158,7 @@ html.theme-dark .page-shell.restaurant-shell .review-name,
 .page-shell.restaurant-shell.theme-dark .section-title,
 .page-shell.restaurant-shell.theme-dark .gift-copy h3,
 .page-shell.restaurant-shell.theme-dark .review-name {
-  color: #f7fff9 !important;
+  color: #f7f1fb !important;
 }
 
 html.theme-dark .page-shell.restaurant-shell .rating,
@@ -1394,7 +1394,7 @@ html.theme-dark .page-shell.restaurant-shell .review-panel,
 .page-shell.restaurant-shell.theme-dark .gift-panel,
 .page-shell.restaurant-shell.theme-dark .about-panel,
 .page-shell.restaurant-shell.theme-dark .review-panel {
-  border-color: rgba(93, 215, 142, 0.22) !important;
+  border-color: rgba(235, 7, 138, 0.22) !important;
   background: rgba(8, 29, 18, 0.88) !important;
 }
 
@@ -1408,7 +1408,7 @@ html.theme-dark .page-shell.restaurant-shell .review-name,
 .page-shell.restaurant-shell.theme-dark .section-title,
 .page-shell.restaurant-shell.theme-dark .review-title,
 .page-shell.restaurant-shell.theme-dark .review-name {
-  color: #f7fff9 !important;
+  color: #f7f1fb !important;
 }
 
 html.theme-dark .page-shell.restaurant-shell .review-row,
@@ -1517,10 +1517,10 @@ html.theme-dark .page-shell.restaurant-shell .review-row,
   width: 172px !important;
   margin: 12px auto 0 !important;
   padding: 10px 12px 12px !important;
-  border: 1px solid rgba(7, 150, 62, 0.18) !important;
+  border: 1px solid rgba(116, 51, 163, 0.18) !important;
   border-radius: 9px !important;
-  background: linear-gradient(180deg, rgba(7, 150, 62, 0.075), rgba(255, 255, 255, 0.96)) !important;
-  box-shadow: 0 8px 18px rgba(7, 150, 62, 0.07) !important;
+  background: linear-gradient(180deg, rgba(116, 51, 163, 0.075), rgba(255, 255, 255, 0.96)) !important;
+  box-shadow: 0 8px 18px rgba(116, 51, 163, 0.07) !important;
   text-align: right !important;
   direction: rtl !important;
 }
@@ -1565,13 +1565,13 @@ html.theme-dark .page-shell.restaurant-shell .review-row,
 
 html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card,
 .page-shell.restaurant-shell.theme-dark .restaurant-wallet-card {
-  border-color: rgba(93, 215, 142, 0.22) !important;
-  background: linear-gradient(180deg, rgba(7, 150, 62, 0.16), rgba(8, 29, 18, 0.88)) !important;
+  border-color: rgba(235, 7, 138, 0.22) !important;
+  background: linear-gradient(180deg, rgba(116, 51, 163, 0.16), rgba(8, 29, 18, 0.88)) !important;
 }
 
 html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card strong,
 .page-shell.restaurant-shell.theme-dark .restaurant-wallet-card strong {
-  color: #f7fff9 !important;
+  color: #f7f1fb !important;
 }
 
 html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card p,
@@ -2020,7 +2020,7 @@ html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card small,
   }
 
   .page-shell.restaurant-shell .tabs .active {
-    background: rgba(7, 150, 62, .1) !important;
+    background: rgba(116, 51, 163, .1) !important;
   }
 
   .page-shell.restaurant-shell .tabs .active::after,
@@ -2031,6 +2031,174 @@ html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card small,
 
   html.theme-dark .page-shell.restaurant-shell .tabs .active,
   .page-shell.restaurant-shell.theme-dark .tabs .active {
-    background: rgba(109, 240, 155, .1) !important;
+    background: rgba(235, 7, 138, .1) !important;
+  }
+}
+
+/* Dashboard mobile header spacing: keep the account controls away from viewport edges. */
+@media (max-width: 760px) {
+  .page-shell.dashboard-shell .topbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas: "actions brand" !important;
+    align-items: center !important;
+    justify-content: stretch !important;
+    gap: 8px !important;
+    direction: ltr !important;
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 12px auto 18px !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .page-shell.dashboard-shell .topbar > div:first-child {
+    grid-area: brand !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    width: auto !important;
+    min-width: 0 !important;
+    direction: rtl !important;
+  }
+
+  .page-shell.dashboard-shell .brand {
+    width: auto !important;
+    min-width: 0 !important;
+    gap: 7px !important;
+  }
+
+  .page-shell.dashboard-shell .brand-logo-mark {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .page-shell.dashboard-shell .brand-logo-type {
+    width: clamp(78px, 18vw, 104px) !important;
+    height: 32px !important;
+  }
+
+  .page-shell.dashboard-shell .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    flex: 0 1 auto !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  .page-shell.dashboard-shell .user-menu-btn,
+  .page-shell.dashboard-shell .login-btn {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: min(122px, 32vw) !important;
+    height: 48px !important;
+    padding-inline: 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .page-shell.dashboard-shell .user-menu-name {
+    min-width: 0 !important;
+    max-width: 58px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .page-shell.dashboard-shell .user-mini-avatar {
+    width: 30px !important;
+    height: 30px !important;
+    flex-basis: 30px !important;
+  }
+
+  .page-shell.dashboard-shell .home-theme-toggle {
+    flex: 0 0 64px !important;
+    width: 64px !important;
+    height: 40px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-shell.dashboard-shell .topbar {
+    width: calc(100% - 18px) !important;
+    max-width: calc(100% - 18px) !important;
+    gap: 6px !important;
+  }
+
+  .page-shell.dashboard-shell .user-menu-btn,
+  .page-shell.dashboard-shell .login-btn {
+    max-width: 104px !important;
+    height: 44px !important;
+    padding-inline: 7px !important;
+    gap: 6px !important;
+    font-size: 13px !important;
+  }
+
+  .page-shell.dashboard-shell .user-menu-name {
+    max-width: 42px !important;
+  }
+
+  .page-shell.dashboard-shell .user-mini-avatar {
+    width: 28px !important;
+    height: 28px !important;
+    flex-basis: 28px !important;
+  }
+
+  .page-shell.dashboard-shell .home-theme-toggle {
+    flex-basis: 56px !important;
+    width: 56px !important;
+    height: 38px !important;
+  }
+}
+
+/* Final mobile nav readability: no glow under the active icon, readable labels. */
+@media (max-width: 1100px) {
+  .mobile-bottom-nav button::before,
+  html.theme-dark .mobile-bottom-nav button::before,
+  html.theme-dark .page-shell .mobile-bottom-nav button::before,
+  .page-shell.theme-dark .mobile-bottom-nav button::before,
+  .home-shell.theme-dark .mobile-bottom-nav button::before {
+    box-shadow: none !important;
+    filter: none !important;
+  }
+
+  .mobile-bottom-nav button.active::before,
+  html.theme-dark .mobile-bottom-nav button.active::before,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active::before,
+  .page-shell.theme-dark .mobile-bottom-nav button.active::before,
+  .home-shell.theme-dark .mobile-bottom-nav button.active::before {
+    box-shadow: none !important;
+    filter: none !important;
+  }
+
+  .mobile-bottom-nav button span,
+  html.theme-dark .mobile-bottom-nav button span,
+  html.theme-dark .page-shell .mobile-bottom-nav button span,
+  .page-shell.theme-dark .mobile-bottom-nav button span,
+  .home-shell.theme-dark .mobile-bottom-nav button span {
+    text-shadow: none !important;
+    opacity: 1 !important;
+  }
+
+  .mobile-bottom-nav button.active span {
+    color: #7433a3 !important;
+    transform: translateY(-2px) !important;
+  }
+
+  html.theme-dark .mobile-bottom-nav button.active span,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active span,
+  .page-shell.theme-dark .mobile-bottom-nav button.active span,
+  .home-shell.theme-dark .mobile-bottom-nav button.active span {
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
   }
 }

@@ -1,5 +1,6 @@
-import { ChevronDown, Gift, LayoutDashboard, LogOut, Moon, Sun } from 'lucide-react';
+import { ChevronDown, LayoutDashboard, LogOut, Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
+import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
 
 const HOME_LABEL = '\u0635\u0641\u062d\u0647 \u0627\u0635\u0644\u06cc';
 const BRAND_LABEL = '\u06a9\u06cc \u0645\u06cc\u0627\u06cc';
@@ -12,10 +13,10 @@ const navItems = [
   { label: '\u0635\u0641\u062d\u0647 \u0627\u0635\u0644\u06cc', href: '/' },
   { label: '\u0647\u062f\u0627\u06cc\u0627', href: '/#gifts' },
   { label: '\u06a9\u0633\u0628\u200c\u0648\u06a9\u0627\u0631\u0647\u0627', href: '/#brands' },
-  { label: '\u0641\u0631\u0648\u0634\u06af\u0627\u0647\u06cc', href: '/#categories' },
+  { label: '\u0641\u0631\u0648\u0634\u06af\u0627\u0647\u06cc', href: '/#brands' },
   { label: '\u0633\u0648\u0627\u0644\u0627\u062a \u0645\u062a\u062f\u0627\u0648\u0644', href: '/faq' },
   { label: '\u0628\u0627\u0634\u06af\u0627\u0647 \u0645\u0634\u062a\u0631\u06cc\u0627\u0646', action: 'account' },
-  { label: '\u062a\u0645\u0627\u0633 \u0628\u0627 \u0645\u0627', href: '/#footer' },
+  { label: '\u062a\u0645\u0627\u0633 \u0628\u0627 \u0645\u0627', href: '/contact' },
 ];
 
 const firstValue = (source, keys) => {
@@ -36,12 +37,11 @@ const getProfileName = (profile) => {
   return fullName || [firstName, lastName].filter(Boolean).join(' ') || DEFAULT_USER_NAME;
 };
 
-const getProfileInitial = (name) => [...String(name || DEFAULT_USER_NAME).trim()][0] || '\u06a9';
 const normalizeMediaUrl = (value = '') => {
   const text = String(value || '').trim().replace(/^\"|\"$/g, '');
   if (!text || text === '[]') return '';
   if (/^(https?:|data:|blob:)/.test(text)) return text;
-  if (text.startsWith('/')) return 'https://api.didarads.com' + text.replace(/\s/g, '%20');
+  if (text.startsWith('/')) return text;
   return 'https://api.keymiay.com/images/' + encodeURIComponent(text).replace(/%2F/g, '/');
 };
 const getProfileAvatar = (profile) => normalizeMediaUrl(firstValue(profile, [
@@ -60,8 +60,7 @@ const getProfileAvatar = (profile) => normalizeMediaUrl(firstValue(profile, [
 
 function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme, userProfile }) {
   const userName = getProfileName(userProfile);
-  const userInitial = getProfileInitial(userName);
-  const userAvatar = getProfileAvatar(userProfile);
+  const userAvatar = getProfileAvatar(userProfile) || defaultProfileAvatar;
 
   const openAccount = () => {
     if (isLoggedIn) {
@@ -76,8 +75,8 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
     <header className="topbar d-flex align-items-center justify-content-between">
       <div className="d-flex align-items-center">
         <Link className="brand d-flex align-items-center" href="/" aria-label={HOME_LABEL}>
-          <Gift className="brand-icon" />
-          <span>{BRAND_LABEL}</span>
+          <img className="brand-logo-mark" src={brandAssets.logoMark} alt="" aria-hidden="true" />
+          <img className="brand-logo-type" src={brandAssets.logoType} alt={BRAND_LABEL} />
         </Link>
         <nav>
           <ul className="nav-list d-flex align-items-center">
@@ -110,8 +109,8 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
         {isLoggedIn ? (
           <div className="user-menu-wrap">
             <button className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`} type="button" onClick={onToggleUserMenu}>
-              <span className="user-mini-avatar">{userAvatar ? <img src={userAvatar} alt={userName} /> : userInitial}</span>
-              <span>{userName}</span>
+              <span className="user-mini-avatar"><img src={userAvatar} alt={userName} /></span>
+              <span className="user-menu-name">{userName}</span>
               <ChevronDown />
             </button>
             {isUserMenuOpen && (

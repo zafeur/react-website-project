@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CalendarDays, Mail, UserRound, X } from "lucide-react";
+import { defaultProfileAvatar, profileAvatarOptions } from "../data/brandAssets";
 
 const labels = {
   title: "\u062a\u06a9\u0645\u06cc\u0644 \u0627\u0637\u0644\u0627\u0639\u0627\u062a \u06a9\u0627\u0631\u0628\u0631\u06cc",
@@ -18,6 +19,7 @@ const labels = {
   persianCalendar: "\u0641\u0627\u0631\u0633\u06cc",
   gregorianCalendar: "\u0645\u06cc\u0644\u0627\u062f\u06cc",
   confirmDate: "\u062a\u0627\u06cc\u06cc\u062f \u062a\u0627\u0631\u06cc\u062e",
+  avatar: "\u067e\u0631\u0648\u0641\u0627\u06cc\u0644",
 };
 
 const toPersianDigits = (value) => String(value ?? "").replace(/[0-9]/g, (digit) => String.fromCharCode(0x06f0 + Number(digit)));
@@ -62,6 +64,7 @@ function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoa
     email: initialProfile.email || "",
     birthDate: initialBirthDate,
     birthDateCalendar: initialCalendarMode,
+    avatarPreview: initialProfile.avatarPreview || initialProfile.avatar_preview || initialProfile.avatar || initialProfile.profile_image || defaultProfileAvatar,
   });
   const [calendarMode, setCalendarMode] = useState(initialCalendarMode);
   const [isBirthDatePickerOpen, setIsBirthDatePickerOpen] = useState(false);
@@ -113,6 +116,22 @@ function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoa
         <div className="login-title-block"><h2>{labels.title}</h2><p>{labels.subtitle}</p></div>
 
         <form className="profile-completion-form" onSubmit={handleSubmit}>
+          <div className="profile-avatar-options" role="radiogroup" aria-label={labels.avatar}>
+            {profileAvatarOptions.map((option) => (
+              <button
+                className={form.avatarPreview === option.src ? "profile-avatar-option is-active" : "profile-avatar-option"}
+                type="button"
+                role="radio"
+                aria-checked={form.avatarPreview === option.src}
+                key={option.id}
+                onClick={() => updateField("avatarPreview", option.src)}
+              >
+                <span className="profile-avatar-preview"><img src={option.src} alt={option.label} /></span>
+                <span>{option.label}</span>
+              </button>
+            ))}
+          </div>
+
           <div className="profile-completion-row">
             <label className="login-field"><span>{labels.firstName}</span><div className="input-shell"><UserRound /><input type="text" value={form.firstName} onChange={(event) => updateField("firstName", event.target.value)} required /></div></label>
             <label className="login-field"><span>{labels.lastName}</span><div className="input-shell"><UserRound /><input type="text" value={form.lastName} onChange={(event) => updateField("lastName", event.target.value)} required /></div></label>

@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
-import { applyPersianDigitsToDocument } from '../src/helper/persianDigits';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/App.css';
 import '../src/components/Header.css';
-import '../src/components/BusinessProfileEmptyState.css';
 import '../src/components/BusinessProfilePage.css';
+import '../src/components/BusinessProfileEmptyState.css';
 import '../src/components/DashboardPage.css';
 import '../src/components/LoginModal.css';
 import '../src/components/MobileBottomNav.css';
 import '../src/components/HomePage.css';
 import '../src/components/FaqMembershipPage.css';
-import '../src/components/GlobalDarkMode.css';
+import '../src/components/ContactPage.css';
 
 const getSavedDarkMode = () => {
   if (typeof window === 'undefined') {
@@ -24,24 +23,12 @@ const getSavedDarkMode = () => {
 };
 
 export default function MyApp({ Component, pageProps }) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [hasHydratedTheme, setHasHydratedTheme] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(getSavedDarkMode);
 
   useEffect(() => {
-    setIsDarkMode(getSavedDarkMode());
-    setHasHydratedTheme(true);
-  }, []);
-
-  useEffect(() => applyPersianDigitsToDocument(), []);
-
-  useEffect(() => {
-    if (!hasHydratedTheme) {
-      return;
-    }
-
     window.localStorage.setItem('keymiyay-theme', isDarkMode ? 'dark' : 'light');
     document.documentElement.classList.toggle('theme-dark', isDarkMode);
-  }, [hasHydratedTheme, isDarkMode]);
+  }, [isDarkMode]);
 
   return (
     <Component

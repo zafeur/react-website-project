@@ -4,25 +4,26 @@
 }
 
 .brand {
-  gap: 9px;
-  color: var(--green);
-  font-size: 36px;
-  font-weight: 800;
+  gap: 10px;
+  color: var(--brand-purple, var(--green));
   letter-spacing: 0;
   line-height: 1;
-          white-space: nowrap;
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
-.brand span {
-  white-space: nowrap;
+.brand-logo-mark {
+  width: 42px;
+  height: 42px;
+  display: block;
+  object-fit: contain;
 }
 
-.brand-icon {
-  width: 40px;
-  height: 40px;
-  color: var(--green);
-  stroke-width: 3.4;
+.brand-logo-type {
+  width: clamp(104px, 10vw, 142px);
+  height: 42px;
+  display: block;
+  object-fit: contain;
 }
 
 .nav-list {
@@ -43,10 +44,10 @@
 .login-btn,
 .follow-btn {
   border: 0;
-  background: linear-gradient(180deg, #0ba746 0%, #008b38 100%);
+  background: linear-gradient(180deg, var(--brand-purple, #7433a3) 0%, var(--brand-pink, #eb078a) 100%);
   color: #fff;
   font-weight: 800;
-  box-shadow: 0 5px 10px rgba(0, 126, 52, 0.23);
+  box-shadow: 0 5px 12px rgba(116, 51, 163, 0.22);
 }
 
 .login-btn {
@@ -65,12 +66,13 @@
 
 .user-menu-btn {
   border: 0;
-  background: linear-gradient(180deg, #0ba746 0%, #008b38 100%);
+  background: linear-gradient(180deg, var(--brand-purple, #7433a3) 0%, var(--brand-pink, #eb078a) 100%);
   color: #fff;
   font-weight: 800;
-  box-shadow: 0 5px 10px rgba(0, 126, 52, 0.23);
+  box-shadow: 0 5px 12px rgba(116, 51, 163, 0.22);
   height: 50px;
-  min-width: 186px;
+  min-width: 176px;
+  max-width: 236px;
   padding: 0 12px 0 14px;
   display: flex;
   align-items: center;
@@ -83,6 +85,7 @@
 .user-mini-avatar {
   width: 31px;
   height: 31px;
+  flex: 0 0 31px;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -96,6 +99,17 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.user-mini-avatar img[src$=".svg"] {
+  object-fit: contain;
+}
+
+.user-menu-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .user-menu-btn svg {
@@ -140,7 +154,7 @@
 }
 
 .user-dropdown button:hover {
-  background: #f4fbf7;
+  background: #f7f1fb;
   color: var(--green);
   transform: translateX(-2px);
 }
@@ -170,11 +184,16 @@
   }
 
   .brand {
-    font-size: 30px;
+    gap: 8px;
   }
 
-  .brand-icon {
+  .brand-logo-mark {
     width: 34px;
+    height: 34px;
+  }
+
+  .brand-logo-type {
+    width: 112px;
     height: 34px;
   }
 
@@ -322,11 +341,16 @@
   }
 
   .brand {
-    font-size: 30px;
+    gap: 8px;
   }
 
-  .brand-icon {
+  .brand-logo-mark {
     width: 34px;
+    height: 34px;
+  }
+
+  .brand-logo-type {
+    width: 116px;
     height: 34px;
   }
 
@@ -339,8 +363,8 @@
   .login-btn,
   .user-menu-btn {
     width: auto;
-    min-width: 92px;
-    max-width: 128px;
+    min-width: 128px;
+    max-width: 210px;
     height: 44px;
     padding: 0 12px;
     font-size: 14px;
@@ -353,11 +377,16 @@
   }
 
   .brand {
-    font-size: 26px;
+    gap: 7px;
   }
 
-  .brand-icon {
+  .brand-logo-mark {
     width: 30px;
+    height: 30px;
+  }
+
+  .brand-logo-type {
+    width: 98px;
     height: 30px;
   }
 
@@ -369,8 +398,8 @@
 
   .login-btn,
   .user-menu-btn {
-    min-width: 76px;
-    max-width: 106px;
+    min-width: 122px;
+    max-width: 190px;
     height: 40px;
     padding: 0 10px;
     font-size: 13px;
@@ -397,7 +426,7 @@
   .user-menu-btn {
     width: auto;
     min-width: 132px;
-    max-width: 160px;
+    max-width: 210px;
     height: 46px;
     padding: 0 14px;
     font-size: 14px;
@@ -406,11 +435,16 @@
 
 @media (max-width: 420px) {
   .brand {
-    font-size: 26px;
+    gap: 7px;
   }
 
-  .brand-icon {
+  .brand-logo-mark {
     width: 30px;
+    height: 30px;
+  }
+
+  .brand-logo-type {
+    width: 96px;
     height: 30px;
   }
 
@@ -428,6 +462,39 @@
   .faq-header-action {
     max-width: none;
     min-width: 190px;
+  }
+}
+
+/* Mobile app pages need real edge padding after page-specific frame resets. */
+@media (max-width: 768px) {
+  .dashboard-frame .topbar,
+  .faq-frame .topbar {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)) !important;
+    overflow: visible !important;
+  }
+
+  .dashboard-frame .topbar > div:first-child,
+  .faq-frame .topbar > div:first-child {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .dashboard-frame .user-menu-wrap,
+  .faq-frame .user-menu-wrap {
+    flex: 0 1 auto !important;
+    max-width: calc(100vw - 156px) !important;
+  }
+
+  .dashboard-frame .user-menu-btn,
+  .faq-frame .user-menu-btn {
+    max-width: 100% !important;
+  }
+
+  .dashboard-frame .topbar {
+    padding-top: 14px !important;
+    margin-bottom: 24px !important;
   }
 }
 
@@ -909,5 +976,232 @@
     grid-template-areas:
       "brand"
       "actions" !important;
+  }
+}
+
+/* Absolute final desktop header layout: match home header and stop 80% zoom drift. */
+@media (min-width: 769px) {
+  .business-shell .topbar,
+  .restaurant-shell .topbar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-areas: "actions nav brand" !important;
+    align-items: center !important;
+    gap: clamp(18px, 2.4vw, 34px) !important;
+    height: 52px !important;
+    min-height: 52px !important;
+    margin-bottom: 30px !important;
+    direction: ltr !important;
+  }
+
+  .business-shell .topbar > div:first-child,
+  .restaurant-shell .topbar > div:first-child {
+    display: contents !important;
+  }
+
+  .business-shell .brand,
+  .restaurant-shell .brand {
+    grid-area: brand !important;
+    justify-self: end !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-width: max-content !important;
+    margin: 0 !important;
+    direction: rtl !important;
+    transform: none !important;
+  }
+
+  .business-shell .topbar nav,
+  .restaurant-shell .topbar nav {
+    grid-area: nav !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    overflow: visible !important;
+    direction: rtl !important;
+  }
+
+  .business-shell .nav-list,
+  .restaurant-shell .nav-list {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+    gap: clamp(18px, 2.05vw, 34px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    font-size: clamp(13px, 1.05vw, 16px) !important;
+    line-height: 1 !important;
+  }
+
+  .business-shell .nav-list li,
+  .restaurant-shell .nav-list li {
+    height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    flex: 0 0 auto !important;
+    padding-bottom: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .business-shell .home-header-actions,
+  .restaurant-shell .home-header-actions {
+    grid-area: actions !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    width: auto !important;
+    min-width: max-content !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    direction: ltr !important;
+  }
+
+  .business-shell .login-btn,
+  .business-shell .user-menu-btn,
+  .restaurant-shell .login-btn,
+  .restaurant-shell .user-menu-btn {
+    flex: 0 0 auto !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 769px) {
+  .business-shell .topbar,
+  .restaurant-shell .topbar {
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    gap: 16px !important;
+  }
+
+  .business-shell .nav-list,
+  .restaurant-shell .nav-list {
+    gap: clamp(10px, 1.3vw, 18px) !important;
+    font-size: clamp(12px, 1vw, 14px) !important;
+  }
+}
+
+/* Dashboard header should match the home page header rhythm. */
+@media (min-width: 769px) {
+  .dashboard-shell .topbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 22px !important;
+    min-height: 74px !important;
+    height: auto !important;
+    margin-bottom: 26px !important;
+    padding-inline: clamp(18px, 2.2vw, 32px) !important;
+    overflow: visible !important;
+  }
+
+  .dashboard-shell .topbar > div:first-child {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    min-width: 0 !important;
+    order: 1 !important;
+  }
+
+  .dashboard-shell .brand {
+    flex: 0 0 auto !important;
+    min-width: max-content !important;
+  }
+
+  .dashboard-shell .topbar nav {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    overflow: visible !important;
+  }
+
+  .dashboard-shell .nav-list {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: clamp(18px, 2vw, 34px) !important;
+    margin: 0 42px 0 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    font-size: clamp(13px, 1.05vw, 16px) !important;
+    line-height: 1 !important;
+  }
+
+  .dashboard-shell .home-header-actions {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    min-width: max-content !important;
+    width: auto !important;
+    margin: 0 auto 0 0 !important;
+    padding: 0 clamp(14px, 1.4vw, 22px) 0 0 !important;
+    position: relative !important;
+    border: 0 !important;
+    border-inline-start: 0 !important;
+    border-inline-end: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    direction: rtl !important;
+    order: 2 !important;
+  }
+
+  .dashboard-shell .home-header-actions::before {
+    display: none !important;
+  }
+
+  .dashboard-shell .home-header-actions::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    right: 0 !important;
+    width: 1px !important;
+    height: 56px !important;
+    display: block !important;
+    background: rgba(116, 51, 163, .2) !important;
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
+  }
+
+  .dashboard-shell .home-theme-toggle {
+    flex: 0 0 auto !important;
+  }
+
+  .dashboard-shell .user-menu-btn,
+  .dashboard-shell .login-btn {
+    flex: 0 0 auto !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 769px) {
+  .dashboard-shell .topbar {
+    gap: 16px !important;
+    padding-inline: 18px !important;
+  }
+
+  .dashboard-shell .nav-list {
+    gap: clamp(10px, 1.25vw, 18px) !important;
+    margin-right: 22px !important;
+    font-size: clamp(12px, 1vw, 14px) !important;
+  }
+
+  .dashboard-shell .home-header-actions {
+    gap: 10px !important;
+    padding: 0 16px 0 0 !important;
+  }
+
+  .dashboard-shell .user-menu-btn,
+  .dashboard-shell .login-btn {
+    min-width: 132px !important;
+    max-width: 180px !important;
+    height: 46px !important;
+    padding-inline: 14px !important;
   }
 }

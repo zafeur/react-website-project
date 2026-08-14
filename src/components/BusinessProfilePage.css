@@ -1,4 +1,4 @@
-﻿.hero-grid {
+.hero-grid {
   display: grid;
   grid-template-columns: 806px 1fr;
   gap: 50px;
@@ -25,7 +25,7 @@
   height: 154px;
   margin: 0 auto 30px;
   border-radius: 50%;
-  background: #132a47;
+  background: #1b1023;
   color: #f3ad2f;
   box-shadow: 0 9px 19px rgba(14, 35, 66, 0.12);
   display: grid;
@@ -278,7 +278,7 @@
 }
 
 .gift-discount {
-  background: #78bd2c;
+  background: #7433a3;
 }
 
 .gift-item svg {
@@ -385,7 +385,7 @@
 .follow-btn:hover,
 .login-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 18px rgba(0, 126, 52, 0.28);
+  box-shadow: 0 10px 18px rgba(116, 51, 163, 0.28);
   filter: brightness(1.03);
 }
 
@@ -555,7 +555,7 @@
 }
 
 .info-card:hover {
-  border-color: rgba(7, 150, 62, 0.28);
+  border-color: rgba(116, 51, 163, 0.28);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
   transform: translateY(-2px);
 }
@@ -638,10 +638,10 @@
   width: min(100%, 260px);
   margin: 22px auto 0;
   padding: 18px 20px;
-  border: 1px solid rgba(7, 150, 62, .2);
+  border: 1px solid rgba(116, 51, 163, .2);
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(7, 150, 62, .1), #fff 58%);
-  box-shadow: 0 12px 24px rgba(7, 150, 62, .09);
+  background: linear-gradient(135deg, rgba(116, 51, 163, .1), #fff 58%);
+  box-shadow: 0 12px 24px rgba(116, 51, 163, .09);
   text-align: right;
 }
 
@@ -678,14 +678,14 @@
 }
 
 .page-shell.theme-dark .business-wallet-card {
-  background: linear-gradient(135deg, rgba(7, 150, 62, .18), #0f1712 58%);
+  background: linear-gradient(135deg, rgba(116, 51, 163, .18), #1b1023 58%);
   border-color: rgba(255, 255, 255, .11);
   box-shadow: 0 16px 30px rgba(0, 0, 0, .26);
 }
 
 .page-shell.theme-dark .business-wallet-card strong,
 .page-shell.theme-dark .business-wallet-card p {
-  color: #edf7f0;
+  color: #f7f1fb;
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {
@@ -907,7 +907,7 @@
 }
 
 .page-shell.theme-dark .profile {
-  background: #0f1712;
+  background: #1b1023;
   border-color: rgba(255, 255, 255, .11);
   box-shadow: 0 18px 38px rgba(0, 0, 0, .24);
 }
@@ -1005,8 +1005,8 @@
   max-height: 390px;
   overflow: hidden;
   border-radius: 14px;
-  border: 1px solid rgba(7, 150, 62, .12);
-  background: linear-gradient(135deg, #f7fff9 0%, #eef8f1 48%, #ffffff 100%);
+  border: 1px solid rgba(116, 51, 163, .12);
+  background: linear-gradient(135deg, #f7f1fb 0%, #f7f1fb 48%, #ffffff 100%);
   box-shadow: 0 18px 42px rgba(0, 0, 0, .055);
 }
 
@@ -1042,7 +1042,7 @@
   aspect-ratio: 1;
   right: -12%;
   top: -34%;
-  background: rgba(7, 150, 62, .14);
+  background: rgba(116, 51, 163, .14);
   filter: blur(4px);
 }
 
@@ -1051,7 +1051,7 @@
   aspect-ratio: 1;
   left: -8%;
   bottom: -28%;
-  background: rgba(7, 150, 62, .09);
+  background: rgba(116, 51, 163, .09);
 }
 
 .business-hero-banner-logo .hero-photo {
@@ -1061,7 +1061,7 @@
   padding: clamp(12px, 1.7vw, 20px);
   border-radius: 28px;
   background: rgba(255, 255, 255, .88);
-  box-shadow: 0 22px 48px rgba(7, 150, 62, .17);
+  box-shadow: 0 22px 48px rgba(116, 51, 163, .17);
 }
 
 .business-hero-banner-caption {
@@ -1071,7 +1071,7 @@
   display: grid;
   gap: 5px;
   text-align: right;
-  color: #063f1d;
+  color: #1b1023;
 }
 
 .business-hero-banner-caption span {
@@ -1083,12 +1083,12 @@
 .business-hero-banner-caption strong {
   font-size: clamp(24px, 3.2vw, 42px);
   line-height: 1.15;
-  color: #0b2415;
+  color: #1b1023;
 }
 
 .page-shell.theme-dark .business-hero-banner {
   border-color: rgba(255, 255, 255, .1);
-  background: linear-gradient(135deg, #0b2115 0%, #10291a 48%, #07100b 100%);
+  background: linear-gradient(135deg, #1b1023 0%, #1b1023 48%, #1b1023 100%);
   box-shadow: 0 22px 48px rgba(0, 0, 0, .28);
 }
 
@@ -1098,11 +1098,11 @@
 }
 
 .page-shell.theme-dark .business-hero-banner-caption {
-  color: #f0fff4;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .business-hero-banner-caption strong {
-  color: #f2fff7;
+  color: #f7f1fb;
 }
 
 @media (max-width: 768px) {
@@ -1140,7 +1140,7 @@
   max-height: none;
   display: grid;
   place-items: center;
-  background: #f5f7f3;
+  background: #f7f1fb;
 }
 
 .business-hero-banner.business-hero-banner-photo .hero-photo {
@@ -1151,7 +1151,7 @@
 }
 
 .page-shell.theme-dark .business-hero-banner.business-hero-banner-photo {
-  background: #07100b;
+  background: #1b1023;
 }
 
 @media (max-width: 900px) {
@@ -1196,10 +1196,10 @@
   padding: clamp(24px, 3vw, 36px);
   border-radius: 20px;
   background:
-    radial-gradient(circle at 18% 14%, rgba(7, 150, 62, .12), transparent 34%),
-    linear-gradient(145deg, rgba(255, 255, 255, .97), rgba(248, 253, 250, .94));
-  border: 1px solid rgba(7, 150, 62, .14);
-  box-shadow: 0 24px 60px rgba(12, 36, 24, .08);
+    radial-gradient(circle at 18% 14%, rgba(116, 51, 163, .12), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, .97), rgba(247, 241, 251, .94));
+  border: 1px solid rgba(116, 51, 163, .14);
+  box-shadow: 0 24px 60px rgba(116, 51, 163, .08);
   overflow: hidden;
 }
 
@@ -1216,12 +1216,12 @@
   justify-items: center;
   gap: 18px;
   padding: clamp(34px, 6vw, 64px);
-  border: 1px solid rgba(7, 150, 62, .18);
+  border: 1px solid rgba(116, 51, 163, .18);
   border-radius: 24px;
   background:
-    radial-gradient(circle at 22% 18%, rgba(7, 150, 62, .14), transparent 34%),
-    linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(247, 253, 250, .94));
-  box-shadow: 0 24px 64px rgba(12, 36, 24, .1);
+    radial-gradient(circle at 22% 18%, rgba(116, 51, 163, .14), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(247, 241, 251, .94));
+  box-shadow: 0 24px 64px rgba(116, 51, 163, .10);
   text-align: center;
 }
 
@@ -1231,9 +1231,9 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: linear-gradient(145deg, rgba(7, 150, 62, .14), rgba(255, 194, 71, .18));
+  background: linear-gradient(145deg, rgba(116, 51, 163, .14), rgba(255, 194, 71, .18));
   color: var(--green);
-  box-shadow: inset 0 0 0 1px rgba(7, 150, 62, .16);
+  box-shadow: inset 0 0 0 1px rgba(116, 51, 163, .16);
 }
 
 .business-coming-soon-icon svg {
@@ -1244,7 +1244,7 @@
 
 .business-coming-soon-card h1 {
   margin: 0;
-  color: #102016;
+  color: #1b1023;
   font-size: clamp(26px, 3.4vw, 42px);
   font-weight: 950;
   line-height: 1.45;
@@ -1261,18 +1261,18 @@
 
 .page-shell.theme-dark .business-coming-soon-card {
   background:
-    radial-gradient(circle at 22% 18%, rgba(109, 240, 155, .12), transparent 34%),
-    linear-gradient(145deg, rgba(13, 28, 18, .98), rgba(8, 19, 13, .94));
-  border-color: rgba(109, 240, 155, .16);
+    radial-gradient(circle at 22% 18%, rgba(235, 7, 138, .12), transparent 34%),
+    linear-gradient(145deg, rgba(27, 16, 35, .98), rgba(27, 16, 35, .94));
+  border-color: rgba(235, 7, 138, .16);
   box-shadow: 0 24px 64px rgba(0, 0, 0, .34);
 }
 
 .page-shell.theme-dark .business-coming-soon-card h1 {
-  color: #f4fff8;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .business-coming-soon-card p {
-  color: rgba(244, 255, 248, .68);
+  color: rgba(247, 241, 251, .68);
 }
 
 .business-social-actions svg,
@@ -1287,9 +1287,9 @@
   margin: 14px auto 22px;
   padding: 0;
   border: 7px solid #fff;
-  outline: 2px solid rgba(7, 150, 62, .32);
+  outline: 2px solid rgba(116, 51, 163, .32);
   background: #fff;
-  box-shadow: 0 18px 40px rgba(7, 150, 62, .14);
+  box-shadow: 0 18px 40px rgba(116, 51, 163, .14);
 }
 
 .business-logo-circle img {
@@ -1308,7 +1308,7 @@
   border-radius: 50%;
   background:
     radial-gradient(circle at 34% 28%, rgba(255, 194, 71, .22), transparent 34%),
-    linear-gradient(145deg, rgba(7, 150, 62, .14), rgba(7, 150, 62, .04));
+    linear-gradient(145deg, rgba(116, 51, 163, .14), rgba(116, 51, 163, .04));
   color: var(--green);
 }
 
@@ -1346,8 +1346,8 @@
 .business-tags span {
   padding: 9px 18px;
   border-radius: 999px;
-  background: rgba(7, 150, 62, .09);
-  color: #0b4321;
+  background: rgba(116, 51, 163, .09);
+  color: #1b1023;
   font-weight: 800;
   font-size: 14px;
 }
@@ -1357,8 +1357,8 @@
   margin-top: 24px;
   min-height: 62px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #11b857, #05943f);
-  box-shadow: 0 16px 34px rgba(7, 150, 62, .24);
+  background: linear-gradient(135deg, #7433a3, #7433a3);
+  box-shadow: 0 16px 34px rgba(116, 51, 163, .24);
 }
 
 .business-wallet-panel {
@@ -1366,8 +1366,8 @@
   margin-top: 24px;
   padding: 24px;
   border-radius: 18px;
-  background: linear-gradient(145deg, rgba(7, 150, 62, .1), rgba(255, 255, 255, .82));
-  border: 1px solid rgba(7, 150, 62, .18);
+  background: linear-gradient(145deg, rgba(116, 51, 163, .1), rgba(255, 255, 255, .82));
+  border: 1px solid rgba(116, 51, 163, .18);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
 }
 
@@ -1390,12 +1390,12 @@
   margin-top: 16px;
   font-size: clamp(28px, 3vw, 38px);
   line-height: 1.2;
-  color: #0d2015;
+  color: #1b1023;
 }
 
 .business-wallet-panel p {
   margin: 10px 0 0;
-  color: #486354;
+  color: #7433a3;
   font-weight: 800;
 }
 
@@ -1412,9 +1412,9 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid rgba(7, 150, 62, .16);
+  border: 1px solid rgba(116, 51, 163, .16);
   background: rgba(255, 255, 255, .72);
-  color: #173222;
+  color: #1b1023;
   display: grid;
   place-items: center;
   transition: transform .2s ease, border-color .2s ease, color .2s ease;
@@ -1422,7 +1422,7 @@
 
 .business-social-actions button:hover {
   transform: translateY(-2px);
-  border-color: rgba(7, 150, 62, .45);
+  border-color: rgba(116, 51, 163, .45);
   color: var(--green);
 }
 
@@ -1438,14 +1438,14 @@
 .business-profile-layout .business-hero-banner {
   min-height: 310px;
   border-radius: 20px;
-  border-color: rgba(7, 150, 62, .16);
-  box-shadow: 0 24px 60px rgba(12, 36, 24, .08);
-  background: #07100b;
+  border-color: rgba(116, 51, 163, .16);
+  box-shadow: 0 24px 60px rgba(116, 51, 163, .08);
+  background: #1b1023;
 }
 
 .business-profile-layout .business-hero-banner.business-hero-banner-photo {
   aspect-ratio: 2.75 / 1;
-  background: #07100b;
+  background: #1b1023;
 }
 
 .business-profile-layout .business-hero-banner.business-hero-banner-photo .hero-photo {
@@ -1463,8 +1463,8 @@
   padding: 28px;
   background:
     radial-gradient(circle at 24% 32%, rgba(255, 194, 71, .16), transparent 30%),
-    radial-gradient(circle at 74% 28%, rgba(7, 150, 62, .2), transparent 34%),
-    linear-gradient(135deg, #f7fff9 0%, #eefaf3 100%);
+    radial-gradient(circle at 74% 28%, rgba(116, 51, 163, .2), transparent 34%),
+    linear-gradient(135deg, #f7f1fb 0%, #f7f1fb 100%);
   color: var(--green);
   text-align: center;
 }
@@ -1476,7 +1476,7 @@
 }
 
 .business-banner-placeholder span {
-  color: #0d2015;
+  color: #1b1023;
   font-size: clamp(22px, 3vw, 34px);
   font-weight: 950;
 }
@@ -1496,20 +1496,20 @@
 .page-shell.theme-dark .business-logo-placeholder {
   background:
     radial-gradient(circle at 34% 28%, rgba(255, 194, 71, .16), transparent 34%),
-    linear-gradient(145deg, rgba(109, 240, 155, .13), rgba(109, 240, 155, .04));
-  color: #6df09b;
+    linear-gradient(145deg, rgba(235, 7, 138, .13), rgba(235, 7, 138, .04));
+  color: #f7d7ea;
 }
 
 .page-shell.theme-dark .business-banner-placeholder {
   background:
     radial-gradient(circle at 24% 32%, rgba(255, 194, 71, .12), transparent 30%),
-    radial-gradient(circle at 74% 28%, rgba(109, 240, 155, .16), transparent 34%),
-    linear-gradient(135deg, #08140d 0%, #0d1c12 100%);
-  color: #6df09b;
+    radial-gradient(circle at 74% 28%, rgba(235, 7, 138, .16), transparent 34%),
+    linear-gradient(135deg, #1b1023 0%, #1b1023 100%);
+  color: #f7d7ea;
 }
 
 .page-shell.theme-dark .business-banner-placeholder span {
-  color: #f4fff8;
+  color: #f7f1fb;
 }
 
 .business-banner-badge {
@@ -1522,8 +1522,8 @@
   gap: 10px;
   padding: 12px 18px;
   border-radius: 14px;
-  background: rgba(5, 18, 12, .68);
-  color: #f4fff8;
+  background: rgba(27, 16, 35, .68);
+  color: #f7f1fb;
   border: 1px solid rgba(255, 255, 255, .12);
   backdrop-filter: blur(12px);
   font-weight: 800;
@@ -1532,7 +1532,7 @@
 .business-banner-badge svg {
   width: 24px;
   height: 24px;
-  color: #36d27b;
+  color: #7433a3;
   flex: 0 0 auto;
 }
 
@@ -1552,8 +1552,8 @@
   align-items: flex-start !important;
   gap: 16px;
   background: rgba(255, 255, 255, .96);
-  border: 1px solid rgba(7, 150, 62, .14);
-  box-shadow: 0 18px 42px rgba(12, 36, 24, .06);
+  border: 1px solid rgba(116, 51, 163, .14);
+  box-shadow: 0 18px 42px rgba(116, 51, 163, .06);
 }
 
 .business-info-icon {
@@ -1562,7 +1562,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle, rgba(7, 150, 62, .22), rgba(7, 150, 62, .08));
+  background: radial-gradient(circle, rgba(116, 51, 163, .22), rgba(116, 51, 163, .08));
   color: var(--green);
   flex: 0 0 auto;
 }
@@ -1579,13 +1579,13 @@
 }
 
 .business-info-card .info-title {
-  color: #547062;
+  color: #7433a3;
   font-size: 14px;
   font-weight: 900;
 }
 
 .business-info-card .info-text {
-  color: #0d2015;
+  color: #1b1023;
   font-size: clamp(16px, 1.7vw, 20px);
   font-weight: 900;
   line-height: 1.8;
@@ -1610,9 +1610,9 @@
   gap: 0;
   padding: 20px;
   border-radius: 20px;
-  border: 1px solid rgba(7, 150, 62, .14);
+  border: 1px solid rgba(116, 51, 163, .14);
   background: rgba(255, 255, 255, .96);
-  box-shadow: 0 18px 42px rgba(12, 36, 24, .06);
+  box-shadow: 0 18px 42px rgba(116, 51, 163, .06);
 }
 
 .business-feature-item {
@@ -1621,7 +1621,7 @@
   gap: 12px;
   min-width: 0;
   padding: 10px 16px;
-  border-left: 1px solid rgba(7, 150, 62, .12);
+  border-left: 1px solid rgba(116, 51, 163, .12);
 }
 
 .business-feature-item:last-child {
@@ -1642,13 +1642,13 @@
 }
 
 .business-feature-item strong {
-  color: #0d2015;
+  color: #1b1023;
   font-size: 15px;
   font-weight: 900;
 }
 
 .business-feature-item span {
-  color: #526d5d;
+  color: #7433a3;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.7;
@@ -1658,8 +1658,8 @@
 .page-shell.theme-dark .business-info-card,
 .page-shell.theme-dark .business-feature-strip {
   background:
-    radial-gradient(circle at 18% 12%, rgba(7, 150, 62, .12), transparent 34%),
-    rgba(8, 21, 14, .94);
+    radial-gradient(circle at 18% 12%, rgba(116, 51, 163, .12), transparent 34%),
+    rgba(27, 16, 35, .94);
   border-color: rgba(255, 255, 255, .1);
   box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
 }
@@ -1667,16 +1667,16 @@
 .page-shell.theme-dark .business-social-actions button {
   background: rgba(255, 255, 255, .05);
   border-color: rgba(255, 255, 255, .18);
-  color: #f3fff7;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .business-tags span {
   background: rgba(255, 255, 255, .08);
-  color: #f3fff7;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .business-wallet-panel {
-  background: linear-gradient(145deg, rgba(7, 150, 62, .18), rgba(8, 21, 14, .88));
+  background: linear-gradient(145deg, rgba(116, 51, 163, .18), rgba(27, 16, 35, .88));
   border-color: rgba(255, 255, 255, .1);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
 }
@@ -1684,17 +1684,17 @@
 .page-shell.theme-dark .business-wallet-panel strong,
 .page-shell.theme-dark .business-info-card .info-text,
 .page-shell.theme-dark .business-feature-item strong {
-  color: #f4fff8;
+  color: #f7f1fb;
 }
 
 .page-shell.theme-dark .business-wallet-panel p,
 .page-shell.theme-dark .business-info-card .info-title,
 .page-shell.theme-dark .business-feature-item span {
-  color: rgba(244, 255, 248, .72);
+  color: rgba(247, 241, 251, .72);
 }
 
 .page-shell.theme-dark .business-info-icon {
-  background: radial-gradient(circle, rgba(7, 150, 62, .34), rgba(7, 150, 62, .12));
+  background: radial-gradient(circle, rgba(116, 51, 163, .34), rgba(116, 51, 163, .12));
 }
 
 @media (max-width: 1180px) {
@@ -1719,7 +1719,7 @@
 
   .business-feature-item {
     border-left: 0;
-    border-bottom: 1px solid rgba(7, 150, 62, .12);
+    border-bottom: 1px solid rgba(116, 51, 163, .12);
   }
 
   .business-feature-item:last-child {
@@ -1823,7 +1823,7 @@
   margin-top: 8px;
   padding: 7px 12px;
   border-radius: 999px;
-  background: rgba(7, 150, 62, .12);
+  background: rgba(116, 51, 163, .12);
   color: var(--green);
   text-decoration: none;
   font-size: 12px;
@@ -1832,7 +1832,7 @@
 
 .business-info-action:hover {
   color: var(--green);
-  background: rgba(7, 150, 62, .2);
+  background: rgba(116, 51, 163, .2);
   text-decoration: none;
 }
 
@@ -1885,21 +1885,21 @@
   gap: 10px;
   padding: 10px 18px;
   border-radius: 999px;
-  border: 1px solid rgba(7, 150, 62, .22);
-  color: #0c7f39;
-  background: linear-gradient(135deg, rgba(7, 150, 62, .12), rgba(255, 255, 255, .86));
+  border: 1px solid rgba(116, 51, 163, .22);
+  color: #1b1023;
+  background: linear-gradient(135deg, rgba(116, 51, 163, .12), rgba(255, 255, 255, .86));
   text-decoration: none;
   font-weight: 900;
-  box-shadow: 0 14px 28px rgba(7, 150, 62, .1);
+  box-shadow: 0 14px 28px rgba(116, 51, 163, .1);
   transition: transform .2s ease, border-color .2s ease, background .2s ease;
 }
 
 .business-instagram-link:hover {
   transform: translateY(-2px);
-  border-color: rgba(7, 150, 62, .48);
+  border-color: rgba(116, 51, 163, .48);
   color: var(--green);
   text-decoration: none;
-  background: linear-gradient(135deg, rgba(7, 150, 62, .18), rgba(255, 255, 255, .94));
+  background: linear-gradient(135deg, rgba(116, 51, 163, .18), rgba(255, 255, 255, .94));
 }
 
 .business-instagram-link svg {
@@ -1918,15 +1918,15 @@
 }
 
 .page-shell.theme-dark .business-instagram-link {
-  color: #f5fff8;
+  color: #f7f1fb;
   border-color: rgba(255, 255, 255, .18);
-  background: linear-gradient(135deg, rgba(7, 150, 62, .24), rgba(255, 255, 255, .06));
+  background: linear-gradient(135deg, rgba(116, 51, 163, .24), rgba(255, 255, 255, .06));
   box-shadow: 0 14px 28px rgba(0, 0, 0, .2);
 }
 
 .page-shell.theme-dark .business-instagram-link:hover {
-  border-color: rgba(67, 224, 130, .5);
-  background: linear-gradient(135deg, rgba(7, 150, 62, .32), rgba(255, 255, 255, .08));
+  border-color: rgba(116, 51, 163, .5);
+  background: linear-gradient(135deg, rgba(116, 51, 163, .32), rgba(255, 255, 255, .08));
 }
 
 @media (max-width: 640px) {
@@ -2360,8 +2360,8 @@
   max-height: 330px !important;
   margin: 0 !important;
   border-radius: 12px !important;
-  background: #07100b !important;
-  box-shadow: 0 16px 34px rgba(12, 36, 24, .08) !important;
+  background: #1b1023 !important;
+  box-shadow: 0 16px 34px rgba(116, 51, 163, .08) !important;
 }
 
 .business-frame .business-profile-layout .business-hero-banner .hero-photo,
@@ -2424,14 +2424,14 @@
 }
 
 .business-frame .business-info-card .info-title {
-  color: #5f7468 !important;
+  color: #7433a3 !important;
   font-size: 12px !important;
   font-weight: 800 !important;
   line-height: 1.5 !important;
 }
 
 .business-frame .business-info-card .info-text {
-  color: #0d2015 !important;
+  color: #1b1023 !important;
   width: 100% !important;
   max-width: 100% !important;
   display: block !important;
@@ -2571,7 +2571,7 @@
 
   .business-frame .business-feature-item {
     border-left: 0 !important;
-    border-bottom: 1px solid rgba(7, 150, 62, .12) !important;
+    border-bottom: 1px solid rgba(116, 51, 163, .12) !important;
   }
 
   .business-frame .business-feature-item:last-child {
@@ -2620,7 +2620,7 @@
 html.theme-dark .business-frame .business-info-card .info-title,
 .page-shell.theme-dark .restaurant-shell .info-card .info-title,
 html.theme-dark .restaurant-shell .info-card .info-title {
-  color: rgba(237, 247, 240, .72) !important;
+  color: rgba(247, 241, 251, .72) !important;
 }
 
 .page-shell.theme-dark .business-frame .business-info-card .info-text,
@@ -2629,22 +2629,22 @@ html.theme-dark .business-frame .business-info-card .info-text,
 html.theme-dark .restaurant-shell .info-card .info-text,
 .page-shell.theme-dark .restaurant-shell .restaurant-phone-text,
 html.theme-dark .restaurant-shell .restaurant-phone-text {
-  color: #f4fff8 !important;
+  color: #f7f1fb !important;
 }
 
 .page-shell.theme-dark .business-frame .business-info-action,
 html.theme-dark .business-frame .business-info-action,
 .page-shell.theme-dark .restaurant-shell .business-info-action,
 html.theme-dark .restaurant-shell .business-info-action {
-  color: #b8ffd0 !important;
-  background: rgba(37, 196, 99, .18) !important;
+  color: #eb078a !important;
+  background: rgba(235, 7, 138, .18) !important;
 }
 
 .page-shell.theme-dark .business-frame .business-info-icon,
 html.theme-dark .business-frame .business-info-icon,
 .page-shell.theme-dark .restaurant-shell .info-card svg,
 html.theme-dark .restaurant-shell .info-card svg {
-  color: #36d27b !important;
+  color: #7433a3 !important;
 }
 
 /* Business info cards tidy pass: remove empty pockets and align RTL content. */
@@ -2900,7 +2900,7 @@ html.theme-dark .restaurant-shell .info-card svg {
 }
 .business-follow-message {
   margin: 10px 0 0;
-  color: #07963e;
+  color: #7433a3;
   font-size: 13px;
   font-weight: 800;
   text-align: center;
@@ -2908,7 +2908,7 @@ html.theme-dark .restaurant-shell .info-card svg {
 
 .theme-dark .business-follow-message,
 html.theme-dark .business-follow-message {
-  color: #63d68f;
+  color: #eb078a;
 }
 
 
@@ -2923,8 +2923,8 @@ html.theme-dark .business-follow-message {
   min-height: 320px;
   border: 1px solid var(--business-border);
   border-radius: 18px;
-  background: linear-gradient(135deg, rgba(5, 150, 80, 0.08), rgba(255, 255, 255, 0.92));
-  box-shadow: 0 24px 70px rgba(6, 95, 70, 0.12);
+  background: linear-gradient(135deg, rgba(116, 51, 163, 0.08), rgba(255, 255, 255, 0.92));
+  box-shadow: 0 24px 70px rgba(27, 16, 35, 0.12);
   display: grid;
   place-items: center;
   align-content: center;
@@ -2935,7 +2935,7 @@ html.theme-dark .business-follow-message {
 .business-profile-loading-line {
   display: block;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(5, 150, 105, 0.12), rgba(5, 150, 105, 0.28), rgba(5, 150, 105, 0.12));
+  background: linear-gradient(90deg, rgba(116, 51, 163, 0.12), rgba(116, 51, 163, 0.28), rgba(116, 51, 163, 0.12));
   background-size: 220% 100%;
   animation: businessProfileLoading 1.2s ease-in-out infinite;
 }
@@ -2957,7 +2957,7 @@ html.theme-dark .business-follow-message {
 }
 
 .theme-dark .business-profile-loading-card {
-  background: linear-gradient(135deg, rgba(5, 150, 80, 0.16), rgba(2, 30, 18, 0.94));
+  background: linear-gradient(135deg, rgba(116, 51, 163, 0.16), rgba(27, 16, 35, 0.94));
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
 }
 
@@ -3027,4 +3027,368 @@ html.theme-dark .business-follow-message {
   unicode-bidi: isolate !important;
   text-align: right !important;
   white-space: nowrap !important;
+}
+
+/* Final dark-mode palette enforcement for business pages. */
+.page-shell.theme-dark .business-profile-page,
+html.theme-dark .business-profile-page {
+  color: #f7f1fb !important;
+}
+
+.page-shell.theme-dark .business-profile-layout,
+html.theme-dark .business-profile-layout {
+  background:
+    radial-gradient(circle at 34% 18%, rgba(235, 7, 138, .13), transparent 32%),
+    linear-gradient(135deg, rgba(27, 16, 35, .98), rgba(38, 18, 52, .96)) !important;
+}
+
+.page-shell.theme-dark .business-profile-card,
+.page-shell.theme-dark .business-info-card,
+.page-shell.theme-dark .business-feature-strip,
+.page-shell.theme-dark .business-wallet-panel,
+html.theme-dark .business-profile-card,
+html.theme-dark .business-info-card,
+html.theme-dark .business-feature-strip,
+html.theme-dark .business-wallet-panel {
+  border-color: rgba(116, 51, 163, .38) !important;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(235, 7, 138, .10), transparent 34%),
+    linear-gradient(145deg, rgba(27, 16, 35, .96), rgba(38, 18, 52, .92)) !important;
+  box-shadow: 0 22px 54px rgba(27, 16, 35, .34) !important;
+}
+
+.page-shell.theme-dark .business-hero-banner,
+.page-shell.theme-dark .business-banner-placeholder,
+html.theme-dark .business-hero-banner,
+html.theme-dark .business-banner-placeholder {
+  background:
+    radial-gradient(circle at 56% 32%, rgba(235, 7, 138, .16), transparent 34%),
+    linear-gradient(135deg, rgba(27, 16, 35, .96), rgba(55, 25, 73, .84)) !important;
+  color: #f7f1fb !important;
+}
+
+.page-shell.theme-dark .business-banner-placeholder svg,
+.page-shell.theme-dark .business-info-icon,
+.page-shell.theme-dark .business-feature-item svg,
+.page-shell.theme-dark .business-wallet-panel svg,
+html.theme-dark .business-banner-placeholder svg,
+html.theme-dark .business-info-icon,
+html.theme-dark .business-feature-item svg,
+html.theme-dark .business-wallet-panel svg {
+  color: var(--brand-pink, #eb078a) !important;
+  background: rgba(116, 51, 163, .22) !important;
+}
+
+.page-shell.theme-dark .business-info-action,
+html.theme-dark .business-info-action {
+  background: rgba(235, 7, 138, .12) !important;
+  color: var(--brand-pink, #eb078a) !important;
+}
+
+.page-shell.theme-dark .business-follow-btn,
+html.theme-dark .business-follow-btn {
+  background: linear-gradient(135deg, var(--brand-purple, #7433a3), var(--brand-pink, #eb078a)) !important;
+  color: #fff !important;
+  box-shadow: 0 16px 30px rgba(116, 51, 163, .30) !important;
+}
+
+.page-shell.theme-dark .business-wallet-panel strong,
+.page-shell.theme-dark .business-info-card .info-text,
+.page-shell.theme-dark .business-feature-item strong,
+html.theme-dark .business-wallet-panel strong,
+html.theme-dark .business-info-card .info-text,
+html.theme-dark .business-feature-item strong {
+  color: #ffffff !important;
+}
+
+.page-shell.theme-dark .business-wallet-panel p,
+.page-shell.theme-dark .business-info-card .info-title,
+.page-shell.theme-dark .business-feature-item span,
+html.theme-dark .business-wallet-panel p,
+html.theme-dark .business-info-card .info-title,
+html.theme-dark .business-feature-item span {
+  color: rgba(247, 241, 251, .74) !important;
+}
+
+/* Final light-mode palette wash: remove the pale green/yellow cast from empty API banners. */
+.business-profile-page .business-banner-placeholder,
+.business-frame .business-profile-layout .business-banner-placeholder,
+.business-frame .business-profile-layout .business-hero-banner.has-broken-image,
+.business-frame .business-profile-layout .business-hero-banner.has-broken-image .business-banner-placeholder-fallback {
+  background:
+    radial-gradient(circle at 74% 26%, rgba(116, 51, 163, .16), transparent 34%),
+    radial-gradient(circle at 32% 34%, rgba(235, 7, 138, .08), transparent 32%),
+    linear-gradient(135deg, rgba(247, 241, 251, .98), rgba(255, 245, 251, .96)) !important;
+  color: var(--brand-purple, #7433a3) !important;
+}
+
+.business-profile-page .business-banner-placeholder svg,
+.business-frame .business-profile-layout .business-banner-placeholder svg {
+  color: var(--brand-purple, #7433a3) !important;
+}
+
+/* Absolute final business dark-mode override: remove remaining green-black panels. */
+.page-shell.theme-dark .business-frame .business-profile-layout,
+html.theme-dark .business-frame .business-profile-layout {
+  background:
+    radial-gradient(circle at 32% 18%, rgba(235, 7, 138, .14), transparent 32%),
+    linear-gradient(135deg, rgba(27, 16, 35, .98), rgba(44, 20, 60, .96)) !important;
+}
+
+.page-shell.theme-dark .business-frame .business-profile-card,
+.page-shell.theme-dark .business-frame .business-info-card,
+.page-shell.theme-dark .business-frame .business-feature-strip,
+.page-shell.theme-dark .business-frame .business-wallet-panel,
+html.theme-dark .business-frame .business-profile-card,
+html.theme-dark .business-frame .business-info-card,
+html.theme-dark .business-frame .business-feature-strip,
+html.theme-dark .business-frame .business-wallet-panel {
+  border-color: rgba(116, 51, 163, .48) !important;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(235, 7, 138, .12), transparent 34%),
+    linear-gradient(145deg, rgba(38, 18, 52, .98), rgba(27, 16, 35, .98)) !important;
+  box-shadow: 0 22px 50px rgba(27, 16, 35, .40) !important;
+}
+
+.page-shell.theme-dark .business-frame .business-profile-layout .business-hero-banner,
+.page-shell.theme-dark .business-frame .business-profile-layout .business-hero-banner.business-hero-banner-photo,
+.page-shell.theme-dark .business-frame .business-banner-placeholder,
+html.theme-dark .business-frame .business-profile-layout .business-hero-banner,
+html.theme-dark .business-frame .business-profile-layout .business-hero-banner.business-hero-banner-photo,
+html.theme-dark .business-frame .business-banner-placeholder {
+  background:
+    radial-gradient(circle at 56% 32%, rgba(235, 7, 138, .16), transparent 34%),
+    linear-gradient(135deg, rgba(38, 18, 52, .96), rgba(27, 16, 35, .96)) !important;
+  border-color: rgba(116, 51, 163, .38) !important;
+  box-shadow: 0 18px 42px rgba(27, 16, 35, .34) !important;
+}
+
+.page-shell.theme-dark .business-frame .business-info-card .info-title,
+.page-shell.theme-dark .business-frame .business-feature-item span,
+.page-shell.theme-dark .business-frame .business-wallet-panel p,
+html.theme-dark .business-frame .business-info-card .info-title,
+html.theme-dark .business-frame .business-feature-item span,
+html.theme-dark .business-frame .business-wallet-panel p {
+  color: rgba(247, 241, 251, .74) !important;
+}
+
+.page-shell.theme-dark .business-frame .business-info-card .info-text,
+.page-shell.theme-dark .business-frame .business-feature-item strong,
+.page-shell.theme-dark .business-frame .business-wallet-panel strong,
+html.theme-dark .business-frame .business-info-card .info-text,
+html.theme-dark .business-frame .business-feature-item strong,
+html.theme-dark .business-frame .business-wallet-panel strong {
+  color: #ffffff !important;
+}
+
+.page-shell.theme-dark .business-frame .business-info-icon,
+.page-shell.theme-dark .business-frame .business-feature-item svg,
+.page-shell.theme-dark .business-frame .business-wallet-panel svg,
+html.theme-dark .business-frame .business-info-icon,
+html.theme-dark .business-frame .business-feature-item svg,
+html.theme-dark .business-frame .business-wallet-panel svg {
+  color: var(--brand-pink, #eb078a) !important;
+  background: rgba(116, 51, 163, .24) !important;
+}
+
+/* Final dark-mode cleanup: keep business placeholders readable and icons transparent. */
+.page-shell.theme-dark .business-profile-page .business-hero-banner,
+.page-shell.theme-dark .business-profile-page .business-hero-banner.business-hero-banner-photo,
+.page-shell.theme-dark .business-profile-page .business-banner-placeholder,
+.page-shell.theme-dark .business-profile-page .business-hero-banner.has-broken-image,
+.page-shell.theme-dark .business-profile-page .business-hero-banner.has-broken-image .business-banner-placeholder-fallback,
+html.theme-dark .business-profile-page .business-hero-banner,
+html.theme-dark .business-profile-page .business-hero-banner.business-hero-banner-photo,
+html.theme-dark .business-profile-page .business-banner-placeholder,
+html.theme-dark .business-profile-page .business-hero-banner.has-broken-image,
+html.theme-dark .business-profile-page .business-hero-banner.has-broken-image .business-banner-placeholder-fallback {
+  background:
+    radial-gradient(circle at 52% 30%, rgba(235, 7, 138, .16), transparent 34%),
+    radial-gradient(circle at 28% 38%, rgba(116, 51, 163, .18), transparent 36%),
+    linear-gradient(135deg, rgba(38, 18, 52, .98), rgba(27, 16, 35, .98)) !important;
+  color: #ffffff !important;
+  border-color: rgba(116, 51, 163, .42) !important;
+  box-shadow: 0 18px 42px rgba(27, 16, 35, .34) !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-banner-placeholder span,
+html.theme-dark .business-profile-page .business-banner-placeholder span {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-banner-placeholder svg,
+.page-shell.theme-dark .business-profile-page .business-feature-item svg,
+.page-shell.theme-dark .business-profile-page .business-wallet-panel svg,
+html.theme-dark .business-profile-page .business-banner-placeholder svg,
+html.theme-dark .business-profile-page .business-feature-item svg,
+html.theme-dark .business-profile-page .business-wallet-panel svg {
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  color: var(--brand-pink, #eb078a) !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-info-icon,
+html.theme-dark .business-profile-page .business-info-icon {
+  background: transparent !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-info-icon svg,
+html.theme-dark .business-profile-page .business-info-icon svg {
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* Final business dark-mode contrast pass. */
+.page-shell.theme-dark.business-shell,
+html.theme-dark .page-shell.business-shell {
+  background: var(--brand-dark, #1b1023) !important;
+}
+
+.page-shell.theme-dark .business-frame,
+html.theme-dark .business-frame {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(235, 7, 138, .08), transparent 30%),
+    linear-gradient(180deg, rgba(27, 16, 35, .98), rgba(24, 13, 32, .98)) !important;
+}
+
+.page-shell.theme-dark .business-profile-page,
+html.theme-dark .business-profile-page {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-profile-layout,
+html.theme-dark .business-profile-page .business-profile-layout {
+  border-color: rgba(116, 51, 163, .26) !important;
+  background:
+    radial-gradient(circle at 32% 18%, rgba(235, 7, 138, .10), transparent 30%),
+    linear-gradient(135deg, rgba(34, 17, 45, .96), rgba(27, 16, 35, .98)) !important;
+  box-shadow: none !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-profile-card,
+.page-shell.theme-dark .business-profile-page .business-info-card,
+.page-shell.theme-dark .business-profile-page .business-feature-strip,
+.page-shell.theme-dark .business-profile-page .business-wallet-panel,
+html.theme-dark .business-profile-page .business-profile-card,
+html.theme-dark .business-profile-page .business-info-card,
+html.theme-dark .business-profile-page .business-feature-strip,
+html.theme-dark .business-profile-page .business-wallet-panel {
+  border-color: rgba(116, 51, 163, .46) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(235, 7, 138, .10), transparent 34%),
+    linear-gradient(145deg, rgba(38, 18, 52, .98), rgba(27, 16, 35, .98)) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .22) !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-hero-banner,
+.page-shell.theme-dark .business-profile-page .business-banner-placeholder,
+html.theme-dark .business-profile-page .business-hero-banner,
+html.theme-dark .business-profile-page .business-banner-placeholder {
+  border-color: rgba(116, 51, 163, .34) !important;
+  background:
+    radial-gradient(circle at 50% 34%, rgba(235, 7, 138, .13), transparent 34%),
+    linear-gradient(135deg, rgba(38, 18, 52, .96), rgba(27, 16, 35, .98)) !important;
+  box-shadow: none !important;
+}
+
+.page-shell.theme-dark .business-profile-page :where(.business-info-card .info-title, .business-feature-item span, .business-wallet-panel p),
+html.theme-dark .business-profile-page :where(.business-info-card .info-title, .business-feature-item span, .business-wallet-panel p) {
+  color: rgba(247, 241, 251, .78) !important;
+}
+
+.page-shell.theme-dark .business-profile-page :where(.business-info-card .info-text, .business-feature-item strong, .business-wallet-panel strong, .business-profile-card h1),
+html.theme-dark .business-profile-page :where(.business-info-card .info-text, .business-feature-item strong, .business-wallet-panel strong, .business-profile-card h1) {
+  color: #ffffff !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-info-action,
+html.theme-dark .business-profile-page .business-info-action {
+  border: 1px solid rgba(235, 7, 138, .26) !important;
+  background: rgba(235, 7, 138, .14) !important;
+  color: #f7d7ea !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-info-action.is-disabled,
+html.theme-dark .business-profile-page .business-info-action.is-disabled {
+  border-color: rgba(116, 51, 163, .18) !important;
+  background: rgba(116, 51, 163, .12) !important;
+  color: rgba(247, 241, 251, .40) !important;
+}
+
+.page-shell.theme-dark .business-profile-page :where(.business-info-icon, .business-feature-item svg, .business-wallet-panel svg, .business-banner-placeholder svg),
+html.theme-dark .business-profile-page :where(.business-info-icon, .business-feature-item svg, .business-wallet-panel svg, .business-banner-placeholder svg) {
+  background: transparent !important;
+  color: var(--brand-pink, #eb078a) !important;
+  box-shadow: none !important;
+}
+
+.page-shell.theme-dark .business-profile-page .business-feature-item,
+html.theme-dark .business-profile-page .business-feature-item {
+  border-color: rgba(116, 51, 163, .24) !important;
+}
+
+/* Final feature-strip alignment: keep every icon attached to its own label in RTL. */
+.business-profile-page .business-feature-strip,
+.business-frame .business-feature-strip {
+  direction: rtl !important;
+}
+
+.business-profile-page .business-feature-item,
+.business-frame .business-feature-item {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  justify-content: start !important;
+  column-gap: 12px !important;
+  direction: rtl !important;
+  text-align: right !important;
+  overflow: hidden !important;
+}
+
+.business-profile-page .business-feature-item svg,
+.business-frame .business-feature-item svg {
+  grid-column: 1 !important;
+  width: 28px !important;
+  height: 28px !important;
+  justify-self: start !important;
+  margin: 0 !important;
+  flex: none !important;
+}
+
+.business-profile-page .business-feature-item > div,
+.business-frame .business-feature-item > div {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+  justify-self: stretch !important;
+  text-align: right !important;
+}
+
+.business-profile-page .business-feature-item strong,
+.business-profile-page .business-feature-item span,
+.business-frame .business-feature-item strong,
+.business-frame .business-feature-item span {
+  width: 100% !important;
+  text-align: right !important;
+}
+
+/* Final feature-strip icon cleanup: SVGs must not carry square backgrounds. */
+.business-profile-page .business-feature-strip .business-feature-item svg,
+.business-frame .business-feature-strip .business-feature-item svg,
+.page-shell.theme-dark .business-profile-page .business-feature-strip .business-feature-item svg,
+html.theme-dark .business-profile-page .business-feature-strip .business-feature-item svg {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  outline: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
 }
