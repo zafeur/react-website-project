@@ -1108,9 +1108,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const displayedBrands = ensureDefaultBrands(homeData.brands);
-  const brandLoopItems = displayedBrands.length > 1
-    ? [...displayedBrands, ...displayedBrands]
-    : displayedBrands;
   const bannerItems = mergeExtraBanners(homeData.banners)
     .filter((banner) => isApiBannerImage(banner?.image))
     .filter((banner) => !failedBannerImages[banner.image]);
@@ -1558,9 +1555,6 @@ useEffect(() => {
 
   const activeStory = activeStoryIndex === null ? null : homeData.stories[activeStoryIndex];
   const storyDisplayItems = homeData.stories.map((story, index) => ({ story, index })).reverse();
-  const storyLoopItems = storyDisplayItems.length > 1
-    ? [...storyDisplayItems, ...storyDisplayItems]
-    : storyDisplayItems;
 
   useEffect(() => {
     setStoryDurationMs(4200);
@@ -2043,12 +2037,12 @@ useEffect(() => {
           </div>
         </section>
 
-        <section className="home-stories" aria-label={t.selectedBrands} data-auto-loop="true">
-          {storyLoopItems.map(({ story, index }, loopIndex) => (
+        <section className="home-stories" aria-label={t.selectedBrands}>
+          {storyDisplayItems.map(({ story, index }) => (
             <button
               className={`home-story ${spinningStory === story.title ? 'is-spinning' : ''}`}
               type="button"
-              key={`${story.title}-${index}-${loopIndex}`}
+              key={`${story.title}-${index}`}
               onClick={() => openStory(story, index)}
             >
               <span className="home-story-ring">
@@ -2164,8 +2158,8 @@ useEffect(() => {
             </div>
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
-          <div className="home-brand-grid" data-auto-loop="true">
-            {brandLoopItems.map((brand, index) => {
+          <div className="home-brand-grid">
+            {displayedBrands.map((brand, index) => {
               const href = getBrandHref(brand);
 
               return (
