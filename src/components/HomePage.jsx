@@ -1201,6 +1201,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const isBrandRow = row.classList.contains('home-brand-grid');
       const isStoryRow = row.classList.contains('home-stories');
       let isPaused = false;
+      let isHoveringCard = false;
       let resumeTimer;
       let scrollDirection = 1;
       let isDragging = false;
@@ -1316,6 +1317,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       };
       const shouldHoldAutoScroll = () =>
         isPaused ||
+        isHoveringCard ||
         (document.activeElement && row.contains(document.activeElement)) ||
         document.hidden;
       const normalizeScrollPosition = () => {
@@ -1486,6 +1488,23 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         event.stopPropagation();
         router.push(href);
       };
+      const handleHoverStart = (event) => {
+        if (!event.target?.closest?.('.home-story, .home-brand-card, .home-offer-card')) {
+          return;
+        }
+
+        isHoveringCard = true;
+        stopAutoStep();
+      };
+      const handleHoverEnd = (event) => {
+        const nextTarget = event.relatedTarget;
+
+        if (nextTarget && row.contains(nextTarget) && nextTarget.closest?.('.home-story, .home-brand-card, .home-offer-card')) {
+          return;
+        }
+
+        isHoveringCard = false;
+      };
       updateOverflowState();
       const resizeObserver = typeof ResizeObserver !== 'undefined'
         ? new ResizeObserver(updateOverflowState)
@@ -1493,10 +1512,12 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       resizeObserver?.observe(row);
       Array.from(row.children).forEach((child) => resizeObserver?.observe(child));
       autoScrollTimer = window.setInterval(autoScroll, 3000);
+      const firstAutoScrollTimer = window.setTimeout(autoScroll, 900);
 
       row.addEventListener('pointerdown', startDrag);
       row.addEventListener('pointermove', moveDrag);
-      row.addEventListener('mouseenter', pause);
+      row.addEventListener('mouseover', handleHoverStart);
+      row.addEventListener('mouseout', handleHoverEnd);
       row.addEventListener('touchstart', pause, { passive: true });
       row.addEventListener('wheel', pause, { passive: true });
       row.addEventListener('pointerup', endDrag);
@@ -1510,10 +1531,12 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         window.cancelAnimationFrame(momentumFrame);
         window.cancelAnimationFrame(autoStepFrame);
         window.clearTimeout(resumeTimer);
+        window.clearTimeout(firstAutoScrollTimer);
         resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
         row.removeEventListener('pointermove', moveDrag);
-        row.removeEventListener('mouseenter', pause);
+        row.removeEventListener('mouseover', handleHoverStart);
+        row.removeEventListener('mouseout', handleHoverEnd);
         row.removeEventListener('touchstart', pause);
         row.removeEventListener('wheel', pause);
         row.removeEventListener('pointerup', endDrag);
