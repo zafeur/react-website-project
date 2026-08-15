@@ -10990,3 +10990,50 @@ html.theme-dark .home-shell .home-offer-footer button {
 .home-shell .home-stories.is-scrollable {
   justify-content: flex-start !important;
 }
+
+/* Final VIP read-more motion: keep the reveal soft after all open-state overrides. */
+.home-shell .home-offer-card--vip-discount .home-offer-description {
+  display: block !important;
+  max-height: 4.9em !important;
+  overflow: hidden !important;
+  opacity: .9 !important;
+  transform-origin: top center !important;
+  transition:
+    max-height .32s ease,
+    opacity .22s ease,
+    transform .22s ease !important;
+}
+
+.home-shell .home-offer-card--vip-discount .home-offer-description.is-expanded {
+  max-height: 220px !important;
+  opacity: 1 !important;
+  animation: homeVipDescriptionOpen .26s ease both !important;
+}
+
+.home-shell .home-offer-card--vip-discount .home-offer-read-more {
+  transition:
+    color .18s ease,
+    transform .18s ease,
+    text-shadow .18s ease !important;
+}
+
+.home-shell .home-offer-card--vip-discount .home-offer-read-more:hover {
+  transform: translateY(-1px) !important;
+  text-shadow: 0 0 14px rgba(255, 233, 172, .24) !important;
+}
+
+.home-shell .home-offer-card--vip-discount .home-offer-read-more:active {
+  transform: translateY(1px) scale(.96) !important;
+}
+
+@keyframes homeVipDescriptionOpen {
+  from {
+    opacity: .58;
+    transform: translateY(-4px) scaleY(.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
