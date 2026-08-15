@@ -168,7 +168,7 @@ export const businessProfiles = decodeSiteDataText([
   {
     id: 'melal',
     slug: 'melal',
-    collectionId: '',
+    collectionId: 'melal',
     aliases: ['restaurant', 'Ø±Ø³ØªÙˆØ±Ø§Ù† Ù…Ù„Ù„', 'Ù…Ù„Ù„'],
     title: 'Ø±Ø³ØªÙˆØ±Ø§Ù† Ù…Ù„Ù„',
     shortTitle: 'Ù…Ù„Ù„',

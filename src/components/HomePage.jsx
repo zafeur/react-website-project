@@ -1,9 +1,12 @@
-﻿import { useEffect, useRef, useState } from 'react';
+﻿import { faqs } from '../data/faqData';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
   ChevronLeft,
   ChevronRight,
+  Check,
+  Copy,
   Gift,
   LogIn,
   Moon,
@@ -73,6 +76,8 @@ const t = {
   discountCode: "\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0634\u0645\u0627",
   discountRequested: "\u062f\u0631\u062e\u0648\u0627\u0633\u062a \u0634\u0645\u0627 \u062b\u0628\u062a \u0634\u062f.",
   discountFailed: "\u062f\u0631\u06cc\u0627\u0641\u062a \u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0627\u0646\u062c\u0627\u0645 \u0646\u0634\u062f.",
+  copyCode: "\u06a9\u067e\u06cc \u06a9\u062f",
+  copiedCode: "\u06a9\u067e\u06cc \u0634\u062f",
   search: "\u062c\u0633\u062a\u062c\u0648\u06cc \u0628\u0631\u0646\u062f\u060c \u0647\u062f\u06cc\u0647 \u06cc\u0627 \u067e\u06cc\u0634\u0646\u0647\u0627\u062f...",
   searchResults: "\u0646\u062a\u0627\u06cc\u062c \u062c\u0633\u062a\u062c\u0648",
   noResults: "\u0646\u062a\u06cc\u062c\u0647\u200c\u0627\u06cc \u067e\u06cc\u062f\u0627 \u0646\u0634\u062f",
@@ -136,21 +141,47 @@ const normalizeMediaUrl = (value, fallback) => {
 };
 
 const defaultHomeData = {
-  stories: [],
-
-  banners: [],
-
-  brands: [],
-
-  categories: [
-  { title: t.gifts, icon: 'Gift' },
-  { title: t.restaurant, icon: 'Store' },
-  { title: t.shop, icon: 'ShoppingBag' },
-  { title: t.club, icon: 'Star' },
-  { title: t.special, icon: 'Sparkles' },
+  stories: [
+  { title: getStoryDisplayTitle(t.bastani), image: asset('img/business-banners/bastani-logo-enhanced.png'), video: storyVideoByTitle[t.bastani] },
+  { title: t.barial, image: asset('img/barial.jpg'), video: storyVideoByTitle[t.barial] },
+  { title: t.dorato, image: asset('img/logo dorato.jpg'), video: storyVideoByTitle[t.dorato] },
+  { title: t.ibamo, image: asset('img/logo ibamo.jpg'), video: storyVideoByTitle[t.ibamo] },
+  { title: getStoryDisplayTitle(t.mojalal), image: asset('img/mojalal.jpg'), video: storyVideoByTitle[t.mojalal] },
+  { title: t.bakhshi, image: asset('img/bakhshi.jpg'), video: storyVideoByTitle[t.bakhshi] },
 ],
 
-  offers: [],
+  banners: [
+  { title: t.bastani, image: asset('img/banner/bannerweb bastani.6ff0aa72.jpg') },
+  { title: t.barial, image: asset('img/banner/bannerweb barial.15abe337.jpg') },
+  { title: t.bakhshi, image: asset('img/banner/bannerweb bakhshi.e2078af9 (1).jpg') },
+],
+
+  brands: [
+  { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/collections/melal' },
+  { title: t.barial, businessId: 'barial', collectionId: '4', image: asset('img/barial.jpg'), href: '/collections/4' },
+  { title: t.dorato, businessId: 'dorato', collectionId: '5', image: asset('img/logo dorato.jpg'), href: '/collections/5' },
+  { title: t.bastani, businessId: 'bastani', collectionId: '2', image: asset('img/business-banners/bastani-logo-enhanced.png'), href: '/collections/2' },
+  { title: t.ibamo, businessId: 'ibamo', collectionId: '1', image: asset('img/logo ibamo.jpg'), href: '/collections/1' },
+  { title: t.mojalal, businessId: 'mojalal', collectionId: '3', image: asset('img/mojalal.jpg'), href: '/collections/3' },
+],
+
+  categories: [
+  { title: t.gifts, icon: 'Gift', href: '#gifts' },
+  { title: t.restaurant, icon: 'Store', href: '/collections/melal' },
+  { title: t.shop, icon: 'ShoppingBag', disabled: true },
+  { title: t.club, icon: 'Star', disabled: true },
+  { title: t.special, icon: 'Sparkles', href: '#vip-gifts' },
+],
+
+  offers: [
+  { id: 'melal-discount', businessId: 'melal', title: t.gift1, brand: t.restaurant, tag: t.free, vip: 0, hasGift: true, hasDiscount: false, image: asset('img/restaurant-melal.png') },
+  { id: 'barial-discount', businessId: 'barial', collectionId: '4', title: t.gift2, brand: t.barial, tag: t.discount, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/barial.jpg') },
+  { id: 'dorato-discount', businessId: 'dorato', collectionId: '5', title: t.gift3, brand: t.dorato, tag: t.special, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/logo dorato.jpg') },
+  { id: 'ibamo-discount', businessId: 'ibamo', collectionId: '1', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0627\u06cc\u0628\u0627\u0645\u0648', brand: t.ibamo, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
+  { id: 'bakhshi-discount', businessId: 'bakhshi', collectionId: '6', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u062e\u0634\u06cc', brand: t.bakhshi, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/bakhshi.jpg') },
+  { id: 'bastani-discount', businessId: 'bastani', collectionId: '2', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u0627\u0633\u062a\u0627\u0646\u06cc', brand: t.bastani, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/business-banners/bastani-logo-enhanced.png') },
+  { id: 'mojalal-discount', businessId: 'mojalal', collectionId: '3', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0645\u062c\u0644\u0644', brand: t.mojalal, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/mojalal.jpg') },
+],
 };
 
 const emptyHomeData = {
@@ -410,11 +441,18 @@ const getCollectionIdForOffer = (offer) => {
   const explicitCollectionId = firstValue(offer, ['collectionId', 'collection_id', 'collectionID']);
   const businessKey = getKnownBusinessKey(offer);
 
-  return explicitCollectionId || knownCollectionIdByBusiness[businessKey] || '';
+  if (explicitCollectionId) return explicitCollectionId;
+  if (businessKey === 'melal') return '';
+
+  return knownCollectionIdByBusiness[businessKey] || '';
 };
 
 const getOfferFallback = (offer, index) => {
-  return {};
+  const businessKey = getKnownBusinessKey(offer);
+
+  return defaultHomeData.offers.find((fallbackOffer) => fallbackOffer.businessId === businessKey) ||
+    defaultHomeData.offers[index % defaultHomeData.offers.length] ||
+    {};
 };
 
 const valueMatchesBusiness = (value, businessKey) => {
@@ -617,6 +655,21 @@ const buildBrandsFromOffers = (offers) => {
     .filter(Boolean);
 };
 
+const ensureDefaultBrands = (brands) => {
+  const normalizedBrands = Array.isArray(brands) ? brands : [];
+  const existingKeys = new Set(
+    normalizedBrands
+      .map((brand) => getKnownBusinessKey(brand) || firstValue(brand, ['businessId', 'business_id', 'collectionId', 'collection_id']))
+      .filter(Boolean)
+  );
+  const missingDefaults = defaultHomeData.brands.filter((brand) => {
+    const key = getKnownBusinessKey(brand) || brand.businessId || brand.collectionId;
+    return key && !existingKeys.has(key);
+  });
+
+  return [...missingDefaults, ...normalizedBrands];
+};
+
 const buildStoriesFromOffers = (offers) =>
   buildBrandsFromOffers(offers)
     .map((brand) => ({
@@ -709,12 +762,12 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   return {
     ...normalizedHome,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
-    brands: discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands,
+    brands: ensureDefaultBrands(discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands),
     offers: mergeOfferLists(normalizedHome.offers, discountOffers),
   };
 };
 
-const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v2';
+const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v3';
 const HOME_MOBILE_CACHE_KEY = 'keymiyay-home-mobile';
 const PROFILE_STORAGE_KEY = 'keymiyay-user-profile';
 
@@ -779,17 +832,17 @@ const saveCachedHomeMobile = (mobile) => {
 const hasUsableHomeData = (data) => Boolean(data?.stories?.length || data?.offers?.length || data?.brands?.length || data?.banners?.length);
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
-  const brands = normalizeCards(
+  const brands = ensureDefaultBrands(normalizeCards(
     normalizeList(data?.brands || data?.businesses || data?.stores, []),
-    []
-  );
+    defaultHomeData.brands
+  ));
 
   return {
     stories: normalizeApiStories(data),
     banners: normalizeCards(normalizeList(data?.banners || data?.sliders || data?.slides, []), []),
     brands,
     categories: normalizeCategories(data?.categories),
-    offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, [])),
+    offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, defaultHomeData.offers)),
   };
 };
 
@@ -968,7 +1021,7 @@ const getDirectGeneratedCode = (data) => {
 };
 
 const getDiscountCode = (data, offer) =>
-  findOfferDiscountCode(data, offer) || getDirectGeneratedCode(data);
+  findOfferDiscountCode(data, offer) || getDirectGeneratedCode(data) || firstValue(offer, discountCodeKeys);
 
 const getDiscountMessage = (data) =>
   findNestedValue(data, ['message', 'text', 'description']);
@@ -1097,6 +1150,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [activeBanner, setActiveBanner] = useState(0);
   const [bannerDragOffset, setBannerDragOffset] = useState(0);
   const [isBannerDragging, setIsBannerDragging] = useState(false);
+  const [failedBannerImages, setFailedBannerImages] = useState({});
   const bannerTimerRef = useRef(null);
   const dragStartRef = useRef(null);
   const storyVideoRef = useRef(null);
@@ -1108,10 +1162,15 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [storyDurationMs, setStoryDurationMs] = useState(4200);
   const [pendingOffer, setPendingOffer] = useState(null);
   const [discountPopup, setDiscountPopup] = useState(null);
+  const [isDiscountCodeCopied, setIsDiscountCodeCopied] = useState(false);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
+  const [requestingOfferId, setRequestingOfferId] = useState(null);
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
-  const bannerItems = mergeExtraBanners(homeData.banners).filter((banner) => isApiBannerImage(banner?.image));
+  const displayedBrands = ensureDefaultBrands(homeData.brands);
+  const bannerItems = mergeExtraBanners(homeData.banners)
+    .filter((banner) => isApiBannerImage(banner?.image))
+    .filter((banner) => !failedBannerImages[banner.image]);
   const bannerCount = bannerItems.length;
   const bannerDots = bannerCount ? bannerItems : [{ title: 'placeholder-1' }, { title: 'placeholder-2' }, { title: 'placeholder-3' }];
   const debugVipValue = getDebugVipValue(router);
@@ -1143,14 +1202,14 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       })
     : [];
   const filteredBrands = normalizedSearchQuery && filteredOffers.length === 0
-    ? homeData.brands.filter((brand) => normalizeSearchText([
+    ? displayedBrands.filter((brand) => normalizeSearchText([
         brand.title,
         brand.businessId,
         brand.collectionId,
       ].join(' ')).includes(normalizedSearchQuery))
     : [];
   const searchResultCount = filteredOffers.length || filteredBrands.length;
-  const primaryCollectionHref = homeData.brands.find((brand) => brand.href && brand.href.startsWith('/collections/'))?.href ||
+  const primaryCollectionHref = displayedBrands.find((brand) => brand.href && brand.href.startsWith('/collections/'))?.href ||
     getCollectionHref(homeData.offers[0]) ||
     '/#brands';
   useEffect(() => {
@@ -1222,7 +1281,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         const elapsedSeconds = Math.min((frameTime - previousFrameTime) / 1000, 0.06);
         previousFrameTime = frameTime;
 
-        if (!isBrandRow && !reduceMotion && !shouldHoldAutoScroll()) {
+        if (!reduceMotion && !shouldHoldAutoScroll()) {
           if (row.scrollLeft >= maxScroll - 1) {
             scrollDirection = -1;
           } else if (row.scrollLeft <= 1) {
@@ -1403,50 +1462,9 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   }, [homeData.stories, homeData.brands, homeData.offers, vipOffers.length, visibleGiftDiscountOffers.length, discountOnlyOffers.length, router]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return undefined;
-    }
+    setIsDiscountCodeCopied(false);
+  }, [discountPopup?.code]);
 
-    const row = document.querySelector('#brands .home-brand-grid[data-auto-loop="true"]');
-
-    if (!row) {
-      return undefined;
-    }
-
-    let direction = 1;
-    let pauseUntil = 0;
-    const speedPerTick = 1.15;
-    const pauseBriefly = () => {
-      pauseUntil = window.performance.now() + 900;
-    };
-    const tick = () => {
-      const maxScroll = row.scrollWidth - row.clientWidth;
-
-      if (maxScroll <= 8 || row.matches(':hover') || row.classList.contains('is-dragging') || window.performance.now() < pauseUntil) {
-        return;
-      }
-
-      if (row.scrollLeft >= maxScroll - 1) {
-        direction = -1;
-      } else if (row.scrollLeft <= 1) {
-        direction = 1;
-      }
-
-      row.scrollLeft = Math.max(0, Math.min(maxScroll, row.scrollLeft + speedPerTick * direction));
-    };
-    const timer = window.setInterval(tick, 24);
-
-    row.addEventListener('pointerdown', pauseBriefly);
-    row.addEventListener('wheel', pauseBriefly, { passive: true });
-    row.addEventListener('touchstart', pauseBriefly, { passive: true });
-
-    return () => {
-      window.clearInterval(timer);
-      row.removeEventListener('pointerdown', pauseBriefly);
-      row.removeEventListener('wheel', pauseBriefly);
-      row.removeEventListener('touchstart', pauseBriefly);
-    };
-  }, [homeData.brands.length]);
 useEffect(() => {
   const checkAuth = () => {
     setIsLoggedIn(hasAuthToken());
@@ -1778,7 +1796,19 @@ useEffect(() => {
       return;
     }
 
+    const existingCode = firstValue(offer, discountCodeKeys);
+
+    if (existingCode) {
+      setDiscountPopup({
+        offer,
+        code: existingCode,
+        message: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0622\u0645\u0627\u062f\u0647 \u0627\u0633\u062a.',
+      });
+      return;
+    }
+
     try {
+      setRequestingOfferId(offer.id);
       setIsRequestingDiscount(true);
       const data = await requestDiscountCode(offer, { mobile: loadCachedHomeMobile() });
       const receivedCode = getDiscountCode(data, offer) || '';
@@ -1788,16 +1818,34 @@ useEffect(() => {
         code: receivedCode,
         message: receivedCode
           ? getDiscountMessage(data) || '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0628\u0627 \u0645\u0648\u0641\u0642\u06cc\u062a \u062f\u0631\u06cc\u0627\u0641\u062a \u0634\u062f.'
-          : getDiscountMessage(data) || '\u06a9\u062f\u06cc \u0627\u0632 \u0633\u0645\u062a API \u0628\u0631\u0646\u06af\u0634\u062a. \u0644\u0637\u0641\u0627 \u062f\u0648\u0628\u0627\u0631\u0647 \u062a\u0644\u0627\u0634 \u06a9\u0646\u06cc\u062f.',
+          : getDiscountMessage(data) || '\u062f\u0631 \u062d\u0627\u0644 \u062d\u0627\u0636\u0631 \u06a9\u062f\u06cc \u0628\u0631\u0627\u06cc \u0627\u06cc\u0646 \u067e\u06cc\u0634\u0646\u0647\u0627\u062f \u062f\u0631 \u062f\u0633\u062a\u0631\u0633 \u0646\u06cc\u0633\u062a. \u0644\u0637\u0641\u0627 \u06a9\u0645\u06cc \u0628\u0639\u062f \u062f\u0648\u0628\u0627\u0631\u0647 \u062a\u0644\u0627\u0634 \u06a9\u0646\u06cc\u062f.',
       });
-    } catch (error) {
+    } catch {
       setDiscountPopup({
         offer,
         code: '',
-        message: error.response?.data?.message || error.message || t.discountFailed,
+        message: t.discountFailed,
       });
     } finally {
       setIsRequestingDiscount(false);
+      setRequestingOfferId(null);
+    }
+  };
+
+  const copyDiscountCode = async () => {
+    if (!discountPopup?.code) return;
+
+    try {
+      await navigator.clipboard.writeText(discountPopup.code);
+      setIsDiscountCodeCopied(true);
+    } catch {
+      const textArea = document.createElement('textarea');
+      textArea.value = discountPopup.code;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setIsDiscountCodeCopied(true);
     }
   };
 
@@ -1854,7 +1902,7 @@ useEffect(() => {
         </div>
         <div className="home-offer-footer">
           <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount || isInactive}>
-            {isRequestingDiscount ? t.wait : '\u06a9\u062f \u062e\u0631\u06cc\u062f'}
+            {requestingOfferId === offer.id ? t.wait : '\u06a9\u062f \u062e\u0631\u06cc\u062f'}
           </button>
         </div>
       </article>
@@ -2009,7 +2057,14 @@ useEffect(() => {
                       onPointerUp={(event) => handleBrandPointerUp(event, href)}
                       key={`search-brand-${brand.title}`}
                     >
-                      <img src={brand.image} alt={brand.title} />
+                      {isRestaurantBrand(brand.title) ? (
+                        <span className="home-brand-melal-logo" aria-label={brand.title}>
+                          <span>{'\u0645\u0644\u0644'}</span>
+                          <small>RESTAURANT</small>
+                        </span>
+                      ) : (
+                        <img src={brand.image} alt={brand.title} />
+                      )}
                       <strong>{brand.title}</strong>
                     </Link>
                   );
@@ -2059,22 +2114,7 @@ useEffect(() => {
         </section>
 
 
-        {vipOffers.length ? (
-          <section className="home-section home-offer-section home-vip-section" id="vip-gifts">
-            <div className="home-section-head">
-              <div>
-                <span>پیشنهادهای ویژه</span>
-                <h2>کارت‌های ویژه</h2>
-              </div>
-              <button className="home-text-action" type="button" onClick={() => document.getElementById('gifts')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-                مشاهده بقیه کارت‌ها
-              </button>
-            </div>
-            <div className="home-offer-grid home-vip-offer-grid">
-              {vipOffers.map(renderOfferCard)}
-            </div>
-          </section>
-        ) : null}
+        
         <section className="home-hero-grid">
           <div className="home-banner-slider" aria-label={t.bannerAlt}>
             <div
@@ -2089,7 +2129,11 @@ useEffect(() => {
                 {bannerCount ? (
                   bannerItems.map((banner, index) => (
                     <div className="home-banner-slide" key={`${banner.title}-${index}`}>
-                      <img src={banner.image} alt={`${t.bannerAlt} ${banner.title}`} />
+                      <img
+                        src={banner.image}
+                        alt={`${t.bannerAlt} ${banner.title}`}
+                        onError={() => setFailedBannerImages((current) => ({ ...current, [banner.image]: true }))}
+                      />
                     </div>
                   ))
                 ) : (
@@ -2134,6 +2178,34 @@ useEffect(() => {
           </aside>
         </section>
 
+        {vipOffers.length ? (
+  <section className="home-section home-offer-section home-vip-section" id="vip-gifts">
+    <div className="home-section-head">
+      <div>
+        <span>پیشنهادهای ویژه</span>
+
+      </div>
+
+      <button
+        className="home-text-action"
+        type="button"
+        onClick={() =>
+          document.getElementById('gifts')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          })
+        }
+      >
+        مشاهده بقیه کارت‌ها
+      </button>
+    </div>
+
+    <div className="home-offer-grid home-vip-offer-grid">
+      {vipOffers.map(renderOfferCard)}
+    </div>
+  </section>
+     ) : null}
+
         <section className="home-section" id="brands">
           <div className="home-section-head">
             <div>
@@ -2143,7 +2215,7 @@ useEffect(() => {
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
           <div className="home-brand-grid" data-auto-loop="true">
-            {homeData.brands.map((brand, index) => {
+            {displayedBrands.map((brand, index) => {
               const href = getBrandHref(brand);
 
               return (
@@ -2330,39 +2402,50 @@ useEffect(() => {
       )}
 
       {discountPopup && (
-        <div className="home-popup-backdrop" onClick={() => setDiscountPopup(null)}>
-          <section className="home-discount-popup" onClick={(event) => event.stopPropagation()}>
-            <button type="button" className="home-popup-close" onClick={() => setDiscountPopup(null)}>{t.close}</button>
-            <span className="home-eyebrow">{discountPopup.offer?.brand}</span>
-            <h2>{discountPopup.code ? t.discountCode : discountPopup.offer?.title}</h2>
-            <div className={`home-discount-code ${discountPopup.code ? '' : 'is-empty'}`}>
-              {discountPopup.code || '\u06a9\u062f\u06cc \u062f\u0631\u06cc\u0627\u0641\u062a \u0646\u0634\u062f'}
-            </div>
-            <p>{discountPopup.message}</p>
-          </section>
+  <div className="home-popup-backdrop" onClick={() => setDiscountPopup(null)}>
+    <section
+      className="home-discount-popup"
+      onClick={(event) => event.stopPropagation()}
+    >
+      <button
+        type="button"
+        className="home-popup-close"
+        onClick={() => setDiscountPopup(null)}
+      >
+        {t.close}
+      </button>
+
+      <span className="home-eyebrow">
+        {discountPopup.offer?.brand}
+      </span>
+
+      <h2>
+        {discountPopup.code
+          ? t.discountCode
+          : discountPopup.offer?.title}
+      </h2>
+
+      {discountPopup.code ? (
+        <div className="home-discount-code-wrap">
+          <div className="home-discount-code">{discountPopup.code}</div>
+          <button className="home-discount-copy" type="button" onClick={copyDiscountCode}>
+            {isDiscountCodeCopied ? <Check /> : <Copy />}
+            <span>{isDiscountCodeCopied ? t.copiedCode : t.copyCode}</span>
+          </button>
         </div>
+      ) : (
+        <div className="home-discount-code is-empty">کدی دریافت نشد</div>
       )}
+
+      <p>{discountPopup.message}</p>
+    </section>
+  </div>
+)}
     </main>
   );
 }
 
 export default HomePage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -12,9 +12,16 @@ import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, 
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
 const PROFILE_STORAGE_KEY = "keymiyay-user-profile";
+const AVATAR_STORAGE_KEY = "keymiyay-user-avatar";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
 const localAvatarChoices = new Set([brandAssets.maleProfile, brandAssets.femaleProfile]);
+const getSavedAvatarChoice = () => {
+  if (!canUseStorage()) return "";
+
+  const savedAvatar = localStorage.getItem(AVATAR_STORAGE_KEY);
+  return localAvatarChoices.has(savedAvatar) ? savedAvatar : "";
+};
 
 const hasIncomingAvatar = (profile = {}) => Boolean(
   profile.avatarPreview ||
@@ -59,6 +66,12 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
       const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
       if (savedProfile) {
         setUserProfile(JSON.parse(savedProfile));
+        return;
+      }
+
+      const savedAvatar = getSavedAvatarChoice();
+      if (savedAvatar) {
+        setUserProfile({ avatarPreview: savedAvatar });
       }
     } catch (error) {
       localStorage.removeItem(PROFILE_STORAGE_KEY);
@@ -281,6 +294,7 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
           ? { ...incomingProfile, ...current }
           : { ...(current || {}), ...incomingProfile }
       );
+      const savedAvatar = getSavedAvatarChoice();
 
       if (
         current?.avatarPreview &&
@@ -290,6 +304,14 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
         nextProfile.avatarPreview = current.avatarPreview;
       }
 
+      if (
+        !nextProfile.avatarPreview &&
+        savedAvatar &&
+        !hasIncomingAvatar(profile)
+      ) {
+        nextProfile.avatarPreview = savedAvatar;
+      }
+
       if (canUseStorage()) {
         const profileForStorage = { ...nextProfile };
         delete profileForStorage.avatarFile;
@@ -297,6 +319,9 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
         delete profileForStorage.imageFile;
         if (String(profileForStorage.avatarPreview || "").startsWith("blob:")) {
           delete profileForStorage.avatarPreview;
+        }
+        if (localAvatarChoices.has(profileForStorage.avatarPreview)) {
+          localStorage.setItem(AVATAR_STORAGE_KEY, profileForStorage.avatarPreview);
         }
         localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profileForStorage));
       }

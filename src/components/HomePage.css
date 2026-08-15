@@ -11040,6 +11040,62 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
   user-select: none !important;
 }
 
+/* VIP cards: expanding one description must not stretch every card in the row. */
+.home-vip-section .home-offer-grid,
+.home-vip-offer-grid {
+  align-items: flex-start !important;
+}
+
+.home-vip-section .home-offer-card {
+  align-self: flex-start !important;
+  height: auto !important;
+}
+
+.home-vip-section .home-offer-card .home-offer-description.is-expanded {
+  max-height: 96px !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Final VIP card normalization: no inner text scrollbar, and row cards share one height. */
+.home-vip-section .home-offer-grid,
+.home-vip-offer-grid {
+  align-items: stretch !important;
+}
+
+.home-vip-section .home-offer-card,
+.home-vip-section .home-offer-card--vip-discount,
+.home-shell.theme-dark .home-vip-section .home-offer-card,
+html.theme-dark .home-shell .home-vip-section .home-offer-card {
+  align-self: stretch !important;
+  display: grid !important;
+  grid-template-rows: auto 1fr auto !important;
+  height: auto !important;
+  min-height: 400px !important;
+}
+
+.home-vip-section .home-offer-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+.home-vip-section .home-offer-description,
+.home-vip-section .home-offer-card .home-offer-description.is-expanded {
+  max-height: none !important;
+  overflow: visible !important;
+  scrollbar-width: none !important;
+}
+
+.home-vip-section .home-offer-description::-webkit-scrollbar,
+.home-vip-section .home-offer-card .home-offer-description.is-expanded::-webkit-scrollbar {
+  display: none !important;
+}
+
+.home-vip-section .home-offer-footer {
+  align-self: end !important;
+}
+
 /* Mobile about card: keep contact pills inside the dark card. */
 @media (max-width: 640px) {
   .home-shell .home-about-intro {
@@ -11090,4 +11146,125 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
     width: 15px !important;
     height: 15px !important;
   }
+}
+.home-discount-copy-button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px 18px;
+  border: 1px solid #7433a3;
+  border-radius: 12px;
+  background: #7433a3;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 16px rgba(116, 51, 163, 0.22);
+}
+
+.home-discount-copy-button:hover {
+  background: #eb078a;
+  border-color: #eb078a;
+  box-shadow: 0 8px 20px rgba(235, 7, 138, 0.25);
+}
+
+.home-discount-copy-button:active {
+  transform: scale(0.98);
+}
+
+/* Final API-empty banner fallback: designed backgrounds for light and dark modes. */
+.home-banner-slide.is-placeholder {
+  position: relative !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, .72), rgba(255, 255, 255, .22)),
+    radial-gradient(circle at 16% 22%, rgba(235, 7, 138, .18), transparent 30%),
+    radial-gradient(circle at 82% 24%, rgba(116, 51, 163, .20), transparent 34%),
+    linear-gradient(135deg, #fff7fd 0%, #f6effb 46%, #ffffff 100%) !important;
+}
+
+.home-banner-slide.is-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(116, 51, 163, .14);
+  background:
+    repeating-linear-gradient(
+      -18deg,
+      rgba(116, 51, 163, .08) 0,
+      rgba(116, 51, 163, .08) 1px,
+      transparent 1px,
+      transparent 14px
+    );
+  opacity: .75;
+}
+
+.home-banner-slide.is-placeholder::after {
+  content: "کی میای";
+  position: absolute;
+  right: clamp(28px, 6vw, 76px);
+  bottom: clamp(26px, 5vw, 58px);
+  color: rgba(116, 51, 163, .72);
+  font-size: clamp(28px, 5vw, 62px);
+  font-weight: 950;
+  line-height: 1;
+}
+
+.home-shell.theme-dark .home-banner-slide.is-placeholder,
+html.theme-dark .home-shell .home-banner-slide.is-placeholder {
+  background:
+    linear-gradient(90deg, rgba(31, 15, 42, .86), rgba(31, 15, 42, .34)),
+    radial-gradient(circle at 16% 22%, rgba(235, 7, 138, .30), transparent 30%),
+    radial-gradient(circle at 82% 24%, rgba(151, 83, 212, .30), transparent 34%),
+    linear-gradient(135deg, #170c21 0%, #281238 52%, #130a1b 100%) !important;
+}
+
+.home-shell.theme-dark .home-banner-slide.is-placeholder::before,
+html.theme-dark .home-shell .home-banner-slide.is-placeholder::before {
+  border-color: rgba(255, 255, 255, .12);
+  background:
+    repeating-linear-gradient(
+      -18deg,
+      rgba(255, 255, 255, .08) 0,
+      rgba(255, 255, 255, .08) 1px,
+      transparent 1px,
+      transparent 14px
+    );
+}
+
+.home-shell.theme-dark .home-banner-slide.is-placeholder::after,
+html.theme-dark .home-shell .home-banner-slide.is-placeholder::after {
+  color: rgba(255, 255, 255, .78);
+}
+
+/* Dark guide cards: keep number/icon pills on the dark surface. */
+.home-shell.theme-dark .home-guide-steps li,
+html.theme-dark .home-shell .home-guide-steps li {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .03)),
+    rgba(27, 16, 35, .92) !important;
+  border-color: rgba(235, 7, 138, .26) !important;
+  box-shadow: 0 22px 42px rgba(0, 0, 0, .26) !important;
+}
+
+.home-shell.theme-dark .home-guide-number,
+html.theme-dark .home-shell .home-guide-number {
+  background: linear-gradient(145deg, #eb078a 0%, #7433a3 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, .18) !important;
+  box-shadow: 0 14px 28px rgba(235, 7, 138, .22) !important;
+}
+
+.home-shell.theme-dark .home-guide-icon,
+html.theme-dark .home-shell .home-guide-icon {
+  background: rgba(235, 7, 138, .14) !important;
+  color: #f7d7ea !important;
+  border: 1px solid rgba(235, 7, 138, .24) !important;
+}
+
+.home-shell.theme-dark .home-guide-steps li:hover,
+html.theme-dark .home-shell .home-guide-steps li:hover {
+  border-color: rgba(235, 7, 138, .42) !important;
+  box-shadow: 0 26px 48px rgba(0, 0, 0, .32) !important;
 }

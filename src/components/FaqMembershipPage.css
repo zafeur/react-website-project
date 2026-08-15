@@ -1,3 +1,7 @@
+/* =========================================================
+   FAQ PAGE — BASE
+   ========================================================= */
+
 .faq-shell {
   width: 100%;
   max-width: 1256px;
@@ -27,31 +31,32 @@
   white-space: nowrap;
 }
 
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
 .faq-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 28px;
-  align-items: stretch;
+  display: block;
   margin-top: 24px;
 }
 
 .faq-hero-copy,
-.faq-hero-card,
 .faq-section {
   border: 1px solid var(--line);
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 19px rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  box-shadow: 0 8px 19px rgba(0, 0, 0, 0.05);
 }
 
 .faq-hero-copy {
-  padding: 34px;
+  padding: 38px;
 }
 
 .faq-eyebrow,
-.faq-section-head span,
-.faq-form-intro span,
-.faq-trust-card span {
+.faq-section-head > span,
+.faq-form-intro > div:first-child > span,
+.faq-trust-card > span {
   color: var(--green);
   font-size: 14px;
   font-weight: 800;
@@ -80,54 +85,53 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 9px;
+
   min-height: 48px;
   padding: 0 22px;
+
   color: #fff;
-  background: linear-gradient(#7433a3 0%, #7433a3 100%);
+  background: linear-gradient(135deg, #7433a3, #8a3db4);
+
   border: 0;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 11px;
+
+  font-size: 15px;
   font-weight: 800;
-  box-shadow: 0 8px 18px rgba(116, 51, 163, 0.24);
+
+  box-shadow: 0 8px 18px rgba(116, 51, 163, 0.2);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
 }
 
 .faq-primary-link {
   margin-top: 16px;
 }
 
-.faq-hero-card {
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 14px;
-  padding: 28px;
-  text-align: center;
+.faq-primary-link svg {
+  width: 18px;
+  height: 18px;
 }
 
-.faq-hero-card svg {
-  width: 76px;
-  height: 76px;
-  color: var(--green);
-  padding: 16px;
-  border-radius: 50%;
-  background: #f1fbf5;
+.faq-primary-link:hover,
+.faq-submit-btn:hover:not(:disabled) {
+  color: #fff;
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow: 0 12px 24px rgba(116, 51, 163, 0.25);
 }
 
-.faq-hero-card strong {
-  font-size: 24px;
-  font-weight: 800;
-}
 
-.faq-hero-card span {
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.9;
-}
+/* =========================================================
+   GENERAL SECTIONS
+   ========================================================= */
 
 .faq-section {
   margin-top: 24px;
-  padding: 26px;
+  padding: 28px;
 }
 
 .faq-section-head {
@@ -143,39 +147,85 @@
   line-height: 1.5;
 }
 
+
+/* =========================================================
+   CUSTOMER FLOW
+   ========================================================= */
+
+.faq-flow-section {
+  padding: 26px;
+}
+
 .faq-customer-flow {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
 }
 
 .faq-step-card {
-  min-height: 230px;
-  padding: 18px;
+  min-height: 0;
+  padding: 17px 15px;
+
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 13px;
+
   background: #fff;
+
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
 }
 
 .faq-step-number {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  margin-bottom: 16px;
-  color: #fff;
-  background: var(--green);
-  border-radius: 50%;
+
+  width: 31px;
+  height: 31px;
+  margin-bottom: 12px;
+
+  color: #7433a3;
+  background: #f4eef8;
+
+  border: 1px solid rgba(116, 51, 163, 0.12);
+  border-radius: 9px;
+
+  font-size: 13px;
   font-weight: 800;
 }
 
 .faq-step-card h3 {
-  margin: 0 0 10px;
+  margin: 0 0 7px;
+
   color: #202326;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 800;
-  line-height: 1.7;
+  line-height: 1.65;
 }
+
+.faq-step-card p {
+  margin: 0;
+
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.85;
+}
+
+.faq-step-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(116, 51, 163, 0.25);
+  box-shadow: 0 10px 22px rgba(116, 51, 163, 0.08);
+}
+
+
+/* =========================================================
+   BUSINESS FLOW
+   ========================================================= */
 
 .faq-two-column {
   display: grid;
@@ -186,8 +236,10 @@
 .faq-business-flow {
   display: grid;
   gap: 12px;
+
   margin: 0;
   padding: 0;
+
   list-style: none;
   counter-reset: business-step;
 }
@@ -195,60 +247,91 @@
 .faq-business-flow li {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr);
+
   align-items: center;
   gap: 12px;
+
   min-height: 58px;
   padding: 12px 14px;
+
   border: 1px solid var(--line);
   border-radius: 10px;
+
   color: #202326;
+
   font-size: 15px;
   font-weight: 700;
   line-height: 1.9;
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.faq-business-flow li:hover {
+  transform: translateY(-1px);
+  border-color: rgba(116, 51, 163, 0.25);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
 }
 
 .faq-business-flow li::before {
   counter-increment: business-step;
   content: counter(business-step);
+
   display: grid;
   place-items: center;
+
   width: 34px;
   height: 34px;
-  color: var(--green);
-  background: #f1fbf5;
+
+  color: #7433a3;
+  background: #f4eef8;
+
   border-radius: 50%;
+
   font-weight: 800;
 }
 
 .faq-trust-card {
   align-self: start;
+
   padding: 24px;
+
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 14px;
+
   background: #f9fffb;
 }
 
 .faq-trust-icon {
   display: grid;
   place-items: center;
-  width: 72px;
-  height: 72px;
+
+  width: 64px;
+  height: 64px;
   margin-bottom: 16px;
+
   color: #fff;
-  background: var(--green);
-  border-radius: 50%;
+  background: linear-gradient(135deg, #7433a3, #8a3db4);
+
+  border-radius: 18px;
+
+  box-shadow: 0 8px 18px rgba(116, 51, 163, 0.18);
 }
 
 .faq-trust-icon svg {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
 }
 
 .faq-trust-card ul {
   display: grid;
   gap: 12px;
+
   margin: 18px 0 0;
   padding: 0;
+
   list-style: none;
 }
 
@@ -256,7 +339,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
+
   color: #202326;
+
   font-size: 14px;
   font-weight: 700;
   line-height: 1.8;
@@ -269,314 +354,935 @@
   color: var(--green);
 }
 
+
+/* =========================================================
+   FAQ — MAIN HEADER
+   ========================================================= */
+
+.faq-all-section {
+  padding: 30px;
+}
+
+.faq-main-heading {
+  margin-bottom: 28px;
+}
+
+.faq-heading-badge {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+
+  width: fit-content;
+
+  padding: 7px 11px;
+
+  border-radius: 9px;
+
+  background: #f5eff9;
+  color: #7433a3 !important;
+
+  font-size: 12px !important;
+}
+
+.faq-heading-badge svg {
+  width: 16px;
+  height: 16px;
+}
+
+.faq-main-heading h2 {
+  margin-top: 11px;
+  font-size: 27px;
+}
+
+.faq-main-heading p {
+  max-width: 650px;
+
+  margin: 8px 0 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+
+/* =========================================================
+   FAQ GROUP
+   ========================================================= */
+
+.faq-groups {
+  display: grid;
+  gap: 24px;
+}
+
+.faq-group {
+  padding: 20px;
+
+  border: 1px solid #eee8f1;
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #fcfafc
+    );
+}
+
+.faq-group-title {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  margin-bottom: 17px;
+  padding-bottom: 16px;
+
+  border-bottom: 1px solid #eee8f1;
+}
+
+.faq-group-icon {
+  display: grid;
+  place-items: center;
+
+  width: 45px;
+  height: 45px;
+
+  flex: 0 0 45px;
+
+  color: #7433a3;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7effb,
+      #f9edf6
+    );
+
+  border: 1px solid rgba(116, 51, 163, 0.11);
+
+  border-radius: 13px;
+
+  box-shadow:
+    0 6px 15px rgba(116, 51, 163, 0.06);
+}
+
+.faq-group-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.faq-group-title > div:last-child {
+  display: grid;
+  gap: 2px;
+}
+
+.faq-group-title span {
+  color: #9a73b5;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.faq-group-title h3 {
+  margin: 0;
+
+  color: #252129;
+
+  font-size: 18px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   FAQ LIST
+   ========================================================= */
+
 .faq-list {
   display: grid;
-  gap: 12px;
+  gap: 9px;
 }
 
 .faq-item {
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  overflow: hidden;
+
+  border: 1px solid #ebe6ee;
+  border-radius: 12px;
+
   background: #fff;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.faq-item:hover {
+  transform: translateY(-1px);
+
+  border-color: rgba(116, 51, 163, 0.22);
+
+  box-shadow:
+    0 7px 18px rgba(116, 51, 163, 0.055);
+}
+
+.faq-item[open] {
+  border-color: rgba(116, 51, 163, 0.28);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #fdfaff
+    );
+
+  box-shadow:
+    0 9px 22px rgba(116, 51, 163, 0.08);
 }
 
 .faq-item summary {
   cursor: pointer;
-  padding: 18px 20px;
-  color: #202326;
-  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+
+  min-height: 64px;
+
+  gap: 13px;
+
+  padding: 9px 13px;
+
+  color: #252329;
+
+  font-size: 14px;
   font-weight: 800;
+
   list-style: none;
+
+  user-select: none;
 }
 
 .faq-item summary::-webkit-details-marker {
   display: none;
 }
 
-.faq-item p {
-  margin: 0;
-  padding: 0 20px 18px;
+
+/* شماره سؤال */
+
+.faq-question-number {
+  display: grid;
+  place-items: center;
+
+  width: 35px;
+  height: 35px;
+
+  flex: 0 0 35px;
+
+  border-radius: 10px;
+
+  background: #f6f1f8;
+
+  color: #7433a3;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
+
+.faq-item[open] .faq-question-number {
+  background: #7433a3;
+  color: #fff;
+
+  transform: scale(1.03);
+}
+
+
+/* متن سؤال */
+
+.faq-question-text {
+  flex: 1;
+
+  line-height: 1.8;
+}
+
+
+/* فلش */
+
+.faq-question-arrow {
+  display: grid;
+  place-items: center;
+
+  width: 32px;
+  height: 32px;
+
+  flex: 0 0 32px;
+
+  border-radius: 9px;
+
+  color: #8c7898;
+  background: #faf8fb;
+
+  transition:
+    transform 220ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.faq-question-arrow svg {
+  width: 17px;
+  height: 17px;
+}
+
+.faq-item[open] .faq-question-arrow {
+  transform: rotate(180deg);
+
+  background: #f1e8f5;
+
+  color: #7433a3;
+}
+
+
+/* =========================================================
+   FAQ ANSWER
+   ========================================================= */
+
+.faq-answer {
+  display: flex;
+  gap: 12px;
+
+  padding:
+    0
+    22px
+    18px
+    61px;
+}
+
+.faq-answer-line {
+  width: 2px;
+
+  flex: 0 0 2px;
+
+  border-radius: 99px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #7433a3,
+      #eb078a
+    );
+}
+
+.faq-answer p {
+  margin: 0;
+
+  color: #716b76;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  line-height: 2;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
 
 .faq-form-section {
+  position: relative;
   overflow: hidden;
+
+  margin-top: 24px;
+  padding: 28px;
+
+  border: 1px solid var(--line);
+  border-radius: 18px;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(116, 51, 163, 0.07),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(235, 7, 138, 0.035),
+      transparent 28%
+    ),
+    #fff;
+
+  box-shadow: 0 10px 28px rgba(25, 15, 35, 0.055);
 }
 
+.faq-form-section::before {
+  content: '';
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  top: -100px;
+  left: -80px;
+
+  border-radius: 50%;
+
+  background: rgba(116, 51, 163, 0.045);
+
+  pointer-events: none;
+}
+
+.faq-form-section::after {
+  content: '';
+
+  position: absolute;
+
+  width: 120px;
+  height: 120px;
+
+  right: -55px;
+  bottom: -55px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(116, 51, 163, 0.06);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   FORM HEADER
+   ========================================================= */
+
 .faq-form-intro {
+  position: relative;
+  z-index: 1;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 24px;
+
+  gap: 28px;
+
+  margin-bottom: 22px;
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid var(--line);
 }
 
+.faq-form-intro > div:first-child {
+  flex: 1;
+}
+
+.faq-form-intro > div:first-child > span {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 10px;
+
+  border-radius: 8px;
+
+  background: #f5eff9;
+
+  font-size: 11px;
+}
+
+.faq-form-intro h2 {
+  margin: 9px 0 5px;
+
+  color: #202326;
+
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.faq-form-intro p {
+  margin: 0;
+
+  max-width: 650px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
 .faq-form-progress {
-  min-width: 190px;
+  flex: 0 0 185px;
+
+  padding: 12px 14px;
+
+  border: 1px solid rgba(116, 51, 163, 0.1);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  box-shadow: 0 5px 15px rgba(35, 20, 45, 0.035);
 }
 
 .faq-form-progress span {
   display: block;
+
   margin-bottom: 8px;
-  color: #202326;
-  text-align: left;
+
+  color: #343438;
+
+  font-size: 12px;
   font-weight: 800;
+
+  text-align: right;
 }
 
 .faq-form-progress div {
-  height: 8px;
+  height: 6px;
+
   overflow: hidden;
+
   border-radius: 999px;
-  background: #f4eef8;
+
+  background: #eeeaf0;
 }
 
 .faq-form-progress i {
   display: block;
+
   height: 100%;
+
   border-radius: inherit;
-  background: var(--green);
+
+  background:
+    linear-gradient(
+      90deg,
+      #7433a3,
+      #eb078a
+    );
+
   transition: width 260ms ease;
 }
 
+
+/* =========================================================
+   FORM WINDOW
+   ========================================================= */
+
 .faq-form-window {
-  overflow: visible;
+  position: relative;
+  z-index: 1;
+
+  padding: 22px;
+
+  border: 1px solid rgba(116, 51, 163, 0.08);
+  border-radius: 16px;
+
+  background: rgba(249, 248, 250, 0.8);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.faq-form-slide {
-  direction: rtl;
-  width: 100%;
-  padding-left: 1px;
-  padding-right: 1px;
-}
+
+/* =========================================================
+   FORM SECTION TITLE
+   ========================================================= */
 
 .faq-form-title {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
+
+  gap: 13px;
+
+  margin-bottom: 18px;
+
   color: #202326;
-  font-size: 18px;
+
+  font-size: 17px;
   font-weight: 800;
 }
 
-.faq-form-title svg {
-  width: 22px;
-  height: 22px;
-  color: var(--green);
+.faq-form-title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 40px;
+
+  color: #7433a3;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7effb,
+      #f4eafa
+    );
+
+  border: 1px solid rgba(116, 51, 163, 0.1);
+  border-radius: 12px;
+
+  box-shadow:
+    0 5px 12px rgba(116, 51, 163, 0.08);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.faq-form-title-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.faq-form-title:hover .faq-form-title-icon {
+  transform: translateY(-1px) rotate(-2deg);
+
+  box-shadow:
+    0 7px 16px rgba(116, 51, 163, 0.12);
 }
 
 .faq-form-title-spaced {
-  margin-top: 26px;
+  margin-top: 29px;
+
+  padding-top: 23px;
+
+  border-top: 1px dashed rgba(116, 51, 163, 0.16);
 }
+
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
 
 .faq-form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
 
-.faq-field {
-  display: grid;
-  gap: 8px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 17px;
 }
 
 .faq-field-wide {
   grid-column: 1 / -1;
 }
 
-.faq-field span {
-  color: #202326;
-  font-size: 14px;
-  font-weight: 800;
+
+/* =========================================================
+   FIELD LABEL — ICON ONLY BESIDE TITLE
+   ========================================================= */
+
+.faq-field {
+  display: grid;
+  gap: 8px;
 }
+
+.faq-field-label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  min-height: 32px;
+}
+
+.faq-field-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  flex: 0 0 30px;
+
+  color: #7433a3;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7effb,
+      #f3edf7
+    );
+
+  border: 1px solid rgba(116, 51, 163, 0.1);
+
+  border-radius: 9px;
+
+  box-shadow:
+    0 3px 9px rgba(116, 51, 163, 0.055);
+
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.faq-field-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.faq-field-label-text {
+  color: #343438;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  line-height: 1.7;
+}
+
+.faq-field:focus-within .faq-field-icon {
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7433a3,
+      #8a3db4
+    );
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 14px rgba(116, 51, 163, 0.18);
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
 
 .faq-field input,
 .faq-field textarea,
 .faq-field select {
   width: 100%;
-  min-height: 52px;
+  min-height: 48px;
+
   padding: 0 14px;
+
   color: #202326;
+
   font: inherit;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  border: 1px solid #e4e7e5;
-  border-radius: 10px;
+
+  border: 1px solid #e5e1e8;
+  border-radius: 11px;
+
   background: #fff;
+
   outline: 0;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+
+  box-shadow:
+    0 2px 8px rgba(32, 20, 40, 0.025);
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    background 180ms ease;
 }
 
-.faq-field textarea {
-  padding-top: 12px;
-  resize: vertical;
+.faq-field input:hover,
+.faq-field textarea:hover,
+.faq-field select:hover {
+  border-color: rgba(116, 51, 163, 0.28);
+
+  box-shadow:
+    0 4px 12px rgba(116, 51, 163, 0.045);
 }
 
 .faq-field input:focus,
 .faq-field textarea:focus,
 .faq-field select:focus {
-  border-color: rgba(116, 51, 163, 0.7);
-  box-shadow: 0 0 0 4px rgba(116, 51, 163, 0.12);
+  border-color: #7433a3;
+
+  background: #fff;
+
+  box-shadow:
+    0 0 0 4px rgba(116, 51, 163, 0.075),
+    0 7px 17px rgba(116, 51, 163, 0.07);
+
+  transform: translateY(-1px);
 }
 
+.faq-field input::placeholder,
+.faq-field textarea::placeholder {
+  color: #b8b3bb;
+  font-size: 12px;
+}
+
+.faq-field textarea {
+  min-height: 92px;
+
+  padding-top: 13px;
+
+  resize: vertical;
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
 .faq-form-actions {
+  position: relative;
+  z-index: 1;
+
   display: flex;
+  align-items: center;
   justify-content: space-between;
+
   gap: 14px;
-  margin-top: 24px;
+
+  margin-top: 20px;
 }
 
 .faq-secondary-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 0 20px;
-  color: #202326;
+
+  gap: 8px;
+
+  min-height: 46px;
+
+  padding: 0 18px;
+
+  color: #343438;
+
   background: #fff;
+
   border: 1px solid var(--line);
-  border-radius: 10px;
-  font-size: 15px;
+  border-radius: 11px;
+
+  font-size: 13px;
   font-weight: 800;
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
 }
 
-.faq-submit-btn:disabled,
-.faq-secondary-btn:disabled {
-  cursor: not-allowed;
-  opacity: .58;
+.faq-secondary-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  border-color: rgba(116, 51, 163, 0.3);
+
+  background: #fcfafd;
+
+  box-shadow:
+    0 7px 16px rgba(0, 0, 0, 0.05);
+}
+
+.faq-submit-btn {
+  min-width: 150px;
+  min-height: 46px;
+
+  font-size: 13px;
 }
 
 .faq-submit-btn svg,
 .faq-secondary-btn svg {
-  width: 19px;
-  height: 19px;
+  width: 17px;
+  height: 17px;
+
+  flex: 0 0 auto;
 }
 
+.faq-submit-btn svg {
+  transition: transform 180ms ease;
+}
+
+.faq-submit-btn:hover:not(:disabled) svg {
+  transform: translateX(-2px);
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
 .faq-status {
-  margin: 20px 0 0;
-  padding: 14px 16px;
-  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+
+  margin: 18px 0 0;
+
+  padding: 13px 15px;
+
+  border-radius: 11px;
+
+  font-size: 13px;
   font-weight: 800;
   line-height: 1.8;
 }
 
 .faq-status-success {
-  color: #1b1023;
+  color: #44205c;
+
   background: #f7f1fb;
-  border: 1px solid rgba(116, 51, 163, 0.2);
+
+  border: 1px solid rgba(116, 51, 163, 0.16);
 }
 
 .faq-status-error {
   color: #a82020;
+
   background: #fff2f2;
-  border: 1px solid rgba(180, 30, 30, 0.16);
+
+  border: 1px solid rgba(180, 30, 30, 0.14);
 }
 
-.faq-primary-link,
-.faq-submit-btn,
-.faq-secondary-btn,
-.faq-item,
-.faq-step-card {
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, filter 180ms ease;
+.faq-submit-btn:disabled,
+.faq-secondary-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
 }
 
-.faq-primary-link:hover,
-.faq-submit-btn:hover {
-  color: #fff;
-  filter: brightness(1.04);
-  transform: translateY(-1px);
-}
 
-.faq-secondary-btn:hover,
-.faq-item:hover,
-.faq-step-card:hover {
-  border-color: rgba(116, 51, 163, 0.35);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.07);
-}
-
-/* Dark mode for FAQ on every viewport, including first paint after refresh. */
-.faq-shell.theme-dark,
-html.theme-dark .faq-shell,
-.faq-shell.theme-dark .faq-frame,
-html.theme-dark .faq-shell .faq-frame {
-  background:
-    radial-gradient(circle at 20% 0%, rgba(235, 7, 138, .08), transparent 34%),
-    linear-gradient(180deg, #1b1023 0%, #1b1023 100%) !important;
-  color: #f7f1fb !important;
-}
-
-.faq-shell.theme-dark :where(.faq-hero-copy, .faq-hero-card, .faq-section, .faq-step-card, .faq-item, .faq-trust-card),
-html.theme-dark .faq-shell :where(.faq-hero-copy, .faq-hero-card, .faq-section, .faq-step-card, .faq-item, .faq-trust-card) {
-  border-color: rgba(235, 7, 138, .22) !important;
-  background: rgba(255, 255, 255, .045) !important;
-  color: #f7f1fb !important;
-  box-shadow: none !important;
-}
-
-.faq-shell.theme-dark :where(.faq-hero h1, .faq-section-head h2, .faq-form-intro h2, .faq-step-card h3, .faq-item summary, .faq-trust-card li, .faq-form-title, .faq-field span, .faq-form-progress span),
-html.theme-dark .faq-shell :where(.faq-hero h1, .faq-section-head h2, .faq-form-intro h2, .faq-step-card h3, .faq-item summary, .faq-trust-card li, .faq-form-title, .faq-field span, .faq-form-progress span) {
-  color: #ffffff !important;
-}
-
-.faq-shell.theme-dark :where(.faq-hero p, .faq-form-intro p, .faq-step-card p, .faq-item p, .faq-hero-card span),
-html.theme-dark .faq-shell :where(.faq-hero p, .faq-form-intro p, .faq-step-card p, .faq-item p, .faq-hero-card span) {
-  color: rgba(247, 241, 251, .78) !important;
-}
-
-.faq-shell.theme-dark :where(.faq-eyebrow, .faq-section-head span, .faq-form-intro span, .faq-trust-card span),
-html.theme-dark .faq-shell :where(.faq-eyebrow, .faq-section-head span, .faq-form-intro span, .faq-trust-card span) {
-  color: #c084fc !important;
-}
-
-.faq-shell.theme-dark :where(.faq-hero-card svg, .faq-step-number, .faq-business-flow li::before, .faq-trust-icon),
-html.theme-dark .faq-shell :where(.faq-hero-card svg, .faq-step-number, .faq-business-flow li::before, .faq-trust-icon) {
-  background: rgba(116, 51, 163, .22) !important;
-  color: #f7d7ea !important;
-}
-
-.faq-shell.theme-dark :where(.faq-field input, .faq-field textarea, .faq-field select),
-html.theme-dark .faq-shell :where(.faq-field input, .faq-field textarea, .faq-field select) {
-  border-color: rgba(235, 7, 138, .24) !important;
-  background: rgba(255, 255, 255, .07) !important;
-  color: #ffffff !important;
-  box-shadow: inset 0 0 0 1px rgba(116, 51, 163, .14) !important;
-}
-
-.faq-shell.theme-dark :where(.faq-field input, .faq-field textarea, .faq-field select):focus,
-html.theme-dark .faq-shell :where(.faq-field input, .faq-field textarea, .faq-field select):focus {
-  border-color: rgba(235, 7, 138, .72) !important;
-  box-shadow: 0 0 0 4px rgba(235, 7, 138, .14), inset 0 0 0 1px rgba(116, 51, 163, .2) !important;
-}
-
-.faq-shell.theme-dark .faq-form-progress div,
-html.theme-dark .faq-shell .faq-form-progress div {
-  background: rgba(255, 255, 255, .18) !important;
-}
-
-.faq-shell.theme-dark .faq-form-progress i,
-html.theme-dark .faq-shell .faq-form-progress i {
-  background: linear-gradient(90deg, var(--brand-purple, #7433a3), var(--brand-pink, #eb078a)) !important;
-}
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 1200px) {
-  .faq-hero,
+
+  .faq-customer-flow {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
   .faq-two-column {
     grid-template-columns: 1fr;
   }
-
-  .faq-customer-flow {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
+
 @media (max-width: 768px) {
+
   .faq-frame {
     padding-bottom: 32px;
   }
 
   .faq-hero-copy,
-  .faq-section,
-  .faq-hero-card {
+  .faq-section {
     padding: 20px;
   }
 
@@ -584,129 +1290,516 @@ html.theme-dark .faq-shell .faq-form-progress i {
     font-size: 28px;
   }
 
-  .faq-customer-flow,
-  .faq-form-grid {
+  .faq-customer-flow {
     grid-template-columns: 1fr;
+    gap: 9px;
   }
 
-  .faq-form-intro,
-  .faq-form-actions {
-    flex-direction: column;
+  .faq-step-card {
+    padding: 14px;
+  }
+
+  .faq-step-number {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 9px;
+    border-radius: 8px;
+  }
+
+  .faq-form-section {
+    padding: 20px;
+
+    padding-bottom:
+      calc(
+        136px +
+        env(safe-area-inset-bottom, 0px)
+      );
+  }
+
+  .faq-form-intro {
     align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 17px;
+    margin-bottom: 20px;
+  }
+
+  .faq-form-intro h2 {
+    font-size: 21px;
   }
 
   .faq-form-progress {
-    min-width: 0;
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .faq-form-window {
+    padding: 17px;
+  }
+
+  .faq-form-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .faq-field-wide {
+    grid-column: auto;
+  }
+
+  .faq-form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .faq-secondary-btn,
+  .faq-submit-btn {
+    width: 100%;
+  }
+
+
+  /* FAQ موبایل */
+
+  .faq-all-section {
+    padding: 18px;
+  }
+
+  .faq-group {
+    padding: 14px;
+  }
+
+  .faq-group-title {
+    gap: 10px;
+  }
+
+  .faq-group-icon {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .faq-group-title h3 {
+    font-size: 16px;
+  }
+
+  .faq-item summary {
+    min-height: 58px;
+
+    gap: 9px;
+
+    padding: 8px 9px;
+
+    font-size: 13px;
+  }
+
+  .faq-question-number {
+    width: 31px;
+    height: 31px;
+    flex-basis: 31px;
+  }
+
+  .faq-question-arrow {
+    width: 29px;
+    height: 29px;
+    flex-basis: 29px;
+  }
+
+  .faq-answer {
+    padding:
+      0
+      14px
+      16px
+      49px;
+  }
+
+  .faq-answer p {
+    font-size: 12px;
   }
 }
 
-/* Mobile dark mode: keep FAQ surfaces dark and readable. */
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+.faq-shell.theme-dark,
+html.theme-dark .faq-shell,
+.faq-shell.theme-dark .faq-frame,
+html.theme-dark .faq-shell .faq-frame {
+  background:
+    radial-gradient(
+      circle at 20% 0%,
+      rgba(235, 7, 138, 0.08),
+      transparent 34%
+    ),
+    #1b1023 !important;
+
+  color: #f7f1fb !important;
+}
+
+
+/* surfaces */
+
+.faq-shell.theme-dark
+  :where(
+    .faq-hero-copy,
+    .faq-section,
+    .faq-step-card,
+    .faq-item,
+    .faq-trust-card,
+    .faq-form-section,
+    .faq-group
+  ),
+
+html.theme-dark .faq-shell
+  :where(
+    .faq-hero-copy,
+    .faq-section,
+    .faq-step-card,
+    .faq-item,
+    .faq-trust-card,
+    .faq-form-section,
+    .faq-group
+  ) {
+
+  border-color:
+    rgba(235, 7, 138, 0.22) !important;
+
+  background:
+    rgba(255, 255, 255, 0.045) !important;
+
+  color: #f7f1fb !important;
+
+  box-shadow: none !important;
+}
+
+
+/* titles */
+
+.faq-shell.theme-dark
+  :where(
+    .faq-hero h1,
+    .faq-section-head h2,
+    .faq-form-intro h2,
+    .faq-step-card h3,
+    .faq-item summary,
+    .faq-trust-card li,
+    .faq-form-title,
+    .faq-field-label-text,
+    .faq-form-progress span,
+    .faq-group-title h3
+  ),
+
+html.theme-dark .faq-shell
+  :where(
+    .faq-hero h1,
+    .faq-section-head h2,
+    .faq-form-intro h2,
+    .faq-step-card h3,
+    .faq-item summary,
+    .faq-trust-card li,
+    .faq-form-title,
+    .faq-field-label-text,
+    .faq-form-progress span,
+    .faq-group-title h3
+  ) {
+
+  color: #fff !important;
+}
+
+
+/* descriptions */
+
+.faq-shell.theme-dark
+  :where(
+    .faq-hero p,
+    .faq-form-intro p,
+    .faq-step-card p,
+    .faq-item p,
+    .faq-main-heading p,
+    .faq-answer p
+  ),
+
+html.theme-dark .faq-shell
+  :where(
+    .faq-hero p,
+    .faq-form-intro p,
+    .faq-step-card p,
+    .faq-item p,
+    .faq-main-heading p,
+    .faq-answer p
+  ) {
+
+  color: rgba(247, 241, 251, 0.78) !important;
+}
+
+
+/* labels */
+
+.faq-shell.theme-dark
+  :where(
+    .faq-eyebrow,
+    .faq-section-head > span,
+    .faq-form-intro > div:first-child > span,
+    .faq-trust-card > span
+  ),
+
+html.theme-dark .faq-shell
+  :where(
+    .faq-eyebrow,
+    .faq-section-head > span,
+    .faq-form-intro > div:first-child > span,
+    .faq-trust-card > span
+  ) {
+
+  color: #c084fc !important;
+}
+
+
+/* =========================================================
+   DARK FAQ
+   ========================================================= */
+
+.faq-shell.theme-dark .faq-group-title,
+html.theme-dark .faq-shell .faq-group-title {
+  border-bottom-color:
+    rgba(235, 7, 138, 0.15);
+}
+
+.faq-shell.theme-dark .faq-group-title span,
+html.theme-dark .faq-shell .faq-group-title span {
+  color: #c084fc;
+}
+
+.faq-shell.theme-dark .faq-group-icon,
+html.theme-dark .faq-shell .faq-group-icon {
+  background:
+    rgba(116, 51, 163, 0.22);
+
+  border-color:
+    rgba(235, 7, 138, 0.18);
+
+  color: #d8a4ff;
+}
+
+.faq-shell.theme-dark .faq-question-number,
+html.theme-dark .faq-shell .faq-question-number {
+  background:
+    rgba(116, 51, 163, 0.22);
+
+  color: #d8a4ff;
+}
+
+.faq-shell.theme-dark .faq-item[open] .faq-question-number,
+html.theme-dark .faq-shell .faq-item[open] .faq-question-number {
+  background:
+    linear-gradient(
+      135deg,
+      #7433a3,
+      #8a3db4
+    );
+
+  color: #fff;
+}
+
+.faq-shell.theme-dark .faq-question-arrow,
+html.theme-dark .faq-shell .faq-question-arrow {
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  color: #c7b3d0;
+}
+
+.faq-shell.theme-dark .faq-item[open] .faq-question-arrow,
+html.theme-dark .faq-shell .faq-item[open] .faq-question-arrow {
+  background:
+    rgba(116, 51, 163, 0.25);
+
+  color: #d8a4ff;
+}
+
+
+/* =========================================================
+   DARK FORM
+   ========================================================= */
+
+.faq-shell.theme-dark .faq-form-window,
+html.theme-dark .faq-shell .faq-form-window {
+  background:
+    rgba(255, 255, 255, 0.035) !important;
+
+  border-color:
+    rgba(235, 7, 138, 0.15) !important;
+}
+
+.faq-shell.theme-dark .faq-form-progress,
+html.theme-dark .faq-shell .faq-form-progress {
+  background:
+    rgba(255, 255, 255, 0.055) !important;
+
+  border-color:
+    rgba(235, 7, 138, 0.18) !important;
+}
+
+.faq-shell.theme-dark .faq-form-title-icon,
+html.theme-dark .faq-shell .faq-form-title-icon {
+  background:
+    rgba(116, 51, 163, 0.22);
+
+  border-color:
+    rgba(235, 7, 138, 0.18);
+
+  color: #d8a4ff;
+}
+
+
+/* field icons */
+
+.faq-shell.theme-dark .faq-field-icon,
+html.theme-dark .faq-shell .faq-field-icon {
+  background:
+    rgba(116, 51, 163, 0.2);
+
+  border-color:
+    rgba(235, 7, 138, 0.16);
+
+  color: #d8a4ff;
+}
+
+.faq-shell.theme-dark .faq-field:focus-within .faq-field-icon,
+html.theme-dark .faq-shell .faq-field:focus-within .faq-field-icon {
+  background:
+    linear-gradient(
+      135deg,
+      #7433a3,
+      #8a3db4
+    );
+
+  color: #fff;
+}
+
+
+/* inputs */
+
+.faq-shell.theme-dark
+  :where(
+    .faq-field input,
+    .faq-field textarea,
+    .faq-field select
+  ),
+
+html.theme-dark .faq-shell
+  :where(
+    .faq-field input,
+    .faq-field textarea,
+    .faq-field select
+  ) {
+
+  border-color:
+    rgba(235, 7, 138, 0.24) !important;
+
+  background:
+    rgba(255, 255, 255, 0.07) !important;
+
+  color: #fff !important;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(116, 51, 163, 0.14) !important;
+}
+
+.faq-shell.theme-dark
+  :where(
+    .faq-field input,
+    .faq-field textarea,
+    .faq-field select
+  ):focus,
+
+html.theme-dark .faq-shell
+  :where(
+    .faq-field input,
+    .faq-field textarea,
+    .faq-field select
+  ):focus {
+
+  border-color:
+    rgba(235, 7, 138, 0.72) !important;
+
+  box-shadow:
+    0 0 0 4px rgba(235, 7, 138, 0.14),
+    inset 0 0 0 1px rgba(116, 51, 163, 0.2) !important;
+}
+
+.faq-shell.theme-dark
+  :where(
+    .faq-field input::placeholder,
+    .faq-field textarea::placeholder
+  ),
+
+html.theme-dark .faq-shell
+  :where(
+    .faq-field input::placeholder,
+    .faq-field textarea::placeholder
+  ) {
+
+  color:
+    rgba(247, 241, 251, 0.48) !important;
+}
+
+
+/* progress */
+
+.faq-shell.theme-dark .faq-form-progress div,
+html.theme-dark .faq-shell .faq-form-progress div {
+  background:
+    rgba(255, 255, 255, 0.18) !important;
+}
+
+.faq-shell.theme-dark .faq-form-progress i,
+html.theme-dark .faq-shell .faq-form-progress i {
+  background:
+    linear-gradient(
+      90deg,
+      #7433a3,
+      #eb078a
+    ) !important;
+}
+
+
+/* secondary button */
+
+.faq-shell.theme-dark .faq-secondary-btn,
+html.theme-dark .faq-shell .faq-secondary-btn {
+
+  border-color:
+    rgba(235, 7, 138, 0.24) !important;
+
+  background:
+    rgba(255, 255, 255, 0.07) !important;
+
+  color:
+    #f7f1fb !important;
+}
+
+
+/* =========================================================
+   MOBILE DARK
+   ========================================================= */
+
 @media (max-width: 768px) {
+
   .faq-shell.theme-dark,
   html.theme-dark .faq-shell,
   .faq-shell.theme-dark .faq-frame,
   html.theme-dark .faq-shell .faq-frame {
+
     background:
-      radial-gradient(circle at 20% 0%, rgba(235, 7, 138, .08), transparent 34%),
-      linear-gradient(180deg, #1b1023 0%, #1b1023 100%) !important;
+      radial-gradient(
+        circle at 20% 0%,
+        rgba(235, 7, 138, 0.08),
+        transparent 34%
+      ),
+      #1b1023 !important;
+
     color: #f7f1fb !important;
-  }
-
-  .faq-shell.theme-dark .faq-hero-copy,
-  .faq-shell.theme-dark .faq-hero-card,
-  .faq-shell.theme-dark .faq-section,
-  .faq-shell.theme-dark .faq-step-card,
-  .faq-shell.theme-dark .faq-item,
-  .faq-shell.theme-dark .faq-trust-card,
-  html.theme-dark .faq-shell .faq-hero-copy,
-  html.theme-dark .faq-shell .faq-hero-card,
-  html.theme-dark .faq-shell .faq-section,
-  html.theme-dark .faq-shell .faq-step-card,
-  html.theme-dark .faq-shell .faq-item,
-  html.theme-dark .faq-shell .faq-trust-card {
-    border-color: rgba(235, 7, 138, .22) !important;
-    background: rgba(255, 255, 255, .045) !important;
-    color: #f7f1fb !important;
-    box-shadow: none !important;
-  }
-
-  .faq-shell.theme-dark :where(.faq-hero h1, .faq-section-head h2, .faq-form-intro h2, .faq-step-card h3, .faq-item summary, .faq-trust-card li),
-  html.theme-dark .faq-shell :where(.faq-hero h1, .faq-section-head h2, .faq-form-intro h2, .faq-step-card h3, .faq-item summary, .faq-trust-card li) {
-    color: #ffffff !important;
-  }
-
-  .faq-shell.theme-dark :where(.faq-hero p, .faq-form-intro p, .faq-step-card p, .faq-item p, .faq-hero-card span),
-  html.theme-dark .faq-shell :where(.faq-hero p, .faq-form-intro p, .faq-step-card p, .faq-item p, .faq-hero-card span) {
-    color: rgba(247, 241, 251, .78) !important;
-  }
-
-  .faq-shell.theme-dark :where(.faq-eyebrow, .faq-section-head span, .faq-form-intro span, .faq-trust-card span),
-  html.theme-dark .faq-shell :where(.faq-eyebrow, .faq-section-head span, .faq-form-intro span, .faq-trust-card span) {
-    color: #c084fc !important;
-  }
-
-  .faq-shell.theme-dark :where(.faq-hero-card svg, .faq-step-number, .faq-business-flow li::before, .faq-trust-icon),
-  html.theme-dark .faq-shell :where(.faq-hero-card svg, .faq-step-number, .faq-business-flow li::before, .faq-trust-icon) {
-    background: rgba(116, 51, 163, .22) !important;
-    color: #f7d7ea !important;
-  }
-
-  .faq-shell.theme-dark .faq-field span,
-  .faq-shell.theme-dark .faq-form-title,
-  .faq-shell.theme-dark .faq-form-progress span,
-  html.theme-dark .faq-shell .faq-field span,
-  html.theme-dark .faq-shell .faq-form-title,
-  html.theme-dark .faq-shell .faq-form-progress span {
-    color: #ffffff !important;
-  }
-
-  .faq-shell.theme-dark .faq-field input,
-  .faq-shell.theme-dark .faq-field textarea,
-  .faq-shell.theme-dark .faq-field select,
-  html.theme-dark .faq-shell .faq-field input,
-  html.theme-dark .faq-shell .faq-field textarea,
-  html.theme-dark .faq-shell .faq-field select {
-    border-color: rgba(235, 7, 138, .24) !important;
-    background: rgba(255, 255, 255, .07) !important;
-    color: #ffffff !important;
-    box-shadow: inset 0 0 0 1px rgba(116, 51, 163, .14) !important;
-  }
-
-  .faq-shell.theme-dark .faq-field input::placeholder,
-  .faq-shell.theme-dark .faq-field textarea::placeholder,
-  html.theme-dark .faq-shell .faq-field input::placeholder,
-  html.theme-dark .faq-shell .faq-field textarea::placeholder {
-    color: rgba(247, 241, 251, .48) !important;
-  }
-
-  .faq-shell.theme-dark .faq-field input:focus,
-  .faq-shell.theme-dark .faq-field textarea:focus,
-  .faq-shell.theme-dark .faq-field select:focus,
-  html.theme-dark .faq-shell .faq-field input:focus,
-  html.theme-dark .faq-shell .faq-field textarea:focus,
-  html.theme-dark .faq-shell .faq-field select:focus {
-    border-color: rgba(235, 7, 138, .72) !important;
-    box-shadow: 0 0 0 4px rgba(235, 7, 138, .14), inset 0 0 0 1px rgba(116, 51, 163, .2) !important;
-  }
-
-  .faq-shell.theme-dark .faq-form-progress div,
-  html.theme-dark .faq-shell .faq-form-progress div {
-    background: rgba(255, 255, 255, .18) !important;
-  }
-
-  .faq-shell.theme-dark .faq-form-progress i,
-  html.theme-dark .faq-shell .faq-form-progress i {
-    background: linear-gradient(90deg, var(--brand-purple, #7433a3), var(--brand-pink, #eb078a)) !important;
-  }
-
-  .faq-shell.theme-dark .faq-secondary-btn,
-  html.theme-dark .faq-shell .faq-secondary-btn {
-    border-color: rgba(235, 7, 138, .24) !important;
-    background: rgba(255, 255, 255, .07) !important;
-    color: #f7f1fb !important;
-  }
-
-  .faq-form-section {
-    padding-bottom: calc(136px + env(safe-area-inset-bottom, 0px)) !important;
   }
 }

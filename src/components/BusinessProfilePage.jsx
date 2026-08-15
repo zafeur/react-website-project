@@ -81,9 +81,49 @@ const normalizeMediaUrl = (value, fallback) => {
   }
 };
 
-const getLocalApiImageMirror = () => '';
+const localApiImageMirrors = new Map([
+  ['logo ibamo.jpg', '/home/img/logo ibamo.jpg'],
+  ['logo bastani.jpg', '/home/img/logo bastani.jpg'],
+  ['mojalal.jpg', '/home/img/mojalal.jpg'],
+  ['logo dorato.jpg', '/home/img/logo dorato.jpg'],
+  ['logo bakhshi.jpeg', '/home/img/logo bakhshi.jpeg'],
+]);
 
-const getCollectionImageMirror = () => '';
+const collectionImageMirrors = new Map([
+  ['1', '/home/img/logo ibamo.jpg'],
+  ['2', '/home/img/logo bastani.jpg'],
+  ['3', '/home/img/mojalal.jpg'],
+  ['4', '/home/img/barial.jpg'],
+  ['5', '/home/img/logo dorato.jpg'],
+  ['6', '/home/img/logo bakhshi.jpeg'],
+]);
+
+const getLocalApiImageMirror = (value) => {
+  if (!value) return '';
+
+  try {
+    const url = new URL(value, API_MEDIA_BASE_URL);
+    const filename = decodeURIComponent(url.pathname.split('/').pop() || '').toLowerCase();
+    return localApiImageMirrors.get(filename) || '';
+  } catch {
+    const filename = decodeURIComponent(String(value).split('/').pop() || '').toLowerCase();
+    return localApiImageMirrors.get(filename) || '';
+  }
+};
+
+const getCollectionImageMirror = (collectionId, slug) => {
+  const collectionMatch = collectionImageMirrors.get(String(collectionId || ''));
+  if (collectionMatch) return collectionMatch;
+
+  const normalizedSlug = normalizeTextKey(slug);
+  if (normalizedSlug.includes('ibamo')) return '/home/img/logo ibamo.jpg';
+  if (normalizedSlug.includes('bastani')) return '/home/img/logo bastani.jpg';
+  if (normalizedSlug.includes('mojalal') || normalizedSlug.includes('mojallal')) return '/home/img/mojalal.jpg';
+  if (normalizedSlug.includes('dorato')) return '/home/img/logo dorato.jpg';
+  if (normalizedSlug.includes('bakhshi')) return '/home/img/logo bakhshi.jpeg';
+
+  return '';
+};
 
 const getCollectionImageFromApiMirror = (collectionId, slug) => {
   const mirror = getCollectionImageMirror(collectionId, slug);

@@ -28,5 +28,6 @@ Thumbs.db
 
 # Local Codex / temporary files
 .codex-remote-attachments/
+.codex-rar-inspect/
 folder-tree-full.txt
 *.rar

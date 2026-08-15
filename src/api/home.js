@@ -17,19 +17,24 @@ export const getDiscountCards = async () => {
   return response.data;
 };
 
+const getOfferValue = (offer, keys) => keys.map((key) => offer?.[key]).find(Boolean);
+
+const isNumericId = (value) => /^\d+$/.test(String(value || "").trim());
+
+const getCollectionId = (offer) => {
+  const explicitCollectionId = getOfferValue(offer, ["collectionId", "collection_id"]);
+  if (explicitCollectionId) return explicitCollectionId;
+
+  const id = getOfferValue(offer, ["id"]);
+  return isNumericId(id) ? id : "";
+};
+
 const buildDiscountPayload = (offer, context = {}) => {
-  const collectionId = offer?.collection_id || offer?.collectionId || offer?.id || "";
-  const discountId = offer?.discount_id || offer?.discountId || offer?.offer_id || offer?.offerId || offer?.id || "";
-  const token = offer?.token || offer?.discount_token || offer?.discountToken || "";
+  const collectionId = getCollectionId(offer);
 
   return {
     mobile: context.mobile || offer?.mobile || "",
-    collection_id: collectionId,
-    collectionId,
-    discount_id: discountId,
-    discountId,
-    token,
-    discount_token: token,
+    ...(collectionId ? { collection_id: collectionId } : {}),
   };
 };
 
