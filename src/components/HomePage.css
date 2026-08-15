@@ -11038,14 +11038,14 @@ html.theme-dark .home-shell .home-offer-footer button {
   }
 }
 
-/* Stable carousel physics: keep scrollLeft LTR, keep card content RTL. */
+/* Stable RTL carousel physics: keep visual order RTL while JS normalizes scrollLeft. */
 .home-shell .home-stories,
 .home-shell .home-brand-grid,
 .home-shell .home-offer-section .home-offer-grid,
 .home-shell .home-vip-section .home-offer-grid,
 .home-shell .home-section#gifts > .home-offer-grid,
 .home-shell .home-section#discount-only > .home-offer-grid {
-  direction: ltr !important;
+  direction: rtl !important;
 }
 
 .home-shell .home-story,

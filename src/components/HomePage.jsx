@@ -794,6 +794,37 @@ const saveCachedHomeMobile = (mobile) => {
 };
 
 const hasUsableHomeData = (data) => Boolean(data?.stories?.length || data?.offers?.length || data?.brands?.length || data?.banners?.length);
+
+let detectedRtlScrollType;
+
+const getRtlScrollType = () => {
+  if (detectedRtlScrollType) {
+    return detectedRtlScrollType;
+  }
+
+  if (typeof document === 'undefined') {
+    return 'negative';
+  }
+
+  const outer = document.createElement('div');
+  const inner = document.createElement('div');
+  outer.dir = 'rtl';
+  outer.style.cssText = 'position:absolute;top:-9999px;width:4px;height:1px;overflow:scroll;visibility:hidden;';
+  inner.style.width = '8px';
+  outer.appendChild(inner);
+  document.body.appendChild(outer);
+
+  if (outer.scrollLeft > 0) {
+    detectedRtlScrollType = 'default';
+  } else {
+    outer.scrollLeft = 1;
+    detectedRtlScrollType = outer.scrollLeft === 0 ? 'negative' : 'reverse';
+  }
+
+  document.body.removeChild(outer);
+  return detectedRtlScrollType;
+};
+
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
   const brands = ensureDefaultBrands(normalizeCards(
@@ -1184,8 +1215,48 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       let lastDragTime = 0;
       let swipeVelocity = 0;
       const dragClickThreshold = 14;
+      const rtlScrollType = getRtlScrollType();
+      const getMaxScroll = () => Math.max(0, row.scrollWidth - row.clientWidth);
+      const isRtlScrollRow = () => window.getComputedStyle(row).direction === 'rtl';
+      const getVisualScrollLeft = () => {
+        const maxScroll = getMaxScroll();
+
+        if (!isRtlScrollRow()) {
+          return row.scrollLeft;
+        }
+
+        if (rtlScrollType === 'negative') {
+          return -row.scrollLeft;
+        }
+
+        if (rtlScrollType === 'default') {
+          return maxScroll - row.scrollLeft;
+        }
+
+        return row.scrollLeft;
+      };
+      const setVisualScrollLeft = (value, behavior = 'auto') => {
+        const maxScroll = getMaxScroll();
+        const next = Math.max(0, Math.min(maxScroll, value));
+        let rawNext = next;
+
+        if (isRtlScrollRow()) {
+          if (rtlScrollType === 'negative') {
+            rawNext = -next;
+          } else if (rtlScrollType === 'default') {
+            rawNext = maxScroll - next;
+          }
+        }
+
+        if (behavior === 'smooth') {
+          row.scrollTo({ left: rawNext, behavior });
+          return;
+        }
+
+        row.scrollLeft = rawNext;
+      };
       const updateOverflowState = () => {
-        const isScrollable = row.scrollWidth - row.clientWidth > 8;
+        const isScrollable = getMaxScroll() > 8;
         row.classList.toggle('is-scrollable', isScrollable);
         row.classList.toggle('is-centered', !isScrollable);
       };
@@ -1219,30 +1290,31 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         (document.activeElement && row.contains(document.activeElement)) ||
         document.hidden;
       const normalizeScrollPosition = () => {
-        const maxScroll = row.scrollWidth - row.clientWidth;
+        const maxScroll = getMaxScroll();
 
         if (maxScroll <= 8) {
-          row.scrollLeft = 0;
+          setVisualScrollLeft(0);
           return;
         }
 
-        row.scrollLeft = Math.max(0, Math.min(maxScroll, row.scrollLeft));
+        setVisualScrollLeft(getVisualScrollLeft());
       };
       const autoScroll = () => {
         updateOverflowState();
-        const maxScroll = row.scrollWidth - row.clientWidth;
+        const maxScroll = getMaxScroll();
         if (reduceMotion || shouldHoldAutoScroll() || maxScroll <= 8) {
           return;
         }
 
-        if (row.scrollLeft >= maxScroll - 2) {
+        const currentScroll = getVisualScrollLeft();
+
+        if (currentScroll >= maxScroll - 2) {
           scrollDirection = -1;
-        } else if (row.scrollLeft <= 2) {
+        } else if (currentScroll <= 2) {
           scrollDirection = 1;
         }
 
-        const next = Math.max(0, Math.min(maxScroll, row.scrollLeft + getStepDistance() * scrollDirection));
-        row.scrollTo({ left: next, behavior: 'smooth' });
+        setVisualScrollLeft(currentScroll + getStepDistance() * scrollDirection, 'smooth');
       };
       const startMomentum = () => {
         if (reduceMotion || Math.abs(swipeVelocity) < 0.08) {
@@ -1258,11 +1330,11 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
           const elapsedMs = Math.min(frameTime - lastMomentumTime, 32);
           lastMomentumTime = frameTime;
-          const maxScroll = row.scrollWidth - row.clientWidth;
-          const next = Math.max(0, Math.min(maxScroll, row.scrollLeft + scrollVelocity * elapsedMs));
+          const maxScroll = getMaxScroll();
+          const next = Math.max(0, Math.min(maxScroll, getVisualScrollLeft() + scrollVelocity * elapsedMs));
           const hitEdge = next <= 0 || next >= maxScroll;
 
-          row.scrollLeft = next;
+          setVisualScrollLeft(next);
           scrollVelocity *= Math.pow(0.94, elapsedMs / 16);
 
           if (hitEdge || Math.abs(scrollVelocity) < 0.02) {
@@ -1287,7 +1359,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         didDrag = false;
         didNavigateBrandTap = false;
         dragStartX = event.clientX;
-        dragStartScrollLeft = row.scrollLeft;
+        dragStartScrollLeft = getVisualScrollLeft();
         lastDragX = event.clientX;
         lastDragTime = window.performance.now();
         const brandCard = isBrandRow
@@ -1318,7 +1390,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           if (!row.hasPointerCapture?.(event.pointerId)) {
             row.setPointerCapture?.(event.pointerId);
           }
-          row.scrollLeft = dragStartScrollLeft - deltaX;
+          setVisualScrollLeft(dragStartScrollLeft - deltaX);
           swipeVelocity = (event.clientX - lastDragX) / elapsed;
           lastDragX = event.clientX;
           lastDragTime = now;
