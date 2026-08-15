@@ -1188,7 +1188,8 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       let lastDragTime = 0;
       let swipeVelocity = 0;
       const dragClickThreshold = 14;
-      const pixelsPerSecond = isBrandRow ? 42 : isStoryRow ? 48 : 24;
+      const isLoopRow = row.dataset.autoLoop === 'true';
+      const pixelsPerSecond = isBrandRow ? 70 : isStoryRow ? 76 : 32;
       const stopMomentum = () => {
         window.cancelAnimationFrame(momentumFrame);
         momentumFrame = 0;
@@ -1224,6 +1225,13 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         previousFrameTime = frameTime;
 
         if (!reduceMotion && !shouldHoldAutoScroll()) {
+          if (isLoopRow && row.scrollLeft >= maxScroll - 1) {
+            row.scrollLeft = 0;
+            previousFrameTime = frameTime;
+            animationFrame = window.requestAnimationFrame(autoScroll);
+            return;
+          }
+
           if (row.scrollLeft >= maxScroll - 1) {
             scrollDirection = -1;
           } else if (row.scrollLeft <= 1) {
@@ -1550,6 +1558,9 @@ useEffect(() => {
 
   const activeStory = activeStoryIndex === null ? null : homeData.stories[activeStoryIndex];
   const storyDisplayItems = homeData.stories.map((story, index) => ({ story, index })).reverse();
+  const storyLoopItems = storyDisplayItems.length > 1
+    ? [...storyDisplayItems, ...storyDisplayItems]
+    : storyDisplayItems;
 
   useEffect(() => {
     setStoryDurationMs(4200);
@@ -2032,12 +2043,12 @@ useEffect(() => {
           </div>
         </section>
 
-        <section className="home-stories" aria-label={t.selectedBrands}>
-          {storyDisplayItems.map(({ story, index }) => (
+        <section className="home-stories" aria-label={t.selectedBrands} data-auto-loop="true">
+          {storyLoopItems.map(({ story, index }, loopIndex) => (
             <button
               className={`home-story ${spinningStory === story.title ? 'is-spinning' : ''}`}
               type="button"
-              key={story.title}
+              key={`${story.title}-${index}-${loopIndex}`}
               onClick={() => openStory(story, index)}
             >
               <span className="home-story-ring">

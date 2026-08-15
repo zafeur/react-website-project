@@ -10073,10 +10073,6 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
   overscroll-behavior-inline: contain !important;
 }
 
-.home-stories {
-  justify-content: safe center !important;
-}
-
 @media (max-width: 640px) {
   .home-stories {
     justify-content: flex-start !important;
