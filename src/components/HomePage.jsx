@@ -1211,7 +1211,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       let didNavigateBrandTap = false;
       let autoScrollTimer = 0;
       let momentumFrame = 0;
-      let autoStepFrame = 0;
       let lastDragX = 0;
       let lastDragTime = 0;
       let swipeVelocity = 0;
@@ -1251,52 +1250,10 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
         row.scrollLeft = rawNext;
       };
-      const stopAutoStep = () => {
-        window.cancelAnimationFrame(autoStepFrame);
-        autoStepFrame = 0;
-      };
-      const animateVisualScrollTo = (target) => {
-        stopAutoStep();
-
-        const start = getVisualScrollLeft();
-        const maxScroll = getMaxScroll();
-        const end = Math.max(0, Math.min(maxScroll, target));
-        const distance = end - start;
-
-        if (Math.abs(distance) < 1) {
-          setVisualScrollLeft(end);
-          return;
-        }
-
-        const startedAt = window.performance.now();
-        const duration = 520;
-        const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3);
-        const step = (frameTime) => {
-          const progress = Math.min((frameTime - startedAt) / duration, 1);
-          setVisualScrollLeft(start + distance * easeOutCubic(progress));
-
-          if (progress < 1) {
-            autoStepFrame = window.requestAnimationFrame(step);
-          } else {
-            autoStepFrame = 0;
-          }
-        };
-
-        autoStepFrame = window.requestAnimationFrame(step);
-      };
       const updateOverflowState = () => {
         const isScrollable = getMaxScroll() > 8;
         row.classList.toggle('is-scrollable', isScrollable);
         row.classList.toggle('is-centered', !isScrollable);
-      };
-      const getStepDistance = () => {
-        const firstItem = row.firstElementChild;
-        const styles = window.getComputedStyle(row);
-        const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
-
-        return firstItem
-          ? firstItem.getBoundingClientRect().width + gap
-          : row.clientWidth * 0.8;
       };
       const stopMomentum = () => {
         window.cancelAnimationFrame(momentumFrame);
@@ -1306,7 +1263,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const pause = () => {
         isPaused = true;
         window.clearTimeout(resumeTimer);
-        stopAutoStep();
       };
       const resume = () => {
         window.clearTimeout(resumeTimer);
@@ -1335,15 +1291,35 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           return;
         }
 
-        const currentScroll = getVisualScrollLeft();
+        const children = Array.from(row.children).filter((child) => child instanceof HTMLElement);
 
-        if (currentScroll >= maxScroll - 2) {
-          scrollDirection = -1;
-        } else if (currentScroll <= 2) {
-          scrollDirection = 1;
+        if (children.length <= 1) {
+          return;
         }
 
-        animateVisualScrollTo(currentScroll + getStepDistance() * scrollDirection);
+        const rowRect = row.getBoundingClientRect();
+        const currentIndex = children.reduce((closestIndex, child, index) => {
+          const closestChild = children[closestIndex];
+          const distance = Math.abs(child.getBoundingClientRect().right - rowRect.right);
+          const closestDistance = Math.abs(closestChild.getBoundingClientRect().right - rowRect.right);
+
+          return distance < closestDistance ? index : closestIndex;
+        }, 0);
+        let nextIndex = currentIndex + scrollDirection;
+
+        if (nextIndex >= children.length) {
+          scrollDirection = -1;
+          nextIndex = Math.max(children.length - 2, 0);
+        } else if (nextIndex < 0) {
+          scrollDirection = 1;
+          nextIndex = Math.min(1, children.length - 1);
+        }
+
+        children[nextIndex]?.scrollIntoView({
+          behavior: reduceMotion ? 'auto' : 'smooth',
+          block: 'nearest',
+          inline: 'start',
+        });
       };
       const startMomentum = () => {
         if (reduceMotion || Math.abs(swipeVelocity) < 0.08) {
@@ -1502,7 +1478,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       cleanup.push(() => {
         window.clearInterval(autoScrollTimer);
         window.cancelAnimationFrame(momentumFrame);
-        window.cancelAnimationFrame(autoStepFrame);
         window.clearTimeout(resumeTimer);
         resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
