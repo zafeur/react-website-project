@@ -984,7 +984,7 @@ const getDirectGeneratedCode = (data) => {
 };
 
 const getDiscountCode = (data, offer) =>
-  findOfferDiscountCode(data, offer) || getDirectGeneratedCode(data) || firstValue(offer, discountCodeKeys);
+  findOfferDiscountCode(data, offer) || getDirectGeneratedCode(data);
 
 const getDiscountMessage = (data) =>
   findNestedValue(data, ['message', 'text', 'description']);
@@ -1740,17 +1740,6 @@ useEffect(() => {
       setIsLoggedIn(false);
       setPendingOffer(offer);
       openLogin();
-      return;
-    }
-
-    const existingCode = firstValue(offer, discountCodeKeys);
-
-    if (existingCode) {
-      setDiscountPopup({
-        offer,
-        code: existingCode,
-        message: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0622\u0645\u0627\u062f\u0647 \u0627\u0633\u062a.',
-      });
       return;
     }
 
