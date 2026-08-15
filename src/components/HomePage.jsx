@@ -1512,7 +1512,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       resizeObserver?.observe(row);
       Array.from(row.children).forEach((child) => resizeObserver?.observe(child));
       autoScrollTimer = window.setInterval(autoScroll, 3000);
-      const firstAutoScrollTimer = window.setTimeout(autoScroll, 900);
 
       row.addEventListener('pointerdown', startDrag);
       row.addEventListener('pointermove', moveDrag);
@@ -1531,7 +1530,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         window.cancelAnimationFrame(momentumFrame);
         window.cancelAnimationFrame(autoStepFrame);
         window.clearTimeout(resumeTimer);
-        window.clearTimeout(firstAutoScrollTimer);
         resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
         row.removeEventListener('pointermove', moveDrag);
