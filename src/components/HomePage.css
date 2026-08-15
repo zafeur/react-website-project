@@ -11037,3 +11037,23 @@ html.theme-dark .home-shell .home-offer-footer button {
     transform: translateY(0) scaleY(1);
   }
 }
+
+/* Stable carousel physics: keep scrollLeft LTR, keep card content RTL. */
+.home-shell .home-stories,
+.home-shell .home-brand-grid,
+.home-shell .home-offer-section .home-offer-grid,
+.home-shell .home-vip-section .home-offer-grid,
+.home-shell .home-section#gifts > .home-offer-grid,
+.home-shell .home-section#discount-only > .home-offer-grid {
+  direction: ltr !important;
+}
+
+.home-shell .home-story,
+.home-shell .home-brand-card,
+.home-shell .home-offer-card {
+  direction: rtl !important;
+}
+
+.home-shell .home-section#brands .home-brand-grid .home-brand-card {
+  flex-basis: clamp(220px, 20vw, 260px) !important;
+}

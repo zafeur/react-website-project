@@ -1218,6 +1218,16 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         row.matches(':hover') ||
         (document.activeElement && row.contains(document.activeElement)) ||
         document.hidden;
+      const normalizeScrollPosition = () => {
+        const maxScroll = row.scrollWidth - row.clientWidth;
+
+        if (maxScroll <= 8) {
+          row.scrollLeft = 0;
+          return;
+        }
+
+        row.scrollLeft = Math.max(0, Math.min(maxScroll, row.scrollLeft));
+      };
       const autoScroll = () => {
         updateOverflowState();
         const maxScroll = row.scrollWidth - row.clientWidth;
@@ -1325,6 +1335,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         row.classList.remove('is-dragging');
         if (didDrag) {
           startMomentum();
+          window.setTimeout(normalizeScrollPosition, 80);
         }
         resume();
 
