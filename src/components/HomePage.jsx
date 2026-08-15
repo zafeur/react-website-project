@@ -1211,6 +1211,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       let didNavigateBrandTap = false;
       let autoScrollTimer = 0;
       let momentumFrame = 0;
+      let autoStepFrame = 0;
       let lastDragX = 0;
       let lastDragTime = 0;
       let swipeVelocity = 0;
@@ -1248,12 +1249,40 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           }
         }
 
-        if (behavior === 'smooth') {
-          row.scrollTo({ left: rawNext, behavior });
+        row.scrollLeft = rawNext;
+      };
+      const stopAutoStep = () => {
+        window.cancelAnimationFrame(autoStepFrame);
+        autoStepFrame = 0;
+      };
+      const animateVisualScrollTo = (target) => {
+        stopAutoStep();
+
+        const start = getVisualScrollLeft();
+        const maxScroll = getMaxScroll();
+        const end = Math.max(0, Math.min(maxScroll, target));
+        const distance = end - start;
+
+        if (Math.abs(distance) < 1) {
+          setVisualScrollLeft(end);
           return;
         }
 
-        row.scrollLeft = rawNext;
+        const startedAt = window.performance.now();
+        const duration = 520;
+        const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3);
+        const step = (frameTime) => {
+          const progress = Math.min((frameTime - startedAt) / duration, 1);
+          setVisualScrollLeft(start + distance * easeOutCubic(progress));
+
+          if (progress < 1) {
+            autoStepFrame = window.requestAnimationFrame(step);
+          } else {
+            autoStepFrame = 0;
+          }
+        };
+
+        autoStepFrame = window.requestAnimationFrame(step);
       };
       const updateOverflowState = () => {
         const isScrollable = getMaxScroll() > 8;
@@ -1277,6 +1306,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const pause = () => {
         isPaused = true;
         window.clearTimeout(resumeTimer);
+        stopAutoStep();
       };
       const resume = () => {
         window.clearTimeout(resumeTimer);
@@ -1286,7 +1316,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       };
       const shouldHoldAutoScroll = () =>
         isPaused ||
-        row.matches(':hover') ||
         (document.activeElement && row.contains(document.activeElement)) ||
         document.hidden;
       const normalizeScrollPosition = () => {
@@ -1302,7 +1331,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const autoScroll = () => {
         updateOverflowState();
         const maxScroll = getMaxScroll();
-        if (reduceMotion || shouldHoldAutoScroll() || maxScroll <= 8) {
+        if (shouldHoldAutoScroll() || maxScroll <= 8) {
           return;
         }
 
@@ -1314,7 +1343,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           scrollDirection = 1;
         }
 
-        setVisualScrollLeft(currentScroll + getStepDistance() * scrollDirection, 'smooth');
+        animateVisualScrollTo(currentScroll + getStepDistance() * scrollDirection);
       };
       const startMomentum = () => {
         if (reduceMotion || Math.abs(swipeVelocity) < 0.08) {
@@ -1473,6 +1502,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       cleanup.push(() => {
         window.clearInterval(autoScrollTimer);
         window.cancelAnimationFrame(momentumFrame);
+        window.cancelAnimationFrame(autoStepFrame);
         window.clearTimeout(resumeTimer);
         resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
