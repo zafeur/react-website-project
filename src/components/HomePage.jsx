@@ -1168,6 +1168,9 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const displayedBrands = ensureDefaultBrands(homeData.brands);
+  const brandLoopItems = displayedBrands.length > 1
+    ? [...displayedBrands, ...displayedBrands]
+    : displayedBrands;
   const bannerItems = mergeExtraBanners(homeData.banners)
     .filter((banner) => isApiBannerImage(banner?.image))
     .filter((banner) => !failedBannerImages[banner.image]);
@@ -2215,7 +2218,7 @@ useEffect(() => {
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
           <div className="home-brand-grid" data-auto-loop="true">
-            {displayedBrands.map((brand, index) => {
+            {brandLoopItems.map((brand, index) => {
               const href = getBrandHref(brand);
 
               return (
