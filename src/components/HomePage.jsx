@@ -1187,6 +1187,11 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const dragClickThreshold = 14;
       const isLoopRow = row.dataset.autoLoop === 'true';
       const pixelsPerSecond = isBrandRow ? 70 : isStoryRow ? 76 : 32;
+      const updateOverflowState = () => {
+        const isScrollable = row.scrollWidth - row.clientWidth > 8;
+        row.classList.toggle('is-scrollable', isScrollable);
+        row.classList.toggle('is-centered', !isScrollable);
+      };
       const stopMomentum = () => {
         window.cancelAnimationFrame(momentumFrame);
         momentumFrame = 0;
@@ -1377,6 +1382,12 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         event.stopPropagation();
         router.push(href);
       };
+      updateOverflowState();
+      const resizeObserver = typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(updateOverflowState)
+        : null;
+      resizeObserver?.observe(row);
+      Array.from(row.children).forEach((child) => resizeObserver?.observe(child));
       animationFrame = window.requestAnimationFrame(autoScroll);
 
       row.addEventListener('pointerdown', startDrag);
@@ -1393,6 +1404,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         window.cancelAnimationFrame(animationFrame);
         window.cancelAnimationFrame(momentumFrame);
         window.clearTimeout(resumeTimer);
+        resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
         row.removeEventListener('pointermove', moveDrag);
         row.removeEventListener('touchstart', pause);

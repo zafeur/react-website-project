@@ -10982,7 +10982,11 @@ html.theme-dark .home-shell .home-offer-footer button {
   transform: none !important;
 }
 
-/* Stories row: center visible API items without breaking overflow scrolling. */
-.home-shell .home-stories {
-  justify-content: safe center !important;
+/* Stories row: center only when there is no overflow, so scroll coordinates stay normal. */
+.home-shell .home-stories.is-centered {
+  justify-content: center !important;
+}
+
+.home-shell .home-stories.is-scrollable {
+  justify-content: flex-start !important;
 }
