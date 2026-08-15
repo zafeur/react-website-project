@@ -10981,3 +10981,8 @@ html.theme-dark .home-shell .home-offer-footer button {
   opacity: .55 !important;
   transform: none !important;
 }
+
+/* Stories row: center visible API items without breaking overflow scrolling. */
+.home-shell .home-stories {
+  justify-content: safe center !important;
+}
