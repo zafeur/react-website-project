@@ -1211,6 +1211,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       let didNavigateBrandTap = false;
       let autoScrollTimer = 0;
       let momentumFrame = 0;
+      let autoStepFrame = 0;
       let lastDragX = 0;
       let lastDragTime = 0;
       let swipeVelocity = 0;
@@ -1250,6 +1251,39 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
         row.scrollLeft = rawNext;
       };
+      const stopAutoStep = () => {
+        window.cancelAnimationFrame(autoStepFrame);
+        autoStepFrame = 0;
+      };
+      const animateVisualScrollTo = (target) => {
+        stopAutoStep();
+
+        const start = getVisualScrollLeft();
+        const maxScroll = getMaxScroll();
+        const end = Math.max(0, Math.min(maxScroll, target));
+        const distance = end - start;
+
+        if (Math.abs(distance) < 1) {
+          setVisualScrollLeft(end);
+          return;
+        }
+
+        const startedAt = window.performance.now();
+        const duration = 420;
+        const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3);
+        const step = (frameTime) => {
+          const progress = Math.min((frameTime - startedAt) / duration, 1);
+          setVisualScrollLeft(start + distance * easeOutCubic(progress));
+
+          if (progress < 1) {
+            autoStepFrame = window.requestAnimationFrame(step);
+          } else {
+            autoStepFrame = 0;
+          }
+        };
+
+        autoStepFrame = window.requestAnimationFrame(step);
+      };
       const updateOverflowState = () => {
         const isScrollable = getMaxScroll() > 8;
         row.classList.toggle('is-scrollable', isScrollable);
@@ -1263,6 +1297,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const pause = () => {
         isPaused = true;
         window.clearTimeout(resumeTimer);
+        stopAutoStep();
       };
       const resume = () => {
         window.clearTimeout(resumeTimer);
@@ -1315,11 +1350,23 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           nextIndex = Math.min(1, children.length - 1);
         }
 
-        children[nextIndex]?.scrollIntoView({
-          behavior: reduceMotion ? 'auto' : 'smooth',
-          block: 'nearest',
-          inline: 'start',
-        });
+        const targetChild = children[nextIndex];
+
+        if (!targetChild) {
+          return;
+        }
+
+        const currentScroll = getVisualScrollLeft();
+        const targetRect = targetChild.getBoundingClientRect();
+        const horizontalDelta = rowRect.right - targetRect.right;
+        const targetScroll = currentScroll + horizontalDelta;
+
+        if (reduceMotion) {
+          setVisualScrollLeft(targetScroll);
+          return;
+        }
+
+        animateVisualScrollTo(targetScroll);
       };
       const startMomentum = () => {
         if (reduceMotion || Math.abs(swipeVelocity) < 0.08) {
@@ -1478,6 +1525,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       cleanup.push(() => {
         window.clearInterval(autoScrollTimer);
         window.cancelAnimationFrame(momentumFrame);
+        window.cancelAnimationFrame(autoStepFrame);
         window.clearTimeout(resumeTimer);
         resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
