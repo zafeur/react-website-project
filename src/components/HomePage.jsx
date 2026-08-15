@@ -1178,19 +1178,25 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       let didDrag = false;
       let brandTapCandidate = null;
       let didNavigateBrandTap = false;
-      let animationFrame = 0;
+      let autoScrollTimer = 0;
       let momentumFrame = 0;
-      let previousFrameTime = 0;
       let lastDragX = 0;
       let lastDragTime = 0;
       let swipeVelocity = 0;
       const dragClickThreshold = 14;
-      const isLoopRow = row.dataset.autoLoop === 'true';
-      const pixelsPerSecond = isBrandRow ? 70 : isStoryRow ? 76 : 32;
       const updateOverflowState = () => {
         const isScrollable = row.scrollWidth - row.clientWidth > 8;
         row.classList.toggle('is-scrollable', isScrollable);
         row.classList.toggle('is-centered', !isScrollable);
+      };
+      const getStepDistance = () => {
+        const firstItem = row.firstElementChild;
+        const styles = window.getComputedStyle(row);
+        const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+
+        return firstItem
+          ? firstItem.getBoundingClientRect().width + gap
+          : row.clientWidth * 0.8;
       };
       const stopMomentum = () => {
         window.cancelAnimationFrame(momentumFrame);
@@ -1209,42 +1215,24 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       };
       const shouldHoldAutoScroll = () =>
         isPaused ||
-        (!isBrandRow && !isStoryRow && row.matches(':hover')) ||
+        row.matches(':hover') ||
         (document.activeElement && row.contains(document.activeElement)) ||
         document.hidden;
-      const autoScroll = (frameTime) => {
+      const autoScroll = () => {
+        updateOverflowState();
         const maxScroll = row.scrollWidth - row.clientWidth;
-        if (maxScroll <= 8) {
-          animationFrame = window.requestAnimationFrame(autoScroll);
+        if (reduceMotion || shouldHoldAutoScroll() || maxScroll <= 8) {
           return;
         }
 
-        if (!previousFrameTime) {
-          previousFrameTime = frameTime;
+        if (row.scrollLeft >= maxScroll - 2) {
+          scrollDirection = -1;
+        } else if (row.scrollLeft <= 2) {
+          scrollDirection = 1;
         }
 
-        const elapsedSeconds = Math.min((frameTime - previousFrameTime) / 1000, 0.06);
-        previousFrameTime = frameTime;
-
-        if (!reduceMotion && !shouldHoldAutoScroll()) {
-          if (isLoopRow && row.scrollLeft >= maxScroll - 1) {
-            row.scrollLeft = 0;
-            previousFrameTime = frameTime;
-            animationFrame = window.requestAnimationFrame(autoScroll);
-            return;
-          }
-
-          if (row.scrollLeft >= maxScroll - 1) {
-            scrollDirection = -1;
-          } else if (row.scrollLeft <= 1) {
-            scrollDirection = 1;
-          }
-
-          const next = row.scrollLeft + pixelsPerSecond * elapsedSeconds * scrollDirection;
-          row.scrollLeft = Math.max(0, Math.min(maxScroll, next));
-        }
-
-        animationFrame = window.requestAnimationFrame(autoScroll);
+        const next = Math.max(0, Math.min(maxScroll, row.scrollLeft + getStepDistance() * scrollDirection));
+        row.scrollTo({ left: next, behavior: 'smooth' });
       };
       const startMomentum = () => {
         if (reduceMotion || Math.abs(swipeVelocity) < 0.08) {
@@ -1270,7 +1258,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           if (hitEdge || Math.abs(scrollVelocity) < 0.02) {
             momentumFrame = 0;
             swipeVelocity = 0;
-            previousFrameTime = 0;
             return;
           }
 
@@ -1336,7 +1323,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         brandTapCandidate = null;
         isDragging = false;
         row.classList.remove('is-dragging');
-        previousFrameTime = 0;
         if (didDrag) {
           startMomentum();
         }
@@ -1388,10 +1374,11 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         : null;
       resizeObserver?.observe(row);
       Array.from(row.children).forEach((child) => resizeObserver?.observe(child));
-      animationFrame = window.requestAnimationFrame(autoScroll);
+      autoScrollTimer = window.setInterval(autoScroll, 3000);
 
       row.addEventListener('pointerdown', startDrag);
       row.addEventListener('pointermove', moveDrag);
+      row.addEventListener('mouseenter', pause);
       row.addEventListener('touchstart', pause, { passive: true });
       row.addEventListener('wheel', pause, { passive: true });
       row.addEventListener('pointerup', endDrag);
@@ -1401,12 +1388,13 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       row.addEventListener('click', handleRowClick, true);
 
       cleanup.push(() => {
-        window.cancelAnimationFrame(animationFrame);
+        window.clearInterval(autoScrollTimer);
         window.cancelAnimationFrame(momentumFrame);
         window.clearTimeout(resumeTimer);
         resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
         row.removeEventListener('pointermove', moveDrag);
+        row.removeEventListener('mouseenter', pause);
         row.removeEventListener('touchstart', pause);
         row.removeEventListener('wheel', pause);
         row.removeEventListener('pointerup', endDrag);
