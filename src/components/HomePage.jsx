@@ -14,10 +14,6 @@ import {
   Info,
   PhoneCall,
   Search,
-  ShoppingBag,
-  Sparkles,
-  Star,
-  Store,
   Sun,
   TicketPercent,
   Trophy,
@@ -165,14 +161,6 @@ const defaultHomeData = {
   { title: t.mojalal, businessId: 'mojalal', collectionId: '3', image: asset('img/mojalal.jpg'), href: '/collections/3' },
 ],
 
-  categories: [
-  { title: t.gifts, icon: 'Gift', href: '#gifts' },
-  { title: t.restaurant, icon: 'Store', href: '/collections/melal' },
-  { title: t.shop, icon: 'ShoppingBag', disabled: true },
-  { title: t.club, icon: 'Star', disabled: true },
-  { title: t.special, icon: 'Sparkles', href: '#vip-gifts' },
-],
-
   offers: [
   { id: 'melal-discount', businessId: 'melal', title: t.gift1, brand: t.restaurant, tag: t.free, vip: 0, hasGift: true, hasDiscount: false, image: asset('img/restaurant-melal.png') },
   { id: 'barial-discount', businessId: 'barial', collectionId: '4', title: t.gift2, brand: t.barial, tag: t.discount, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/barial.jpg') },
@@ -188,17 +176,7 @@ const emptyHomeData = {
   stories: [],
   banners: [],
   brands: [],
-  categories: defaultHomeData.categories,
   offers: [],
-};
-
-const categoryIcons = {
-  Gift,
-  LogIn,
-  Store,
-  ShoppingBag,
-  Star,
-  Sparkles,
 };
 
 const normalizeList = (value, fallback = []) => (Array.isArray(value) && value.length ? value : fallback);
@@ -317,20 +295,6 @@ const normalizeOfferActive = (offer) => {
 
   return true;
 };
-const blockedCategoryTerms = ['pet', 'pets', 'animal', 'animals', '\u062d\u06cc\u0648\u0627\u0646', '\u062d\u06cc\u0648\u0627\u0646\u0627\u062a', '\u062d\u06cc\u0648\u0627\u0646\u0627\u062a \u062e\u0627\u0646\u06af\u06cc'];
-
-const isAllowedCategory = (category) => {
-  const title = String(firstValue(category, ['title', 'name', 'label']) || '').toLowerCase();
-  const icon = String(firstValue(category, ['icon', 'iconName', 'icon_name']) || '').toLowerCase();
-
-  return !blockedCategoryTerms.some((term) => title.includes(term) || icon.includes(term));
-};
-
-const normalizeCategories = (items) => {
-  const categories = normalizeList(items, defaultHomeData.categories).filter(isAllowedCategory);
-  return categories.length ? categories : defaultHomeData.categories;
-};
-
 const resolveHomeData = (data) => data?.data || data?.home || data?.homepage || data || {};
 
 const isRestaurantBrand = (title = '') =>
@@ -841,7 +805,6 @@ const normalizeHomeData = (payload) => {
     stories: normalizeApiStories(data),
     banners: normalizeCards(normalizeList(data?.banners || data?.sliders || data?.slides, []), []),
     brands,
-    categories: normalizeCategories(data?.categories),
     offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, defaultHomeData.offers)),
   };
 };
@@ -1061,29 +1024,6 @@ const getOfferPercent = (offer) => {
   return String(offer.title || '').match(/[\u06f0-\u06f90-9]+\s*[\u066a%]|[\u066a%]\s*[\u06f0-\u06f90-9]+/)?.[0] || '\u06f1\u06f0\u066a';
 };
 
-const isLocalDebugHost = () => {
-  if (typeof window === 'undefined') return false;
-
-  return ['localhost', '127.0.0.1'].includes(window.location.hostname);
-};
-
-const getDebugVipValue = (router) => {
-  const value = router.query?.debugVip;
-  return Array.isArray(value) ? value[0] : value;
-};
-
-const shouldPreviewVipOffer = (offer, debugVipValue) => {
-  if (!debugVipValue || !isLocalDebugHost()) return false;
-
-  const normalizedDebugValue = normalizeLookupText(debugVipValue);
-
-  if (normalizedDebugValue === 'all') {
-    return true;
-  }
-
-  return [getKnownBusinessKey(offer), offer.businessId, offer.id, offer.title, offer.brand]
-    .some((value) => normalizeLookupText(value) === normalizedDebugValue || findBusinessKeyInText(value) === normalizedDebugValue);
-};
 const getOfferStatus = (offer) => offer.isActive === false ? '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644' : '\u0641\u0639\u0627\u0644';
 const getOfferTypeLabel = () => '';
 
@@ -1176,9 +1116,8 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
     .filter((banner) => !failedBannerImages[banner.image]);
   const bannerCount = bannerItems.length;
   const bannerDots = bannerCount ? bannerItems : [{ title: 'placeholder-1' }, { title: 'placeholder-2' }, { title: 'placeholder-3' }];
-  const debugVipValue = getDebugVipValue(router);
-  const vipOffers = homeData.offers.filter((offer) => offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue));
-  const nonVipOffers = homeData.offers.filter((offer) => !(offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue)));
+  const vipOffers = homeData.offers.filter((offer) => offer.offerType === 'vip-discount');
+  const nonVipOffers = homeData.offers.filter((offer) => offer.offerType !== 'vip-discount');
   const classifiedGiftDiscountOffers = nonVipOffers.filter((offer) => offer.offerType === 'gift-discount');
   const giftDiscountOffers = classifiedGiftDiscountOffers.length
     ? classifiedGiftDiscountOffers
@@ -1854,10 +1793,7 @@ useEffect(() => {
 
 
   const renderOfferCard = (offer, index) => {
-    const isDebugVip = shouldPreviewVipOffer(offer, debugVipValue);
-    const displayedOffer = isDebugVip
-      ? { ...offer, offerType: 'vip-discount', isVip: true, hasGift: true, hasDiscount: true }
-      : offer;
+    const displayedOffer = offer;
     const offerStatus = getOfferStatus(displayedOffer);
     const isInactive = offerStatus === '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644';
     const offerType = displayedOffer.offerType || 'simple-discount';

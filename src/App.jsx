@@ -147,8 +147,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
       setLoginError("ارسال کد انجام نشد.");
       return false;
     } catch (error) {
-      console.log(error);
-
       setLoginError(
         error.response?.data?.message ||
           "خطا در ارتباط با سرور"
@@ -166,8 +164,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
 
       const data = await verifyOtp({ mobile, otp });
 
-      console.log(data);
-
       const token = getTokenFromAuthResponse(data);
       const tokenSaved = setAuthToken(token, getUserTypeFromAuthResponse(data));
 
@@ -184,8 +180,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
       setDashboardSectionRequest(initialDashboardSection ? { section: initialDashboardSection, createdAt: Date.now() } : null);
       setCurrentPage("dashboard");
     } catch (error) {
-      console.log(error);
-
       if (error.response?.data?.message) {
         setLoginError(error.response.data.message);
       } else {
