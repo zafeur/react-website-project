@@ -11057,3 +11057,8 @@ html.theme-dark .home-shell .home-offer-footer button {
 .home-shell .home-section#brands .home-brand-grid .home-brand-card {
   flex-basis: clamp(220px, 20vw, 260px) !important;
 }
+
+.home-shell .home-section#brands .home-brand-grid {
+  padding-top: 18px !important;
+  scroll-padding-top: 18px !important;
+}
