@@ -11062,3 +11062,17 @@ html.theme-dark .home-shell .home-offer-footer button {
   padding-top: 18px !important;
   scroll-padding-top: 18px !important;
 }
+
+/* Carousel overflow guarantee: auto-scroll is only visible when at least one card sits off-screen. */
+@media (min-width: 641px) {
+  .home-shell .home-section#brands .home-brand-grid .home-brand-card {
+    flex-basis: clamp(300px, 28vw, 340px) !important;
+  }
+
+  .home-shell .home-offer-section .home-offer-grid .home-offer-card,
+  .home-shell .home-vip-section .home-offer-grid .home-offer-card,
+  .home-shell .home-section#gifts > .home-offer-grid .home-offer-card,
+  .home-shell .home-section#discount-only > .home-offer-grid .home-offer-card {
+    flex-basis: clamp(360px, 34vw, 430px) !important;
+  }
+}
