@@ -16,7 +16,10 @@ export const sendOtp = async (mobile) => {
 };
 
 export const verifyOtp = async ({ mobile, otp }) => {
-  const response = await authClient.post("/register-mobile", toFormData({ mobile, otp }));
+  const response = await authClient.post(
+    "/register-mobile",
+    toFormData({ mobile, otp, type: 1 })
+  );
 
   return response.data;
 };

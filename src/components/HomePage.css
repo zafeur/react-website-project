@@ -4324,17 +4324,32 @@ html.theme-dark .home-shell .home-offer-media .home-offer-kind {
 
 /* Final offers layout: one shared container, one grid, VIP indicated only at card level. */
 .home-section#gifts > .home-offer-grid {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 22px !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
   align-items: stretch !important;
+  gap: 18px !important;
   width: 100% !important;
   margin: 0 !important;
+  padding: 12px 0 0 !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  direction: rtl !important;
+  scroll-behavior: smooth !important;
+  scroll-snap-type: x proximity !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.home-section#gifts > .home-offer-grid::-webkit-scrollbar {
+  display: none !important;
 }
 
 .home-section#gifts .home-offer-card {
+  flex: 0 0 clamp(300px, 28vw, 420px) !important;
   min-height: 0 !important;
   height: 100% !important;
+  scroll-snap-align: start !important;
 }
 
 .home-section#gifts .home-offer-card--vip-discount {
@@ -4380,19 +4395,10 @@ html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
   box-shadow: 0 22px 48px rgba(0, 0, 0, .28) !important;
 }
 
-@media (max-width: 980px) {
-  .home-section#gifts > .home-offer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
 @media (max-width: 640px) {
   .home-section#gifts > .home-offer-grid {
-    display: flex !important;
     gap: 14px !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    padding: 0 4px 14px !important;
+    padding: 12px 4px 14px !important;
   }
 
   .home-section#gifts > .home-offer-grid .home-offer-card {

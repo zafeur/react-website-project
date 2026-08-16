@@ -184,13 +184,14 @@ const findBusinessProfile = (businessId = DEFAULT_BUSINESS_ID) => {
   if (matchedProfile) return matchedProfile;
 
   if (isNumericCollection) {
+    const fallbackTitle = `${uiText.collectionFallback} ${toPersianDigits(rawBusinessId)}`;
     return {
       ...(businessProfiles[0] || {}),
       id: `collection-${rawBusinessId}`,
       slug: `collection-${rawBusinessId}`,
       collectionId: rawBusinessId,
-      title: `${uiText.collectionFallback} ${toPersianDigits(rawBusinessId)}`,
-      shortTitle: `${uiText.collectionFallback} ${toPersianDigits(rawBusinessId)}`,
+      title: fallbackTitle,
+      shortTitle: fallbackTitle,
       logoText: '',
       logoSmall: '',
       category: uiText.collectionFallback,
@@ -248,35 +249,42 @@ const mergeCollectionData = (details, listItem) => {
   return merged;
 };
 
-const makeEmptyBusinessProfile = (fallbackProfile, collectionId) => ({
-  ...fallbackProfile,
-  collectionId: collectionId || fallbackProfile.collectionId,
-  title: '',
-  shortTitle: '',
-  image: DEFAULT_BUSINESS_IMAGE,
-  imageFallback: DEFAULT_BUSINESS_IMAGE,
-  bannerImage: DEFAULT_BUSINESS_IMAGE,
-  bannerFallbackImage: DEFAULT_BUSINESS_IMAGE,
-  logoText: '',
-  logoSmall: '',
-  description: '',
-  category: '',
-  specialty: '',
-  rating: '',
-  votes: '',
-  address: '',
-  phone: '',
-  hours: '',
-  mapUrl: '',
-  instagramUrl: '',
-  isFollowed: false,
-  walletBalance: 0,
-  walletBalanceLabel: uiText.walletEmpty,
-  walletStatus: '',
-  points: '',
-  discountCode: '',
-  cashbackLabel: '',
-});
+const makeEmptyBusinessProfile = (fallbackProfile, collectionId) => {
+  const safeCollectionId = collectionId || fallbackProfile?.collectionId || '';
+  const fallbackTitle = fallbackProfile?.title || (
+    safeCollectionId ? `${uiText.collectionFallback} ${toPersianDigits(safeCollectionId)}` : uiText.collectionFallback
+  );
+
+  return {
+    ...fallbackProfile,
+    collectionId: safeCollectionId,
+    title: fallbackTitle,
+    shortTitle: fallbackTitle,
+    image: DEFAULT_BUSINESS_IMAGE,
+    imageFallback: DEFAULT_BUSINESS_IMAGE,
+    bannerImage: DEFAULT_BUSINESS_IMAGE,
+    bannerFallbackImage: DEFAULT_BUSINESS_IMAGE,
+    logoText: '',
+    logoSmall: '',
+    description: '',
+    category: '',
+    specialty: '',
+    rating: '',
+    votes: '',
+    address: '',
+    phone: '',
+    hours: '',
+    mapUrl: '',
+    instagramUrl: '',
+    isFollowed: false,
+    walletBalance: 0,
+    walletBalanceLabel: uiText.walletEmpty,
+    walletStatus: '',
+    points: '',
+    discountCode: '',
+    cashbackLabel: '',
+  };
+};
 
 const normalizeApiCollectionProfile = (source, fallbackProfile) => {
   const data = resolveApiData(source) || {};

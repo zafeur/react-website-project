@@ -2,7 +2,7 @@ import httpClient from "../helper/httpClient";
 import { toFormData } from "../helper/formData";
 
 export const getHomePageData = async () => {
-  const response = await httpClient.get("/home", {
+  const response = await httpClient.get("/discount/all", {
     requiresAuth: false,
   });
 

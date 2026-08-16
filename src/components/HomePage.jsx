@@ -619,8 +619,17 @@ const buildBrandsFromOffers = (offers) => {
     .filter(Boolean);
 };
 
-const ensureDefaultBrands = (brands) => {
+const ensureDefaultBrands = (brands, allowFallback = true) => {
   const normalizedBrands = Array.isArray(brands) ? brands : [];
+
+  if (!allowFallback) {
+    const melalFallback = defaultHomeData.brands.find((brand) => brand.businessId === 'melal');
+    return [...(melalFallback ? [melalFallback] : []), ...normalizedBrands.filter((brand) => {
+      const brandKey = getKnownBusinessKey(brand) || firstValue(brand, ['businessId', 'business_id', 'collectionId', 'collection_id']);
+      return brandKey && String(brandKey).toLowerCase() !== 'melal';
+    })];
+  }
+
   const existingKeys = new Set(
     normalizedBrands
       .map((brand) => getKnownBusinessKey(brand) || firstValue(brand, ['businessId', 'business_id', 'collectionId', 'collection_id']))
@@ -709,11 +718,44 @@ const getOfferMergeKey = (offer) =>
     .toLowerCase();
 
 const mergeOfferLists = (fallbackOffers, apiOffers) => {
+  const melalFallback = defaultHomeData.offers.find((offer) => offer.businessId === 'melal');
+  const dedupeOffers = (items) => {
+    const seen = new Set();
+
+    return items.filter((item) => {
+      const key = String(
+        item?.businessId ||
+        item?.collectionId ||
+        item?.id ||
+        item?.title ||
+        item?.brand ||
+        ''
+      ).trim().toLowerCase();
+
+      if (!key || seen.has(key)) {
+        return false;
+      }
+
+      seen.add(key);
+      return true;
+    });
+  };
+
   if (!apiOffers.length) {
-    return fallbackOffers;
+    const nextFallback = dedupeOffers([
+      ...(melalFallback ? [melalFallback] : []),
+      ...fallbackOffers.filter((offer) => String(offer?.businessId || '').toLowerCase() !== 'melal'),
+    ]);
+
+    return nextFallback;
   }
 
-  return apiOffers;
+  const apiPriorityOffers = dedupeOffers([
+    ...(melalFallback ? [melalFallback] : []),
+    ...apiOffers,
+  ]);
+
+  return apiPriorityOffers;
 };
 
 const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
@@ -723,10 +765,15 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   const homeStories = normalizeApiStories(resolveHomeData(homePayload));
   const offerStories = buildStoriesFromOffers(discountOffers);
 
+  const apiBrands = buildBrandsFromOffers(discountOffers);
+  const nextBrands = discountOffers.length
+    ? ensureDefaultBrands(apiBrands, false)
+    : ensureDefaultBrands(normalizedHome.brands, true);
+
   return {
     ...normalizedHome,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
-    brands: ensureDefaultBrands(discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands),
+    brands: nextBrands,
     offers: mergeOfferLists(normalizedHome.offers, discountOffers),
   };
 };
@@ -1138,7 +1185,12 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [requestingOfferId, setRequestingOfferId] = useState(null);
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
-  const displayedBrands = ensureDefaultBrands(homeData.brands);
+  const displayedBrands = homeData.brands?.length
+    ? ensureDefaultBrands(homeData.brands, false)
+    : ensureDefaultBrands([], true);
+  const displayedStories = homeData.stories?.length
+    ? homeData.stories
+    : defaultHomeData.stories;
   const bannerItems = mergeExtraBanners(homeData.banners)
     .filter((banner) => isApiBannerImage(banner?.image))
     .filter((banner) => !failedBannerImages[banner.image]);
@@ -1210,13 +1262,14 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       let didDrag = false;
       let brandTapCandidate = null;
       let didNavigateBrandTap = false;
-      let autoScrollTimer = 0;
+      let autoScrollFrame = 0;
+      let previousAutoScrollTime = 0;
       let momentumFrame = 0;
-      let autoStepFrame = 0;
       let lastDragX = 0;
       let lastDragTime = 0;
       let swipeVelocity = 0;
       const dragClickThreshold = 14;
+      const pixelsPerSecond = isBrandRow ? 84 : isStoryRow ? 72 : 58;
       const rtlScrollType = getRtlScrollType();
       const getMaxScroll = () => Math.max(0, row.scrollWidth - row.clientWidth);
       const isRtlScrollRow = () => window.getComputedStyle(row).direction === 'rtl';
@@ -1252,52 +1305,10 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
         row.scrollLeft = rawNext;
       };
-      const stopAutoStep = () => {
-        window.cancelAnimationFrame(autoStepFrame);
-        autoStepFrame = 0;
-      };
-      const animateVisualScrollTo = (target) => {
-        stopAutoStep();
-
-        const start = getVisualScrollLeft();
-        const maxScroll = getMaxScroll();
-        const end = Math.max(0, Math.min(maxScroll, target));
-        const distance = end - start;
-
-        if (Math.abs(distance) < 1) {
-          setVisualScrollLeft(end);
-          return;
-        }
-
-        const startedAt = window.performance.now();
-        const duration = 420;
-        const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3);
-        const step = (frameTime) => {
-          const progress = Math.min((frameTime - startedAt) / duration, 1);
-          setVisualScrollLeft(start + distance * easeOutCubic(progress));
-
-          if (progress < 1) {
-            autoStepFrame = window.requestAnimationFrame(step);
-          } else {
-            autoStepFrame = 0;
-          }
-        };
-
-        autoStepFrame = window.requestAnimationFrame(step);
-      };
       const updateOverflowState = () => {
         const isScrollable = getMaxScroll() > 8;
         row.classList.toggle('is-scrollable', isScrollable);
         row.classList.toggle('is-centered', !isScrollable);
-      };
-      const getStepDistance = () => {
-        const firstItem = row.firstElementChild;
-        const styles = window.getComputedStyle(row);
-        const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
-
-        return firstItem
-          ? firstItem.getBoundingClientRect().width + gap
-          : row.clientWidth * 0.75;
       };
       const stopMomentum = () => {
         window.cancelAnimationFrame(momentumFrame);
@@ -1307,7 +1318,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const pause = () => {
         isPaused = true;
         window.clearTimeout(resumeTimer);
-        stopAutoStep();
       };
       const resume = () => {
         window.clearTimeout(resumeTimer);
@@ -1330,10 +1340,18 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
         setVisualScrollLeft(getVisualScrollLeft());
       };
-      const autoScroll = () => {
+      const autoScroll = (frameTime) => {
         updateOverflowState();
         const maxScroll = getMaxScroll();
+        if (!previousAutoScrollTime) {
+          previousAutoScrollTime = frameTime;
+        }
+
+        const elapsedSeconds = Math.min((frameTime - previousAutoScrollTime) / 1000, 0.08);
+        previousAutoScrollTime = frameTime;
+
         if (shouldHoldAutoScroll() || maxScroll <= 8) {
+          autoScrollFrame = window.requestAnimationFrame(autoScroll);
           return;
         }
 
@@ -1344,14 +1362,8 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           scrollDirection = 1;
         }
 
-        const targetScroll = currentScroll + getStepDistance() * scrollDirection;
-
-        if (reduceMotion) {
-          setVisualScrollLeft(targetScroll);
-          return;
-        }
-
-        animateVisualScrollTo(targetScroll);
+        setVisualScrollLeft(currentScroll + pixelsPerSecond * elapsedSeconds * scrollDirection);
+        autoScrollFrame = window.requestAnimationFrame(autoScroll);
       };
       const startMomentum = () => {
         if (reduceMotion || Math.abs(swipeVelocity) < 0.08) {
@@ -1494,7 +1506,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         }
 
         isHoveringCard = true;
-        stopAutoStep();
       };
       const handleHoverEnd = (event) => {
         const nextTarget = event.relatedTarget;
@@ -1511,7 +1522,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         : null;
       resizeObserver?.observe(row);
       Array.from(row.children).forEach((child) => resizeObserver?.observe(child));
-      autoScrollTimer = window.setInterval(autoScroll, 3000);
+      autoScrollFrame = window.requestAnimationFrame(autoScroll);
 
       row.addEventListener('pointerdown', startDrag);
       row.addEventListener('pointermove', moveDrag);
@@ -1526,9 +1537,8 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       row.addEventListener('click', handleRowClick, true);
 
       cleanup.push(() => {
-        window.clearInterval(autoScrollTimer);
+        window.cancelAnimationFrame(autoScrollFrame);
         window.cancelAnimationFrame(momentumFrame);
-        window.cancelAnimationFrame(autoStepFrame);
         window.clearTimeout(resumeTimer);
         resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
@@ -2167,7 +2177,7 @@ useEffect(() => {
         </section>
 
         <section className="home-stories" aria-label={t.selectedBrands}>
-          {storyDisplayItems.map(({ story, index }) => (
+          {displayedStories.map((story, index) => (
             <button
               className={`home-story ${spinningStory === story.title ? 'is-spinning' : ''}`}
               type="button"
