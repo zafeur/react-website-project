@@ -5,8 +5,6 @@ import { useRouter } from 'next/router';
 import {
   ChevronLeft,
   ChevronRight,
-  Check,
-  Copy,
   Gift,
   LogIn,
   Moon,
@@ -14,6 +12,10 @@ import {
   Info,
   PhoneCall,
   Search,
+  ShoppingBag,
+  Sparkles,
+  Star,
+  Store,
   Sun,
   TicketPercent,
   Trophy,
@@ -72,8 +74,6 @@ const t = {
   discountCode: "\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0634\u0645\u0627",
   discountRequested: "\u062f\u0631\u062e\u0648\u0627\u0633\u062a \u0634\u0645\u0627 \u062b\u0628\u062a \u0634\u062f.",
   discountFailed: "\u062f\u0631\u06cc\u0627\u0641\u062a \u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0627\u0646\u062c\u0627\u0645 \u0646\u0634\u062f.",
-  copyCode: "\u06a9\u067e\u06cc \u06a9\u062f",
-  copiedCode: "\u06a9\u067e\u06cc \u0634\u062f",
   search: "\u062c\u0633\u062a\u062c\u0648\u06cc \u0628\u0631\u0646\u062f\u060c \u0647\u062f\u06cc\u0647 \u06cc\u0627 \u067e\u06cc\u0634\u0646\u0647\u0627\u062f...",
   searchResults: "\u0646\u062a\u0627\u06cc\u062c \u062c\u0633\u062a\u062c\u0648",
   noResults: "\u0646\u062a\u06cc\u062c\u0647\u200c\u0627\u06cc \u067e\u06cc\u062f\u0627 \u0646\u0634\u062f",
@@ -137,46 +137,38 @@ const normalizeMediaUrl = (value, fallback) => {
 };
 
 const defaultHomeData = {
-  stories: [
-  { title: getStoryDisplayTitle(t.bastani), image: asset('img/business-banners/bastani-logo-enhanced.png'), video: storyVideoByTitle[t.bastani] },
-  { title: t.barial, image: asset('img/barial.jpg'), video: storyVideoByTitle[t.barial] },
-  { title: t.dorato, image: asset('img/logo dorato.jpg'), video: storyVideoByTitle[t.dorato] },
-  { title: t.ibamo, image: asset('img/logo ibamo.jpg'), video: storyVideoByTitle[t.ibamo] },
-  { title: getStoryDisplayTitle(t.mojalal), image: asset('img/mojalal.jpg'), video: storyVideoByTitle[t.mojalal] },
-  { title: t.bakhshi, image: asset('img/bakhshi.jpg'), video: storyVideoByTitle[t.bakhshi] },
+  stories: [],
+
+  banners: [],
+
+  brands: [],
+
+  categories: [
+  { title: t.gifts, icon: 'Gift' },
+  { title: t.restaurant, icon: 'Store' },
+  { title: t.shop, icon: 'ShoppingBag' },
+  { title: t.club, icon: 'Star' },
+  { title: t.special, icon: 'Sparkles' },
 ],
 
-  banners: [
-  { title: t.bastani, image: asset('img/banner/bannerweb bastani.6ff0aa72.jpg') },
-  { title: t.barial, image: asset('img/banner/bannerweb barial.15abe337.jpg') },
-  { title: t.bakhshi, image: asset('img/banner/bannerweb bakhshi.e2078af9 (1).jpg') },
-],
-
-  brands: [
-  { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/collections/melal' },
-  { title: t.barial, businessId: 'barial', collectionId: '4', image: asset('img/barial.jpg'), href: '/collections/4' },
-  { title: t.dorato, businessId: 'dorato', collectionId: '5', image: asset('img/logo dorato.jpg'), href: '/collections/5' },
-  { title: t.bastani, businessId: 'bastani', collectionId: '2', image: asset('img/business-banners/bastani-logo-enhanced.png'), href: '/collections/2' },
-  { title: t.ibamo, businessId: 'ibamo', collectionId: '1', image: asset('img/logo ibamo.jpg'), href: '/collections/1' },
-  { title: t.mojalal, businessId: 'mojalal', collectionId: '3', image: asset('img/mojalal.jpg'), href: '/collections/3' },
-],
-
-  offers: [
-  { id: 'melal-discount', businessId: 'melal', title: t.gift1, brand: t.restaurant, tag: t.free, vip: 0, hasGift: true, hasDiscount: false, image: asset('img/restaurant-melal.png') },
-  { id: 'barial-discount', businessId: 'barial', collectionId: '4', title: t.gift2, brand: t.barial, tag: t.discount, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/barial.jpg') },
-  { id: 'dorato-discount', businessId: 'dorato', collectionId: '5', title: t.gift3, brand: t.dorato, tag: t.special, vip: 0, hasGift: true, hasDiscount: true, image: asset('img/logo dorato.jpg') },
-  { id: 'ibamo-discount', businessId: 'ibamo', collectionId: '1', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0627\u06cc\u0628\u0627\u0645\u0648', brand: t.ibamo, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, code: 'IBAMO72WDBU', image: asset('img/logo ibamo.jpg') },
-  { id: 'bakhshi-discount', businessId: 'bakhshi', collectionId: '6', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u062e\u0634\u06cc', brand: t.bakhshi, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/bakhshi.jpg') },
-  { id: 'bastani-discount', businessId: 'bastani', collectionId: '2', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0628\u0627\u0633\u062a\u0627\u0646\u06cc', brand: t.bastani, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/business-banners/bastani-logo-enhanced.png') },
-  { id: 'mojalal-discount', businessId: 'mojalal', collectionId: '3', title: '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062e\u0631\u06cc\u062f \u0627\u0632 \u0645\u062c\u0644\u0644', brand: t.mojalal, tag: t.discount, vip: 0, hasGift: false, hasDiscount: true, image: asset('img/mojalal.jpg') },
-],
+  offers: [],
 };
 
 const emptyHomeData = {
   stories: [],
   banners: [],
   brands: [],
+  categories: defaultHomeData.categories,
   offers: [],
+};
+
+const categoryIcons = {
+  Gift,
+  LogIn,
+  Store,
+  ShoppingBag,
+  Star,
+  Sparkles,
 };
 
 const normalizeList = (value, fallback = []) => (Array.isArray(value) && value.length ? value : fallback);
@@ -295,6 +287,20 @@ const normalizeOfferActive = (offer) => {
 
   return true;
 };
+const blockedCategoryTerms = ['pet', 'pets', 'animal', 'animals', '\u062d\u06cc\u0648\u0627\u0646', '\u062d\u06cc\u0648\u0627\u0646\u0627\u062a', '\u062d\u06cc\u0648\u0627\u0646\u0627\u062a \u062e\u0627\u0646\u06af\u06cc'];
+
+const isAllowedCategory = (category) => {
+  const title = String(firstValue(category, ['title', 'name', 'label']) || '').toLowerCase();
+  const icon = String(firstValue(category, ['icon', 'iconName', 'icon_name']) || '').toLowerCase();
+
+  return !blockedCategoryTerms.some((term) => title.includes(term) || icon.includes(term));
+};
+
+const normalizeCategories = (items) => {
+  const categories = normalizeList(items, defaultHomeData.categories).filter(isAllowedCategory);
+  return categories.length ? categories : defaultHomeData.categories;
+};
+
 const resolveHomeData = (data) => data?.data || data?.home || data?.homepage || data || {};
 
 const isRestaurantBrand = (title = '') =>
@@ -405,18 +411,11 @@ const getCollectionIdForOffer = (offer) => {
   const explicitCollectionId = firstValue(offer, ['collectionId', 'collection_id', 'collectionID']);
   const businessKey = getKnownBusinessKey(offer);
 
-  if (explicitCollectionId) return explicitCollectionId;
-  if (businessKey === 'melal') return '';
-
-  return knownCollectionIdByBusiness[businessKey] || '';
+  return explicitCollectionId || knownCollectionIdByBusiness[businessKey] || '';
 };
 
 const getOfferFallback = (offer, index) => {
-  const businessKey = getKnownBusinessKey(offer);
-
-  return defaultHomeData.offers.find((fallbackOffer) => fallbackOffer.businessId === businessKey) ||
-    defaultHomeData.offers[index % defaultHomeData.offers.length] ||
-    {};
+  return {};
 };
 
 const valueMatchesBusiness = (value, businessKey) => {
@@ -619,30 +618,6 @@ const buildBrandsFromOffers = (offers) => {
     .filter(Boolean);
 };
 
-const ensureDefaultBrands = (brands, allowFallback = true) => {
-  const normalizedBrands = Array.isArray(brands) ? brands : [];
-
-  if (!allowFallback) {
-    const melalFallback = defaultHomeData.brands.find((brand) => brand.businessId === 'melal');
-    return [...(melalFallback ? [melalFallback] : []), ...normalizedBrands.filter((brand) => {
-      const brandKey = getKnownBusinessKey(brand) || firstValue(brand, ['businessId', 'business_id', 'collectionId', 'collection_id']);
-      return brandKey && String(brandKey).toLowerCase() !== 'melal';
-    })];
-  }
-
-  const existingKeys = new Set(
-    normalizedBrands
-      .map((brand) => getKnownBusinessKey(brand) || firstValue(brand, ['businessId', 'business_id', 'collectionId', 'collection_id']))
-      .filter(Boolean)
-  );
-  const missingDefaults = defaultHomeData.brands.filter((brand) => {
-    const key = getKnownBusinessKey(brand) || brand.businessId || brand.collectionId;
-    return key && !existingKeys.has(key);
-  });
-
-  return [...missingDefaults, ...normalizedBrands];
-};
-
 const buildStoriesFromOffers = (offers) =>
   buildBrandsFromOffers(offers)
     .map((brand) => ({
@@ -718,44 +693,11 @@ const getOfferMergeKey = (offer) =>
     .toLowerCase();
 
 const mergeOfferLists = (fallbackOffers, apiOffers) => {
-  const melalFallback = defaultHomeData.offers.find((offer) => offer.businessId === 'melal');
-  const dedupeOffers = (items) => {
-    const seen = new Set();
-
-    return items.filter((item) => {
-      const key = String(
-        item?.businessId ||
-        item?.collectionId ||
-        item?.id ||
-        item?.title ||
-        item?.brand ||
-        ''
-      ).trim().toLowerCase();
-
-      if (!key || seen.has(key)) {
-        return false;
-      }
-
-      seen.add(key);
-      return true;
-    });
-  };
-
   if (!apiOffers.length) {
-    const nextFallback = dedupeOffers([
-      ...(melalFallback ? [melalFallback] : []),
-      ...fallbackOffers.filter((offer) => String(offer?.businessId || '').toLowerCase() !== 'melal'),
-    ]);
-
-    return nextFallback;
+    return fallbackOffers;
   }
 
-  const apiPriorityOffers = dedupeOffers([
-    ...(melalFallback ? [melalFallback] : []),
-    ...apiOffers,
-  ]);
-
-  return apiPriorityOffers;
+  return apiOffers;
 };
 
 const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
@@ -765,20 +707,15 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   const homeStories = normalizeApiStories(resolveHomeData(homePayload));
   const offerStories = buildStoriesFromOffers(discountOffers);
 
-  const apiBrands = buildBrandsFromOffers(discountOffers);
-  const nextBrands = discountOffers.length
-    ? ensureDefaultBrands(apiBrands, false)
-    : ensureDefaultBrands(normalizedHome.brands, true);
-
   return {
     ...normalizedHome,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
-    brands: nextBrands,
+    brands: discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands,
     offers: mergeOfferLists(normalizedHome.offers, discountOffers),
   };
 };
 
-const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v3';
+const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v2';
 const HOME_MOBILE_CACHE_KEY = 'keymiyay-home-mobile';
 const PROFILE_STORAGE_KEY = 'keymiyay-user-profile';
 
@@ -841,49 +778,19 @@ const saveCachedHomeMobile = (mobile) => {
 };
 
 const hasUsableHomeData = (data) => Boolean(data?.stories?.length || data?.offers?.length || data?.brands?.length || data?.banners?.length);
-
-let detectedRtlScrollType;
-
-const getRtlScrollType = () => {
-  if (detectedRtlScrollType) {
-    return detectedRtlScrollType;
-  }
-
-  if (typeof document === 'undefined') {
-    return 'negative';
-  }
-
-  const outer = document.createElement('div');
-  const inner = document.createElement('div');
-  outer.dir = 'rtl';
-  outer.style.cssText = 'position:absolute;top:-9999px;width:4px;height:1px;overflow:scroll;visibility:hidden;';
-  inner.style.width = '8px';
-  outer.appendChild(inner);
-  document.body.appendChild(outer);
-
-  if (outer.scrollLeft > 0) {
-    detectedRtlScrollType = 'default';
-  } else {
-    outer.scrollLeft = 1;
-    detectedRtlScrollType = outer.scrollLeft === 0 ? 'negative' : 'reverse';
-  }
-
-  document.body.removeChild(outer);
-  return detectedRtlScrollType;
-};
-
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
-  const brands = ensureDefaultBrands(normalizeCards(
+  const brands = normalizeCards(
     normalizeList(data?.brands || data?.businesses || data?.stores, []),
-    defaultHomeData.brands
-  ));
+    []
+  );
 
   return {
     stories: normalizeApiStories(data),
     banners: normalizeCards(normalizeList(data?.banners || data?.sliders || data?.slides, []), []),
     brands,
-    offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, defaultHomeData.offers)),
+    categories: normalizeCategories(data?.categories),
+    offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, [])),
   };
 };
 
@@ -1102,6 +1009,29 @@ const getOfferPercent = (offer) => {
   return String(offer.title || '').match(/[\u06f0-\u06f90-9]+\s*[\u066a%]|[\u066a%]\s*[\u06f0-\u06f90-9]+/)?.[0] || '\u06f1\u06f0\u066a';
 };
 
+const isLocalDebugHost = () => {
+  if (typeof window === 'undefined') return false;
+
+  return ['localhost', '127.0.0.1'].includes(window.location.hostname);
+};
+
+const getDebugVipValue = (router) => {
+  const value = router.query?.debugVip;
+  return Array.isArray(value) ? value[0] : value;
+};
+
+const shouldPreviewVipOffer = (offer, debugVipValue) => {
+  if (!debugVipValue || !isLocalDebugHost()) return false;
+
+  const normalizedDebugValue = normalizeLookupText(debugVipValue);
+
+  if (normalizedDebugValue === 'all') {
+    return true;
+  }
+
+  return [getKnownBusinessKey(offer), offer.businessId, offer.id, offer.title, offer.brand]
+    .some((value) => normalizeLookupText(value) === normalizedDebugValue || findBusinessKeyInText(value) === normalizedDebugValue);
+};
 const getOfferStatus = (offer) => offer.isActive === false ? '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644' : '\u0641\u0639\u0627\u0644';
 const getOfferTypeLabel = () => '';
 
@@ -1168,7 +1098,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [activeBanner, setActiveBanner] = useState(0);
   const [bannerDragOffset, setBannerDragOffset] = useState(0);
   const [isBannerDragging, setIsBannerDragging] = useState(false);
-  const [failedBannerImages, setFailedBannerImages] = useState({});
   const bannerTimerRef = useRef(null);
   const dragStartRef = useRef(null);
   const storyVideoRef = useRef(null);
@@ -1180,24 +1109,16 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [storyDurationMs, setStoryDurationMs] = useState(4200);
   const [pendingOffer, setPendingOffer] = useState(null);
   const [discountPopup, setDiscountPopup] = useState(null);
-  const [isDiscountCodeCopied, setIsDiscountCodeCopied] = useState(false);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
   const [requestingOfferId, setRequestingOfferId] = useState(null);
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
-  const displayedBrands = homeData.brands?.length
-    ? ensureDefaultBrands(homeData.brands, false)
-    : ensureDefaultBrands([], true);
-  const displayedStories = homeData.stories?.length
-    ? homeData.stories
-    : defaultHomeData.stories;
-  const bannerItems = mergeExtraBanners(homeData.banners)
-    .filter((banner) => isApiBannerImage(banner?.image))
-    .filter((banner) => !failedBannerImages[banner.image]);
+  const bannerItems = mergeExtraBanners(homeData.banners).filter((banner) => isApiBannerImage(banner?.image));
   const bannerCount = bannerItems.length;
   const bannerDots = bannerCount ? bannerItems : [{ title: 'placeholder-1' }, { title: 'placeholder-2' }, { title: 'placeholder-3' }];
-  const vipOffers = homeData.offers.filter((offer) => offer.offerType === 'vip-discount');
-  const nonVipOffers = homeData.offers.filter((offer) => offer.offerType !== 'vip-discount');
+  const debugVipValue = getDebugVipValue(router);
+  const vipOffers = homeData.offers.filter((offer) => offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue));
+  const nonVipOffers = homeData.offers.filter((offer) => !(offer.offerType === 'vip-discount' || shouldPreviewVipOffer(offer, debugVipValue)));
   const classifiedGiftDiscountOffers = nonVipOffers.filter((offer) => offer.offerType === 'gift-discount');
   const giftDiscountOffers = classifiedGiftDiscountOffers.length
     ? classifiedGiftDiscountOffers
@@ -1224,14 +1145,14 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       })
     : [];
   const filteredBrands = normalizedSearchQuery && filteredOffers.length === 0
-    ? displayedBrands.filter((brand) => normalizeSearchText([
+    ? homeData.brands.filter((brand) => normalizeSearchText([
         brand.title,
         brand.businessId,
         brand.collectionId,
       ].join(' ')).includes(normalizedSearchQuery))
     : [];
   const searchResultCount = filteredOffers.length || filteredBrands.length;
-  const primaryCollectionHref = displayedBrands.find((brand) => brand.href && brand.href.startsWith('/collections/'))?.href ||
+  const primaryCollectionHref = homeData.brands.find((brand) => brand.href && brand.href.startsWith('/collections/'))?.href ||
     getCollectionHref(homeData.offers[0]) ||
     '/#brands';
   useEffect(() => {
@@ -1253,7 +1174,6 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       const isBrandRow = row.classList.contains('home-brand-grid');
       const isStoryRow = row.classList.contains('home-stories');
       let isPaused = false;
-      let isHoveringCard = false;
       let resumeTimer;
       let scrollDirection = 1;
       let isDragging = false;
@@ -1262,54 +1182,14 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       let didDrag = false;
       let brandTapCandidate = null;
       let didNavigateBrandTap = false;
-      let autoScrollFrame = 0;
-      let previousAutoScrollTime = 0;
+      let animationFrame = 0;
       let momentumFrame = 0;
+      let previousFrameTime = 0;
       let lastDragX = 0;
       let lastDragTime = 0;
       let swipeVelocity = 0;
       const dragClickThreshold = 14;
-      const pixelsPerSecond = isBrandRow ? 84 : isStoryRow ? 72 : 58;
-      const rtlScrollType = getRtlScrollType();
-      const getMaxScroll = () => Math.max(0, row.scrollWidth - row.clientWidth);
-      const isRtlScrollRow = () => window.getComputedStyle(row).direction === 'rtl';
-      const getVisualScrollLeft = () => {
-        const maxScroll = getMaxScroll();
-
-        if (!isRtlScrollRow()) {
-          return row.scrollLeft;
-        }
-
-        if (rtlScrollType === 'negative') {
-          return -row.scrollLeft;
-        }
-
-        if (rtlScrollType === 'default') {
-          return maxScroll - row.scrollLeft;
-        }
-
-        return row.scrollLeft;
-      };
-      const setVisualScrollLeft = (value, behavior = 'auto') => {
-        const maxScroll = getMaxScroll();
-        const next = Math.max(0, Math.min(maxScroll, value));
-        let rawNext = next;
-
-        if (isRtlScrollRow()) {
-          if (rtlScrollType === 'negative') {
-            rawNext = -next;
-          } else if (rtlScrollType === 'default') {
-            rawNext = maxScroll - next;
-          }
-        }
-
-        row.scrollLeft = rawNext;
-      };
-      const updateOverflowState = () => {
-        const isScrollable = getMaxScroll() > 8;
-        row.classList.toggle('is-scrollable', isScrollable);
-        row.classList.toggle('is-centered', !isScrollable);
-      };
+      const pixelsPerSecond = isBrandRow ? 42 : isStoryRow ? 48 : 24;
       const stopMomentum = () => {
         window.cancelAnimationFrame(momentumFrame);
         momentumFrame = 0;
@@ -1327,43 +1207,35 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       };
       const shouldHoldAutoScroll = () =>
         isPaused ||
-        isHoveringCard ||
+        (!isBrandRow && !isStoryRow && row.matches(':hover')) ||
         (document.activeElement && row.contains(document.activeElement)) ||
         document.hidden;
-      const normalizeScrollPosition = () => {
-        const maxScroll = getMaxScroll();
-
-        if (maxScroll <= 8) {
-          setVisualScrollLeft(0);
-          return;
-        }
-
-        setVisualScrollLeft(getVisualScrollLeft());
-      };
       const autoScroll = (frameTime) => {
-        updateOverflowState();
-        const maxScroll = getMaxScroll();
-        if (!previousAutoScrollTime) {
-          previousAutoScrollTime = frameTime;
-        }
-
-        const elapsedSeconds = Math.min((frameTime - previousAutoScrollTime) / 1000, 0.08);
-        previousAutoScrollTime = frameTime;
-
-        if (shouldHoldAutoScroll() || maxScroll <= 8) {
-          autoScrollFrame = window.requestAnimationFrame(autoScroll);
+        const maxScroll = row.scrollWidth - row.clientWidth;
+        if (maxScroll <= 8) {
+          animationFrame = window.requestAnimationFrame(autoScroll);
           return;
         }
 
-        const currentScroll = getVisualScrollLeft();
-        if (currentScroll >= maxScroll - 2) {
-          scrollDirection = -1;
-        } else if (currentScroll <= 2) {
-          scrollDirection = 1;
+        if (!previousFrameTime) {
+          previousFrameTime = frameTime;
         }
 
-        setVisualScrollLeft(currentScroll + pixelsPerSecond * elapsedSeconds * scrollDirection);
-        autoScrollFrame = window.requestAnimationFrame(autoScroll);
+        const elapsedSeconds = Math.min((frameTime - previousFrameTime) / 1000, 0.06);
+        previousFrameTime = frameTime;
+
+        if (!isBrandRow && !reduceMotion && !shouldHoldAutoScroll()) {
+          if (row.scrollLeft >= maxScroll - 1) {
+            scrollDirection = -1;
+          } else if (row.scrollLeft <= 1) {
+            scrollDirection = 1;
+          }
+
+          const next = row.scrollLeft + pixelsPerSecond * elapsedSeconds * scrollDirection;
+          row.scrollLeft = Math.max(0, Math.min(maxScroll, next));
+        }
+
+        animationFrame = window.requestAnimationFrame(autoScroll);
       };
       const startMomentum = () => {
         if (reduceMotion || Math.abs(swipeVelocity) < 0.08) {
@@ -1379,16 +1251,17 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
           const elapsedMs = Math.min(frameTime - lastMomentumTime, 32);
           lastMomentumTime = frameTime;
-          const maxScroll = getMaxScroll();
-          const next = Math.max(0, Math.min(maxScroll, getVisualScrollLeft() + scrollVelocity * elapsedMs));
+          const maxScroll = row.scrollWidth - row.clientWidth;
+          const next = Math.max(0, Math.min(maxScroll, row.scrollLeft + scrollVelocity * elapsedMs));
           const hitEdge = next <= 0 || next >= maxScroll;
 
-          setVisualScrollLeft(next);
+          row.scrollLeft = next;
           scrollVelocity *= Math.pow(0.94, elapsedMs / 16);
 
           if (hitEdge || Math.abs(scrollVelocity) < 0.02) {
             momentumFrame = 0;
             swipeVelocity = 0;
+            previousFrameTime = 0;
             return;
           }
 
@@ -1408,7 +1281,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         didDrag = false;
         didNavigateBrandTap = false;
         dragStartX = event.clientX;
-        dragStartScrollLeft = getVisualScrollLeft();
+        dragStartScrollLeft = row.scrollLeft;
         lastDragX = event.clientX;
         lastDragTime = window.performance.now();
         const brandCard = isBrandRow
@@ -1439,7 +1312,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
           if (!row.hasPointerCapture?.(event.pointerId)) {
             row.setPointerCapture?.(event.pointerId);
           }
-          setVisualScrollLeft(dragStartScrollLeft - deltaX);
+          row.scrollLeft = dragStartScrollLeft - deltaX;
           swipeVelocity = (event.clientX - lastDragX) / elapsed;
           lastDragX = event.clientX;
           lastDragTime = now;
@@ -1454,9 +1327,9 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         brandTapCandidate = null;
         isDragging = false;
         row.classList.remove('is-dragging');
+        previousFrameTime = 0;
         if (didDrag) {
           startMomentum();
-          window.setTimeout(normalizeScrollPosition, 80);
         }
         resume();
 
@@ -1500,34 +1373,10 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         event.stopPropagation();
         router.push(href);
       };
-      const handleHoverStart = (event) => {
-        if (!event.target?.closest?.('.home-story, .home-brand-card, .home-offer-card')) {
-          return;
-        }
-
-        isHoveringCard = true;
-      };
-      const handleHoverEnd = (event) => {
-        const nextTarget = event.relatedTarget;
-
-        if (nextTarget && row.contains(nextTarget) && nextTarget.closest?.('.home-story, .home-brand-card, .home-offer-card')) {
-          return;
-        }
-
-        isHoveringCard = false;
-      };
-      updateOverflowState();
-      const resizeObserver = typeof ResizeObserver !== 'undefined'
-        ? new ResizeObserver(updateOverflowState)
-        : null;
-      resizeObserver?.observe(row);
-      Array.from(row.children).forEach((child) => resizeObserver?.observe(child));
-      autoScrollFrame = window.requestAnimationFrame(autoScroll);
+      animationFrame = window.requestAnimationFrame(autoScroll);
 
       row.addEventListener('pointerdown', startDrag);
       row.addEventListener('pointermove', moveDrag);
-      row.addEventListener('mouseover', handleHoverStart);
-      row.addEventListener('mouseout', handleHoverEnd);
       row.addEventListener('touchstart', pause, { passive: true });
       row.addEventListener('wheel', pause, { passive: true });
       row.addEventListener('pointerup', endDrag);
@@ -1537,14 +1386,11 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       row.addEventListener('click', handleRowClick, true);
 
       cleanup.push(() => {
-        window.cancelAnimationFrame(autoScrollFrame);
+        window.cancelAnimationFrame(animationFrame);
         window.cancelAnimationFrame(momentumFrame);
         window.clearTimeout(resumeTimer);
-        resizeObserver?.disconnect();
         row.removeEventListener('pointerdown', startDrag);
         row.removeEventListener('pointermove', moveDrag);
-        row.removeEventListener('mouseover', handleHoverStart);
-        row.removeEventListener('mouseout', handleHoverEnd);
         row.removeEventListener('touchstart', pause);
         row.removeEventListener('wheel', pause);
         row.removeEventListener('pointerup', endDrag);
@@ -1559,9 +1405,50 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   }, [homeData.stories, homeData.brands, homeData.offers, vipOffers.length, visibleGiftDiscountOffers.length, discountOnlyOffers.length, router]);
 
   useEffect(() => {
-    setIsDiscountCodeCopied(false);
-  }, [discountPopup?.code]);
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
 
+    const row = document.querySelector('#brands .home-brand-grid[data-auto-loop="true"]');
+
+    if (!row) {
+      return undefined;
+    }
+
+    let direction = 1;
+    let pauseUntil = 0;
+    const speedPerTick = 1.15;
+    const pauseBriefly = () => {
+      pauseUntil = window.performance.now() + 900;
+    };
+    const tick = () => {
+      const maxScroll = row.scrollWidth - row.clientWidth;
+
+      if (maxScroll <= 8 || row.matches(':hover') || row.classList.contains('is-dragging') || window.performance.now() < pauseUntil) {
+        return;
+      }
+
+      if (row.scrollLeft >= maxScroll - 1) {
+        direction = -1;
+      } else if (row.scrollLeft <= 1) {
+        direction = 1;
+      }
+
+      row.scrollLeft = Math.max(0, Math.min(maxScroll, row.scrollLeft + speedPerTick * direction));
+    };
+    const timer = window.setInterval(tick, 24);
+
+    row.addEventListener('pointerdown', pauseBriefly);
+    row.addEventListener('wheel', pauseBriefly, { passive: true });
+    row.addEventListener('touchstart', pauseBriefly, { passive: true });
+
+    return () => {
+      window.clearInterval(timer);
+      row.removeEventListener('pointerdown', pauseBriefly);
+      row.removeEventListener('wheel', pauseBriefly);
+      row.removeEventListener('touchstart', pauseBriefly);
+    };
+  }, [homeData.brands.length]);
 useEffect(() => {
   const checkAuth = () => {
     setIsLoggedIn(hasAuthToken());
@@ -1904,13 +1791,13 @@ useEffect(() => {
         code: receivedCode,
         message: receivedCode
           ? getDiscountMessage(data) || '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0628\u0627 \u0645\u0648\u0641\u0642\u06cc\u062a \u062f\u0631\u06cc\u0627\u0641\u062a \u0634\u062f.'
-          : getDiscountMessage(data) || '\u062f\u0631 \u062d\u0627\u0644 \u062d\u0627\u0636\u0631 \u06a9\u062f\u06cc \u0628\u0631\u0627\u06cc \u0627\u06cc\u0646 \u067e\u06cc\u0634\u0646\u0647\u0627\u062f \u062f\u0631 \u062f\u0633\u062a\u0631\u0633 \u0646\u06cc\u0633\u062a. \u0644\u0637\u0641\u0627 \u06a9\u0645\u06cc \u0628\u0639\u062f \u062f\u0648\u0628\u0627\u0631\u0647 \u062a\u0644\u0627\u0634 \u06a9\u0646\u06cc\u062f.',
+          : getDiscountMessage(data) || '\u06a9\u062f\u06cc \u0627\u0632 \u0633\u0645\u062a API \u0628\u0631\u0646\u06af\u0634\u062a. \u0644\u0637\u0641\u0627 \u062f\u0648\u0628\u0627\u0631\u0647 \u062a\u0644\u0627\u0634 \u06a9\u0646\u06cc\u062f.',
       });
-    } catch {
+    } catch (error) {
       setDiscountPopup({
         offer,
         code: '',
-        message: t.discountFailed,
+        message: error.response?.data?.message || error.message || t.discountFailed,
       });
     } finally {
       setIsRequestingDiscount(false);
@@ -1918,26 +1805,12 @@ useEffect(() => {
     }
   };
 
-  const copyDiscountCode = async () => {
-    if (!discountPopup?.code) return;
-
-    try {
-      await navigator.clipboard.writeText(discountPopup.code);
-      setIsDiscountCodeCopied(true);
-    } catch {
-      const textArea = document.createElement('textarea');
-      textArea.value = discountPopup.code;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setIsDiscountCodeCopied(true);
-    }
-  };
-
 
   const renderOfferCard = (offer, index) => {
-    const displayedOffer = offer;
+    const isDebugVip = shouldPreviewVipOffer(offer, debugVipValue);
+    const displayedOffer = isDebugVip
+      ? { ...offer, offerType: 'vip-discount', isVip: true, hasGift: true, hasDiscount: true }
+      : offer;
     const offerStatus = getOfferStatus(displayedOffer);
     const isInactive = offerStatus === '\u063a\u06cc\u0631\u0641\u0639\u0627\u0644';
     const offerType = displayedOffer.offerType || 'simple-discount';
@@ -2140,14 +2013,7 @@ useEffect(() => {
                       onPointerUp={(event) => handleBrandPointerUp(event, href)}
                       key={`search-brand-${brand.title}`}
                     >
-                      {isRestaurantBrand(brand.title) ? (
-                        <span className="home-brand-melal-logo" aria-label={brand.title}>
-                          <span>{'\u0645\u0644\u0644'}</span>
-                          <small>RESTAURANT</small>
-                        </span>
-                      ) : (
-                        <img src={brand.image} alt={brand.title} />
-                      )}
+                      <img src={brand.image} alt={brand.title} />
                       <strong>{brand.title}</strong>
                     </Link>
                   );
@@ -2177,11 +2043,11 @@ useEffect(() => {
         </section>
 
         <section className="home-stories" aria-label={t.selectedBrands}>
-          {displayedStories.map((story, index) => (
+          {storyDisplayItems.map(({ story, index }) => (
             <button
               className={`home-story ${spinningStory === story.title ? 'is-spinning' : ''}`}
               type="button"
-              key={`${story.title}-${index}`}
+              key={story.title}
               onClick={() => openStory(story, index)}
             >
               <span className="home-story-ring">
@@ -2212,11 +2078,7 @@ useEffect(() => {
                 {bannerCount ? (
                   bannerItems.map((banner, index) => (
                     <div className="home-banner-slide" key={`${banner.title}-${index}`}>
-                      <img
-                        src={banner.image}
-                        alt={`${t.bannerAlt} ${banner.title}`}
-                        onError={() => setFailedBannerImages((current) => ({ ...current, [banner.image]: true }))}
-                      />
+                      <img src={banner.image} alt={`${t.bannerAlt} ${banner.title}`} />
                     </div>
                   ))
                 ) : (
@@ -2297,8 +2159,8 @@ useEffect(() => {
             </div>
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
-          <div className="home-brand-grid">
-            {displayedBrands.map((brand, index) => {
+          <div className="home-brand-grid" data-auto-loop="true">
+            {homeData.brands.map((brand, index) => {
               const href = getBrandHref(brand);
 
               return (
@@ -2508,17 +2370,34 @@ useEffect(() => {
           : discountPopup.offer?.title}
       </h2>
 
+      <div
+        className={`home-discount-code ${
+          discountPopup.code ? '' : 'is-empty'
+        }`}
+      >
+        {discountPopup.code || 'کدی دریافت نشد'}
+      </div>
+
       {discountPopup.code ? (
-        <div className="home-discount-code-wrap">
-          <div className="home-discount-code">{discountPopup.code}</div>
-          <button className="home-discount-copy" type="button" onClick={copyDiscountCode}>
-            {isDiscountCodeCopied ? <Check /> : <Copy />}
-            <span>{isDiscountCodeCopied ? t.copiedCode : t.copyCode}</span>
-          </button>
-        </div>
-      ) : (
-        <div className="home-discount-code is-empty">کدی دریافت نشد</div>
-      )}
+        <button
+          type="button"
+          className="home-discount-copy-button"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(discountPopup.code);
+            } catch (error) {
+              const textArea = document.createElement('textarea');
+              textArea.value = discountPopup.code;
+              document.body.appendChild(textArea);
+              textArea.select();
+              document.execCommand('copy');
+              document.body.removeChild(textArea);
+            }
+          }}
+        >
+          کپی کد
+        </button>
+      ) : null}
 
       <p>{discountPopup.message}</p>
     </section>
@@ -2529,6 +2408,22 @@ useEffect(() => {
 }
 
 export default HomePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

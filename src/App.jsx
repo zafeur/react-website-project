@@ -12,16 +12,9 @@ import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, 
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
 const PROFILE_STORAGE_KEY = "keymiyay-user-profile";
-const AVATAR_STORAGE_KEY = "keymiyay-user-avatar";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
 const localAvatarChoices = new Set([brandAssets.maleProfile, brandAssets.femaleProfile]);
-const getSavedAvatarChoice = () => {
-  if (!canUseStorage()) return "";
-
-  const savedAvatar = localStorage.getItem(AVATAR_STORAGE_KEY);
-  return localAvatarChoices.has(savedAvatar) ? savedAvatar : "";
-};
 
 const hasIncomingAvatar = (profile = {}) => Boolean(
   profile.avatarPreview ||
@@ -66,12 +59,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
       const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
       if (savedProfile) {
         setUserProfile(JSON.parse(savedProfile));
-        return;
-      }
-
-      const savedAvatar = getSavedAvatarChoice();
-      if (savedAvatar) {
-        setUserProfile({ avatarPreview: savedAvatar });
       }
     } catch (error) {
       localStorage.removeItem(PROFILE_STORAGE_KEY);
@@ -147,6 +134,8 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
       setLoginError("ارسال کد انجام نشد.");
       return false;
     } catch (error) {
+      console.log(error);
+
       setLoginError(
         error.response?.data?.message ||
           "خطا در ارتباط با سرور"
@@ -164,6 +153,8 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
 
       const data = await verifyOtp({ mobile, otp });
 
+      console.log(data);
+
       const token = getTokenFromAuthResponse(data);
       const tokenSaved = setAuthToken(token, getUserTypeFromAuthResponse(data));
 
@@ -180,6 +171,8 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
       setDashboardSectionRequest(initialDashboardSection ? { section: initialDashboardSection, createdAt: Date.now() } : null);
       setCurrentPage("dashboard");
     } catch (error) {
+      console.log(error);
+
       if (error.response?.data?.message) {
         setLoginError(error.response.data.message);
       } else {
@@ -288,7 +281,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
           ? { ...incomingProfile, ...current }
           : { ...(current || {}), ...incomingProfile }
       );
-      const savedAvatar = getSavedAvatarChoice();
 
       if (
         current?.avatarPreview &&
@@ -298,14 +290,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
         nextProfile.avatarPreview = current.avatarPreview;
       }
 
-      if (
-        !nextProfile.avatarPreview &&
-        savedAvatar &&
-        !hasIncomingAvatar(profile)
-      ) {
-        nextProfile.avatarPreview = savedAvatar;
-      }
-
       if (canUseStorage()) {
         const profileForStorage = { ...nextProfile };
         delete profileForStorage.avatarFile;
@@ -313,9 +297,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
         delete profileForStorage.imageFile;
         if (String(profileForStorage.avatarPreview || "").startsWith("blob:")) {
           delete profileForStorage.avatarPreview;
-        }
-        if (localAvatarChoices.has(profileForStorage.avatarPreview)) {
-          localStorage.setItem(AVATAR_STORAGE_KEY, profileForStorage.avatarPreview);
         }
         localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profileForStorage));
       }

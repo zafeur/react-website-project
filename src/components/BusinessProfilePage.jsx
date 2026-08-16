@@ -81,49 +81,9 @@ const normalizeMediaUrl = (value, fallback) => {
   }
 };
 
-const localApiImageMirrors = new Map([
-  ['logo ibamo.jpg', '/home/img/logo ibamo.jpg'],
-  ['logo bastani.jpg', '/home/img/logo bastani.jpg'],
-  ['mojalal.jpg', '/home/img/mojalal.jpg'],
-  ['logo dorato.jpg', '/home/img/logo dorato.jpg'],
-  ['logo bakhshi.jpeg', '/home/img/logo bakhshi.jpeg'],
-]);
+const getLocalApiImageMirror = () => '';
 
-const collectionImageMirrors = new Map([
-  ['1', '/home/img/logo ibamo.jpg'],
-  ['2', '/home/img/logo bastani.jpg'],
-  ['3', '/home/img/mojalal.jpg'],
-  ['4', '/home/img/barial.jpg'],
-  ['5', '/home/img/logo dorato.jpg'],
-  ['6', '/home/img/logo bakhshi.jpeg'],
-]);
-
-const getLocalApiImageMirror = (value) => {
-  if (!value) return '';
-
-  try {
-    const url = new URL(value, API_MEDIA_BASE_URL);
-    const filename = decodeURIComponent(url.pathname.split('/').pop() || '').toLowerCase();
-    return localApiImageMirrors.get(filename) || '';
-  } catch {
-    const filename = decodeURIComponent(String(value).split('/').pop() || '').toLowerCase();
-    return localApiImageMirrors.get(filename) || '';
-  }
-};
-
-const getCollectionImageMirror = (collectionId, slug) => {
-  const collectionMatch = collectionImageMirrors.get(String(collectionId || ''));
-  if (collectionMatch) return collectionMatch;
-
-  const normalizedSlug = normalizeTextKey(slug);
-  if (normalizedSlug.includes('ibamo')) return '/home/img/logo ibamo.jpg';
-  if (normalizedSlug.includes('bastani')) return '/home/img/logo bastani.jpg';
-  if (normalizedSlug.includes('mojalal') || normalizedSlug.includes('mojallal')) return '/home/img/mojalal.jpg';
-  if (normalizedSlug.includes('dorato')) return '/home/img/logo dorato.jpg';
-  if (normalizedSlug.includes('bakhshi')) return '/home/img/logo bakhshi.jpeg';
-
-  return '';
-};
+const getCollectionImageMirror = () => '';
 
 const getCollectionImageFromApiMirror = (collectionId, slug) => {
   const mirror = getCollectionImageMirror(collectionId, slug);
@@ -184,14 +144,13 @@ const findBusinessProfile = (businessId = DEFAULT_BUSINESS_ID) => {
   if (matchedProfile) return matchedProfile;
 
   if (isNumericCollection) {
-    const fallbackTitle = `${uiText.collectionFallback} ${toPersianDigits(rawBusinessId)}`;
     return {
       ...(businessProfiles[0] || {}),
       id: `collection-${rawBusinessId}`,
       slug: `collection-${rawBusinessId}`,
       collectionId: rawBusinessId,
-      title: fallbackTitle,
-      shortTitle: fallbackTitle,
+      title: `${uiText.collectionFallback} ${toPersianDigits(rawBusinessId)}`,
+      shortTitle: `${uiText.collectionFallback} ${toPersianDigits(rawBusinessId)}`,
       logoText: '',
       logoSmall: '',
       category: uiText.collectionFallback,
@@ -249,42 +208,35 @@ const mergeCollectionData = (details, listItem) => {
   return merged;
 };
 
-const makeEmptyBusinessProfile = (fallbackProfile, collectionId) => {
-  const safeCollectionId = collectionId || fallbackProfile?.collectionId || '';
-  const fallbackTitle = fallbackProfile?.title || (
-    safeCollectionId ? `${uiText.collectionFallback} ${toPersianDigits(safeCollectionId)}` : uiText.collectionFallback
-  );
-
-  return {
-    ...fallbackProfile,
-    collectionId: safeCollectionId,
-    title: fallbackTitle,
-    shortTitle: fallbackTitle,
-    image: DEFAULT_BUSINESS_IMAGE,
-    imageFallback: DEFAULT_BUSINESS_IMAGE,
-    bannerImage: DEFAULT_BUSINESS_IMAGE,
-    bannerFallbackImage: DEFAULT_BUSINESS_IMAGE,
-    logoText: '',
-    logoSmall: '',
-    description: '',
-    category: '',
-    specialty: '',
-    rating: '',
-    votes: '',
-    address: '',
-    phone: '',
-    hours: '',
-    mapUrl: '',
-    instagramUrl: '',
-    isFollowed: false,
-    walletBalance: 0,
-    walletBalanceLabel: uiText.walletEmpty,
-    walletStatus: '',
-    points: '',
-    discountCode: '',
-    cashbackLabel: '',
-  };
-};
+const makeEmptyBusinessProfile = (fallbackProfile, collectionId) => ({
+  ...fallbackProfile,
+  collectionId: collectionId || fallbackProfile.collectionId,
+  title: '',
+  shortTitle: '',
+  image: DEFAULT_BUSINESS_IMAGE,
+  imageFallback: DEFAULT_BUSINESS_IMAGE,
+  bannerImage: DEFAULT_BUSINESS_IMAGE,
+  bannerFallbackImage: DEFAULT_BUSINESS_IMAGE,
+  logoText: '',
+  logoSmall: '',
+  description: '',
+  category: '',
+  specialty: '',
+  rating: '',
+  votes: '',
+  address: '',
+  phone: '',
+  hours: '',
+  mapUrl: '',
+  instagramUrl: '',
+  isFollowed: false,
+  walletBalance: 0,
+  walletBalanceLabel: uiText.walletEmpty,
+  walletStatus: '',
+  points: '',
+  discountCode: '',
+  cashbackLabel: '',
+});
 
 const normalizeApiCollectionProfile = (source, fallbackProfile) => {
   const data = resolveApiData(source) || {};
