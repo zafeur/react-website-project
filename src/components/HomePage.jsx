@@ -141,7 +141,9 @@ const defaultHomeData = {
 
   banners: [],
 
-  brands: [],
+  brands: [
+    { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/collections/melal' },
+  ],
 
   categories: [
   { title: t.gifts, icon: 'Gift' },
@@ -424,6 +426,21 @@ const valueMatchesBusiness = (value, businessKey) => {
   }
 
   return findBusinessKeyInText(value) === businessKey;
+};
+
+const ensureDefaultBrands = (brands) => {
+  const normalizedBrands = Array.isArray(brands) ? brands : [];
+  const existingKeys = new Set(
+    normalizedBrands
+      .map((brand) => getKnownBusinessKey(brand) || firstValue(brand, ['businessId', 'business_id', 'collectionId', 'collection_id']))
+      .filter(Boolean)
+  );
+  const missingDefaults = defaultHomeData.brands.filter((brand) => {
+    const key = getKnownBusinessKey(brand) || brand.businessId || brand.collectionId;
+    return key && !existingKeys.has(key);
+  });
+
+  return [...missingDefaults, ...normalizedBrands];
 };
 
 const getBusinessDisplayValue = (offer, keys, fallbackValue) => {
@@ -710,7 +727,7 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   return {
     ...normalizedHome,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
-    brands: discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands,
+    brands: ensureDefaultBrands(discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands),
     offers: mergeOfferLists(normalizedHome.offers, discountOffers),
   };
 };
