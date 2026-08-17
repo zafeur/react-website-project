@@ -103,6 +103,14 @@ export const getDiscountReport = async () => {
   return response.data;
 };
 
+export const getAllGifts = async () => {
+  const response = await httpClient.get("/gifts", {
+    requiresAuth: true,
+  });
+
+  return response.data;
+};
+
 const USER_GIFTS_ENDPOINT = process.env.NEXT_PUBLIC_USER_GIFTS_API_PATH || "";
 
 export const getUserGifts = async () => {
@@ -177,33 +185,57 @@ export const extractUserGifts = (payload) => {
   const report = data?.report || data?.discount_report || data?.discountReport;
   const user = data?.user || report?.user || payload?.user;
 
+  const preferredCodes = firstArray(
+    user?.discount_codes,
+    user?.discountCodes,
+    report?.user?.discount_codes,
+    report?.user?.discountCodes,
+    payload?.user?.discount_codes,
+    payload?.user?.discountCodes,
+    payload?.data?.user?.discount_codes,
+    payload?.data?.user?.discountCodes
+  );
+
+  const activeUnusedCodes = preferredCodes.filter((item) => {
+    const isActive = item?.active === 1 || item?.active === true || item?.active === "1";
+    const isUsed = item?.is_used === 1 || item?.is_used === true || item?.is_used === "1" || Boolean(item?.used_at);
+    return isActive && !isUsed;
+  });
+
+  if (activeUnusedCodes.length) {
+    return activeUnusedCodes;
+  }
+
+  if (preferredCodes.length) {
+    return preferredCodes;
+  }
+
   return firstArray(
-    payload?.gifts,
+    payload?.active_gifts,
+    payload?.activeGifts,
+    payload?.codes,
+    payload?.discounts,
+    payload?.discount_codes,
+    payload?.discountCodes,
     payload?.all_gifts,
     payload?.allGifts,
     payload?.user_gifts,
     payload?.userGifts,
-    payload?.discounts,
-    payload?.discount_codes,
-    payload?.discountCodes,
-    payload?.data?.gifts,
-    payload?.data?.all_gifts,
-    payload?.data?.allGifts,
-    payload?.data?.user_gifts,
-    payload?.data?.userGifts,
+    payload?.data?.active_gifts,
+    payload?.data?.activeGifts,
+    payload?.data?.codes,
     payload?.data?.discounts,
     payload?.data?.discount_codes,
     payload?.data?.discountCodes,
-    user?.gifts,
-    user?.discount_codes,
-    user?.discountCodes,
-    report?.gifts,
-    report?.all_gifts,
-    report?.allGifts,
-    report?.user_gifts,
-    report?.userGifts,
+    report?.active_gifts,
+    report?.activeGifts,
+    report?.codes,
+    report?.discounts,
     report?.discount_codes,
     report?.discountCodes,
+    payload?.data?.gifts,
+    payload?.gifts,
+    report?.gifts,
     Array.isArray(data) ? data : undefined
   );
 };
