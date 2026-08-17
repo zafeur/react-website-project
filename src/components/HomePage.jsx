@@ -719,6 +719,7 @@ const mergeOfferLists = (fallbackOffers, apiOffers) => {
 
 const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   const normalizedHome = normalizeHomeData(homePayload);
+  const normalizedDiscount = normalizeHomeData(discountPayload);
   const discountOffers = normalizeDiscountApiOffers(discountPayload);
   const discountStories = normalizeApiStories(discountPayload);
   const homeStories = normalizeApiStories(resolveHomeData(homePayload));
@@ -726,6 +727,7 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
 
   return {
     ...normalizedHome,
+    banners: normalizedDiscount.banners.length ? normalizedDiscount.banners : normalizedHome.banners,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
     brands: ensureDefaultBrands(discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands),
     offers: mergeOfferLists(normalizedHome.offers, discountOffers),
