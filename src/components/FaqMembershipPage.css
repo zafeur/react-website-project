@@ -1803,3 +1803,13 @@ html.theme-dark .faq-shell .faq-secondary-btn {
     color: #f7f1fb !important;
   }
 }
+/* =========================================================
+   DARK MODE — CUSTOMER STEPS NUMBERS
+   ========================================================= */
+
+.faq-shell.theme-dark .faq-step-number,
+html.theme-dark .faq-shell .faq-step-number {
+  color: #d8a4ff !important;
+  background: rgba(116, 51, 163, 0.28) !important;
+  border-color: rgba(216, 164, 255, 0.22) !important;
+}

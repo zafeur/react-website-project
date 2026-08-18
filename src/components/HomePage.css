@@ -11115,3 +11115,8 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
 .home-discount-copy-button:active {
   transform: scale(0.98);
 }
+.home-install-app-wrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}

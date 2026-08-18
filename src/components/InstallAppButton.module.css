@@ -1,0 +1,282 @@
+.installAppButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  height: 38px;
+  padding: 0 13px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #ec4899 100%
+  );
+
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  cursor: pointer;
+
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.18);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.installAppButton:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 16px rgba(236, 72, 153, 0.22);
+}
+
+.installAppButton:active {
+  transform: translateY(0);
+}
+
+.installAppButton:focus-visible {
+  outline: 2px solid #ec4899;
+  outline-offset: 2px;
+}
+
+.installAppIcon {
+  width: 15px;
+  height: 15px;
+
+  object-fit: contain;
+  flex-shrink: 0;
+
+  display: block;
+}
+
+
+/* =========================
+   iOS INSTALL GUIDE
+   ========================= */
+
+.installGuideOverlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(20, 10, 35, 0.55);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.installGuideModal {
+  position: relative;
+
+  width: min(420px, 100%);
+
+  padding: 28px 24px 24px;
+
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  color: #272033;
+
+  box-shadow:
+    0 20px 60px rgba(45, 20, 70, 0.25);
+
+  text-align: right;
+
+  direction: rtl;
+}
+
+.installGuideClose {
+  position: absolute;
+
+  top: 12px;
+  left: 12px;
+
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f3eafa;
+
+  color: #6d28d9;
+
+  font-size: 22px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.installGuideClose:hover {
+  background: #eadcff;
+  transform: scale(1.05);
+}
+
+.installGuideIcon {
+  width: 48px;
+  height: 48px;
+
+  margin: 0 auto 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #f3e8ff,
+    #fce7f3
+  );
+}
+
+.installGuideIcon img {
+  width: 30px;
+  height: 30px;
+
+  object-fit: contain;
+}
+
+.installGuideModal h3 {
+  margin: 0 0 12px;
+
+  color: #6d28d9;
+
+  font-size: 20px;
+  font-weight: 800;
+
+  text-align: center;
+}
+
+.installGuideModal p {
+  margin: 0 0 16px;
+
+  color: #5b5566;
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.installGuideModal ol {
+  margin: 0 0 22px;
+  padding-right: 22px;
+
+  color: #393242;
+
+  font-size: 14px;
+  line-height: 2;
+}
+
+.installGuideModal li {
+  padding-right: 4px;
+}
+
+.installGuideModal strong {
+  color: #7c3aed;
+}
+
+.installGuideDone {
+  width: 100%;
+
+  height: 42px;
+
+  border: none;
+  border-radius: 11px;
+
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #ec4899
+  );
+
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.installGuideDone:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 18px rgba(124, 58, 237, 0.22);
+}
+
+.installGuideDone:active {
+  transform: translateY(0);
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 480px) {
+  .installAppButton {
+    height: 36px;
+    padding: 0 11px;
+
+    gap: 5px;
+
+    font-size: 11px;
+    border-radius: 9px;
+  }
+
+  .installAppIcon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .installGuideOverlay {
+    padding: 16px;
+  }
+
+  .installGuideModal {
+    padding: 26px 20px 20px;
+
+    border-radius: 18px;
+  }
+
+  .installGuideModal h3 {
+    font-size: 18px;
+  }
+
+  .installGuideModal p,
+  .installGuideModal ol {
+    font-size: 13px;
+  }
+}

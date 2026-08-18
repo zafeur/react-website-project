@@ -1,13 +1,38 @@
 import Link from 'next/link';
-import { PhoneCall, Sun, Moon, MessageCircle, MapPin } from 'lucide-react';
+import {
+  PhoneCall,
+  Sun,
+  Moon,
+  MessageCircle,
+  MapPin,
+} from 'lucide-react';
+
 import MobileBottomNav from './MobileBottomNav';
 import { brandAssets } from '../data/brandAssets';
 
 const InstagramGlyph = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-    <circle cx="12" cy="12" r="4" />
-    <circle cx="17.2" cy="6.8" r="1" />
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect
+      x="3.5"
+      y="3.5"
+      width="17"
+      height="17"
+      rx="5"
+    />
+    <circle
+      cx="12"
+      cy="12"
+      r="4"
+    />
+    <circle
+      cx="17.2"
+      cy="6.8"
+      r="1"
+    />
   </svg>
 );
 
@@ -22,7 +47,10 @@ const nav = {
   contact: 'تماس با ما',
 };
 
-function ContactPage({ isDarkMode = false, onToggleTheme }) {
+function ContactPage({
+  isDarkMode = false,
+  onToggleTheme,
+}) {
   const handleMobileNav = (id) => {
     if (id === 'home') {
       window.location.href = '/';
@@ -48,77 +76,236 @@ function ContactPage({ isDarkMode = false, onToggleTheme }) {
   };
 
   return (
-    <main className={`page-shell contact-shell ${isDarkMode ? 'theme-dark' : ''}`} dir="rtl">
+    <main
+      className={`page-shell contact-shell ${
+        isDarkMode ? 'theme-dark' : ''
+      }`}
+      dir="rtl"
+    >
       <section className="frame contact-frame">
+
+        {/* ================= HEADER ================= */}
+
         <header className="topbar d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
-            <Link className="brand d-flex align-items-center" href="/" aria-label={nav.home}>
-              <img className="brand-logo-mark" src={brandAssets.logoMark} alt="" aria-hidden="true" />
-              <img className="brand-logo-type" src={brandAssets.logoType} alt={nav.brand} />
+
+            <Link
+              className="brand d-flex align-items-center"
+              href="/"
+              aria-label={nav.home}
+            >
+              <img
+                className="brand-logo-mark"
+                src={brandAssets.logoMark}
+                alt=""
+                aria-hidden="true"
+              />
+
+              <img
+                className="brand-logo-type"
+                src={brandAssets.logoType}
+                alt={nav.brand}
+              />
             </Link>
+
             <nav>
               <ul className="nav-list d-flex align-items-center">
-                <li><Link href="/">{nav.home}</Link></li>
-                <li><Link href="/#gifts">{nav.gifts}</Link></li>
-                <li><Link href="/#brands">{nav.businesses}</Link></li>
-                <li><Link href="/#brands">{nav.shop}</Link></li>
-                <li><Link href="/faq">{nav.faq}</Link></li>
-                <li><Link href="/dashboard">{nav.club}</Link></li>
-                <li><Link href="/contact" className="active-link">{nav.contact}</Link></li>
+
+                <li>
+                  <Link href="/">
+                    {nav.home}
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/#gifts">
+                    {nav.gifts}
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/#brands">
+                    {nav.businesses}
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/#brands">
+                    {nav.shop}
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/faq">
+                    {nav.faq}
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/dashboard">
+                    {nav.club}
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/contact"
+                    className="active-link"
+                  >
+                    {nav.contact}
+                  </Link>
+                </li>
+
               </ul>
             </nav>
           </div>
+
           <div className="home-header-actions">
+
             <button
-              className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
+              className={`home-theme-toggle ${
+                isDarkMode ? 'is-dark' : ''
+              }`}
               type="button"
               onClick={onToggleTheme}
-              aria-label={isDarkMode ? 'حالت روشن' : 'حالت تاریک'}
-              title={isDarkMode ? 'حالت روشن' : 'حالت تاریک'}
+              aria-label={
+                isDarkMode
+                  ? 'حالت روشن'
+                  : 'حالت تاریک'
+              }
+              title={
+                isDarkMode
+                  ? 'حالت روشن'
+                  : 'حالت تاریک'
+              }
             >
-              <span className="home-theme-toggle-icon home-theme-toggle-sun"><Sun /></span>
+              <span className="home-theme-toggle-icon home-theme-toggle-sun">
+                <Sun />
+              </span>
+
               <span className="home-theme-toggle-thumb" />
-              <span className="home-theme-toggle-icon home-theme-toggle-moon"><Moon /></span>
+
+              <span className="home-theme-toggle-icon home-theme-toggle-moon">
+                <Moon />
+              </span>
             </button>
+
           </div>
         </header>
 
-        <section className="contact-hero" aria-labelledby="contact-title">
+
+        {/* ================= CONTACT HERO ================= */}
+
+        <section
+          className="contact-hero"
+          aria-label="ارتباط با کی‌میای"
+        >
+
           <div className="contact-hero-copy">
-            <span>ارتباط با کی‌میای</span>
-            <h1 id="contact-title">تماس با ما</h1>
+
+            <span>
+              ارتباط با کی‌میای
+            </span>
+
             <p>
-              برای پیگیری هدایا، همکاری کسب‌وکارها، معرفی مجموعه یا سوال درباره خدمات کی‌میای،
-              از طریق شماره تماس یا صفحه اینستاگرام با ما در ارتباط باشید.
+              برای پیگیری هدایا، همکاری کسب‌وکارها،
+              معرفی مجموعه یا سوال درباره خدمات کی‌میای،
+              از طریق شماره تماس یا صفحه اینستاگرام
+              با ما در ارتباط باشید.
             </p>
+
           </div>
-          <div className="contact-hero-mark" aria-hidden="true">
+
+          <div
+            className="contact-hero-mark"
+            aria-hidden="true"
+          >
             <MessageCircle />
           </div>
+
         </section>
 
-        <section className="contact-card-grid" aria-label="راه‌های ارتباطی">
-          <a className="contact-card contact-card-primary" href="tel:09059399545">
-            <span className="contact-card-icon"><PhoneCall /></span>
-            <span>شماره تماس</span>
-            <strong dir="ltr">09059399545</strong>
+
+        {/* ================= CONTACT CARDS ================= */}
+
+        <section
+          className="contact-card-grid"
+          aria-label="راه‌های ارتباطی"
+        >
+
+          {/* PHONE */}
+
+          <a
+            className="contact-card contact-card-primary"
+            href="tel:09059399545"
+          >
+            <span className="contact-card-icon">
+              <PhoneCall />
+            </span>
+
+            <span>
+              شماره تماس
+            </span>
+
+            <strong dir="ltr">
+              09059399545
+            </strong>
           </a>
 
-          <a className="contact-card" href="https://www.instagram.com/keymiay.app/" target="_blank" rel="noreferrer">
-            <span className="contact-card-icon"><InstagramGlyph /></span>
-            <span>آدرس پیج</span>
-            <strong dir="ltr">keymiay.app</strong>
+
+          {/* INSTAGRAM */}
+
+          <a
+            className="contact-card"
+            href="https://www.instagram.com/keymiay.app/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="contact-card-icon">
+              <InstagramGlyph />
+            </span>
+
+            <span>
+              آدرس پیج
+            </span>
+
+            <strong dir="ltr">
+              keymiay.app
+            </strong>
           </a>
+
+
+          {/* LOCATION */}
 
           <div className="contact-card">
-            <span className="contact-card-icon"><MapPin /></span>
-            <span>شروع فعالیت</span>
-            <strong>گرگان</strong>
+
+            <span className="contact-card-icon">
+              <MapPin />
+            </span>
+
+            <span>
+              شروع فعالیت
+            </span>
+
+            <strong>
+              گرگان
+            </strong>
+
           </div>
+
         </section>
+
       </section>
 
-      <MobileBottomNav currentPage="contact" isLoggedIn={false} onNavigate={handleMobileNav} />
+
+      {/* ================= MOBILE NAV ================= */}
+
+      <MobileBottomNav
+        currentPage="contact"
+        isLoggedIn={false}
+        onNavigate={handleMobileNav}
+      />
+
     </main>
   );
 }

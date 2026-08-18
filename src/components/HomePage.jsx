@@ -26,6 +26,7 @@ import { sendOtp, verifyOtp } from '../api/auth';
 import { getDiscountCards, getHomePageData, requestDiscountCode } from '../api/home';
 import { getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
 import { brandAssets } from '../data/brandAssets';
+import InstallAppButton from '../components/InstallAppButton';
 
 const t = {
   brand: "\u06a9\u06cc \u0645\u06cc\u0627\u06cc",
@@ -141,9 +142,7 @@ const defaultHomeData = {
 
   banners: [],
 
-  brands: [
-    { title: t.restaurant, businessId: 'melal', image: asset('img/restaurant-melal.png'), href: '/collections/melal' },
-  ],
+  brands: [],
 
   categories: [
   { title: t.gifts, icon: 'Gift' },
@@ -426,21 +425,6 @@ const valueMatchesBusiness = (value, businessKey) => {
   }
 
   return findBusinessKeyInText(value) === businessKey;
-};
-
-const ensureDefaultBrands = (brands) => {
-  const normalizedBrands = Array.isArray(brands) ? brands : [];
-  const existingKeys = new Set(
-    normalizedBrands
-      .map((brand) => getKnownBusinessKey(brand) || firstValue(brand, ['businessId', 'business_id', 'collectionId', 'collection_id']))
-      .filter(Boolean)
-  );
-  const missingDefaults = defaultHomeData.brands.filter((brand) => {
-    const key = getKnownBusinessKey(brand) || brand.businessId || brand.collectionId;
-    return key && !existingKeys.has(key);
-  });
-
-  return [...missingDefaults, ...normalizedBrands];
 };
 
 const getBusinessDisplayValue = (offer, keys, fallbackValue) => {
@@ -727,9 +711,9 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
 
   return {
     ...normalizedHome,
-    banners: normalizedDiscount.banners.length ? normalizedDiscount.banners : normalizedHome.banners,
+    banners: normalizedDiscount.banners.length ? normalizedDiscount.banners:normalizedHome.banners,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
-    brands: ensureDefaultBrands(discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands),
+    brands: discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands,
     offers: mergeOfferLists(normalizedHome.offers, discountOffers),
   };
 };
@@ -1968,7 +1952,7 @@ useEffect(() => {
               <ul className="nav-list d-flex align-items-center">
                 <li><Link href="/">{t.home}</Link></li>
                 <li><button type="button" onClick={() => document.getElementById('gifts')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>{t.gifts}</button></li>
-                <li><a href="#brands">{t.businesses}</a></li>
+                
                 <li><a href="#brands">{t.shop}</a></li>
                 <li><Link href="/faq">{t.faq}</Link></li>
                 <li><button type="button" onClick={openAccount}>{t.club}</button></li>
@@ -1976,20 +1960,40 @@ useEffect(() => {
               </ul>
             </nav>
           </div>
-          <div className="home-header-actions">
-            <button
-              className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
-              type="button"
-              onClick={onToggleTheme}
-              aria-label={isDarkMode ? t.lightMode : t.darkMode}
-              title={isDarkMode ? t.lightMode : t.darkMode}
-            >
-              <span className="home-theme-toggle-icon home-theme-toggle-sun"><Sun /></span>
-              <span className="home-theme-toggle-thumb" />
-              <span className="home-theme-toggle-icon home-theme-toggle-moon"><Moon /></span>
-            </button>
-            <button className="login-btn home-login-btn" type="button" onClick={openAccount}>{isLoggedIn ? '\u062d\u0633\u0627\u0628 \u06a9\u0627\u0631\u0628\u0631\u06cc' : t.login}</button>
-          </div>
+  <div className="home-header-actions">
+
+  <button
+    className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
+    type="button"
+    onClick={onToggleTheme}
+    aria-label={isDarkMode ? t.lightMode : t.darkMode}
+    title={isDarkMode ? t.lightMode : t.darkMode}
+  >
+    <span className="home-theme-toggle-icon home-theme-toggle-sun">
+      <Sun />
+    </span>
+
+    <span className="home-theme-toggle-thumb" />
+
+    <span className="home-theme-toggle-icon home-theme-toggle-moon">
+      <Moon />
+    </span>
+  </button>
+
+  {/* دکمه نصب اپ */}
+  <div className="home-install-app-wrapper">
+    <InstallAppButton />
+  </div>
+
+  <button
+    className="login-btn home-login-btn"
+    type="button"
+    onClick={openAccount}
+  >
+    {isLoggedIn ? 'حساب کاربری' : t.login}
+  </button>
+
+</div>
         </header>
 
         <section className="home-search-row">
