@@ -1281,6 +1281,24 @@
     padding-bottom: 32px;
   }
 
+  /* Smaller FAQ header button on mobile */
+  .faq-shell .home-header-actions {
+    min-width: 0 !important;
+    gap: 6px !important;
+  }
+
+  .faq-header-action {
+    width: clamp(125px, 38vw, 150px) !important;
+    min-width: 0 !important;
+    max-width: 150px !important;
+    height: 40px !important;
+    padding: 0 8px !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    flex: 0 1 150px !important;
+  }
+
   .faq-hero-copy,
   .faq-section {
     padding: 20px;

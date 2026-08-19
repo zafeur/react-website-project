@@ -1753,8 +1753,20 @@ useEffect(() => {
       setLoginError(t.sendFailed);
       return false;
     } catch (error) {
-      setLoginError(error.response?.data?.message || t.serverError);
-      return false;
+  const message =
+    error.response?.data?.message ||
+    error.message ||
+    "";
+
+  if (/mobile.*invalid|mobile.*format/i.test(message)) {
+    setLoginError("شماره موبایل واردشده معتبر نیست.");
+  } else if (/mobile.*required/i.test(message)) {
+    setLoginError("لطفاً شماره موبایل خود را وارد کنید.");
+  } else {
+    setLoginError("خطایی رخ داده است. لطفاً دوباره تلاش کنید.");
+  }
+
+  return false;
     } finally {
       setIsLoading(false);
     }

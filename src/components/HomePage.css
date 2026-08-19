@@ -11085,49 +11085,85 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
   user-select: none !important;
 }
 
-/* Mobile about card: keep contact pills inside the dark card. */
+/* Mobile about card */
 @media (max-width: 640px) {
   .home-shell .home-about-intro {
     box-sizing: border-box !important;
     width: 100% !important;
     max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
     grid-template-columns: 34px minmax(0, 1fr) !important;
     grid-template-areas:
       "icon copy"
       "side side" !important;
+
+    padding: 10px 12px !important;
     overflow: hidden !important;
-    padding: 10px !important;
   }
 
-  .home-shell .home-about-copy,
-  .home-shell .home-about-side,
-  .home-shell .home-about-contact {
-    box-sizing: border-box !important;
+  /* Let the text use the available width */
+  .home-shell .home-about-copy {
     min-width: 0 !important;
     width: 100% !important;
-    max-width: 100% !important;
   }
 
+  /* Do NOT cut the text with ... */
+  .home-shell .home-about-copy p:first-of-type {
+    display: block !important;
+    width: 100% !important;
+    margin: 4px 0 0 !important;
+
+    font-size: clamp(11px, 3.2vw, 13px) !important;
+    line-height: 1.8 !important;
+
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .home-shell .home-about-side {
+    grid-area: side !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin-top: 6px !important;
+  }
+
+  /* Phone RIGHT — Instagram LEFT */
   .home-shell .home-about-contact {
-    display: grid !important;
-    grid-template-columns: minmax(0, max-content) !important;
-    justify-content: center !important;
-    gap: 7px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    width: 100% !important;
+    max-width: none !important;
+    gap: 12px !important;
     direction: rtl !important;
   }
 
   .home-shell .home-about-contact a {
     box-sizing: border-box !important;
     width: auto !important;
-    max-width: 100% !important;
     min-width: 0 !important;
-    justify-content: flex-start !important;
-    overflow: hidden !important;
-    padding: 0 12px !important;
-    direction: rtl !important;
-    text-align: right !important;
+    max-width: 48% !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 10px !important;
     white-space: nowrap !important;
-    text-overflow: ellipsis !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
   }
 
   .home-shell .home-about-contact svg {
@@ -11135,35 +11171,6 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
     width: 15px !important;
     height: 15px !important;
   }
-}
-.home-discount-copy-button {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px 18px;
-  border: 1px solid #7433a3;
-  border-radius: 12px;
-  background: #7433a3;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 16px rgba(116, 51, 163, 0.22);
-}
-
-.home-discount-copy-button:hover {
-  background: #eb078a;
-  border-color: #eb078a;
-  box-shadow: 0 8px 20px rgba(235, 7, 138, 0.25);
-}
-
-.home-discount-copy-button:active {
-  transform: scale(0.98);
-}
-.home-install-app-wrapper {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
 }
 /* =========================================================
    FINAL MOBILE BANNER FIT

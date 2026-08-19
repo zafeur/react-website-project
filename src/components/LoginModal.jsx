@@ -14,7 +14,12 @@ const t = {
   secure:
     "\u0648\u0631\u0648\u062f \u0634\u0645\u0627 \u0628\u0627 \u06a9\u062f \u06cc\u06a9\u0628\u0627\u0631\u0645\u0635\u0631\u0641 \u0627\u0645\u0646 \u0627\u0646\u062c\u0627\u0645 \u0645\u06cc\u200c\u0634\u0648\u062f",
 };
-
+const normalizeDigits = (value = "") =>
+  String(value)
+    .replace(/[۰-۹]/g, (digit) => "۰۱۲۳۴۵۶۷۸۹".indexOf(digit))
+    .replace(/[٠-٩]/g, (digit) => "٠١٢٣٤٥٦٧٨٩".indexOf(digit))
+    .replace(/\D/g, "");
+    
 function LoginModal({
   loginError,
   isLoading,
@@ -52,7 +57,7 @@ function LoginModal({
   return (
     <div
       className="login-backdrop"
-      onClick={onClose}
+  
     >
       <section
         className="login-modal"
@@ -110,14 +115,18 @@ function LoginModal({
               <div className="input-shell">
                 <ShieldCheck />
                 <input
-                  ref={otpInputRef}
-                  type="text"
-                  placeholder="12345"
-                  value={otp}
-                  onChange={(e) =>
-                    setOtp(e.target.value)
-                  }
-                />
+   ref={otpInputRef}
+  type="text"
+  inputMode="numeric"
+  pattern="[0-9]*"
+  autoComplete="one-time-code"
+  maxLength={6}
+  placeholder="123456"
+  value={otp}
+  onChange={(e) =>
+    setOtp(normalizeDigits(e.target.value).slice(0, 6))
+  }
+/>
               </div>
             </div>
           )}
