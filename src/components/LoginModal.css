@@ -6,6 +6,8 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
+  overflow-y: auto;
+overscroll-behavior: contain;
   background:
     radial-gradient(circle at 50% 42%, rgba(116, 51, 163, 0.12), transparent 34%),
     rgba(4, 12, 8, 0.18);
