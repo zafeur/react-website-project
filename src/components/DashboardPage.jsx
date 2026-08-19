@@ -274,6 +274,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
       setIsReportLoading(true);
       setReportError('');
       const giftsData = await getUserGifts();
+      console.log('USER GIFTS API:', giftsData);
       const data = giftsData || (await getDiscountReport());
       const reportProfile = extractUserProfileFromReport(data);
       if (reportProfile) {

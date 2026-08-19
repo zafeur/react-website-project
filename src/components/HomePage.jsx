@@ -1791,48 +1791,61 @@ useEffect(() => {
       setIsLoading(false);
     }
   };
-  const handleReceiveOffer = async (offer, skipAuthCheck = false) => {
-    if (offer.isActive === false) {
-      setDiscountPopup({
-        offer,
-        code: '',
-        message: '\u0627\u06cc\u0646 \u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u062f\u0631 \u062d\u0627\u0644 \u062d\u0627\u0636\u0631 \u063a\u06cc\u0631\u0641\u0639\u0627\u0644 \u0627\u0633\u062a.',
-      });
-      return;
-    }
+ const handleReceiveOffer = async (offer, skipAuthCheck = false) => {
+  // کارت غیرفعال
+  if (offer.isActive === false) {
+    setDiscountPopup({
+      offer,
+      code: '',
+      message: 'این تخفیف در حال حاضر غیرفعال است.',
+    });
+    return;
+  }
 
-    if (!skipAuthCheck && !hasAuthToken()) {
-      setIsLoggedIn(false);
-      setPendingOffer(offer);
-      openLogin();
-      return;
-    }
+  // بررسی لاگین
+  if (!skipAuthCheck && !hasAuthToken()) {
+    setIsLoggedIn(false);
+    setPendingOffer(offer);
+    openLogin();
+    return;
+  }
 
-    try {
-      setRequestingOfferId(offer.id);
-      setIsRequestingDiscount(true);
-      const data = await requestDiscountCode(offer, { mobile: loadCachedHomeMobile() });
-      const receivedCode = getDiscountCode(data, offer) || '';
+  try {
+    setRequestingOfferId(offer.id);
+    setIsRequestingDiscount(true);
 
-      setDiscountPopup({
-        offer,
-        code: receivedCode,
-        message: receivedCode
-          ? getDiscountMessage(data) || '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641 \u0628\u0627 \u0645\u0648\u0641\u0642\u06cc\u062a \u062f\u0631\u06cc\u0627\u0641\u062a \u0634\u062f.'
-          : getDiscountMessage(data) || '\u06a9\u062f\u06cc \u0627\u0632 \u0633\u0645\u062a API \u0628\u0631\u0646\u06af\u0634\u062a. \u0644\u0637\u0641\u0627 \u062f\u0648\u0628\u0627\u0631\u0647 \u062a\u0644\u0627\u0634 \u06a9\u0646\u06cc\u062f.',
-      });
-    } catch (error) {
-      setDiscountPopup({
-        offer,
-        code: '',
-        message: error.response?.data?.message || error.message || t.discountFailed,
-      });
-    } finally {
-      setIsRequestingDiscount(false);
-      setRequestingOfferId(null);
-    }
-  };
+    // درخواست کد از بک‌اند
+    const data = await requestDiscountCode(offer, {
+      mobile: loadCachedHomeMobile(),
+    });
 
+    // فقط کدی که واقعاً از API آمده نمایش داده شود
+    const receivedCode = getDiscountCode(data, offer) || '';
+
+    setDiscountPopup({
+      offer,
+      code: receivedCode,
+      message: receivedCode
+        ? getDiscountMessage(data) ||
+          'کد تخفیف با موفقیت دریافت شد.'
+        : getDiscountMessage(data) ||
+          'برای این تخفیف در حال حاضر کدی ثبت نشده است.',
+    });
+
+  } catch (error) {
+    setDiscountPopup({
+      offer,
+      code: '',
+      message:
+        error.response?.data?.message ||
+        error.message ||
+        'امکان دریافت کد تخفیف وجود ندارد. لطفاً دوباره تلاش کنید.',
+    });
+  } finally {
+    setIsRequestingDiscount(false);
+    setRequestingOfferId(null);
+  }
+};
 
   const renderOfferCard = (offer, index) => {
     const isDebugVip = shouldPreviewVipOffer(offer, debugVipValue);
@@ -1885,7 +1898,7 @@ useEffect(() => {
           ) : null}
         </div>
         <div className="home-offer-footer">
-          <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount || isInactive}>
+          <button type="button" onClick={() => handleReceiveOffer(offer)} disabled={isRequestingDiscount}>
             {requestingOfferId === offer.id ? t.wait : '\u06a9\u062f \u062e\u0631\u06cc\u062f'}
           </button>
         </div>
@@ -1970,7 +1983,7 @@ useEffect(() => {
         <header className="topbar d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
             <Link className="brand d-flex align-items-center" href="/" aria-label={t.home}>
-              <img className="brand-logo-mark" src={brandAssets.logoMark} alt="" aria-hidden="true" />
+
               <img className="brand-logo-type" src={brandAssets.logoType} alt={t.brand} />
             </Link>
             <nav>
@@ -2468,44 +2481,3 @@ useEffect(() => {
 }
 
 export default HomePage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

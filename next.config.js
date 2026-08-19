@@ -7,5 +7,5 @@ const nextConfig = {
 
 module.exports = withPWA({
   dest: 'public',
-  disable: false,
+  disable: process.env.NODE_ENV === 'development',
 })(nextConfig);

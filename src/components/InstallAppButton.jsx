@@ -140,13 +140,6 @@ export default function InstallAppButton() {
         aria-label="نصب اپ"
         title="نصب اپ"
       >
-        <img
-          src="/brand/icon-192.png"
-          alt=""
-          className={styles.installAppIcon}
-          aria-hidden="true"
-        />
-
         <span>نصب اپ</span>
       </button>
 
@@ -172,7 +165,7 @@ export default function InstallAppButton() {
             </button>
 
             <img
-              src="/brand/icon-192.png"
+              src="/brand/install-app-icon.png"
               alt=""
               className={styles.installGuideIcon}
               aria-hidden="true"
@@ -237,7 +230,7 @@ export default function InstallAppButton() {
             </button>
 
             <img
-              src="/brand/icon-192.png"
+              src="/brand/install-app-icon.png"
               alt=""
               className={styles.installGuideIcon}
               aria-hidden="true"
