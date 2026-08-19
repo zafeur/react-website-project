@@ -713,7 +713,32 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
     ...normalizedHome,
     banners: normalizedDiscount.banners.length ? normalizedDiscount.banners:normalizedHome.banners,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
-    brands: discountOffers.length ? buildBrandsFromOffers(discountOffers) : normalizedHome.brands,
+    brands: (() => {
+  const brands = discountOffers.length
+    ? buildBrandsFromOffers(discountOffers)
+    : normalizedHome.brands;
+
+  const hasMelal = brands.some(
+    (brand) =>
+      brand.businessId === 'melal' ||
+      getKnownBusinessKey(brand) === 'melal'
+  );
+
+  if (hasMelal) {
+    return brands;
+  }
+
+  return [
+    {
+      title: t.restaurant,
+      businessId: 'melal',
+      collectionId: '',
+      image: '/home/img/restaurant-melal.png',
+      href: '/restaurant',
+    },
+    ...brands,
+  ];
+})(),
     offers: mergeOfferLists(normalizedHome.offers, discountOffers),
   };
 };
@@ -2183,8 +2208,20 @@ useEffect(() => {
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
           <div className="home-brand-grid" data-auto-loop="true">
-            {homeData.brands.map((brand, index) => {
-              const href = getBrandHref(brand);
+            {[
+  {
+    title: t.restaurant,
+    businessId: 'melal',
+    image: '/home/img/restaurant-melal.png',
+    href: '/restaurant',
+  },
+  ...homeData.brands.filter(
+    (brand) =>
+      brand.businessId !== 'melal' &&
+      getKnownBusinessKey(brand) !== 'melal'
+  ),
+].map((brand, index) => {
+  const href = getBrandHref(brand);
 
               return (
                 <Link
