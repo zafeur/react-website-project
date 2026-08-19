@@ -188,9 +188,8 @@
   }
 
   .brand-logo-mark {
-    width: 34px;
-    height: 34px;
-  }
+  display: none;
+}
 
   .brand-logo-type {
     width: 112px;

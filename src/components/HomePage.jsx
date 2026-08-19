@@ -2018,18 +2018,18 @@ useEffect(() => {
     </span>
   </button>
 
-  {/* دکمه نصب اپ */}
-  <div className="home-install-app-wrapper">
-    <InstallAppButton />
-  </div>
+ <button
+  className="login-btn home-login-btn"
+  type="button"
+  onClick={openAccount}
+>
+  {isLoggedIn ? 'حساب کاربری' : t.login}
+</button>
 
-  <button
-    className="login-btn home-login-btn"
-    type="button"
-    onClick={openAccount}
-  >
-    {isLoggedIn ? 'حساب کاربری' : t.login}
-  </button>
+{/* دکمه نصب اپ */}
+<div className="home-install-app-wrapper">
+  <InstallAppButton />
+</div>
 
 </div>
         </header>
