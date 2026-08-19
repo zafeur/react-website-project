@@ -2003,7 +2003,7 @@ useEffect(() => {
           <span className={`home-offer-status ${isInactive ? 'is-inactive' : ''}`}>{offerStatus}</span>
         </div>
         <div className="home-offer-copy">
-          <span>{displayedOffer.brand}</span>
+          
           <h3>{displayedOffer.title}</h3>
           <div className="home-offer-benefits" aria-label="offer benefits">
             {offerBenefits.map((benefit) => (
