@@ -1188,9 +1188,9 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       return undefined;
     }
 
-    const rows = Array.from(document.querySelectorAll(
-      '.home-shell .home-stories, .home-shell .home-brand-grid, .home-shell .home-offer-section .home-offer-grid, .home-shell .home-section#gifts > .home-offer-grid, .home-shell #discount-only > .home-offer-grid'
-    ));
+ const rows = Array.from(document.querySelectorAll(
+  '.home-shell .home-stories, .home-shell .home-brand-grid'
+));
     const cleanup = [];
 
     rows.forEach((row) => {
@@ -1431,7 +1431,119 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
     return () => cleanup.forEach((dispose) => dispose());
   }, [homeData.stories, homeData.brands, homeData.offers, vipOffers.length, visibleGiftDiscountOffers.length, discountOnlyOffers.length, router]);
+useEffect(() => {
+  if (typeof window === 'undefined') {
+    return undefined;
+  }
 
+  const rows = Array.from(
+    document.querySelectorAll(
+      '#vip-gifts .home-offer-grid, ' +
+      '#gifts .home-offer-grid, ' +
+      '#discount-only .home-offer-grid'
+    )
+  );
+
+  const cleanups = [];
+
+  rows.forEach((row) => {
+    const cards = Array.from(
+      row.querySelectorAll('.home-offer-card')
+    );
+
+    if (cards.length <= 1) {
+      return;
+    }
+
+    let timer;
+    let paused = false;
+
+    const getCurrentIndex = () => {
+      const rowRect = row.getBoundingClientRect();
+      const center = rowRect.left + rowRect.width / 2;
+
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const distance = Math.abs(cardCenter - center);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      return closestIndex;
+    };
+
+    const goToNextCard = () => {
+      if (paused || document.hidden) {
+        return;
+      }
+
+      const currentIndex = getCurrentIndex();
+      const nextIndex = (currentIndex + 1) % cards.length;
+
+     const rowRect = row.getBoundingClientRect();
+const cardRect = cards[nextIndex].getBoundingClientRect();
+
+const horizontalDistance =
+  cardRect.left +
+  cardRect.width / 2 -
+  (rowRect.left + rowRect.width / 2);
+
+row.scrollBy({
+  left: horizontalDistance,
+  top: 0,
+  behavior: 'smooth',
+});
+    };
+
+    const start = () => {
+      window.clearInterval(timer);
+
+      timer = window.setInterval(() => {
+        goToNextCard();
+      }, 3500);
+    };
+
+    const pause = () => {
+      paused = true;
+    };
+
+    const resume = () => {
+      paused = false;
+      start();
+    };
+
+    row.addEventListener('pointerdown', pause);
+    row.addEventListener('pointerup', resume);
+    row.addEventListener('pointercancel', resume);
+    row.addEventListener('touchstart', pause, { passive: true });
+    row.addEventListener('touchend', resume);
+
+    start();
+
+    cleanups.push(() => {
+      window.clearInterval(timer);
+
+      row.removeEventListener('pointerdown', pause);
+      row.removeEventListener('pointerup', resume);
+      row.removeEventListener('pointercancel', resume);
+      row.removeEventListener('touchstart', pause);
+      row.removeEventListener('touchend', resume);
+    });
+  });
+
+  return () => cleanups.forEach((cleanup) => cleanup());
+}, [
+  vipOffers.length,
+  visibleGiftDiscountOffers.length,
+  discountOnlyOffers.length,
+]);
   useEffect(() => {
     if (typeof window === 'undefined') {
       return undefined;
