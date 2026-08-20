@@ -63,20 +63,20 @@ npm run start
 
 این صفحه از نظر RTL، حالت تاریک، موبایل و رزولوشن‌های کوچک چندین بار اصلاح شده تا layout به‌هم نریزد و متن‌ها از کارت‌ها بیرون نزنند.
 
-### صفحه کسب‌وکارها: `/business/[business]`
+### صفحه کسب‌وکارها: `/collections/[id]`
 
 صفحه داینامیک برای کسب‌وکارهاست. مثال‌ها:
 
 ```txt
-/business/dorato
-/business/barial
-/business/ibamo
-/business/bakhshi
-/business/bastani
-/business/mojalal
+/collections/1
+/collections/2
+/collections/3
+/collections/4
+/collections/5
+/collections/6
 ```
 
-این صفحه با توجه به slug داخل URL، اطلاعات همان کسب‌وکار را نمایش می‌دهد. قبلاً بعضی مسیرهای بیزینس 404 می‌شدند؛ مسیر داینامیک اصلاح شد تا صفحات بیزینس‌ها قابل باز شدن باشند.
+این صفحه با توجه به `id` (collectionId) داخل URL، اطلاعات همان کسب‌وکار را نمایش می‌دهد. مسیر داینامیک `/collections/[id]` جایگزین مسیر قدیمی `/business/[business]` شده است تا صفحات بیزینس‌ها قابل باز شدن باشند.
 
 ### داشبورد کاربر: `/dashboard`
 
@@ -254,9 +254,9 @@ https://api.keymiay.com/story/mojalal.mp4
 
 مسیر `/restaurant` را نمایش می‌دهد و صفحه رستوران ملل را از طریق ساختار اصلی پروژه render می‌کند.
 
-#### `pages/business/[business].jsx`
+#### `pages/collections/[id].jsx`
 
-مسیر داینامیک صفحات کسب‌وکارهاست. این فایل باعث می‌شود URLهایی مثل `/business/dorato` یا `/business/barial` بدون 404 باز شوند.
+مسیر داینامیک صفحات کسب‌وکارهاست. این فایل باعث می‌شود URLهایی مثل `/collections/1` یا `/collections/2` بدون 404 باز شوند. این صفحه از کامپوننت `BusinessProfilePage` برای نمایش اطلاعات کسب‌وکار استفاده می‌کند.
 
 #### `pages/dashboard.jsx`
 
@@ -314,17 +314,9 @@ https://api.keymiay.com/story/mojalal.mp4
 
 در این فایل چند بار cleanup انجام شده تا قوانین تکراری و overrideهای قدیمی کمتر شوند، مخصوصاً برای دکمه‌های کارت‌های تخفیف.
 
-### `src/components/RestaurantPage.jsx`
-
-صفحه رستوران ملل را می‌سازد. شامل کارت پروفایل، تصویر اصلی، اطلاعات تماس، ساعت کاری، موقعیت، کیف پول، تب‌ها، هدایا، درباره ما، گالری و نظرات کاربران.
-
-### `src/components/RestaurantPage.css`
-
-استایل صفحه رستوران ملل است. بیشترین تمرکز اصلاحات این فایل روی RTL، حالت تاریک، موبایل، اندازه کارت‌ها، جلوگیری از بیرون‌زدن متن و تصویر، و هماهنگی layout با طرح مرجع بوده است.
-
 ### `src/components/BusinessProfilePage.jsx`
 
-صفحه پروفایل کسب‌وکارها را می‌سازد. بر اساس slug کسب‌وکار، اطلاعات همان برند را نمایش می‌دهد.
+صفحه پروفایل کسب‌وکارها (شامل رستوران ملل) را می‌سازد. بر اساس `collectionId` کسب‌وکار، اطلاعات همان برند را نمایش می‌دهد. این کامپوننت برای همه صفحات کسب‌وکار از جمله `/restaurant` و `/collections/[id]` استفاده می‌شود.
 
 ### `src/components/BusinessProfilePage.css`
 
