@@ -53,7 +53,7 @@ const parseDateParts = (value = "", calendarMode = "persian") => {
 };
 
 const formatDate = ({ year, month, day }) => String(year) + "/" + pad2(month) + "/" + pad2(day);
-const displayDate = (value, calendarMode) => calendarMode === "persian" ? toPersianDigits(value) : value;
+const displayDate = (value) => toPersianDigits(value);
 
 function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoading = false, error = "", onClose, onSubmit }) {
   const initialBirthDate = initialProfile.birthDate || initialProfile.birth_date || initialProfile.date || "";
@@ -143,7 +143,7 @@ function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoa
             <span>{labels.birthDate}</span>
             <button className={"input-shell birth-date-trigger " + (form.birthDate ? "has-value" : "")} type="button" onClick={() => setIsBirthDatePickerOpen((current) => !current)} aria-expanded={isBirthDatePickerOpen}>
               <CalendarDays />
-              <span>{form.birthDate ? displayDate(form.birthDate, calendarMode) : labels.chooseDate}</span>
+              <span>{form.birthDate ? displayDate(form.birthDate) : labels.chooseDate}</span>
             </button>
 
             {isBirthDatePickerOpen && (
@@ -152,9 +152,9 @@ function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoa
                   <button className={calendarMode === "persian" ? "is-active" : ""} type="button" onClick={() => changeCalendarMode("persian")}>{labels.persianCalendar}</button>
                   <button className={calendarMode === "gregorian" ? "is-active" : ""} type="button" onClick={() => changeCalendarMode("gregorian")}>{labels.gregorianCalendar}</button>
                 </div>
-                <label><span>{labels.year}</span><select value={birthDateParts.year} onChange={(event) => updateBirthDatePart("year", event.target.value)}>{yearOptions.map((year) => <option value={year} key={year}>{calendarMode === "persian" ? toPersianDigits(year) : year}</option>)}</select></label>
-                <label><span>{labels.month}</span><select value={birthDateParts.month} onChange={(event) => updateBirthDatePart("month", event.target.value)}>{months.map((month) => <option value={month} key={month}>{calendarMode === "persian" ? toPersianDigits(pad2(month)) : pad2(month)}</option>)}</select></label>
-                <label><span>{labels.day}</span><select value={birthDateParts.day} onChange={(event) => updateBirthDatePart("day", event.target.value)}>{days.map((day) => <option value={day} key={day}>{calendarMode === "persian" ? toPersianDigits(pad2(day)) : pad2(day)}</option>)}</select></label>
+                <label><span>{labels.year}</span><select value={birthDateParts.year} onChange={(event) => updateBirthDatePart("year", event.target.value)}>{yearOptions.map((year) => <option value={year} key={year}>{toPersianDigits(year)}</option>)}</select></label>
+                <label><span>{labels.month}</span><select value={birthDateParts.month} onChange={(event) => updateBirthDatePart("month", event.target.value)}>{months.map((month) => <option value={month} key={month}>{toPersianDigits(pad2(month))}</option>)}</select></label>
+                <label><span>{labels.day}</span><select value={birthDateParts.day} onChange={(event) => updateBirthDatePart("day", event.target.value)}>{days.map((day) => <option value={day} key={day}>{toPersianDigits(pad2(day))}</option>)}</select></label>
                 <button className="birth-date-confirm" type="button" onClick={() => setIsBirthDatePickerOpen(false)}>{labels.confirmDate}</button>
               </div>
             )}

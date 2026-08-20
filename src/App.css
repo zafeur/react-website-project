@@ -24,6 +24,53 @@ body {
   font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
 }
 
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(116, 51, 163, .72) rgba(116, 51, 163, .10);
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: rgba(116, 51, 163, .10);
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  border: 3px solid rgba(247, 241, 251, .78);
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--brand-purple), var(--brand-pink));
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #8b2fc9, var(--brand-pink));
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner {
+  background: rgba(116, 51, 163, .10);
+}
+
+html.theme-dark {
+  scrollbar-color: rgba(235, 7, 138, .78) rgba(27, 16, 35, .88);
+}
+
+html.theme-dark::-webkit-scrollbar-track,
+html.theme-dark body::-webkit-scrollbar-track {
+  background: rgba(27, 16, 35, .88);
+}
+
+html.theme-dark::-webkit-scrollbar-thumb,
+html.theme-dark body::-webkit-scrollbar-thumb {
+  border-color: rgba(27, 16, 35, .88);
+}
+
 .page-shell {
   width: min(100%, 1256px);
   min-height: 1536px;

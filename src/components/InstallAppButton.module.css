@@ -144,9 +144,9 @@
 
   margin: 0 auto 14px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  padding: 9px;
+  object-fit: contain;
 
   border-radius: 14px;
 
@@ -155,13 +155,7 @@
     #f3e8ff,
     #fce7f3
   );
-}
-
-.installGuideIcon img {
-  width: 30px;
-  height: 30px;
-
-  object-fit: contain;
+  box-shadow: 0 8px 18px rgba(124, 58, 237, .12);
 }
 
 .installGuideModal h3 {
@@ -238,6 +232,52 @@
 
 .installGuideDone:active {
   transform: translateY(0);
+}
+
+:global(.theme-dark) .installGuideOverlay,
+:global(html.theme-dark) .installGuideOverlay {
+  background: rgba(8, 4, 14, 0.68);
+}
+
+:global(.theme-dark) .installGuideModal,
+:global(html.theme-dark) .installGuideModal {
+  border: 1px solid rgba(235, 7, 138, .22);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(235, 7, 138, .16), transparent 42%),
+    linear-gradient(180deg, #21102d 0%, #150b1f 100%);
+  color: #f7f1fb;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .48);
+}
+
+:global(.theme-dark) .installGuideClose,
+:global(html.theme-dark) .installGuideClose {
+  background: rgba(255, 255, 255, .08);
+  color: #f7d7ea;
+}
+
+:global(.theme-dark) .installGuideIcon,
+:global(html.theme-dark) .installGuideIcon {
+  background: linear-gradient(135deg, rgba(116, 51, 163, .42), rgba(235, 7, 138, .2));
+  box-shadow: 0 12px 28px rgba(235, 7, 138, .18);
+}
+
+:global(.theme-dark) .installGuideModal h3,
+:global(html.theme-dark) .installGuideModal h3 {
+  color: #f7d7ea;
+}
+
+:global(.theme-dark) .installGuideModal p,
+:global(.theme-dark) .installGuideModal ol,
+:global(.theme-dark) .installGuideModal li,
+:global(html.theme-dark) .installGuideModal p,
+:global(html.theme-dark) .installGuideModal ol,
+:global(html.theme-dark) .installGuideModal li {
+  color: rgba(247, 241, 251, .86);
+}
+
+:global(.theme-dark) .installGuideModal strong,
+:global(html.theme-dark) .installGuideModal strong {
+  color: #ff8ed0;
 }
 
 

@@ -5,8 +5,13 @@ import { useRouter } from 'next/router';
 import {
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  Check,
+  Copy,
   Gift,
+  LayoutDashboard,
   LogIn,
+  LogOut,
   Moon,
   MousePointerClick,
   Info,
@@ -23,9 +28,9 @@ import {
 import LoginModal from './LoginModal';
 import MobileBottomNav from './MobileBottomNav';
 import { sendOtp, verifyOtp } from '../api/auth';
-import { getDiscountCards, getHomePageData, requestDiscountCode } from '../api/home';
-import { getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
-import { brandAssets } from '../data/brandAssets';
+import { getDiscountCards, requestDiscountCode } from '../api/home';
+import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
+import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
 import InstallAppButton from '../components/InstallAppButton';
 
 const t = {
@@ -174,7 +179,9 @@ const categoryIcons = {
 
 const normalizeList = (value, fallback = []) => (Array.isArray(value) && value.length ? value : fallback);
 
-const firstValue = (item, keys) => keys.map((key) => item?.[key]).find(Boolean);
+const firstValue = (item, keys) => keys
+  .map((key) => item?.[key])
+  .find((value) => value !== undefined && value !== null && value !== '');
 const firstDefinedValue = (item, keys) => {
   for (const key of keys) {
     if (item?.[key] !== undefined && item?.[key] !== null && item?.[key] !== '') {
@@ -805,6 +812,43 @@ const saveCachedHomeMobile = (mobile) => {
   }
 };
 
+const getCachedHomeProfile = () => {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cachedProfile = window.localStorage.getItem(PROFILE_STORAGE_KEY);
+    return cachedProfile ? JSON.parse(cachedProfile) : null;
+  } catch {
+    window.localStorage.removeItem(PROFILE_STORAGE_KEY);
+    return null;
+  }
+};
+
+const getProfileDisplayName = (profile = {}) => {
+  const firstName = firstValue(profile, ['firstName', 'first_name', 'name']);
+  const lastName = firstValue(profile, ['lastName', 'last_name', 'family', 'family_name']);
+  const fullName = firstValue(profile, ['fullName', 'full_name', 'display_name', 'displayName', 'username']);
+  return [firstName, lastName].filter(Boolean).join(' ') || fullName || 'کاربر کی میای';
+};
+
+const getProfileShortDisplayName = (profile = {}) =>
+  firstValue(profile, ['firstName', 'first_name', 'name']) || getProfileDisplayName(profile);
+
+const getProfileAvatar = (profile = {}) =>
+  normalizeMediaUrl(firstValue(profile, [
+    'avatarPreview',
+    'avatar_preview',
+    'avatar',
+    'avatar_url',
+    'avatarUrl',
+    'profile_image',
+    'profileImage',
+    'profile_photo',
+    'profilePhoto',
+    'image',
+    'photo',
+  ])) || defaultProfileAvatar;
+
 const hasUsableHomeData = (data) => Boolean(data?.stories?.length || data?.offers?.length || data?.brands?.length || data?.banners?.length);
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
@@ -1002,6 +1046,37 @@ const getDiscountCode = (data, offer) =>
 const getDiscountMessage = (data) =>
   findNestedValue(data, ['message', 'text', 'description']);
 
+const isTechnicalMessage = (message) =>
+  /attempt to|property|undefined|null|exception|stack|trace|sql|syntax|token|server error/i.test(String(message || ''));
+
+const getPublicApiMessage = (message, fallback) => {
+  const normalizedMessage = String(message || '').trim();
+
+  if (!normalizedMessage || isTechnicalMessage(normalizedMessage)) {
+    return fallback;
+  }
+
+  return normalizedMessage;
+};
+
+const getPublicErrorMessage = (error, fallback) => {
+  const status = error?.response?.status;
+
+  if (status === 401 || status === 403) {
+    return 'برای دریافت کد، لطفاً دوباره وارد حساب کاربری شوید.';
+  }
+
+  if (status === 404) {
+    return 'برای این تخفیف در حال حاضر کدی ثبت نشده است.';
+  }
+
+  if (status === 422 || status === 400) {
+    return fallback;
+  }
+
+  return fallback;
+};
+
 const toPersianDigits = (value) =>
   String(value).replace(/[0-9]/g, (digit) => String.fromCharCode(0x06f0 + Number(digit)));
 
@@ -1133,10 +1208,13 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [loginError, setLoginError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
   const [activeStoryIndex, setActiveStoryIndex] = useState(null);
   const [storyDurationMs, setStoryDurationMs] = useState(4200);
   const [pendingOffer, setPendingOffer] = useState(null);
   const [discountPopup, setDiscountPopup] = useState(null);
+  const [isDiscountCodeCopied, setIsDiscountCodeCopied] = useState(false);
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
   const [requestingOfferId, setRequestingOfferId] = useState(null);
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
@@ -1591,7 +1669,9 @@ row.scrollBy({
   }, [homeData.brands.length]);
 useEffect(() => {
   const checkAuth = () => {
-    setIsLoggedIn(hasAuthToken());
+    const loggedIn = hasAuthToken();
+    setIsLoggedIn(loggedIn);
+    setUserProfile(loggedIn ? getCachedHomeProfile() : null);
   };
 
   checkAuth();
@@ -1611,31 +1691,22 @@ useEffect(() => {
       setHomeData(cachedHomeData);
     }
 
-    Promise.allSettled([getHomePageData(), getDiscountCards()]).then(([homeResult, discountResult]) => {
+    getDiscountCards().then((discountPayload) => {
       if (!isMounted) {
         return;
       }
 
-      const hasFreshHome = homeResult.status === 'fulfilled';
-      const hasFreshDiscounts = discountResult.status === 'fulfilled';
+      const homePayload = cachedHomeData || emptyHomeData;
+      const nextHomeData = mergeHomeAndDiscountData(homePayload, discountPayload);
 
-      if (!hasFreshHome && !hasFreshDiscounts) {
-        setHomeData(cachedHomeData && hasUsableHomeData(cachedHomeData) ? cachedHomeData : emptyHomeData);
+      setHomeData(nextHomeData);
+      saveCachedHomeData(nextHomeData);
+    }).catch(() => {
+      if (!isMounted) {
         return;
       }
 
-      const homePayload = hasFreshHome ? homeResult.value : cachedHomeData || emptyHomeData;
-      const discountPayload = hasFreshDiscounts ? discountResult.value : null;
-      const nextHomeData = mergeHomeAndDiscountData(homePayload, discountPayload);
-      const stableHomeData = !hasFreshDiscounts && cachedHomeData?.offers?.length
-        ? { ...nextHomeData, offers: cachedHomeData.offers, stories: cachedHomeData.stories?.length ? cachedHomeData.stories : nextHomeData.stories }
-        : nextHomeData;
-
-      setHomeData(stableHomeData);
-
-      if (hasFreshDiscounts) {
-        saveCachedHomeData(stableHomeData);
-      }
+      setHomeData(cachedHomeData && hasUsableHomeData(cachedHomeData) ? cachedHomeData : emptyHomeData);
     });
 
     return () => {
@@ -1689,12 +1760,26 @@ useEffect(() => {
   const openAccount = () => {
     if (hasAuthToken()) {
       setIsLoggedIn(true);
+      setUserProfile(getCachedHomeProfile());
       router.push('/dashboard');
       return;
     }
 
     setIsLoggedIn(false);
+    setUserProfile(null);
     openLogin();
+  };
+
+  const handleHomeLogout = () => {
+    clearAuthToken();
+    setIsLoggedIn(false);
+    setIsUserMenuOpen(false);
+    setUserProfile(null);
+
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(PROFILE_STORAGE_KEY);
+      window.location.href = '/';
+    }
   };
 
   const spinStory = (title) => {
@@ -1910,7 +1995,7 @@ useEffect(() => {
 
       router.push('/dashboard');
     } catch (error) {
-      setLoginError(error.response?.data?.message || error.message);
+      setLoginError(getPublicErrorMessage(error, 'ورود انجام نشد. لطفاً دوباره تلاش کنید.'));
     } finally {
       setIsLoading(false);
     }
@@ -1923,6 +2008,7 @@ useEffect(() => {
       code: '',
       message: 'این تخفیف در حال حاضر غیرفعال است.',
     });
+    setIsDiscountCodeCopied(false);
     return;
   }
 
@@ -1950,21 +2036,18 @@ useEffect(() => {
       offer,
       code: receivedCode,
       message: receivedCode
-        ? getDiscountMessage(data) ||
-          'کد تخفیف با موفقیت دریافت شد.'
-        : getDiscountMessage(data) ||
-          'برای این تخفیف در حال حاضر کدی ثبت نشده است.',
+        ? getPublicApiMessage(getDiscountMessage(data), 'کد تخفیف با موفقیت دریافت شد.')
+        : getPublicApiMessage(getDiscountMessage(data), 'برای این تخفیف در حال حاضر کدی ثبت نشده است.'),
     });
+    setIsDiscountCodeCopied(false);
 
   } catch (error) {
     setDiscountPopup({
       offer,
       code: '',
-      message:
-        error.response?.data?.message ||
-        error.message ||
-        'امکان دریافت کد تخفیف وجود ندارد. لطفاً دوباره تلاش کنید.',
+      message: getPublicErrorMessage(error, 'امکان دریافت کد تخفیف وجود ندارد. لطفاً دوباره تلاش کنید.'),
     });
+    setIsDiscountCodeCopied(false);
   } finally {
     setIsRequestingDiscount(false);
     setRequestingOfferId(null);
@@ -2015,6 +2098,7 @@ useEffect(() => {
             <button
               className="home-offer-read-more"
               type="button"
+              aria-expanded={isDescriptionExpanded}
               onClick={() => setExpandedOfferIds((current) => ({ ...current, [offerKey]: !current[offerKey] }))}
             >
               {isDescriptionExpanded ? 'کمتر' : 'بیشتر'}
@@ -2046,7 +2130,7 @@ useEffect(() => {
     }
 
     if (id === 'gifts') {
-      document.getElementById('gifts')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      router.push('/gifts');
       return;
     }
 
@@ -2056,6 +2140,11 @@ useEffect(() => {
     }
 
     router.push('/dashboard');
+  };
+
+  const scrollToOtherCards = () => {
+    const target = document.getElementById('gifts') || document.getElementById('discount-only');
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleBrandClick = (event, href) => {
@@ -2113,7 +2202,7 @@ useEffect(() => {
             <nav>
               <ul className="nav-list d-flex align-items-center">
                 <li><Link href="/">{t.home}</Link></li>
-                <li><button type="button" onClick={() => document.getElementById('gifts')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>{t.gifts}</button></li>
+                <li><Link href="/gifts">{t.gifts}</Link></li>
                 
                 <li><a href="#brands">{t.shop}</a></li>
                 <li><Link href="/faq">{t.faq}</Link></li>
@@ -2142,13 +2231,41 @@ useEffect(() => {
     </span>
   </button>
 
- <button
-  className="login-btn home-login-btn"
-  type="button"
-  onClick={openAccount}
->
-  {isLoggedIn ? 'حساب کاربری' : t.login}
-</button>
+ {isLoggedIn ? (
+  <div className="user-menu-wrap">
+    <button
+      className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`}
+      type="button"
+      onClick={() => setIsUserMenuOpen((current) => !current)}
+    >
+      <span className="user-mini-avatar">
+        <img src={getProfileAvatar(userProfile)} alt={getProfileDisplayName(userProfile)} />
+      </span>
+      <span className="user-menu-name" dir="rtl">{getProfileShortDisplayName(userProfile)}</span>
+      <ChevronDown />
+    </button>
+    {isUserMenuOpen && (
+      <div className="user-dropdown">
+        <button type="button" onClick={openAccount}>
+          <LayoutDashboard />
+          پروفایل داشبورد
+        </button>
+        <button type="button" onClick={handleHomeLogout}>
+          <LogOut />
+          خروج
+        </button>
+      </div>
+    )}
+  </div>
+) : (
+  <button
+    className="login-btn home-login-btn"
+    type="button"
+    onClick={openAccount}
+  >
+    {t.login}
+  </button>
+)}
 
 {/* دکمه نصب اپ */}
 <div className="home-install-app-wrapper">
@@ -2303,7 +2420,9 @@ useEffect(() => {
             <p>{t.heroText}</p>
             <div className="home-hero-actions">
               <a className="home-primary-action" href="#brands">{t.viewRestaurant}</a>
-              <button type="button" onClick={() => document.getElementById('gifts')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>{t.seeGifts}</button>
+              <button type="button" onClick={() => router.push('/gifts')}>
+                {t.seeGifts}
+              </button>
             </div>
           </aside>
         </section>
@@ -2319,12 +2438,7 @@ useEffect(() => {
       <button
         className="home-text-action"
         type="button"
-        onClick={() =>
-          document.getElementById('gifts')?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          })
-        }
+        onClick={scrollToOtherCards}
       >
         مشاهده بقیه کارت‌ها
       </button>
@@ -2392,7 +2506,7 @@ useEffect(() => {
                 <span>{t.giftDiscountKicker}</span>
                 <h2>{t.giftDiscountCards}</h2>
               </div>
-              <button className="home-text-action" type="button">{t.all}</button>
+              <Link className="home-text-action" href="/gifts">{t.all}</Link>
             </div>
             <div className="home-offer-grid">
               {visibleGiftDiscountOffers.map(renderOfferCard)}
@@ -2544,7 +2658,13 @@ useEffect(() => {
       )}
 
       {discountPopup && (
-  <div className="home-popup-backdrop" onClick={() => setDiscountPopup(null)}>
+  <div
+    className="home-popup-backdrop"
+    onClick={() => {
+      setDiscountPopup(null);
+      setIsDiscountCodeCopied(false);
+    }}
+  >
     <section
       className="home-discount-popup"
       onClick={(event) => event.stopPropagation()}
@@ -2552,7 +2672,10 @@ useEffect(() => {
       <button
         type="button"
         className="home-popup-close"
-        onClick={() => setDiscountPopup(null)}
+        onClick={() => {
+          setDiscountPopup(null);
+          setIsDiscountCodeCopied(false);
+        }}
       >
         {t.close}
       </button>
@@ -2567,34 +2690,41 @@ useEffect(() => {
           : discountPopup.offer?.title}
       </h2>
 
-      <div
-        className={`home-discount-code ${
-          discountPopup.code ? '' : 'is-empty'
-        }`}
-      >
-        {discountPopup.code || 'کدی دریافت نشد'}
-      </div>
-
-      {discountPopup.code ? (
-        <button
-          type="button"
-          className="home-discount-copy-button"
-          onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(discountPopup.code);
-            } catch (error) {
-              const textArea = document.createElement('textarea');
-              textArea.value = discountPopup.code;
-              document.body.appendChild(textArea);
-              textArea.select();
-              document.execCommand('copy');
-              document.body.removeChild(textArea);
-            }
-          }}
+      <div className={`home-discount-code-wrap ${discountPopup.code ? 'has-code' : 'is-empty'}`}>
+        <div
+          className={`home-discount-code ${
+            discountPopup.code ? '' : 'is-empty'
+          }`}
+          dir={discountPopup.code ? 'ltr' : 'rtl'}
         >
-          کپی کد
-        </button>
-      ) : null}
+          {discountPopup.code || 'کدی دریافت نشد'}
+        </div>
+
+        {discountPopup.code ? (
+          <button
+            type="button"
+            className={`home-discount-copy ${isDiscountCodeCopied ? 'is-copied' : ''}`}
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(discountPopup.code);
+              } catch (error) {
+                const textArea = document.createElement('textarea');
+                textArea.value = discountPopup.code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+              }
+
+              setIsDiscountCodeCopied(true);
+              window.setTimeout(() => setIsDiscountCodeCopied(false), 1600);
+            }}
+          >
+            {isDiscountCodeCopied ? <Check /> : <Copy />}
+            <span>{isDiscountCodeCopied ? 'کپی شد' : 'کپی کد'}</span>
+          </button>
+        ) : null}
+      </div>
 
       <p>{discountPopup.message}</p>
     </section>

@@ -68,7 +68,7 @@ function ContactPage({
     }
 
     if (id === 'gifts') {
-      window.location.href = '/#gifts';
+      window.location.href = '/gifts';
       return;
     }
 
@@ -95,13 +95,6 @@ function ContactPage({
               aria-label={nav.home}
             >
               <img
-                className="brand-logo-mark"
-                src={brandAssets.logoMark}
-                alt=""
-                aria-hidden="true"
-              />
-
-              <img
                 className="brand-logo-type"
                 src={brandAssets.logoType}
                 alt={nav.brand}
@@ -118,7 +111,7 @@ function ContactPage({
                 </li>
 
                 <li>
-                  <Link href="/#gifts">
+                  <Link href="/gifts">
                     {nav.gifts}
                   </Link>
                 </li>

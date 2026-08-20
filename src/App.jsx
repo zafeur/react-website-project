@@ -242,20 +242,12 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
     }
 
     if (id === "shop") {
-      setDashboardSectionRequest(null);
-      setCurrentPage("business");
-      scrollToSection("restaurant-top");
+      window.location.href = "/#brands";
       return;
     }
 
     if (id === "gifts") {
-      if (!isLoggedIn) {
-        openLogin();
-        return;
-      }
-
-      setDashboardSectionRequest({ section: "gifts", createdAt: Date.now() });
-      setCurrentPage("dashboard");
+      window.location.href = "/gifts";
       return;
     }
 
@@ -275,7 +267,7 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
     }
   };
 
-  const mobileBottomCurrentPage = currentPage === "dashboard" && dashboardSectionRequest?.section === "gifts" ? "gifts" : currentPage;
+  const mobileBottomCurrentPage = currentPage;
 
   const persistUserProfile = (profile, options = {}) => {
     if (!profile) return;
@@ -420,8 +412,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
 }
 
 export default App;
-
-
 
 
 

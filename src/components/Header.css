@@ -15,7 +15,7 @@
 .brand-logo-mark {
   width: 42px;
   height: 42px;
-  display: block;
+  display: none;
   object-fit: contain;
 }
 
@@ -164,6 +164,44 @@
   height: 19px;
 }
 
+.page-shell.theme-dark .user-dropdown,
+.home-shell.theme-dark .user-dropdown,
+html.theme-dark .page-shell .user-dropdown,
+html.theme-dark .home-shell .user-dropdown {
+  border-color: rgba(235, 7, 138, .24);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(235, 7, 138, .13), transparent 36%),
+    linear-gradient(180deg, rgba(38, 18, 52, .98), rgba(27, 16, 35, .98));
+  box-shadow: 0 18px 38px rgba(0, 0, 0, .36);
+}
+
+.page-shell.theme-dark .user-dropdown button,
+.home-shell.theme-dark .user-dropdown button,
+html.theme-dark .page-shell .user-dropdown button,
+html.theme-dark .home-shell .user-dropdown button {
+  background: transparent;
+  color: rgba(247, 241, 251, .88);
+}
+
+.page-shell.theme-dark .user-dropdown button:hover,
+.page-shell.theme-dark .user-dropdown button:focus-visible,
+.home-shell.theme-dark .user-dropdown button:hover,
+.home-shell.theme-dark .user-dropdown button:focus-visible,
+html.theme-dark .page-shell .user-dropdown button:hover,
+html.theme-dark .page-shell .user-dropdown button:focus-visible,
+html.theme-dark .home-shell .user-dropdown button:hover,
+html.theme-dark .home-shell .user-dropdown button:focus-visible {
+  background: rgba(235, 7, 138, .13);
+  color: #ffffff;
+}
+
+.page-shell.theme-dark .user-dropdown svg,
+.home-shell.theme-dark .user-dropdown svg,
+html.theme-dark .page-shell .user-dropdown svg,
+html.theme-dark .home-shell .user-dropdown svg {
+  color: rgba(247, 215, 234, .86);
+}
+
 .login-error {
   min-height: 24px;
   margin: -2px 0 10px;
@@ -235,7 +273,8 @@
   color: inherit;
   font: inherit;
   font-weight: inherit;
-  text-decoration: none;
+  text-decoration: none !important;
+  text-underline-offset: 8px;
   cursor: pointer;
   transition: color 180ms ease, transform 180ms ease;
 }
@@ -456,6 +495,76 @@
   }
 }
 
+.brand-logo-mark {
+  display: none !important;
+}
+
+/* Phone headers: logged-in profile control is an avatar button, not a wide text pill. */
+@media (max-width: 768px) {
+  .topbar .user-menu-wrap {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .topbar .user-menu-btn,
+  .dashboard-frame .topbar .user-menu-btn,
+  .faq-frame .topbar .user-menu-btn,
+  .home-shell .topbar .user-menu-btn,
+  .home-frame .topbar .user-menu-btn,
+  .gifts-shell .topbar .user-menu-btn {
+    width: clamp(116px, 34vw, 148px) !important;
+    min-width: 0 !important;
+    max-width: clamp(116px, 34vw, 148px) !important;
+    height: 52px !important;
+    padding: 0 7px 0 10px !important;
+    border-radius: 13px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 7px !important;
+    overflow: visible !important;
+  }
+
+  .topbar .user-menu-btn .user-mini-avatar {
+    width: 34px !important;
+    height: 34px !important;
+    flex: 0 0 34px !important;
+    border: 2px solid rgba(255, 255, 255, .55) !important;
+    box-shadow: 0 6px 14px rgba(116, 51, 163, .24) !important;
+  }
+
+  .topbar .user-menu-btn > svg {
+    display: none !important;
+  }
+
+  .topbar .user-menu-btn .user-menu-name {
+    display: block !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    line-height: 1.3 !important;
+    text-align: right !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .topbar .user-dropdown {
+    left: 0 !important;
+    right: auto !important;
+    width: min(220px, calc(100vw - 28px)) !important;
+    z-index: 120 !important;
+  }
+
+  .dashboard-frame .user-menu-wrap,
+  .faq-frame .user-menu-wrap {
+    max-width: none !important;
+  }
+}
+
 
 @media (max-width: 1100px) {
   .faq-header-action {
@@ -536,7 +645,7 @@
   }
 
   .topbar .nav-list li::after {
-    bottom: 2px;
+    bottom: -5px;
   }
 }
 

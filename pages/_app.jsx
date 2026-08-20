@@ -10,6 +10,7 @@ import '../src/components/DashboardPage.css';
 import '../src/components/LoginModal.css';
 import '../src/components/MobileBottomNav.css';
 import '../src/components/HomePage.css';
+import '../src/components/GiftsPage.css';
 import '../src/components/FaqMembershipPage.css';
 import '../src/components/ContactPage.css';
 

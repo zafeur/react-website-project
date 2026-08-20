@@ -5,7 +5,6 @@ export const getCollectionDetails = async (collectionId) => {
   const response = await httpClient.get(`/collections/${collectionId}/details`, {
     requiresAuth: true,
     headers: { Accept: "application/json" },
-    params: { collection_id: collectionId },
   });
 
   if (typeof response.data === "string") {

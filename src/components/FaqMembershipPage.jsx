@@ -382,12 +382,12 @@ function FaqMembershipPage({
     }
 
     if (id === 'shop') {
-      window.location.href = '/collections/melal';
+      window.location.href = '/#brands';
       return;
     }
 
     if (id === 'gifts') {
-      window.location.href = '/#gifts';
+      window.location.href = '/gifts';
       return;
     }
 
@@ -497,13 +497,6 @@ function FaqMembershipPage({
               aria-label={nav.home}
             >
               <img
-                className="brand-logo-mark"
-                src={brandAssets.logoMark}
-                alt=""
-                aria-hidden="true"
-              />
-
-              <img
                 className="brand-logo-type"
                 src={brandAssets.logoType}
                 alt={nav.brand}
@@ -520,7 +513,7 @@ function FaqMembershipPage({
                 </li>
 
                 <li>
-                  <Link href="/#gifts">
+                  <Link href="/gifts">
                     {nav.gifts}
                   </Link>
                 </li>

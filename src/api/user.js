@@ -133,9 +133,17 @@ export const extractActiveGiftsFromReport = (payload) => {
   );
 
   const activeUnusedCodes = preferredCodes.filter((item) => {
-    const isActive = item?.active === 1 || item?.active === true || item?.active === "1";
-    const isUsed = item?.is_used === 1 || item?.is_used === true || item?.is_used === "1" || Boolean(item?.used_at);
-    return isActive && !isUsed;
+    const giftActive = item?.collection?.gift_active ?? item?.collection?.giftActive ?? item?.gift_active ?? item?.giftActive;
+    const hasActiveGift = giftActive === 1 || giftActive === true || giftActive === "1";
+    const isUsed =
+      item?.is_used === 1 ||
+      item?.is_used === true ||
+      item?.is_used === "1" ||
+      item?.gift_used === 1 ||
+      item?.gift_used === true ||
+      item?.gift_used === "1" ||
+      Boolean(item?.used_at);
+    return hasActiveGift && !isUsed;
   });
 
   if (activeUnusedCodes.length) {
@@ -212,6 +220,7 @@ export const normalizeUserProfile = (source = {}) => {
   const firstName = firstValue(source, ["firstName", "first_name", "name", "first", "given_name"]);
   const lastName = firstValue(source, ["lastName", "last_name", "family", "family_name", "surname", "last"]);
   const fullName = firstValue(source, ["fullName", "full_name", "display_name", "displayName", "username"]);
+  const points = firstValue(source, ["points", "score", "credit", "wallet", "balance"]);
 
   return {
     ...source,
@@ -225,7 +234,8 @@ export const normalizeUserProfile = (source = {}) => {
     avatar: firstValue(source, ["avatar", "avatar_url", "avatarUrl", "profile_image", "profileImage", "profile_photo", "profilePhoto", "image", "photo"]),
     avatarPreview: firstValue(source, ["avatarPreview", "avatar_preview"]),
     level: firstValue(source, ["level", "rank", "membership_level", "membershipLevel", "status"]),
-    score: firstValue(source, ["score", "points", "credit", "wallet", "balance"]),
+    points,
+    score: points,
   };
 };
 

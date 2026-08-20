@@ -693,12 +693,13 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   html.theme-dark .page-shell .mobile-bottom-nav button.active::before,
   .page-shell.theme-dark .mobile-bottom-nav button.active::before,
   .home-shell.theme-dark .mobile-bottom-nav button.active::before {
-    width: 62px !important;
-    height: 62px !important;
+    top: -16px !important;
+    width: 50px !important;
+    height: 50px !important;
     opacity: 1 !important;
     transform: translateX(-50%) scale(1) !important;
     background: linear-gradient(135deg, #f7d7ea 0%, #7433a3 100%) !important;
-    border: 7px solid #1b1023 !important;
+    border: 0 !important;
     box-shadow: 0 14px 28px rgba(116, 51, 163, .38) !important;
   }
 
@@ -707,10 +708,15 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   html.theme-dark .page-shell .mobile-bottom-nav button.active svg,
   .page-shell.theme-dark .mobile-bottom-nav button.active svg,
   .home-shell.theme-dark .mobile-bottom-nav button.active svg {
+    position: absolute !important;
+    top: -3px !important;
+    left: 50% !important;
+    width: 24px !important;
+    height: 24px !important;
     color: #ffffff !important;
     stroke: currentColor !important;
     fill: none !important;
-    transform: translateY(-21px) !important;
+    transform: translateX(-50%) !important;
   }
 
   .mobile-bottom-nav button.active span,
@@ -718,8 +724,14 @@ html.theme-dark .page-shell .login-modal .input-shell input::placeholder,
   html.theme-dark .page-shell .mobile-bottom-nav button.active span,
   .page-shell.theme-dark .mobile-bottom-nav button.active span,
   .home-shell.theme-dark .mobile-bottom-nav button.active span {
+    position: absolute !important;
+    right: 50% !important;
+    bottom: 18px !important;
+    left: auto !important;
+    width: min(62px, calc(100% - 8px)) !important;
+    text-align: center !important;
     color: #f7d7ea !important;
-    transform: translateY(-6px) !important;
+    transform: translateX(50%) !important;
   }
 }
 
@@ -2191,7 +2203,7 @@ html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card small,
 
   .mobile-bottom-nav button.active span {
     color: #7433a3 !important;
-    transform: translateY(-2px) !important;
+    transform: translateX(50%) !important;
   }
 
   html.theme-dark .mobile-bottom-nav button.active span,
@@ -2199,6 +2211,37 @@ html.theme-dark .page-shell.restaurant-shell .restaurant-wallet-card small,
   .page-shell.theme-dark .mobile-bottom-nav button.active span,
   .home-shell.theme-dark .mobile-bottom-nav button.active span {
     color: #ffffff !important;
-    transform: translateY(-2px) !important;
+    transform: translateX(50%) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .mobile-bottom-nav button.active::before,
+  html.theme-dark .mobile-bottom-nav button.active::before,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active::before,
+  .page-shell.theme-dark .mobile-bottom-nav button.active::before,
+  .home-shell.theme-dark .mobile-bottom-nav button.active::before {
+    top: -15px !important;
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .mobile-bottom-nav button.active svg,
+  html.theme-dark .mobile-bottom-nav button.active svg,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active svg,
+  .page-shell.theme-dark .mobile-bottom-nav button.active svg,
+  .home-shell.theme-dark .mobile-bottom-nav button.active svg {
+    top: -3px !important;
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .mobile-bottom-nav button.active span,
+  html.theme-dark .mobile-bottom-nav button.active span,
+  html.theme-dark .page-shell .mobile-bottom-nav button.active span,
+  .page-shell.theme-dark .mobile-bottom-nav button.active span,
+  .home-shell.theme-dark .mobile-bottom-nav button.active span {
+    bottom: 16px !important;
+    width: min(48px, calc(100% - 8px)) !important;
   }
 }

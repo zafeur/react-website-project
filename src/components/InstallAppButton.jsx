@@ -165,7 +165,7 @@ export default function InstallAppButton() {
             </button>
 
             <img
-              src="/brand/install-app-icon.png"
+              src="/brand/icon-192.png"
               alt=""
               className={styles.installGuideIcon}
               aria-hidden="true"
@@ -230,7 +230,7 @@ export default function InstallAppButton() {
             </button>
 
             <img
-              src="/brand/install-app-icon.png"
+              src="/brand/icon-192.png"
               alt=""
               className={styles.installGuideIcon}
               aria-hidden="true"

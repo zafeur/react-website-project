@@ -1,7 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { CalendarDays, Crown, Gift, LogOut, Mail, PencilLine, Phone, UserRound } from 'lucide-react';
-import { extractActiveGiftsFromReport, extractUserGifts, extractUserProfileFromReport, getDiscountReport, getUserGifts } from '../api/user';
+import { CalendarDays, Crown, Gift, LogOut, Mail, PencilLine, Phone, RefreshCw, UserRound, Wallet } from 'lucide-react';
+import { extractActiveGiftsFromReport, extractUserGifts, extractUserProfileFromReport, getDiscountReport } from '../api/user';
 import { defaultProfileAvatar } from '../data/brandAssets';
 import { businessProfiles, dashboardActions, mobileProfileLinks } from '../data/siteData';
 import { toPersianDigits } from '../helper/persianDigits';
@@ -58,7 +58,7 @@ const getProfileName = (profile) => {
   const lastName = getProfileField(profile, ['lastName', 'last_name', 'family', 'family_name']);
   const fullName = getProfileField(profile, ['fullName', 'full_name']);
 
-  return fullName || [firstName, lastName].filter(Boolean).join(' ') || 'کاربر کی میای';
+  return [firstName, lastName].filter(Boolean).join(' ') || fullName || 'کاربر کی میای';
 };
 
 const isProfileComplete = (profile) => Boolean(
@@ -94,7 +94,7 @@ const getActionSection = (title) => {
   return 'account';
 };
 
-const disabledSections = new Set(['wallet', 'processes', 'referral', 'history', 'stats']);
+const disabledSections = new Set(['processes', 'referral', 'history', 'stats']);
 
 const isEnabledDashboardItem = (item) => !disabledSections.has(getActionSection(item.title));
 
@@ -126,6 +126,19 @@ const getDeepValue = (source, keys) => {
   return '';
 };
 
+const firstArrayValue = (source, keys) => {
+  if (!source || typeof source !== 'object') return [];
+
+  for (const key of keys) {
+    const value = source[key];
+    if (Array.isArray(value)) {
+      return value;
+    }
+  }
+
+  return [];
+};
+
 const normalizeComparable = (value = '') => String(value).trim().toLowerCase().replace(/[\s\u200c_-]+/g, '');
 
 const cleanReportText = (value = '') => String(value)
@@ -138,11 +151,212 @@ const cleanReportText = (value = '') => String(value)
   .replace(/\s+/g, ' ')
   .trim();
 
+const normalizeAmountDigits = (value = '') => String(value)
+  .replace(/[۰-۹]/g, (digit) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit))
+  .replace(/[٠-٩]/g, (digit) => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit));
+
+const parseWalletAmount = (value) => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value !== 'string') return null;
+
+  const normalized = normalizeAmountDigits(value).replace(/,/g, '');
+  const match = normalized.match(/-?\d+(?:\.\d+)?/);
+  if (!match) return null;
+
+  const amount = Number(match[0]);
+  return Number.isFinite(amount) ? amount : null;
+};
+
+const formatWalletAmount = (amount) => `${new Intl.NumberFormat('fa-IR').format(Number(amount) || 0)} تومان`;
+
+const walletAmountKeys = [
+  'wallet_balance',
+  'walletBalance',
+  'walletBalanceAmount',
+  'wallet_amount',
+  'walletAmount',
+  'balance',
+  'credit',
+  'amount',
+  'value',
+  'total',
+  'total_balance',
+  'totalBalance',
+];
+
+const walletListKeys = [
+  'wallets',
+  'wallet_items',
+  'walletItems',
+  'business_wallets',
+  'businessWallets',
+  'collection_wallets',
+  'collectionWallets',
+  'balances',
+  'items',
+];
+
+const walletTransactionKeys = [
+  'wallet_transactions',
+  'walletTransactions',
+  'transactions',
+  'history',
+  'charges',
+  'wallet_charges',
+  'walletCharges',
+];
+
+const walletObjectKeys = ['wallet', 'user_wallet', 'userWallet', 'wallet_summary', 'walletSummary'];
+
+const firstAmountValue = (source, keys = walletAmountKeys) => {
+  if (!source || typeof source !== 'object') return null;
+
+  for (const key of keys) {
+    const amount = parseWalletAmount(source[key]);
+    if (amount !== null) {
+      return amount;
+    }
+  }
+
+  return null;
+};
+
+const getReportParts = (payload) => {
+  const data = payload?.data || payload || {};
+  const report = data?.report || data?.discount_report || data?.discountReport || {};
+  const user = data?.user || report?.user || payload?.user || {};
+
+  return { data, report, user };
+};
+
+const getWalletCandidates = (payload, profile) => {
+  const { data, report, user } = getReportParts(payload);
+  const candidates = [profile, user, report, data, payload].filter(Boolean);
+
+  candidates.slice().forEach((candidate) => {
+    walletObjectKeys.forEach((key) => {
+      if (candidate?.[key] && typeof candidate[key] === 'object') {
+        candidates.push(candidate[key]);
+      }
+    });
+  });
+
+  return candidates;
+};
+
+const findWalletArrays = (payload, profile, keys) => getWalletCandidates(payload, profile).flatMap((candidate) => {
+  if (!candidate || typeof candidate !== 'object') return [];
+
+  return keys.flatMap((key) => (Array.isArray(candidate[key]) ? candidate[key] : []));
+});
+
+const getWalletBusinessName = (item, matchedProfile) => {
+  if (isPrimitiveValue(item)) return matchedProfile?.title || 'مجموعه کی میای';
+
+  const collection = item?.collection || item?.business || item?.brand || item?.shop;
+  if (typeof collection === 'string') return cleanReportText(collection);
+
+  return cleanReportText((collection && typeof collection === 'object' ? firstValue(collection, ['name', 'title', 'business_name', 'businessName', 'collection_name', 'collectionName', 'prefix']) : '') ||
+    firstValue(item, ['title', 'name', 'business', 'business_name', 'businessName', 'collection_name', 'collectionName', 'brand_name', 'brandName']) ||
+    getDeepValue(item, ['business_name', 'businessName', 'collection_name', 'collectionName', 'brand_name', 'brandName']) ||
+    matchedProfile?.title ||
+    'مجموعه کی میای');
+};
+
+const normalizeWalletBusiness = (item, index) => {
+  const matchedProfile = findBusinessProfileForGift(item);
+  const amount = firstAmountValue(item);
+  const title = getWalletBusinessName(item, matchedProfile);
+
+  return {
+    id: getGiftCollectionId(item, matchedProfile) || title || `wallet-${index}`,
+    title,
+    amount: amount || 0,
+    amountLabel: toPersianDigits(firstValue(item, ['balanceLabel', 'balance_label', 'formatted_balance', 'formattedBalance', 'amountLabel', 'amount_label']) || formatWalletAmount(amount || 0)),
+    status: cleanReportText(firstValue(item, ['status', 'description', 'walletStatus']) || (amount > 0 ? `شارژ شده توسط ${title}` : 'هنوز شارژی ثبت نشده')),
+    image: getGiftImage(item, matchedProfile) || matchedProfile?.image || defaultProfileAvatar,
+  };
+};
+
+const normalizeWalletTransaction = (item, index) => {
+  const matchedProfile = findBusinessProfileForGift(item);
+  const amount = firstAmountValue(item);
+  const business = getWalletBusinessName(item, matchedProfile);
+
+  return {
+    id: firstValue(item, ['id', 'transaction_id', 'transactionId']) || `${business}-${index}`,
+    business,
+    title: cleanReportText(firstValue(item, ['type', 'title', 'description', 'reason']) || 'شارژ کیف پول'),
+    date: toPersianDigits(formatPersianDateTime(firstValue(item, ['date', 'created_at', 'createdAt', 'updated_at', 'updatedAt'])) || ''),
+    amount: amount || 0,
+    amountLabel: toPersianDigits(firstValue(item, ['amountLabel', 'amount_label', 'formatted_amount', 'formattedAmount']) || `${amount >= 0 ? '+' : ''}${formatWalletAmount(amount || 0)}`),
+  };
+};
+
+const buildWalletSummary = (payload, profile) => {
+  const businessItems = findWalletArrays(payload, profile, walletListKeys)
+    .map(normalizeWalletBusiness)
+    .filter((item) => item.title || item.amount);
+  const transactionItems = findWalletArrays(payload, profile, walletTransactionKeys)
+    .map(normalizeWalletTransaction)
+    .filter((item) => item.business || item.amount);
+
+  const candidates = getWalletCandidates(payload, profile);
+  const explicitTotal = candidates.reduce((found, candidate) => (
+    found !== null ? found : firstAmountValue(candidate, ['total_wallet', 'totalWallet', 'wallet_total', 'walletTotal', 'total_balance', 'totalBalance', 'balance', 'wallet_balance', 'walletBalance'])
+  ), null);
+  const businessTotal = businessItems.reduce((sum, item) => sum + item.amount, 0);
+  const transactionTotal = transactionItems.reduce((sum, item) => sum + Math.max(0, item.amount), 0);
+  const total = explicitTotal !== null ? explicitTotal : businessTotal || transactionTotal || 0;
+
+  return {
+    total,
+    totalLabel: toPersianDigits(formatWalletAmount(total)),
+    businesses: businessItems,
+    transactions: transactionItems,
+  };
+};
+
 const hasPersianLetters = (value = '') => /[\u0600-\u06ff]/.test(String(value));
 
 const isValidDiscountCode = (value = '') => {
   const normalized = cleanReportText(value);
   return /^[A-Za-z0-9_-]{4,}$/.test(normalized) && !hasPersianLetters(normalized);
+};
+
+const genericGiftLabels = new Set([
+  'کد تخفیف',
+  'هدیه فعال',
+  'مجموعه کی میای',
+]);
+
+const isGenericGiftLabel = (value = '') => genericGiftLabels.has(cleanReportText(value));
+
+const getGiftTitleFromDescription = (description = '') => {
+  const text = cleanReportText(description);
+  if (!text) return '';
+
+  return text
+    .replace(/^با خرید از مجموعه های دیگر از ما\s*/u, '')
+    .replace(/\s*هدیه بگیرید.*$/u, '')
+    .replace(/\s*(?:۰|0)?9[\d۰-۹\s-]{8,}.*$/u, '')
+    .trim();
+};
+
+const formatPersianDateTime = (value = '') => {
+  const normalized = cleanReportText(value);
+  if (!normalized) return '';
+
+  const date = new Date(normalized);
+  if (Number.isNaN(date.getTime())) return normalized;
+
+  return new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Asia/Tehran',
+  }).format(date);
 };
 
 const normalizeGiftStatus = (value, title, place) => {
@@ -154,11 +368,24 @@ const normalizeGiftStatus = (value, title, place) => {
 
   const statusWords = ['\u0641\u0639\u0627\u0644', 'active', 'used', 'expired', '\u0645\u0646\u0642\u0636\u06cc', '\u0627\u0633\u062a\u0641\u0627\u062f\u0647'];
   const looksLikeDate = /\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{2,4}/.test(normalized);
-  if (looksLikeDate || statusWords.some((word) => normalized.toLowerCase().includes(word))) {
+  if (looksLikeDate) {
+    return formatPersianDateTime(normalized);
+  }
+
+  if (statusWords.some((word) => normalized.toLowerCase().includes(word))) {
     return normalized;
   }
 
   return '\u0641\u0639\u0627\u0644';
+};
+
+const getGiftTimeValue = (gift) => {
+  if (isPrimitiveValue(gift)) return '';
+
+  const collection = gift?.collection || gift?.business || gift?.brand || gift?.code?.collection;
+  return firstValue(collection && typeof collection === 'object' ? collection : {}, ['expires_at', 'expire_at', 'expiresAt', 'status']) ||
+    firstValue(gift, ['expires_at', 'expire_at', 'expiresAt', 'status']) ||
+    '';
 };
 
 const findBusinessProfileForGift = (gift) => {
@@ -205,6 +432,22 @@ const getGiftImage = (gift, matchedProfile) => {
   return normalizeMediaUrl(image || matchedProfile?.image || matchedProfile?.bannerImage || '');
 };
 
+const getGiftCollectionId = (gift, matchedProfile) => {
+  if (isPrimitiveValue(gift)) return matchedProfile?.collectionId || matchedProfile?.id || '';
+
+  const collection = gift?.collection || gift?.business || gift?.brand || gift?.code?.collection;
+  const collectionId = collection && typeof collection === 'object'
+    ? firstValue(collection, ['collection_id', 'collectionId', 'id', 'business_id', 'businessId', 'prefix', 'slug'])
+    : '';
+
+  return firstValue(gift, ['collection_id', 'collectionId', 'business_id', 'businessId', 'prefix', 'slug']) ||
+    collectionId ||
+    matchedProfile?.collectionId ||
+    matchedProfile?.id ||
+    matchedProfile?.slug ||
+    '';
+};
+
 const getGiftProfileHref = (gift, matchedProfile) => {
   if (isPrimitiveValue(gift)) {
     const primitiveRouteKey = matchedProfile?.collectionId || matchedProfile?.id || matchedProfile?.slug;
@@ -228,11 +471,12 @@ const normalizeGift = (gift, index) => {
   const primitiveCode = isPrimitiveValue(gift) ? String(gift) : '';
   const matchedProfile = findBusinessProfileForGift(gift);
   const collectionName = getGiftCollectionName(gift, matchedProfile);
-  const rawCode = primitiveCode || getDeepValue(gift, ['code', 'discount_code', 'discountCode', 'coupon_code', 'couponCode', 'token']);
+  const rawCode = primitiveCode || getDeepValue(gift, ['code', 'discount_code', 'discountCode', 'coupon_code', 'couponCode', 'user_code', 'userCode', 'generated_code', 'generatedCode', 'token', 'discount_token', 'discountToken']);
   const code = isValidDiscountCode(rawCode) ? cleanReportText(rawCode) : '';
-  const rawTitle = cleanReportText(getDeepValue(gift, ['title', 'gift_title', 'giftTitle', 'discount_title', 'discountTitle', 'code_title', 'codeTitle']));
-  const title = rawTitle || collectionName || '\u0647\u062f\u06cc\u0647 \u0641\u0639\u0627\u0644';
-  const time = normalizeGiftStatus(getDeepValue(gift, ['expires_at', 'expire_at', 'expiresAt', 'used_at', 'created_at', 'date', 'starts_at', 'startsAt', 'status']), title, collectionName);
+  const rawTitle = cleanReportText(getDeepValue(gift, ['title', 'gift_name', 'giftName', 'gift_title', 'giftTitle', 'discount_title', 'discountTitle', 'code_title', 'codeTitle']));
+  const descriptionTitle = getGiftTitleFromDescription(getDeepValue(gift, ['description', 'gift_description', 'giftDescription']));
+  const title = rawTitle || descriptionTitle || collectionName || '\u0647\u062f\u06cc\u0647 \u0641\u0639\u0627\u0644';
+  const time = normalizeGiftStatus(getGiftTimeValue(gift), title, collectionName);
 
   const apiImage = getGiftImage(gift, null);
   const fallbackImage = getGiftImage({}, matchedProfile);
@@ -242,6 +486,7 @@ const normalizeGift = (gift, index) => {
     id: getDeepValue(gift, ['id', 'discount_id', 'discountId', 'code_id', 'codeId']) || code || `${title}-${index}`,
     title,
     place: collectionName,
+    collectionId: getGiftCollectionId(gift, matchedProfile),
     time: toPersianDigits(time),
     image: apiImage || fallbackImage,
     imageFallback: fallbackImage,
@@ -250,9 +495,94 @@ const normalizeGift = (gift, index) => {
   };
 };
 
+const giftChildKeys = [
+  'active_gifts',
+  'activeGifts',
+  'gifts',
+  'items',
+  'discounts',
+  'discount_codes',
+  'discountCodes',
+  'codes',
+];
+
+const mergeGiftWithCollection = (gift, collection) => {
+  if (isPrimitiveValue(gift)) {
+    return {
+      code: String(gift),
+      collection,
+      collection_id: firstValue(collection, ['collection_id', 'collectionId', 'id', 'business_id', 'businessId']),
+      collection_name: firstValue(collection, ['collection_name', 'collectionName', 'name', 'title', 'business_name', 'businessName']),
+    };
+  }
+
+  return {
+    ...gift,
+    collection: gift.collection || collection.collection || collection,
+    collection_id: firstValue(gift, ['collection_id', 'collectionId', 'business_id', 'businessId']) ||
+      firstValue(collection, ['collection_id', 'collectionId', 'id', 'business_id', 'businessId']),
+    collection_name: firstValue(gift, ['collection_name', 'collectionName', 'business_name', 'businessName']) ||
+      firstValue(collection, ['collection_name', 'collectionName', 'name', 'title', 'business_name', 'businessName']),
+    profile_image: firstValue(gift, ['profile_image', 'profileImage', 'image', 'logo', 'logo_url']) ||
+      firstValue(collection, ['profile_image', 'profileImage', 'image', 'logo', 'logo_url']),
+  };
+};
+
+const expandGiftCollections = (items) => items.flatMap((item) => {
+  if (isPrimitiveValue(item)) return [item];
+
+  const childGifts = firstArrayValue(item, giftChildKeys);
+
+  if (!childGifts.length) {
+    return [item];
+  }
+
+  return childGifts.map((gift) => mergeGiftWithCollection(gift, item));
+});
+
+const normalizeGiftListFromPayload = (payload) => {
+  const directItems = expandGiftCollections(extractUserGifts(payload));
+  const reportItems = expandGiftCollections(extractActiveGiftsFromReport(payload));
+  return (reportItems.length ? reportItems : directItems).map(normalizeGift);
+};
+
+const groupGiftItems = (items) => {
+  const groups = new Map();
+
+  items.forEach((gift) => {
+    const hasUsefulCollection = gift.place && !isGenericGiftLabel(gift.place);
+    const titleLooksLikeCollection = isGenericGiftLabel(gift.place) && gift.title;
+    const groupTitle = hasUsefulCollection ? gift.place : titleLooksLikeCollection ? gift.title : gift.place || 'مجموعه کی میای';
+    const rowTitle = hasUsefulCollection ? gift.title : 'هدیه فعال';
+    const normalizedGift = {
+      ...gift,
+      title: rowTitle,
+    };
+    const key = gift.collectionId || groupTitle || gift.href || gift.id || 'gifts';
+    const existing = groups.get(key);
+
+    if (existing) {
+      existing.gifts.push(normalizedGift);
+      return;
+    }
+
+    groups.set(key, {
+      id: key,
+      title: groupTitle,
+      image: gift.image,
+      imageFallback: gift.imageFallback,
+      href: gift.href,
+      gifts: [normalizedGift],
+    });
+  });
+
+  return Array.from(groups.values());
+};
+
 function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, onLogout, onProfileFromReport }) {
   const [activeSection, setActiveSection] = useState('gifts');
   const [activeGiftItems, setActiveGiftItems] = useState([]);
+  const [walletSummary, setWalletSummary] = useState(() => buildWalletSummary(null, userProfile));
   const [isReportLoading, setIsReportLoading] = useState(false);
   const [reportError, setReportError] = useState('');
 
@@ -273,18 +603,18 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
     try {
       setIsReportLoading(true);
       setReportError('');
-      const giftsData = await getUserGifts();
-      console.log('USER GIFTS API:', giftsData);
-      const data = giftsData || (await getDiscountReport());
+      const data = await getDiscountReport();
+
       const reportProfile = extractUserProfileFromReport(data);
       if (reportProfile) {
         onProfileFromReport?.(reportProfile);
       }
-      const giftItems = extractUserGifts(data);
-      setActiveGiftItems((giftItems.length ? giftItems : extractActiveGiftsFromReport(data)).map(normalizeGift));
+      setWalletSummary(buildWalletSummary(data, reportProfile || userProfile));
+      setActiveGiftItems(normalizeGiftListFromPayload(data));
     } catch (error) {
       setActiveGiftItems([]);
-      setReportError(error.response?.data?.message || error.message || 'دریافت هدیه‌ها انجام نشد.');
+      setWalletSummary(buildWalletSummary(null, userProfile));
+      setReportError('دریافت هدیه‌ها انجام نشد.');
     } finally {
       setIsReportLoading(false);
     }
@@ -295,6 +625,16 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
       loadActiveGifts();
     }
   }, [isVisible]);
+
+  useEffect(() => {
+    setWalletSummary((current) => {
+      if (current.businesses.length || current.transactions.length || current.total) {
+        return current;
+      }
+
+      return buildWalletSummary(null, userProfile);
+    });
+  }, [userProfile]);
 
   const scrollSectionIntoComfortView = (targetId, { alignToTop = false } = {}) => {
     const target = document.getElementById(targetId);
@@ -384,25 +724,117 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
 
     const listClass = mobile ? 'mobile-active-gifts-list' : 'active-gifts-grid';
     const itemClass = mobile ? 'mobile-active-gift' : 'active-gift-card';
+    const groupedGifts = groupGiftItems(activeGiftItems);
 
     return (
       <div className={listClass}>
-        {activeGiftItems.map((gift) => (
-          <article className={itemClass} key={gift.id}>
-            {gift.href ? (
-              <Link className="active-gift-media-link" href={gift.href} aria-label={`مشاهده پروفایل ${gift.place || gift.title}`}>
-                {gift.image ? <img src={gift.image} alt={gift.title} onError={(event) => handleGiftImageError(event, gift.imageFallback)} /> : <div className="active-gift-fallback"><Gift /></div>}
+        {groupedGifts.map((group) => (
+          <article className={itemClass} key={group.id}>
+            {group.href ? (
+              <Link className="active-gift-media-link" href={group.href} aria-label={`مشاهده پروفایل ${group.title}`}>
+                {group.image ? <img src={group.image} alt={group.title} onError={(event) => handleGiftImageError(event, group.imageFallback)} /> : <div className="active-gift-fallback"><Gift /></div>}
               </Link>
-            ) : gift.image ? <img src={gift.image} alt={gift.title} onError={(event) => handleGiftImageError(event, gift.imageFallback)} /> : <div className="active-gift-fallback"><Gift /></div>}
+            ) : group.image ? <img src={group.image} alt={group.title} onError={(event) => handleGiftImageError(event, group.imageFallback)} /> : <div className="active-gift-fallback"><Gift /></div>}
             <div className="active-gift-fallback active-gift-fallback-broken"><Gift /></div>
-            <div>
-              <h3>{gift.title}</h3>
-              <p>{gift.code ? '\u06a9\u062f \u062a\u062e\u0641\u06cc\u0641' : gift.place}</p>
-              {gift.code ? <span dir="ltr">{gift.code}</span> : <span>{gift.time}</span>}
+            <div className="active-gift-card-body">
+              <h3>{group.title}</h3>
+              <ul className="active-gift-list">
+                {group.gifts.map((gift) => (
+                  <li key={gift.id}>
+                    <div>
+                      <strong>{gift.title}</strong>
+                      <small>{gift.time}</small>
+                    </div>
+                    {gift.code ? <span dir="ltr">{gift.code}</span> : <span>بدون کد</span>}
+                  </li>
+                ))}
+              </ul>
             </div>
           </article>
         ))}
       </div>
+    );
+  };
+
+  const renderWallet = (mobile = false) => {
+    const walletBusinesses = walletSummary.businesses;
+    const walletTransactions = walletSummary.transactions.slice(0, 4);
+
+    if (mobile) {
+      return (
+        <section className="mobile-wallet-card">
+          <div className="mobile-wallet-head">
+            <span><Wallet /> کیف پول</span>
+            <strong>{walletSummary.totalLabel}</strong>
+          </div>
+          {walletBusinesses.length ? (
+            <div className="mobile-wallet-list">
+              {walletBusinesses.map((business) => (
+                <article className="mobile-wallet-business" key={business.id}>
+                  <img src={business.image} alt={business.title} />
+                  <div>
+                    <h3>{business.title}</h3>
+                    <p>{business.amountLabel}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="dashboard-empty-state">شارژی برای کیف پول این حساب ثبت نشده است.</p>
+          )}
+        </section>
+      );
+    }
+
+    return (
+      <section className="panel wallet-panel">
+        <div className="wallet-summary">
+          <div>
+            <span className="wallet-eyebrow">کیف پول کاربر</span>
+            <h2><Wallet /> موجودی کلی کیف پول</h2>
+            <p>مجموع شارژهای ثبت‌شده برای این کاربر و سهم هر مجموعه به صورت خلاصه نمایش داده می‌شود.</p>
+          </div>
+          <div className="wallet-total-card">
+            <span>موجودی کل</span>
+            <strong>{walletSummary.totalLabel}</strong>
+            <small>{toPersianDigits(walletBusinesses.length)} مجموعه</small>
+          </div>
+        </div>
+
+        {walletBusinesses.length ? (
+          <div className="wallet-business-grid">
+            {walletBusinesses.map((business) => (
+              <article className="wallet-business-card" key={business.id}>
+                <img src={business.image} alt={business.title} />
+                <div>
+                  <h3>{business.title}</h3>
+                  <strong>{business.amountLabel}</strong>
+                  <span>{business.status}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="dashboard-empty-state">شارژی برای کیف پول این حساب ثبت نشده است.</p>
+        )}
+
+        {walletTransactions.length ? (
+          <div className="wallet-history">
+            <h3>آخرین شارژها</h3>
+            {walletTransactions.map((transaction) => (
+              <article className="wallet-history-item" key={transaction.id}>
+                <RefreshCw />
+                <div>
+                  <strong>{transaction.business}</strong>
+                  <span>{transaction.title}</span>
+                </div>
+                <p>{transaction.date || 'ثبت نشده'}</p>
+                <b className={transaction.amount < 0 ? 'is-debit' : 'is-credit'}>{transaction.amountLabel}</b>
+              </article>
+            ))}
+          </div>
+        ) : null}
+      </section>
     );
   };
 
@@ -428,6 +860,8 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
               {renderActiveGifts(true)}
             </section>
           )}
+
+          {activeSection === 'wallet' && renderWallet(true)}
         </section>
 
         <section className="mobile-profile-menu">
@@ -541,6 +975,8 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
             {renderActiveGifts(false)}
           </section>
         )}
+
+        {activeSection === 'wallet' && renderWallet(false)}
       </div>
     </section>
   );

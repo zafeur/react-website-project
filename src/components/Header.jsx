@@ -11,7 +11,7 @@ const DEFAULT_USER_NAME = '\u06a9\u0627\u0631\u0628\u0631 \u06a9\u06cc \u0645\u0
 
 const navItems = [
   { label: '\u0635\u0641\u062d\u0647 \u0627\u0635\u0644\u06cc', href: '/' },
-  { label: '\u0647\u062f\u0627\u06cc\u0627', href: '/#gifts' },
+  { label: '\u0647\u062f\u0627\u06cc\u0627', href: '/gifts' },
   { label: '\u06a9\u0633\u0628\u200c\u0648\u06a9\u0627\u0631\u0647\u0627', href: '/#brands' },
   { label: '\u0641\u0631\u0648\u0634\u06af\u0627\u0647\u06cc', href: '/#brands' },
   { label: '\u0633\u0648\u0627\u0644\u0627\u062a \u0645\u062a\u062f\u0627\u0648\u0644', href: '/faq' },
@@ -34,8 +34,11 @@ const getProfileName = (profile) => {
   const firstName = firstValue(profile, ['firstName', 'first_name', 'name']);
   const lastName = firstValue(profile, ['lastName', 'last_name', 'family', 'family_name']);
   const fullName = firstValue(profile, ['fullName', 'full_name', 'display_name', 'displayName', 'username']);
-  return fullName || [firstName, lastName].filter(Boolean).join(' ') || DEFAULT_USER_NAME;
+  return [firstName, lastName].filter(Boolean).join(' ') || fullName || DEFAULT_USER_NAME;
 };
+
+const getProfileShortName = (profile) =>
+  firstValue(profile, ['firstName', 'first_name', 'name']) || getProfileName(profile);
 
 const normalizeMediaUrl = (value = '') => {
   const text = String(value || '').trim().replace(/^\"|\"$/g, '');
@@ -58,8 +61,9 @@ const getProfileAvatar = (profile) => normalizeMediaUrl(firstValue(profile, [
   'photo',
 ]));
 
-function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme, userProfile }) {
+function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme, userProfile, loginLabel = LOGIN_LABEL }) {
   const userName = getProfileName(userProfile);
+  const userShortName = getProfileShortName(userProfile);
   const userAvatar = getProfileAvatar(userProfile) || defaultProfileAvatar;
 
   const openAccount = () => {
@@ -75,7 +79,6 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
     <header className="topbar d-flex align-items-center justify-content-between">
       <div className="d-flex align-items-center">
         <Link className="brand d-flex align-items-center" href="/" aria-label={HOME_LABEL}>
-          <img className="brand-logo-mark" src={brandAssets.logoMark} alt="" aria-hidden="true" />
           <img className="brand-logo-type" src={brandAssets.logoType} alt={BRAND_LABEL} />
         </Link>
         <nav>
@@ -110,7 +113,7 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
           <div className="user-menu-wrap">
             <button className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`} type="button" onClick={onToggleUserMenu}>
               <span className="user-mini-avatar"><img src={userAvatar} alt={userName} /></span>
-              <span className="user-menu-name">{userName}</span>
+              <span className="user-menu-name" dir="rtl">{userShortName}</span>
               <ChevronDown />
             </button>
             {isUserMenuOpen && (
@@ -127,7 +130,7 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
             )}
           </div>
         ) : (
-          <button className="login-btn" type="button" onClick={onLogin}>{LOGIN_LABEL}</button>
+          <button className="login-btn" type="button" onClick={onLogin}>{loginLabel}</button>
         )}
       </div>
     </header>

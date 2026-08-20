@@ -54,8 +54,8 @@
 .panel-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 34px; }
 .panel-head-row h2, .history-panel h2, .stats-panel h2, .invite-card h2 { margin: 0; color: #171717; font-size: 26px; font-weight: 800; }
 .panel-head-row a { color: var(--green); font-size: 17px; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
-.active-gifts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; align-items: stretch; }
-.active-gift-card { overflow: hidden; min-height: 340px; display: grid; grid-template-rows: 190px minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 8px 18px rgba(0,0,0,.025); }
+.active-gifts-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: stretch; }
+.active-gift-card { overflow: hidden; min-height: 0; display: grid; grid-template-columns: 128px minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 8px 18px rgba(0,0,0,.025); }
 .active-gift-card:hover { transform: translateY(-5px); box-shadow: 0 16px 30px rgba(0,0,0,.09); }
 .active-gift-card img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -85,9 +85,9 @@
   display: flex;
 }
 
-.active-gift-card > div:last-child { min-height: 0; display: grid; align-content: center; padding: 17px 16px 20px; text-align: center; }
+.active-gift-card > div:last-child { min-height: 0; display: grid; align-content: start; padding: 17px 16px 20px; text-align: right; }
 .active-gift-card h3 {
-  min-height: 58px;
+  min-height: 0;
   margin: 0 0 10px;
   overflow: hidden;
   color: #171717;
@@ -119,6 +119,74 @@
   line-height: 1.6;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.active-gift-card-body {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 16px 18px;
+  text-align: right;
+}
+
+.active-gift-card .active-gift-card-body h3 {
+  min-height: 0;
+  margin: 0;
+  text-align: center;
+  -webkit-line-clamp: 2;
+}
+
+.active-gift-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.active-gift-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid rgba(116, 51, 163, .12);
+  border-radius: 10px;
+  background: rgba(116, 51, 163, .035);
+}
+
+.active-gift-list strong {
+  display: block;
+  margin-bottom: 4px;
+  overflow: hidden;
+  color: #171717;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.6;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.active-gift-list small {
+  display: block;
+  color: #747a7f;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.active-gift-card .active-gift-list span {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(235, 7, 138, .09);
+  color: #cc1e1e;
+  font-size: 13px;
+  direction: ltr;
 }
 
 .dashboard-bottom-grid { display: grid; grid-template-columns: 1fr 576px; gap: 22px; margin-top: 18px; direction: ltr; }
@@ -1301,6 +1369,18 @@ html.theme-dark .page-shell .dashboard-page .mobile-active-gift span,
   color: var(--brand-pink, #eb078a) !important;
 }
 
+html.theme-dark .page-shell .dashboard-page .wallet-panel .dashboard-empty-state,
+.page-shell.theme-dark .dashboard-page .wallet-panel .dashboard-empty-state,
+html.theme-dark .page-shell .dashboard-page .mobile-wallet-card .dashboard-empty-state,
+.page-shell.theme-dark .dashboard-page .mobile-wallet-card .dashboard-empty-state {
+  border-color: rgba(235, 7, 138, .22) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(235, 7, 138, .10), transparent 34%),
+    linear-gradient(135deg, rgba(38, 18, 52, .96), rgba(27, 16, 35, .98)) !important;
+  color: rgba(247, 241, 251, .82) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04) !important;
+}
+
 /* Final mobile active-gift layout fix: readable text with controlled media size. */
 @media (max-width: 768px) {
   .dashboard-page .mobile-active-gift {
@@ -1537,8 +1617,8 @@ html.theme-dark .page-shell .dashboard-page .mobile-active-gift span,
 .active-gift-card > .active-gift-media-link {
   display: block !important;
   width: 100% !important;
-  height: 190px !important;
-  min-height: 190px !important;
+  height: 100% !important;
+  min-height: 128px !important;
   overflow: hidden !important;
 }
 
@@ -1591,5 +1671,148 @@ html.theme-dark .page-shell .dashboard-page .mobile-active-gift span,
   .dashboard-page .mobile-active-gift > .active-gift-media-link > img,
   .dashboard-page .mobile-active-gift > .active-gift-media-link > .active-gift-fallback {
     height: 132px !important;
+  }
+}
+
+/* Dashboard gifts are grouped by collection; each card contains the user's gift codes. */
+@media (max-width: 768px) {
+  .dashboard-page .mobile-active-gift > .active-gift-card-body {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    display: grid !important;
+    align-content: start !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    text-align: right !important;
+  }
+
+  .dashboard-page .mobile-active-gift .active-gift-list {
+    width: 100% !important;
+    display: grid !important;
+    gap: 8px !important;
+  }
+
+  .dashboard-page .mobile-active-gift .active-gift-list li {
+    padding: 8px 10px !important;
+  }
+
+  .dashboard-page .mobile-active-gift .active-gift-list strong,
+  .dashboard-page .mobile-active-gift .active-gift-list small,
+  .dashboard-page .mobile-active-gift .active-gift-list span {
+    width: auto !important;
+    text-align: right !important;
+  }
+
+  .dashboard-page .mobile-active-gift .active-gift-list span {
+    justify-self: end !important;
+    text-align: left !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-page .mobile-active-gift > .active-gift-card-body {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+}
+
+/* Phone dashboard polish: compact profile, menu, and gift list cards. */
+@media (max-width: 768px) {
+  .dashboard-shell .mobile-dashboard {
+    padding-top: 12px !important;
+  }
+
+  .dashboard-shell .mobile-profile-card {
+    min-height: 104px !important;
+    gap: 14px !important;
+    padding: 14px 16px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 8px 22px rgba(26, 13, 46, .06) !important;
+  }
+
+  .dashboard-shell .mobile-profile-card img {
+    width: 58px !important;
+    height: 58px !important;
+    flex: 0 0 58px !important;
+  }
+
+  .dashboard-shell .mobile-profile-card h1 {
+    margin-bottom: 6px !important;
+    font-size: clamp(20px, 5.2vw, 24px) !important;
+    line-height: 1.35 !important;
+  }
+
+  .dashboard-shell .mobile-profile-points {
+    margin: 0 0 6px !important;
+    font-size: 14px !important;
+  }
+
+  .dashboard-shell .mobile-profile-card button {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+  }
+
+  .dashboard-shell .mobile-profile-menu {
+    gap: 10px !important;
+    margin-top: 12px !important;
+  }
+
+  .dashboard-shell .mobile-profile-item {
+    min-height: 58px !important;
+    gap: 12px !important;
+    padding: 0 16px !important;
+    border-radius: 12px !important;
+  }
+
+  .dashboard-shell .mobile-profile-item svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .dashboard-shell .mobile-profile-item span {
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+  }
+
+  .dashboard-page .mobile-active-gifts-list {
+    gap: 12px !important;
+  }
+
+  .dashboard-page .mobile-active-gift {
+    border-radius: 14px !important;
+    box-shadow: 0 8px 20px rgba(26, 13, 46, .055) !important;
+  }
+
+  .dashboard-page .mobile-active-gift > .active-gift-media-link {
+    border-radius: 12px !important;
+  }
+
+  .dashboard-page .mobile-active-gift > .active-gift-card-body {
+    gap: 8px !important;
+  }
+
+  .dashboard-page .mobile-active-gift .active-gift-list li {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+    padding: 8px 9px !important;
+    border-radius: 10px !important;
+  }
+
+  .dashboard-page .mobile-active-gift .active-gift-list strong {
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
+    white-space: normal !important;
+  }
+
+  .dashboard-page .mobile-active-gift .active-gift-list small,
+  .dashboard-page .mobile-active-gift .active-gift-list span {
+    font-size: 11.5px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-shell .mobile-dashboard {
+    padding-inline: 10px !important;
   }
 }
