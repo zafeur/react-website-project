@@ -4,6 +4,7 @@ import { ArrowRight, Gift, Search, Sparkles, Store } from 'lucide-react';
 import { getAllGifts } from '../api/gifts';
 import { toPersianDigits } from '../helper/persianDigits';
 import { clearAuthToken, hasAuthToken } from '../helper/authCookie';
+import { AUTH_SESSION_EXPIRED_EVENT } from '../helper/authSession';
 import Header from './Header';
 import MobileBottomNav from './MobileBottomNav';
 
@@ -215,6 +216,20 @@ function GiftsPage({ isDarkMode = false, onToggleTheme }) {
     } catch {
       window.localStorage.removeItem(PROFILE_STORAGE_KEY);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      setIsLoggedIn(false);
+      setIsUserMenuOpen(false);
+      setUserProfile(null);
+    };
+
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+
+    return () => {
+      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+    };
   }, []);
 
   useEffect(() => {

@@ -30,6 +30,7 @@ import MobileBottomNav from './MobileBottomNav';
 import { sendOtp, verifyOtp } from '../api/auth';
 import { getDiscountCards, requestDiscountCode } from '../api/home';
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
+import { AUTH_SESSION_EXPIRED_EVENT, isAuthExpiredError, resetAuthSessionExpiryNotice, SESSION_EXPIRED_MESSAGE } from '../helper/authSession';
 import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
 import InstallAppButton from '../components/InstallAppButton';
 
@@ -830,9 +831,6 @@ const getProfileDisplayName = (profile = {}) => {
   const fullName = firstValue(profile, ['fullName', 'full_name', 'display_name', 'displayName', 'username']);
   return [firstName, lastName].filter(Boolean).join(' ') || fullName || 'کاربر کی میای';
 };
-
-const getProfileShortDisplayName = (profile = {}) =>
-  firstValue(profile, ['firstName', 'first_name', 'name']) || getProfileDisplayName(profile);
 
 const getProfileAvatar = (profile = {}) =>
   normalizeMediaUrl(firstValue(profile, [
@@ -1683,6 +1681,26 @@ useEffect(() => {
   };
 }, []);
 
+useEffect(() => {
+  const handleSessionExpired = (event) => {
+    setIsLoggedIn(false);
+    setIsUserMenuOpen(false);
+    setUserProfile(null);
+    setIsRequestingDiscount(false);
+    setRequestingOfferId(null);
+    setDiscountPopup(null);
+    setIsDiscountCodeCopied(false);
+    setLoginError(event?.detail?.message || SESSION_EXPIRED_MESSAGE);
+    setIsLoginOpen(true);
+  };
+
+  window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+
+  return () => {
+    window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+  };
+}, []);
+
   useEffect(() => {
     let isMounted = true;
     const cachedHomeData = loadCachedHomeData();
@@ -1983,6 +2001,7 @@ useEffect(() => {
         return;
       }
 
+      resetAuthSessionExpiryNotice();
       setIsLoggedIn(true);
       saveCachedHomeMobile(mobile);
       setIsLoginOpen(false);
@@ -2042,6 +2061,15 @@ useEffect(() => {
     setIsDiscountCodeCopied(false);
 
   } catch (error) {
+    if (isAuthExpiredError(error)) {
+      setIsLoggedIn(false);
+      setPendingOffer(offer);
+      setDiscountPopup(null);
+      setLoginError(SESSION_EXPIRED_MESSAGE);
+      setIsLoginOpen(true);
+      return;
+    }
+
     setDiscountPopup({
       offer,
       code: '',
@@ -2241,7 +2269,7 @@ useEffect(() => {
       <span className="user-mini-avatar">
         <img src={getProfileAvatar(userProfile)} alt={getProfileDisplayName(userProfile)} />
       </span>
-      <span className="user-menu-name" dir="rtl">{getProfileShortDisplayName(userProfile)}</span>
+      <span className="user-menu-name" dir="rtl">{getProfileDisplayName(userProfile)}</span>
       <ChevronDown />
     </button>
     {isUserMenuOpen && (

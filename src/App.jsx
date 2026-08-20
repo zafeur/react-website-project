@@ -9,6 +9,7 @@ import { sendOtp, verifyOtp } from "./api/auth";
 import { getProfileSaveErrorMessage, normalizeUserProfile, updateUserProfile } from "./api/user";
 import { brandAssets } from "./data/brandAssets";
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from "./helper/authCookie";
+import { AUTH_SESSION_EXPIRED_EVENT, resetAuthSessionExpiryNotice, SESSION_EXPIRED_MESSAGE } from "./helper/authSession";
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
 const PROFILE_STORAGE_KEY = "keymiyay-user-profile";
@@ -89,6 +90,28 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
       setIsLoginOpen(true);
     }
   }, [initialPage, initialDashboardSection]);
+
+  useEffect(() => {
+    const handleSessionExpired = (event) => {
+      setIsLoggedIn(false);
+      setIsUserMenuOpen(false);
+      setDashboardSectionRequest(null);
+      setIsProfileCompletionOpen(false);
+      setProfileCompletionError("");
+      setProfileCompletionSuccess("");
+      setUserProfile(null);
+      setProfileMobile("");
+      setCurrentPage("business");
+      setLoginError(event?.detail?.message || SESSION_EXPIRED_MESSAGE);
+      setIsLoginOpen(true);
+    };
+
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+
+    return () => {
+      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+    };
+  }, []);
 
   useEffect(() => {
     if (!hasCheckedAuth || !canUseStorage()) {
@@ -173,6 +196,7 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
         return;
       }
 
+      resetAuthSessionExpiryNotice();
       setIsLoggedIn(true);
       setIsLoginOpen(false);
       setIsUserMenuOpen(false);
@@ -412,7 +436,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
 }
 
 export default App;
-
 
 
 

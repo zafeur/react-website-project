@@ -37,9 +37,6 @@ const getProfileName = (profile) => {
   return [firstName, lastName].filter(Boolean).join(' ') || fullName || DEFAULT_USER_NAME;
 };
 
-const getProfileShortName = (profile) =>
-  firstValue(profile, ['firstName', 'first_name', 'name']) || getProfileName(profile);
-
 const normalizeMediaUrl = (value = '') => {
   const text = String(value || '').trim().replace(/^\"|\"$/g, '');
   if (!text || text === '[]') return '';
@@ -63,7 +60,6 @@ const getProfileAvatar = (profile) => normalizeMediaUrl(firstValue(profile, [
 
 function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onLogout, onLogin, isDarkMode = false, onToggleTheme, userProfile, loginLabel = LOGIN_LABEL }) {
   const userName = getProfileName(userProfile);
-  const userShortName = getProfileShortName(userProfile);
   const userAvatar = getProfileAvatar(userProfile) || defaultProfileAvatar;
 
   const openAccount = () => {
@@ -113,7 +109,7 @@ function Header({ isLoggedIn, isUserMenuOpen, onToggleUserMenu, onDashboard, onL
           <div className="user-menu-wrap">
             <button className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`} type="button" onClick={onToggleUserMenu}>
               <span className="user-mini-avatar"><img src={userAvatar} alt={userName} /></span>
-              <span className="user-menu-name" dir="rtl">{userShortName}</span>
+              <span className="user-menu-name" dir="rtl">{userName}</span>
               <ChevronDown />
             </button>
             {isUserMenuOpen && (
