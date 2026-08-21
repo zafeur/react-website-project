@@ -54,6 +54,66 @@
 .panel-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 34px; }
 .panel-head-row h2, .history-panel h2, .stats-panel h2, .invite-card h2 { margin: 0; color: #171717; font-size: 26px; font-weight: 800; }
 .panel-head-row a { color: var(--green); font-size: 17px; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
+.dashboard-gifts-sections {
+  display: grid;
+  gap: 22px;
+}
+
+.dashboard-gift-subsection {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(116, 51, 163, .14);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(235, 7, 138, .07), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(252, 248, 255, .94));
+}
+
+.dashboard-gift-subsection--codes {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(116, 51, 163, .08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(255, 247, 252, .94));
+}
+
+.dashboard-gift-subsection-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.dashboard-gift-subsection-head > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dashboard-gift-subsection-head svg {
+  width: 26px;
+  height: 26px;
+  color: var(--green);
+  stroke-width: 2.2;
+}
+
+.dashboard-gift-subsection-head h3 {
+  margin: 0;
+  color: #171717;
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.dashboard-gift-subsection-head > span {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(116, 51, 163, .08);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 900;
+}
+
 .active-gifts-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: stretch; }
 .active-gift-card { overflow: hidden; min-height: 0; display: grid; grid-template-columns: 128px minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 8px 18px rgba(0,0,0,.025); }
 .active-gift-card:hover { transform: translateY(-5px); box-shadow: 0 16px 30px rgba(0,0,0,.09); }
@@ -156,6 +216,14 @@
   background: rgba(116, 51, 163, .035);
 }
 
+.active-gift-list li:not(.has-discount-code) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.active-gift-list li:not(.has-discount-code) strong {
+  white-space: normal;
+}
+
 .active-gift-list strong {
   display: block;
   margin-bottom: 4px;
@@ -176,17 +244,62 @@
   line-height: 1.5;
 }
 
-.active-gift-card .active-gift-list span {
+.active-gift-meta-line {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.active-gift-status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.active-gift-status-badge.is-active {
+  background: rgba(16, 185, 129, .14);
+  color: #047857;
+}
+
+.active-gift-status-badge.is-inactive {
+  background: rgba(239, 68, 68, .10);
+  color: #dc2626;
+}
+
+.active-gift-code-cell {
+  display: inline-flex;
+  justify-self: start;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.active-gift-card .active-gift-code-cell > span {
   display: inline-flex;
   width: fit-content;
   max-width: 100%;
-  justify-self: start;
   padding: 4px 9px;
   border-radius: 999px;
   background: rgba(235, 7, 138, .09);
   color: #cc1e1e;
   font-size: 13px;
   direction: ltr;
+}
+
+.active-gift-card .active-gift-list .active-gift-used-badge,
+.active-gift-list .active-gift-used-badge {
+  background: rgba(116, 51, 163, .10);
+  color: var(--green, #7433a3);
+  direction: rtl;
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .dashboard-bottom-grid { display: grid; grid-template-columns: 1fr 576px; gap: 22px; margin-top: 18px; direction: ltr; }
@@ -671,6 +784,7 @@
 html.theme-dark .page-shell .dashboard-page .panel,
 html.theme-dark .page-shell .dashboard-page .dashboard-action-card,
 html.theme-dark .page-shell .dashboard-page .active-gift-card,
+html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection,
 html.theme-dark .page-shell .dashboard-page .history-list,
 html.theme-dark .page-shell .dashboard-page .history-item,
 html.theme-dark .page-shell .dashboard-page .stats-panel,
@@ -685,6 +799,7 @@ html.theme-dark .page-shell .dashboard-page .mobile-wallet-business,
 .page-shell.theme-dark .dashboard-page .panel,
 .page-shell.theme-dark .dashboard-page .dashboard-action-card,
 .page-shell.theme-dark .dashboard-page .active-gift-card,
+.page-shell.theme-dark .dashboard-page .dashboard-gift-subsection,
 .page-shell.theme-dark .dashboard-page .history-list,
 .page-shell.theme-dark .dashboard-page .history-item,
 .page-shell.theme-dark .dashboard-page .stats-panel,
@@ -702,8 +817,8 @@ html.theme-dark .page-shell .dashboard-page .mobile-wallet-business,
   box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
 }
 
-html.theme-dark .page-shell .dashboard-page :where(.panel-head-row h2, .history-panel h2, .stats-panel h2, .dashboard-action-card span, .dashboard-action-card svg, .active-gift-card h3, .history-item h3, .history-item strong, .stat-item strong, .wallet-summary h2, .wallet-history h3, .wallet-business-card h3, .wallet-history-item strong, .mobile-profile-card h1, .mobile-profile-item span, .mobile-wallet-head span, .mobile-wallet-business h3),
-.page-shell.theme-dark .dashboard-page :where(.panel-head-row h2, .history-panel h2, .stats-panel h2, .dashboard-action-card span, .dashboard-action-card svg, .active-gift-card h3, .history-item h3, .history-item strong, .stat-item strong, .wallet-summary h2, .wallet-history h3, .wallet-business-card h3, .wallet-history-item strong, .mobile-profile-card h1, .mobile-profile-item span, .mobile-wallet-head span, .mobile-wallet-business h3) {
+html.theme-dark .page-shell .dashboard-page :where(.panel-head-row h2, .history-panel h2, .stats-panel h2, .dashboard-action-card span, .dashboard-action-card svg, .dashboard-gift-subsection-head h3, .active-gift-card h3, .history-item h3, .history-item strong, .stat-item strong, .wallet-summary h2, .wallet-history h3, .wallet-business-card h3, .wallet-history-item strong, .mobile-profile-card h1, .mobile-profile-item span, .mobile-wallet-head span, .mobile-wallet-business h3),
+.page-shell.theme-dark .dashboard-page :where(.panel-head-row h2, .history-panel h2, .stats-panel h2, .dashboard-action-card span, .dashboard-action-card svg, .dashboard-gift-subsection-head h3, .active-gift-card h3, .history-item h3, .history-item strong, .stat-item strong, .wallet-summary h2, .wallet-history h3, .wallet-business-card h3, .wallet-history-item strong, .mobile-profile-card h1, .mobile-profile-item span, .mobile-wallet-head span, .mobile-wallet-business h3) {
   color: #f7f1fb;
 }
 
@@ -1063,6 +1178,34 @@ html.theme-dark .page-shell .dashboard-page .account-info-icon,
 @media (max-width: 768px) {
   .mobile-dashboard-section {
     margin-top: 18px;
+  }
+
+  .dashboard-gifts-sections {
+    gap: 16px;
+  }
+
+  .dashboard-gift-subsection {
+    gap: 13px;
+    padding: 14px;
+    border-radius: 13px;
+  }
+
+  .dashboard-gift-subsection-head {
+    gap: 10px;
+  }
+
+  .dashboard-gift-subsection-head h3 {
+    font-size: 17px;
+  }
+
+  .dashboard-gift-subsection-head svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .dashboard-gift-subsection-head > span {
+    padding: 5px 10px;
+    font-size: 12px;
   }
 
   .mobile-section-card {

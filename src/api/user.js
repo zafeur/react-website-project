@@ -35,6 +35,15 @@ const firstObject = (...values) => {
   return null;
 };
 
+const isTruthyFlag = (value) => value === 1 || value === true || value === "1";
+
+const isActiveGiftItem = (item) => {
+  const active = item?.gift_active ?? item?.giftActive ?? item?.active ?? item?.is_active ?? item?.isActive;
+  return active === undefined || active === null || active === "" || isTruthyFlag(active);
+};
+
+const isActiveDiscountCodeItem = (item) => isTruthyFlag(item?.active ?? item?.is_active ?? item?.isActive);
+
 const PROFILE_SAVE_FALLBACK_MESSAGE = "ذخیره اطلاعات انجام نشد.";
 const DUPLICATE_EMAIL_MESSAGE = "این ایمیل قبلا برای حساب دیگری ثبت شده است. لطفا ایمیل دیگری وارد کنید.";
 
@@ -120,8 +129,27 @@ export const getUserGifts = async () => {
 export const extractActiveGiftsFromReport = (payload) => {
   const data = payload?.data || payload;
   const report = data?.report || data?.discount_report || data?.discountReport;
+
+  return firstArray(
+    payload?.gifts,
+    payload?.data?.gifts,
+    report?.gifts,
+    payload?.active_gifts,
+    payload?.activeGifts,
+    payload?.data?.active_gifts,
+    payload?.data?.activeGifts,
+    report?.active_gifts,
+    report?.activeGifts,
+    Array.isArray(data) ? data : undefined
+  );
+};
+
+export const extractActiveDiscountCodesFromReport = (payload) => {
+  const data = payload?.data || payload;
+  const report = data?.report || data?.discount_report || data?.discountReport;
   const user = data?.user || report?.user || payload?.user;
-  const preferredCodes = firstArray(
+
+  return firstArray(
     user?.discount_codes,
     user?.discountCodes,
     report?.user?.discount_codes,
@@ -129,51 +157,14 @@ export const extractActiveGiftsFromReport = (payload) => {
     payload?.user?.discount_codes,
     payload?.user?.discountCodes,
     payload?.data?.user?.discount_codes,
-    payload?.data?.user?.discountCodes
-  );
-
-  const activeUnusedCodes = preferredCodes.filter((item) => {
-    const giftActive = item?.collection?.gift_active ?? item?.collection?.giftActive ?? item?.gift_active ?? item?.giftActive;
-    const hasActiveGift = giftActive === 1 || giftActive === true || giftActive === "1";
-    const isUsed =
-      item?.is_used === 1 ||
-      item?.is_used === true ||
-      item?.is_used === "1" ||
-      item?.gift_used === 1 ||
-      item?.gift_used === true ||
-      item?.gift_used === "1" ||
-      Boolean(item?.used_at);
-    return hasActiveGift && !isUsed;
-  });
-
-  if (activeUnusedCodes.length) {
-    return activeUnusedCodes;
-  }
-
-  return firstArray(
-    payload?.active_gifts,
-    payload?.activeGifts,
-    payload?.codes,
-    payload?.discounts,
+    payload?.data?.user?.discountCodes,
     payload?.discount_codes,
     payload?.discountCodes,
-    payload?.data?.active_gifts,
-    payload?.data?.activeGifts,
-    payload?.data?.codes,
-    payload?.data?.discounts,
     payload?.data?.discount_codes,
     payload?.data?.discountCodes,
-    report?.active_gifts,
-    report?.activeGifts,
-    report?.codes,
-    report?.discounts,
     report?.discount_codes,
-    report?.discountCodes,
-    payload?.gifts,
-    payload?.data?.gifts,
-    report?.gifts,
-    Array.isArray(data) ? data : undefined
-  );
+    report?.discountCodes
+  ).filter(isActiveDiscountCodeItem);
 };
 
 export const extractUserGifts = (payload) => {

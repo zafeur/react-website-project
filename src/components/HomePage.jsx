@@ -1,5 +1,5 @@
 ﻿import { faqs } from '../data/faqData';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
@@ -33,6 +33,8 @@ import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, 
 import { AUTH_SESSION_EXPIRED_EVENT, isAuthExpiredError, resetAuthSessionExpiryNotice, SESSION_EXPIRED_MESSAGE } from '../helper/authSession';
 import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
 import InstallAppButton from '../components/InstallAppButton';
+
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 const t = {
   brand: "\u06a9\u06cc \u0645\u06cc\u0627\u06cc",
@@ -1217,6 +1219,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [requestingOfferId, setRequestingOfferId] = useState(null);
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
+  const hasBlockingPopup = Boolean(discountPopup || activeStoryIndex !== null);
   const bannerItems = mergeExtraBanners(homeData.banners).filter((banner) => isApiBannerImage(banner?.image));
   const bannerCount = bannerItems.length;
   const bannerDots = bannerCount ? bannerItems : [{ title: 'placeholder-1' }, { title: 'placeholder-2' }, { title: 'placeholder-3' }];
@@ -1259,6 +1262,47 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const primaryCollectionHref = homeData.brands.find((brand) => brand.href && brand.href.startsWith('/collections/'))?.href ||
     getCollectionHref(homeData.offers[0]) ||
     '/#brands';
+
+  useIsomorphicLayoutEffect(() => {
+    if (typeof window === 'undefined' || !hasBlockingPopup) {
+      return undefined;
+    }
+
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    const previousBodyStyles = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+    };
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.scrollBehavior = 'auto';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      document.documentElement.style.scrollBehavior = 'auto';
+      document.body.style.position = previousBodyStyles.position;
+      document.body.style.top = previousBodyStyles.top;
+      document.body.style.left = previousBodyStyles.left;
+      document.body.style.right = previousBodyStyles.right;
+      document.body.style.width = previousBodyStyles.width;
+      document.body.style.overflow = previousBodyStyles.overflow;
+      window.scrollTo(0, scrollY);
+      document.documentElement.style.scrollBehavior = previousScrollBehavior;
+    };
+  }, [hasBlockingPopup]);
+
   useEffect(() => {
     if (typeof window === 'undefined') {
       return undefined;

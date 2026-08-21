@@ -1,7 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { CalendarDays, Crown, Gift, LogOut, Mail, PencilLine, Phone, RefreshCw, UserRound, Wallet } from 'lucide-react';
-import { extractActiveGiftsFromReport, extractUserGifts, extractUserProfileFromReport, getDiscountReport } from '../api/user';
+import { CalendarDays, Crown, Gift, LogOut, Mail, PencilLine, Phone, RefreshCw, TicketPercent, UserRound, Wallet } from 'lucide-react';
+import { extractActiveDiscountCodesFromReport, extractActiveGiftsFromReport, extractUserProfileFromReport, getDiscountReport } from '../api/user';
 import { defaultProfileAvatar } from '../data/brandAssets';
 import { businessProfiles, dashboardActions, mobileProfileLinks } from '../data/siteData';
 import { toPersianDigits } from '../helper/persianDigits';
@@ -134,6 +134,14 @@ const firstArrayValue = (source, keys) => {
     if (Array.isArray(value)) {
       return value;
     }
+  }
+
+  return [];
+};
+
+const firstArray = (...values) => {
+  for (const value of values) {
+    if (Array.isArray(value)) return value;
   }
 
   return [];
@@ -343,6 +351,41 @@ const getGiftTitleFromDescription = (description = '') => {
     .trim();
 };
 
+const cleanReportGiftText = (value = '') => cleanReportText(value)
+  .replace(/\\+"/g, '')
+  .replace(/\\/g, '')
+  .replace(/^"+|"+$/g, '')
+  .replace(/\[\]/g, '')
+  .trim();
+
+const isUsefulGiftDescription = (value = '') => {
+  const text = cleanReportGiftText(value);
+  if (!text || text === '[]') return false;
+
+  const withoutNoise = text.replace(/["'[\]\s،,:：.-]/g, '');
+  return withoutNoise.length > 2 && hasPersianLetters(withoutNoise);
+};
+
+const parsePrimitiveGiftText = (value = '') => {
+  const text = cleanReportText(value);
+  const separatorIndex = text.search(/\s*[:：]\s*/u);
+
+  if (separatorIndex === -1) {
+    return {
+      collectionName: text,
+      description: '',
+    };
+  }
+
+  const collectionName = cleanReportText(text.slice(0, separatorIndex));
+  const rawDescription = cleanReportGiftText(text.slice(separatorIndex + 1));
+
+  return {
+    collectionName,
+    description: isUsefulGiftDescription(rawDescription) ? rawDescription : '',
+  };
+};
+
 const formatPersianDateTime = (value = '') => {
   const normalized = cleanReportText(value);
   if (!normalized) return '';
@@ -379,6 +422,30 @@ const normalizeGiftStatus = (value, title, place) => {
   return '\u0641\u0639\u0627\u0644';
 };
 
+const isUsedGiftCode = (gift) => {
+  if (isPrimitiveValue(gift)) return false;
+
+  return gift?.is_used === 1 ||
+    gift?.is_used === true ||
+    gift?.is_used === '1' ||
+    gift?.gift_used === 1 ||
+    gift?.gift_used === true ||
+    gift?.gift_used === '1' ||
+    Boolean(gift?.used_at);
+};
+
+const isTruthyStatusFlag = (value) => value === 1 || value === true || value === '1';
+
+const getGiftActiveValue = (gift, collectionFallback) => {
+  if (isPrimitiveValue(gift)) return collectionFallback?.gift_active ?? collectionFallback?.giftActive;
+
+  const collection = gift?.collection || gift?.business || gift?.brand || gift?.code?.collection || collectionFallback;
+  return gift?.gift_active ??
+    gift?.giftActive ??
+    collection?.gift_active ??
+    collection?.giftActive;
+};
+
 const getGiftTimeValue = (gift) => {
   if (isPrimitiveValue(gift)) return '';
 
@@ -388,12 +455,73 @@ const getGiftTimeValue = (gift) => {
     '';
 };
 
+const giftImageKeys = [
+  'profile_image',
+  'profileImage',
+  'profile_photo',
+  'profilePhoto',
+  'banner_image',
+  'bannerImage',
+  'image',
+  'images',
+  'logo',
+  'logo_url',
+  'logoUrl',
+  'logo_path',
+  'logoPath',
+  'image_url',
+  'imageUrl',
+  'image_path',
+  'imagePath',
+  'photo',
+  'photo_url',
+  'photoUrl',
+  'picture',
+  'thumbnail',
+  'avatar',
+];
+
+const mediaObjectKeys = [
+  'url',
+  'src',
+  'path',
+  'file',
+  'file_path',
+  'filePath',
+  'filename',
+  'file_name',
+  'fileName',
+];
+
+const getMediaValue = (source) => {
+  if (!source) return '';
+  if (isPrimitiveValue(source)) return source;
+
+  if (Array.isArray(source)) {
+    return source.map(getMediaValue).find(Boolean) || '';
+  }
+
+  if (typeof source !== 'object') return '';
+
+  const directMedia = firstValue(source, mediaObjectKeys);
+  if (directMedia) return directMedia;
+
+  for (const key of giftImageKeys) {
+    const nestedMedia = getMediaValue(source[key]);
+    if (nestedMedia) return nestedMedia;
+  }
+
+  return '';
+};
+
 const findBusinessProfileForGift = (gift) => {
   if (isPrimitiveValue(gift)) return null;
 
   const collection = gift?.collection || gift?.business || gift?.brand || gift?.code?.collection;
-  const directCollectionId = firstValue(gift, ['collection_id', 'collectionId', 'business_id', 'businessId']);
-  const deepCollectionId = getDeepValue(gift, ['collection_id', 'collectionId', 'business_id', 'businessId', 'id']);
+  const directCollectionIds = [
+    firstValue(gift, ['collection_id', 'collectionId', 'business_id', 'businessId']),
+    collection && typeof collection === 'object' ? firstValue(collection, ['collection_id', 'collectionId', 'id', 'business_id', 'businessId']) : '',
+  ].filter(Boolean).map(String);
   const names = [
     typeof collection === 'string' ? collection : '',
     collection && typeof collection === 'object' ? firstValue(collection, ['prefix', 'slug', 'name', 'title', 'business_name', 'collection_name']) : '',
@@ -410,7 +538,7 @@ const findBusinessProfileForGift = (gift) => {
 
   return businessProfiles.find((profile) => {
     const profileIds = [profile.collectionId, profile.id, profile.slug].filter(Boolean).map(String);
-    return [directCollectionId, deepCollectionId].filter(Boolean).some((id) => profileIds.includes(String(id)));
+    return directCollectionIds.some((id) => profileIds.includes(id));
   });
 };
 
@@ -425,10 +553,26 @@ const getGiftCollectionName = (gift, matchedProfile) => {
     '\u0645\u062c\u0645\u0648\u0639\u0647 \u06a9\u06cc \u0645\u06cc\u0627\u06cc');
 };
 
-const getGiftImage = (gift, matchedProfile) => {
-  if (isPrimitiveValue(gift)) return matchedProfile?.image || matchedProfile?.bannerImage || '';
+const findBusinessProfileByText = (value = '') => {
+  const normalized = normalizeComparable(value);
+  if (!normalized) return null;
 
-  const image = getDeepValue(gift, ['profile_image', 'profileImage', 'banner_image', 'bannerImage', 'image', 'images', 'logo', 'logo_url', 'image_url']);
+  return businessProfiles.find((profile) => {
+    const aliases = Array.isArray(profile.aliases) ? profile.aliases : [];
+    const profileNames = [profile.title, profile.shortTitle, profile.id, profile.slug, ...aliases]
+      .filter(Boolean)
+      .map(normalizeComparable);
+
+    return profileNames.some((profileName) => normalized.includes(profileName) || profileName.includes(normalized));
+  }) || null;
+};
+
+const getGiftImage = (gift, matchedProfile) => {
+  if (isPrimitiveValue(gift)) return normalizeMediaUrl(matchedProfile?.image || matchedProfile?.bannerImage || '');
+
+  const collection = gift?.collection || gift?.business || gift?.brand || gift?.code?.collection;
+  const collectionImage = collection && typeof collection === 'object' ? getMediaValue(collection) : '';
+  const image = getMediaValue(gift) || collectionImage || getDeepValue(gift, giftImageKeys);
   return normalizeMediaUrl(image || matchedProfile?.image || matchedProfile?.bannerImage || '');
 };
 
@@ -467,20 +611,103 @@ const getGiftProfileHref = (gift, matchedProfile) => {
   return routeKey ? `/collections/${routeKey}` : '';
 };
 
-const normalizeGift = (gift, index) => {
-  const primitiveCode = isPrimitiveValue(gift) ? String(gift) : '';
-  const matchedProfile = findBusinessProfileForGift(gift);
-  const collectionName = getGiftCollectionName(gift, matchedProfile);
-  const rawCode = primitiveCode || getDeepValue(gift, ['code', 'discount_code', 'discountCode', 'coupon_code', 'couponCode', 'user_code', 'userCode', 'generated_code', 'generatedCode', 'token', 'discount_token', 'discountToken']);
-  const code = isValidDiscountCode(rawCode) ? cleanReportText(rawCode) : '';
-  const rawTitle = cleanReportText(getDeepValue(gift, ['title', 'gift_name', 'giftName', 'gift_title', 'giftTitle', 'discount_title', 'discountTitle', 'code_title', 'codeTitle']));
-  const descriptionTitle = getGiftTitleFromDescription(getDeepValue(gift, ['description', 'gift_description', 'giftDescription']));
+const getCollectionLookupKeys = (collection = {}) => [
+  firstValue(collection, ['id', 'collection_id', 'collectionId', 'business_id', 'businessId']),
+  firstValue(collection, ['name', 'title', 'collection_name', 'collectionName', 'business_name', 'businessName']),
+  firstValue(collection, ['prefix', 'slug']),
+].filter(Boolean).map((value) => normalizeComparable(value));
+
+const buildReportCollectionLookup = (payload) => {
+  const lookup = new Map();
+  const data = payload?.data || payload;
+  const report = data?.report || data?.discount_report || data?.discountReport;
+  const user = data?.user || report?.user || payload?.user;
+  const allDiscountCodeItems = firstArray(
+    user?.discount_codes,
+    user?.discountCodes,
+    report?.user?.discount_codes,
+    report?.user?.discountCodes,
+    payload?.user?.discount_codes,
+    payload?.user?.discountCodes,
+    payload?.data?.user?.discount_codes,
+    payload?.data?.user?.discountCodes,
+    payload?.discount_codes,
+    payload?.discountCodes,
+    payload?.data?.discount_codes,
+    payload?.data?.discountCodes,
+    report?.discount_codes,
+    report?.discountCodes
+  );
+
+  expandGiftCollections(allDiscountCodeItems).forEach((item) => {
+    if (isPrimitiveValue(item)) return;
+
+    const collection = item?.collection || item?.business || item?.brand || item?.code?.collection;
+    if (!collection || typeof collection !== 'object') return;
+
+    getCollectionLookupKeys(collection).forEach((key) => {
+      lookup.set(key, collection);
+    });
+  });
+
+  return lookup;
+};
+
+const findCollectionInLookup = (lookup, gift) => {
+  if (!lookup?.size) return null;
+
+  const parsedGift = isPrimitiveValue(gift) ? parsePrimitiveGiftText(gift) : null;
+  const candidates = [
+    parsedGift?.collectionName,
+    !isPrimitiveValue(gift) ? firstValue(gift, ['collection_id', 'collectionId', 'business_id', 'businessId']) : '',
+    !isPrimitiveValue(gift) ? getGiftCollectionName(gift, null) : '',
+  ].filter(Boolean).map((value) => normalizeComparable(value));
+
+  for (const candidate of candidates) {
+    if (lookup.has(candidate)) return lookup.get(candidate);
+
+    for (const [key, collection] of lookup.entries()) {
+      if (candidate.includes(key) || key.includes(candidate)) {
+        return collection;
+      }
+    }
+  }
+
+  return null;
+};
+
+const normalizeGift = (gift, index, { includeCode = false, collectionFallback = null } = {}) => {
+  const primitiveGift = isPrimitiveValue(gift) ? parsePrimitiveGiftText(gift) : null;
+  const primitiveCode = includeCode && isPrimitiveValue(gift) ? String(gift) : '';
+  const initialMatchedProfile = primitiveGift
+    ? findBusinessProfileByText(primitiveGift.collectionName)
+    : findBusinessProfileForGift(gift);
+  const fallbackName = collectionFallback && typeof collectionFallback === 'object'
+    ? firstValue(collectionFallback, ['name', 'title', 'collection_name', 'collectionName', 'business_name', 'businessName'])
+    : '';
+  const collectionName = primitiveGift?.collectionName || fallbackName || getGiftCollectionName(gift, initialMatchedProfile);
+  const matchedProfile = initialMatchedProfile || findBusinessProfileByText(collectionName);
+  const rawCode = primitiveCode || (primitiveGift ? '' : getDeepValue(gift, ['code', 'discount_code', 'discountCode', 'coupon_code', 'couponCode', 'user_code', 'userCode', 'generated_code', 'generatedCode', 'token', 'discount_token', 'discountToken']));
+  const code = includeCode && isValidDiscountCode(rawCode) ? cleanReportText(rawCode) : '';
+  const fallbackDescription = collectionFallback && typeof collectionFallback === 'object'
+    ? cleanReportText(firstValue(collectionFallback, ['description', 'gift_description', 'giftDescription', 'text', 'content', 'body']))
+    : '';
+  const reportDescription = primitiveGift ? '' : cleanReportText(getDeepValue(gift, ['description', 'gift_description', 'giftDescription', 'text', 'content', 'body']));
+  const description = primitiveGift?.description ||
+    (isUsefulGiftDescription(reportDescription) ? reportDescription : '') ||
+    fallbackDescription;
+  const rawTitle = primitiveGift ? '' : cleanReportText(getDeepValue(gift, ['title', 'gift_name', 'giftName', 'gift_title', 'giftTitle', 'discount_title', 'discountTitle', 'code_title', 'codeTitle']));
+  const descriptionTitle = getGiftTitleFromDescription(description);
   const title = rawTitle || descriptionTitle || collectionName || '\u0647\u062f\u06cc\u0647 \u0641\u0639\u0627\u0644';
+  const giftText = descriptionTitle || (isUsefulGiftDescription(description) ? description : '') || title;
   const time = normalizeGiftStatus(getGiftTimeValue(gift), title, collectionName);
 
-  const apiImage = getGiftImage(gift, null);
-  const fallbackImage = getGiftImage({}, matchedProfile);
+  const fallbackGift = collectionFallback ? { collection: collectionFallback } : null;
+  const apiImage = (primitiveGift ? '' : getGiftImage(gift, null)) || (fallbackGift ? getGiftImage(fallbackGift, null) : '');
+  const fallbackImage = (fallbackGift ? getGiftImage(fallbackGift, null) : '') || getGiftImage({}, matchedProfile);
   const href = getGiftProfileHref(gift, matchedProfile);
+  const activeValue = getGiftActiveValue(gift, collectionFallback);
+  const isActive = isTruthyStatusFlag(activeValue);
 
   return {
     id: getDeepValue(gift, ['id', 'discount_id', 'discountId', 'code_id', 'codeId']) || code || `${title}-${index}`,
@@ -492,6 +719,11 @@ const normalizeGift = (gift, index) => {
     imageFallback: fallbackImage,
     href,
     code,
+    description,
+    giftText,
+    isActive,
+    statusLabel: isActive ? 'فعال' : 'غیرفعال',
+    isUsed: isUsedGiftCode(gift),
   };
 };
 
@@ -523,8 +755,8 @@ const mergeGiftWithCollection = (gift, collection) => {
       firstValue(collection, ['collection_id', 'collectionId', 'id', 'business_id', 'businessId']),
     collection_name: firstValue(gift, ['collection_name', 'collectionName', 'business_name', 'businessName']) ||
       firstValue(collection, ['collection_name', 'collectionName', 'name', 'title', 'business_name', 'businessName']),
-    profile_image: firstValue(gift, ['profile_image', 'profileImage', 'image', 'logo', 'logo_url']) ||
-      firstValue(collection, ['profile_image', 'profileImage', 'image', 'logo', 'logo_url']),
+    profile_image: getMediaValue(gift) ||
+      getMediaValue(collection),
   };
 };
 
@@ -541,22 +773,37 @@ const expandGiftCollections = (items) => items.flatMap((item) => {
 });
 
 const normalizeGiftListFromPayload = (payload) => {
-  const directItems = expandGiftCollections(extractUserGifts(payload));
   const reportItems = expandGiftCollections(extractActiveGiftsFromReport(payload));
-  return (reportItems.length ? reportItems : directItems).map(normalizeGift);
+  const collectionLookup = buildReportCollectionLookup(payload);
+  return reportItems.map((gift, index) => {
+    const collectionFallback = findCollectionInLookup(collectionLookup, gift);
+    const source = isPrimitiveValue(gift) && collectionFallback
+      ? { collection: collectionFallback }
+      : gift;
+
+    return normalizeGift(source, index, { collectionFallback });
+  });
 };
 
-const groupGiftItems = (items) => {
+const normalizeDiscountCodeListFromPayload = (payload) =>
+  expandGiftCollections(extractActiveDiscountCodesFromReport(payload))
+    .map((gift, index) => normalizeGift(gift, index, { includeCode: true }))
+    .filter((gift) => gift.code);
+
+const groupGiftItems = (items, { compactRows = false } = {}) => {
   const groups = new Map();
 
   items.forEach((gift) => {
     const hasUsefulCollection = gift.place && !isGenericGiftLabel(gift.place);
     const titleLooksLikeCollection = isGenericGiftLabel(gift.place) && gift.title;
     const groupTitle = hasUsefulCollection ? gift.place : titleLooksLikeCollection ? gift.title : gift.place || 'مجموعه کی میای';
-    const rowTitle = hasUsefulCollection ? gift.title : 'هدیه فعال';
+    const rowTitle = compactRows
+      ? 'کد تخفیف'
+      : gift.giftText || (hasUsefulCollection ? gift.title : 'هدیه فعال');
     const normalizedGift = {
       ...gift,
       title: rowTitle,
+      time: compactRows ? (gift.isUsed ? 'استفاده شده' : 'فعال') : gift.time,
     };
     const key = gift.collectionId || groupTitle || gift.href || gift.id || 'gifts';
     const existing = groups.get(key);
@@ -582,6 +829,7 @@ const groupGiftItems = (items) => {
 function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, onLogout, onProfileFromReport }) {
   const [activeSection, setActiveSection] = useState('gifts');
   const [activeGiftItems, setActiveGiftItems] = useState([]);
+  const [activeDiscountCodeItems, setActiveDiscountCodeItems] = useState([]);
   const [walletSummary, setWalletSummary] = useState(() => buildWalletSummary(null, userProfile));
   const [isReportLoading, setIsReportLoading] = useState(false);
   const [reportError, setReportError] = useState('');
@@ -598,6 +846,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
   const profileLevel = profileIsComplete ? 'اطلاعات تکمیل شده' : 'تکمیل نشده';
   const profileScore = `${toPersianDigits(profilePoints)} امتیاز`;
   const profileAvatar = getProfileAvatar(userProfile) || defaultProfileAvatar;
+  const activeGiftTotal = activeGiftItems.length + activeDiscountCodeItems.length;
 
   const loadActiveGifts = async () => {
     try {
@@ -611,8 +860,10 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
       }
       setWalletSummary(buildWalletSummary(data, reportProfile || userProfile));
       setActiveGiftItems(normalizeGiftListFromPayload(data));
+      setActiveDiscountCodeItems(normalizeDiscountCodeListFromPayload(data));
     } catch (error) {
       setActiveGiftItems([]);
+      setActiveDiscountCodeItems([]);
       setWalletSummary(buildWalletSummary(null, userProfile));
       setReportError('دریافت هدیه‌ها انجام نشد.');
     } finally {
@@ -709,22 +960,14 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
     return null;
   }
 
-  const renderActiveGifts = (mobile = false) => {
-    if (isReportLoading) {
-      return <p className="dashboard-empty-state">در حال دریافت هدیه‌ها...</p>;
-    }
-
-    if (reportError) {
-      return <p className="dashboard-empty-state">{reportError}</p>;
-    }
-
-    if (!activeGiftItems.length) {
-      return <p className="dashboard-empty-state">هدیه‌ای برای این حساب ثبت نشده است.</p>;
+  const renderGiftList = (items, { mobile = false, showCodes = false, emptyMessage }) => {
+    if (!items.length) {
+      return <p className="dashboard-empty-state">{emptyMessage}</p>;
     }
 
     const listClass = mobile ? 'mobile-active-gifts-list' : 'active-gifts-grid';
     const itemClass = mobile ? 'mobile-active-gift' : 'active-gift-card';
-    const groupedGifts = groupGiftItems(activeGiftItems);
+    const groupedGifts = groupGiftItems(items, { compactRows: showCodes });
 
     return (
       <div className={listClass}>
@@ -740,18 +983,78 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
               <h3>{group.title}</h3>
               <ul className="active-gift-list">
                 {group.gifts.map((gift) => (
-                  <li key={gift.id}>
+                  <li key={gift.id} className={showCodes ? 'has-discount-code' : ''}>
                     <div>
                       <strong>{gift.title}</strong>
-                      <small>{gift.time}</small>
+                      {showCodes ? (
+                        <small>{gift.time}</small>
+                      ) : (
+                        <small className="active-gift-meta-line">
+                          <span className={`active-gift-status-badge ${gift.isActive ? 'is-active' : 'is-inactive'}`}>{gift.statusLabel}</span>
+                          {gift.time ? <span>{gift.time}</span> : null}
+                        </small>
+                      )}
                     </div>
-                    {gift.code ? <span dir="ltr">{gift.code}</span> : <span>بدون کد</span>}
+                    {showCodes ? (
+                      <div className="active-gift-code-cell">
+                        <span dir="ltr">{gift.code}</span>
+                        {gift.isUsed ? <span className="active-gift-used-badge">استفاده شده</span> : null}
+                      </div>
+                    ) : null}
                   </li>
                 ))}
               </ul>
             </div>
           </article>
         ))}
+      </div>
+    );
+  };
+
+  const renderActiveGifts = (mobile = false) => {
+    if (isReportLoading) {
+      return <p className="dashboard-empty-state">در حال دریافت هدیه‌ها...</p>;
+    }
+
+    if (reportError) {
+      return <p className="dashboard-empty-state">{reportError}</p>;
+    }
+
+    if (!activeGiftItems.length && !activeDiscountCodeItems.length) {
+      return <p className="dashboard-empty-state">هدیه‌ای برای این حساب ثبت نشده است.</p>;
+    }
+
+    return (
+      <div className="dashboard-gifts-sections">
+        <section className="dashboard-gift-subsection">
+          <div className="dashboard-gift-subsection-head">
+            <div>
+              <Gift />
+              <h3>هدیه ها</h3>
+            </div>
+            <span>{toPersianDigits(activeGiftItems.length)} هدیه</span>
+          </div>
+          {renderGiftList(activeGiftItems, {
+            mobile,
+            showCodes: false,
+            emptyMessage: 'هدیه‌ای برای این حساب ثبت نشده است.',
+          })}
+        </section>
+
+        <section className="dashboard-gift-subsection dashboard-gift-subsection--codes">
+          <div className="dashboard-gift-subsection-head">
+            <div>
+              <TicketPercent />
+              <h3>کد های فعال</h3>
+            </div>
+            <span>{toPersianDigits(activeDiscountCodeItems.length)} کد</span>
+          </div>
+          {renderGiftList(activeDiscountCodeItems, {
+            mobile,
+            showCodes: true,
+            emptyMessage: 'کد تخفیف فعالی برای این حساب ثبت نشده است.',
+          })}
+        </section>
       </div>
     );
   };
@@ -855,7 +1158,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
             <section className="mobile-section-card">
               <div className="mobile-section-head">
                 <h2>هدیه‌های من</h2>
-                <span>{activeGiftItems.length} هدیه</span>
+                <span>{toPersianDigits(activeGiftTotal)} مورد</span>
               </div>
               {renderActiveGifts(true)}
             </section>
