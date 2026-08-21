@@ -16,8 +16,6 @@ const labels = {
   year: "\u0633\u0627\u0644",
   month: "\u0645\u0627\u0647",
   day: "\u0631\u0648\u0632",
-  persianCalendar: "\u0641\u0627\u0631\u0633\u06cc",
-  gregorianCalendar: "\u0645\u06cc\u0644\u0627\u062f\u06cc",
   confirmDate: "\u062a\u0627\u06cc\u06cc\u062f \u062a\u0627\u0631\u06cc\u062e",
   avatar: "\u067e\u0631\u0648\u0641\u0627\u06cc\u0644",
 };
@@ -25,25 +23,17 @@ const labels = {
 const toPersianDigits = (value) => String(value ?? "").replace(/[0-9]/g, (digit) => String.fromCharCode(0x06f0 + Number(digit)));
 const toEnglishDigits = (value) => String(value ?? "").replace(/[\u06f0-\u06f9]/g, (digit) => String(digit.charCodeAt(0) - 0x06f0));
 const pad2 = (value) => String(value).padStart(2, "0");
-const persianYears = Array.from({ length: 91 }, (_, index) => 1320 + index);
+const CALENDAR_MODE = "gregorian";
 const gregorianYears = Array.from({ length: 91 }, (_, index) => new Date().getFullYear() - index);
 const months = Array.from({ length: 12 }, (_, index) => index + 1);
 const days = Array.from({ length: 31 }, (_, index) => index + 1);
 
-const getDefaultDateParts = (calendarMode) => calendarMode === "gregorian"
-  ? { year: 2000, month: 1, day: 1 }
-  : { year: 1405, month: 5, day: 13 };
+const getDefaultDateParts = () => ({ year: 2000, month: 1, day: 1 });
 
-const inferCalendarMode = (value = "", explicitMode = "") => {
-  if (explicitMode === "gregorian" || explicitMode === "persian") return explicitMode;
-  const year = Number(toEnglishDigits(value).match(/\d{4}/)?.[0]);
-  return year >= 1700 ? "gregorian" : "persian";
-};
-
-const parseDateParts = (value = "", calendarMode = "persian") => {
+const parseDateParts = (value = "") => {
   const normalized = toEnglishDigits(value);
   const match = normalized.match(/(\d{4})[/-](\d{1,2})[/-](\d{1,2})/);
-  const fallback = getDefaultDateParts(calendarMode);
+  const fallback = getDefaultDateParts();
 
   return {
     year: Number(match?.[1]) || fallback.year,
@@ -57,18 +47,16 @@ const displayDate = (value) => toPersianDigits(value);
 
 function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoading = false, error = "", onClose, onSubmit }) {
   const initialBirthDate = initialProfile.birthDate || initialProfile.birth_date || initialProfile.date || "";
-  const initialCalendarMode = inferCalendarMode(initialBirthDate, initialProfile.birthDateCalendar || initialProfile.birth_date_calendar || initialProfile.calendar_type);
   const [form, setForm] = useState({
     firstName: initialProfile.firstName || initialProfile.first_name || "",
     lastName: initialProfile.lastName || initialProfile.last_name || "",
     email: initialProfile.email || "",
     birthDate: initialBirthDate,
-    birthDateCalendar: initialCalendarMode,
+    birthDateCalendar: CALENDAR_MODE,
     avatarPreview: initialProfile.avatarPreview || initialProfile.avatar_preview || initialProfile.avatar || initialProfile.profile_image || defaultProfileAvatar,
   });
-  const [calendarMode, setCalendarMode] = useState(initialCalendarMode);
   const [isBirthDatePickerOpen, setIsBirthDatePickerOpen] = useState(false);
-  const [birthDateParts, setBirthDateParts] = useState(() => parseDateParts(initialBirthDate, initialCalendarMode));
+  const [birthDateParts, setBirthDateParts] = useState(() => parseDateParts(initialBirthDate));
 
   useEffect(() => {
     document.documentElement.classList.add("keymiyay-modal-open");
@@ -90,20 +78,12 @@ function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoa
     updateField("birthDate", formatDate(nextParts));
   };
 
-  const changeCalendarMode = (nextMode) => {
-    if (nextMode === calendarMode) return;
-    const nextParts = parseDateParts("", nextMode);
-    setCalendarMode(nextMode);
-    setBirthDateParts(nextParts);
-    setForm((current) => ({ ...current, birthDate: current.birthDate ? formatDate(nextParts) : "", birthDateCalendar: nextMode }));
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await onSubmit({ ...form, birthDateCalendar: calendarMode, mobile: initialMobile });
+    await onSubmit({ ...form, birthDateCalendar: CALENDAR_MODE, mobile: initialMobile });
   };
 
-  const yearOptions = calendarMode === "gregorian" ? gregorianYears : persianYears;
+  const yearOptions = gregorianYears;
 
   return (
     <div className="login-backdrop profile-completion-backdrop" onClick={onClose}>
@@ -148,10 +128,6 @@ function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoa
 
             {isBirthDatePickerOpen && (
               <div className="birth-date-picker" role="group" aria-label={labels.birthDate}>
-                <div className="birth-date-calendar-toggle" aria-label={labels.birthDate}>
-                  <button className={calendarMode === "persian" ? "is-active" : ""} type="button" onClick={() => changeCalendarMode("persian")}>{labels.persianCalendar}</button>
-                  <button className={calendarMode === "gregorian" ? "is-active" : ""} type="button" onClick={() => changeCalendarMode("gregorian")}>{labels.gregorianCalendar}</button>
-                </div>
                 <label><span>{labels.year}</span><select value={birthDateParts.year} onChange={(event) => updateBirthDatePart("year", event.target.value)}>{yearOptions.map((year) => <option value={year} key={year}>{toPersianDigits(year)}</option>)}</select></label>
                 <label><span>{labels.month}</span><select value={birthDateParts.month} onChange={(event) => updateBirthDatePart("month", event.target.value)}>{months.map((month) => <option value={month} key={month}>{toPersianDigits(pad2(month))}</option>)}</select></label>
                 <label><span>{labels.day}</span><select value={birthDateParts.day} onChange={(event) => updateBirthDatePart("day", event.target.value)}>{days.map((day) => <option value={day} key={day}>{toPersianDigits(pad2(day))}</option>)}</select></label>

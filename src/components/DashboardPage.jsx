@@ -295,7 +295,7 @@ const normalizeWalletTransaction = (item, index) => {
     id: firstValue(item, ['id', 'transaction_id', 'transactionId']) || `${business}-${index}`,
     business,
     title: cleanReportText(firstValue(item, ['type', 'title', 'description', 'reason']) || 'شارژ کیف پول'),
-    date: toPersianDigits(formatPersianDateTime(firstValue(item, ['date', 'created_at', 'createdAt', 'updated_at', 'updatedAt'])) || ''),
+    date: toPersianDigits(formatGregorianDateTime(firstValue(item, ['date', 'created_at', 'createdAt', 'updated_at', 'updatedAt'])) || ''),
     amount: amount || 0,
     amountLabel: toPersianDigits(firstValue(item, ['amountLabel', 'amount_label', 'formatted_amount', 'formattedAmount']) || `${amount >= 0 ? '+' : ''}${formatWalletAmount(amount || 0)}`),
   };
@@ -386,14 +386,14 @@ const parsePrimitiveGiftText = (value = '') => {
   };
 };
 
-const formatPersianDateTime = (value = '') => {
+const formatGregorianDateTime = (value = '') => {
   const normalized = cleanReportText(value);
   if (!normalized) return '';
 
   const date = new Date(normalized);
   if (Number.isNaN(date.getTime())) return normalized;
 
-  return new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+  return new Intl.DateTimeFormat('fa-IR-u-ca-gregory', {
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
@@ -412,7 +412,7 @@ const normalizeGiftStatus = (value, title, place) => {
   const statusWords = ['\u0641\u0639\u0627\u0644', 'active', 'used', 'expired', '\u0645\u0646\u0642\u0636\u06cc', '\u0627\u0633\u062a\u0641\u0627\u062f\u0647'];
   const looksLikeDate = /\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{2,4}/.test(normalized);
   if (looksLikeDate) {
-    return formatPersianDateTime(normalized);
+    return formatGregorianDateTime(normalized);
   }
 
   if (statusWords.some((word) => normalized.toLowerCase().includes(word))) {
