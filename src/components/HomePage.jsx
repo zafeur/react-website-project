@@ -753,9 +753,14 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
   };
 };
 
-const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v2';
+const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v3';
+const HOME_DATA_LEGACY_CACHE_KEYS = ['keymiay:last-home-data:v2'];
 const HOME_MOBILE_CACHE_KEY = 'keymiyay-home-mobile';
 const PROFILE_STORAGE_KEY = 'keymiyay-user-profile';
+
+const stripHomeBanners = (data) => (
+  data && typeof data === 'object' ? { ...data, banners: [] } : data
+);
 
 const loadCachedHomeData = () => {
   if (typeof window === 'undefined') {
@@ -763,8 +768,12 @@ const loadCachedHomeData = () => {
   }
 
   try {
+    HOME_DATA_LEGACY_CACHE_KEYS.forEach((key) => {
+      window.localStorage.removeItem(key);
+    });
+
     const cached = window.localStorage.getItem(HOME_DATA_CACHE_KEY);
-    return cached ? JSON.parse(cached) : null;
+    return cached ? stripHomeBanners(JSON.parse(cached)) : null;
   } catch {
     return null;
   }
@@ -776,7 +785,7 @@ const saveCachedHomeData = (data) => {
   }
 
   try {
-    window.localStorage.setItem(HOME_DATA_CACHE_KEY, JSON.stringify(data));
+    window.localStorage.setItem(HOME_DATA_CACHE_KEY, JSON.stringify(stripHomeBanners(data)));
   } catch {
     // Cache is best-effort only; the page should still work without it.
   }
@@ -849,7 +858,7 @@ const getProfileAvatar = (profile = {}) =>
     'photo',
   ])) || defaultProfileAvatar;
 
-const hasUsableHomeData = (data) => Boolean(data?.stories?.length || data?.offers?.length || data?.brands?.length || data?.banners?.length);
+const hasUsableHomeData = (data) => Boolean(data?.stories?.length || data?.offers?.length || data?.brands?.length);
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
   const brands = normalizeCards(
@@ -859,7 +868,7 @@ const normalizeHomeData = (payload) => {
 
   return {
     stories: normalizeApiStories(data),
-    banners: normalizeCards(normalizeList(data?.banners || data?.sliders || data?.slides, []), []),
+    banners: [],
     brands,
     categories: normalizeCategories(data?.categories),
     offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, [])),

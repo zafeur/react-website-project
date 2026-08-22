@@ -2,10 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Gift, Search, Sparkles, Store } from 'lucide-react';
 import { getAllGifts } from '../api/gifts';
+import { sendOtp, verifyOtp } from '../api/auth';
 import { toPersianDigits } from '../helper/persianDigits';
-import { clearAuthToken, hasAuthToken } from '../helper/authCookie';
-import { AUTH_SESSION_EXPIRED_EVENT } from '../helper/authSession';
+import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
+import { AUTH_SESSION_EXPIRED_EVENT, resetAuthSessionExpiryNotice } from '../helper/authSession';
 import Header from './Header';
+import LoginModal from './LoginModal';
 import MobileBottomNav from './MobileBottomNav';
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.VITE_API_BASE_URL || '';
@@ -201,6 +203,9 @@ function GiftsPage({ isDarkMode = false, onToggleTheme }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   useEffect(() => {
     const loggedIn = hasAuthToken();
@@ -298,6 +303,69 @@ function GiftsPage({ isDarkMode = false, onToggleTheme }) {
     window.location.href = '/dashboard';
   };
 
+  const openLogin = () => {
+    setLoginError('');
+    setIsLoginOpen(true);
+  };
+
+  const closeLogin = () => {
+    setLoginError('');
+    setIsLoginOpen(false);
+  };
+
+  const handleSendOtp = async (mobile) => {
+    try {
+      setIsAuthLoading(true);
+      setLoginError('');
+      const data = await sendOtp(mobile);
+
+      if (data.status === 'otp_sent') {
+        return true;
+      }
+
+      setLoginError('ارسال کد انجام نشد.');
+      return false;
+    } catch (error) {
+      const message = error?.response?.data?.message || error?.message || '';
+
+      if (/mobile.*invalid|mobile.*format/i.test(message)) {
+        setLoginError('شماره موبایل واردشده معتبر نیست.');
+      } else if (/mobile.*required/i.test(message)) {
+        setLoginError('لطفاً شماره موبایل خود را وارد کنید.');
+      } else {
+        setLoginError('خطایی رخ داده است. لطفاً دوباره تلاش کنید.');
+      }
+
+      return false;
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (mobile, otp) => {
+    try {
+      setIsAuthLoading(true);
+      setLoginError('');
+      const data = await verifyOtp({ mobile, otp });
+      const token = getTokenFromAuthResponse(data);
+      const tokenSaved = setAuthToken(token, getUserTypeFromAuthResponse(data));
+
+      if (!tokenSaved) {
+        setLoginError('توکن ورود در کوکی ذخیره نشد.');
+        return;
+      }
+
+      resetAuthSessionExpiryNotice();
+      setIsLoggedIn(true);
+      setIsLoginOpen(false);
+      window.location.href = '/dashboard';
+    } catch (error) {
+      setLoginError(error?.response?.data?.message || 'ورود انجام نشد. لطفاً دوباره تلاش کنید.');
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
   const handleLogout = () => {
     clearAuthToken();
     setIsLoggedIn(false);
@@ -321,7 +389,7 @@ function GiftsPage({ isDarkMode = false, onToggleTheme }) {
           onToggleUserMenu={() => setIsUserMenuOpen((current) => !current)}
           onDashboard={goDashboard}
           onLogout={handleLogout}
-          onLogin={goDashboard}
+          onLogin={openLogin}
           userProfile={userProfile}
         />
 
@@ -408,6 +476,16 @@ function GiftsPage({ isDarkMode = false, onToggleTheme }) {
       </section>
 
       <MobileBottomNav currentPage="gifts" isLoggedIn={false} onNavigate={handleMobileNav} />
+
+      {isLoginOpen && (
+        <LoginModal
+          loginError={loginError}
+          isLoading={isAuthLoading}
+          onClose={closeLogin}
+          onSendOtp={handleSendOtp}
+          onVerifyOtp={handleVerifyOtp}
+        />
+      )}
     </main>
   );
 }

@@ -9408,13 +9408,23 @@ html.theme-dark .home-shell .home-search-offer-results .home-offer-card {
 
 .home-search-offer-results .home-offer-media {
   display: flex !important;
-  height: 164px !important;
-  min-height: 164px !important;
+  width: 132px !important;
+  height: 150px !important;
+  min-width: 132px !important;
+  min-height: 150px !important;
+  max-width: 132px !important;
+  max-height: 150px !important;
   align-items: center !important;
   justify-content: center !important;
   overflow: visible !important;
+  padding: 0 !important;
+  margin: 0 auto 8px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
   border-bottom: 0 !important;
   background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 .home-search-offer-results .home-offer-media::before,
@@ -10913,6 +10923,7 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
 
 /* Absolute final search-logo cleanup: no oval/capsule behind searched offer logos. */
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media,
+.home-shell .home-search-results-section .home-search-offer-results .home-offer-card .home-offer-media,
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media-link {
   border: 0 !important;
   border-radius: 0 !important;
@@ -10923,6 +10934,18 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
 }
 
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media {
+  width: 132px !important;
+  height: 150px !important;
+  min-width: 132px !important;
+  min-height: 150px !important;
+  max-width: 132px !important;
+  max-height: 150px !important;
+  padding: 0 !important;
+  margin: 0 auto 8px !important;
+  overflow: visible !important;
+}
+
+.home-shell .home-search-results-section .home-search-offer-results .home-offer-card .home-offer-media {
   width: 132px !important;
   height: 150px !important;
   min-width: 132px !important;
@@ -10951,6 +10974,8 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
 
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media::before,
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media::after,
+.home-shell .home-search-results-section .home-search-offer-results .home-offer-card .home-offer-media::before,
+.home-shell .home-search-results-section .home-search-offer-results .home-offer-card .home-offer-media::after,
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media-link::before,
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media-link::after,
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media *::before,
@@ -10970,6 +10995,21 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
 }
 
 .home-shell .home-search-results-panel .home-search-offer-results .home-offer-card .home-offer-media img {
+  width: 112px !important;
+  height: 112px !important;
+  min-width: 112px !important;
+  min-height: 112px !important;
+  max-width: 112px !important;
+  max-height: 112px !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.home-shell .home-search-results-section .home-search-offer-results .home-offer-card .home-offer-media img {
   width: 112px !important;
   height: 112px !important;
   min-width: 112px !important;

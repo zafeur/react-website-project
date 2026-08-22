@@ -13,9 +13,39 @@ import { AUTH_SESSION_EXPIRED_EVENT, resetAuthSessionExpiryNotice, SESSION_EXPIR
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
 const PROFILE_STORAGE_KEY = "keymiyay-user-profile";
+const HOME_DATA_LEGACY_CACHE_KEYS = ["keymiay:last-home-data:v2"];
+const CLIENT_CACHE_MIGRATION_KEY = "keymiay:client-cache-migration:v1";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
 const localAvatarChoices = new Set([brandAssets.maleProfile, brandAssets.femaleProfile]);
+
+const clearLegacyClientCaches = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    HOME_DATA_LEGACY_CACHE_KEYS.forEach((key) => {
+      window.localStorage.removeItem(key);
+    });
+
+    window.localStorage.setItem(CLIENT_CACHE_MIGRATION_KEY, "done");
+  } catch {
+    // Cache cleanup is best-effort; stale cache should never block the app.
+  }
+
+  if (!window.caches?.keys) {
+    return;
+  }
+
+  window.caches.keys().then((cacheNames) => {
+    cacheNames.forEach((cacheName) => {
+      window.caches.delete(cacheName);
+    });
+  }).catch(() => {
+    // CacheStorage can be unavailable or denied in some browser modes.
+  });
+};
 
 const hasIncomingAvatar = (profile = {}) => Boolean(
   profile.avatarPreview ||
@@ -50,6 +80,22 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
   const [profileCompletionError, setProfileCompletionError] = useState("");
   const [profileCompletionSuccess, setProfileCompletionSuccess] = useState("");
   const [isProfileSaving, setIsProfileSaving] = useState(false);
+
+  useEffect(() => {
+    if (!canUseStorage()) {
+      return;
+    }
+
+    try {
+      if (localStorage.getItem(CLIENT_CACHE_MIGRATION_KEY) === "done") {
+        return;
+      }
+    } catch {
+      return;
+    }
+
+    clearLegacyClientCaches();
+  }, []);
 
   useEffect(() => {
     if (!canUseStorage()) {
@@ -436,7 +482,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
 }
 
 export default App;
-
 
 
 

@@ -991,7 +991,6 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
                       ) : (
                         <small className="active-gift-meta-line">
                           <span className={`active-gift-status-badge ${gift.isActive ? 'is-active' : 'is-inactive'}`}>{gift.statusLabel}</span>
-                          {gift.time ? <span>{gift.time}</span> : null}
                         </small>
                       )}
                     </div>

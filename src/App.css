@@ -1,6 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+@font-face {
+  font-family: 'Vazirmatn FD';
+  src: url('/home/fonts/Vazirmatn-FD-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazirmatn FD';
+  src: url('/home/fonts/Vazirmatn-FD-Bold.woff2') format('woff2');
+  font-weight: 500 950;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
+  --app-font-family: 'Vazirmatn FD', 'Vazirmatn', Tahoma, Arial, sans-serif;
   --brand-dark: #1b1023;
   --brand-purple: #7433a3;
   --brand-pink: #eb078a;
@@ -17,11 +32,32 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  font-family: var(--app-font-family);
+}
+
 body {
   margin: 0;
   background: #f3f3f3;
   color: var(--text);
-  font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after,
+#__next,
+.page-shell {
+  font-family: inherit;
+}
+
+button,
+input,
+select,
+textarea,
+a,
+[role='button'] {
+  font-family: inherit;
 }
 
 html {

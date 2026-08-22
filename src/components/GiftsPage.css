@@ -150,7 +150,7 @@
   min-width: 0;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 168px minmax(0, 1fr);
+  grid-template-columns: 152px minmax(0, 1fr);
   align-self: stretch;
   border: 1px solid rgba(116, 51, 163, .13);
   border-radius: 18px;
@@ -217,7 +217,7 @@
 }
 
 .gift-business-media {
-  min-height: 100%;
+  min-height: 0;
   background: linear-gradient(145deg, rgba(116, 51, 163, .12), rgba(235, 7, 138, .08));
   overflow: hidden;
 }
@@ -226,7 +226,7 @@
 .gift-business-media span {
   width: 100%;
   height: 100%;
-  min-height: 190px;
+  min-height: 154px;
   display: grid;
   place-items: center;
   transition: transform 260ms cubic-bezier(.22, 1, .36, 1);
@@ -234,6 +234,7 @@
 
 .gift-business-media img {
   object-fit: cover;
+  object-position: center;
 }
 
 .gift-business-media span svg {
@@ -246,50 +247,50 @@
   min-width: 0;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 14px;
-  padding: 18px;
+  gap: 8px;
+  padding: 12px 14px;
 }
 
 .gift-business-head {
   display: flex;
   align-items: start;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px;
 }
 
 .gift-business-head span {
   display: inline-flex;
   width: fit-content;
-  margin-bottom: 6px;
-  padding: 4px 11px;
+  margin-bottom: 4px;
+  padding: 3px 10px;
   border-radius: 999px;
   background: rgba(16, 185, 129, .1);
   color: #16815f;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 900;
 }
 
 .gift-business-head h2 {
   margin: 0;
   color: #171321;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 950;
-  line-height: 1.55;
+  line-height: 1.42;
 }
 
 .gift-business-head strong {
   flex: 0 0 auto;
-  padding: 6px 10px;
+  padding: 5px 9px;
   border-radius: 999px;
   background: #f7efff;
   color: #7433a3;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 950;
 }
 
 .gift-business-list {
   display: grid;
-  gap: 9px;
+  gap: 7px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -298,28 +299,28 @@
 .gift-business-list li {
   min-width: 0;
   display: grid;
-  grid-template-columns: 28px minmax(0, 1fr);
-  gap: 9px;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 7px;
   align-items: start;
-  padding: 10px 12px;
+  padding: 7px 10px;
   border: 1px solid rgba(116, 51, 163, .1);
   border-radius: 12px;
   background: rgba(255, 255, 255, .68);
 }
 
 .gift-business-list svg {
-  width: 18px;
-  height: 18px;
-  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
   color: #d6128c;
 }
 
 .gift-business-list span {
   min-width: 0;
   color: #30273b;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 850;
-  line-height: 1.8;
+  line-height: 1.58;
 }
 
 .gift-business-link {
@@ -329,13 +330,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  padding: 0 16px;
+  min-height: 34px;
+  padding: 0 14px;
   border: 1px solid rgba(255, 255, 255, .28);
   border-radius: 999px;
   background: linear-gradient(135deg, #8b2fc9, #df0785);
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 900;
   text-decoration: none;
   overflow: hidden;
