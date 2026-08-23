@@ -31,6 +31,7 @@ import { sendOtp, verifyOtp } from '../api/auth';
 import { getDiscountCards, requestDiscountCode } from '../api/home';
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
 import { AUTH_SESSION_EXPIRED_EVENT, isAuthExpiredError, resetAuthSessionExpiryNotice, SESSION_EXPIRED_MESSAGE } from '../helper/authSession';
+import { normalizeMediaUrl } from '../helper/mediaUrl';
 import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
 import InstallAppButton from '../components/InstallAppButton';
 
@@ -113,8 +114,6 @@ const storyVideoByTitle = {
 
 const mergeExtraBanners = (banners) => banners;
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.VITE_API_BASE_URL || '';
-
 const isApiBannerImage = (value) => {
   const image = String(value || '').trim();
 
@@ -125,25 +124,11 @@ const isApiBannerImage = (value) => {
   return !image.startsWith('/home/');
 };
 
-const normalizeMediaUrl = (value, fallback) => {
-  if (!value) {
-    return fallback;
-  }
-
-  if (/^(https?:|data:|blob:|\/)/.test(value)) {
-    return value;
-  }
-
-  if (apiBaseUrl) {
-    try {
-      return new URL(value, apiBaseUrl).toString();
-    } catch {
-      return `/${value}`;
-    }
-  }
-
-  return `/${value}`;
-};
+const renderMediaPlaceholder = (label) => (
+  <span className="home-api-image-placeholder" aria-label={label || t.brand}>
+    <Sparkles aria-hidden="true" />
+  </span>
+);
 
 const defaultHomeData = {
   stories: [],
@@ -314,12 +299,9 @@ const normalizeCategories = (items) => {
 
 const resolveHomeData = (data) => data?.data || data?.home || data?.homepage || data || {};
 
-const isRestaurantBrand = (title = '') =>
-  title === t.restaurant || title.toLowerCase().includes('restaurant') || title.includes('\u0645\u0644\u0644');
-
 const normalizeImage = (item, fallback) =>
   normalizeMediaUrl(
-    firstValue(item, ['image', 'images', 'image_url', 'imageUrl', 'image_path', 'imagePath', 'logo', 'logo_url', 'thumbnail', 'thumbnail_url', 'poster']),
+    firstValue(item, ['profile_image', 'profileImage', 'image', 'images', 'image_url', 'imageUrl', 'image_path', 'imagePath', 'logo', 'logo_url', 'thumbnail', 'thumbnail_url', 'poster']),
     fallback
   );
 
@@ -419,7 +401,7 @@ const getKnownBusinessKey = (offer) => {
 };
 
 const getCollectionIdForOffer = (offer) => {
-  const explicitCollectionId = firstValue(offer, ['collectionId', 'collection_id', 'collectionID']);
+  const explicitCollectionId = firstValue(offer, ['collectionId', 'collection_id', 'collectionID', 'wallet_group_id', 'walletGroupId', 'wallet_group']);
   const businessKey = getKnownBusinessKey(offer);
 
   return explicitCollectionId || knownCollectionIdByBusiness[businessKey] || '';
@@ -626,7 +608,17 @@ const buildBrandsFromOffers = (offers) => {
         href: collectionId ? `/collections/${collectionId}` : '#brands',
       };
     })
-    .filter(Boolean);
+    .filter(Boolean)
+    .sort((firstBrand, secondBrand) => {
+      const firstId = Number(firstBrand.collectionId || firstBrand.businessId || 0);
+      const secondId = Number(secondBrand.collectionId || secondBrand.businessId || 0);
+
+      if (Number.isFinite(firstId) && Number.isFinite(secondId) && firstId !== secondId) {
+        return secondId - firstId;
+      }
+
+      return String(firstBrand.title || '').localeCompare(String(secondBrand.title || ''), 'fa');
+    });
 };
 
 const buildStoriesFromOffers = (offers) =>
@@ -723,38 +715,15 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
     ...normalizedHome,
     banners: normalizedDiscount.banners.length ? normalizedDiscount.banners:normalizedHome.banners,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
-    brands: (() => {
-  const brands = discountOffers.length
-    ? buildBrandsFromOffers(discountOffers)
-    : normalizedHome.brands;
-
-  const hasMelal = brands.some(
-    (brand) =>
-      brand.businessId === 'melal' ||
-      getKnownBusinessKey(brand) === 'melal'
-  );
-
-  if (hasMelal) {
-    return brands;
-  }
-
-  return [
-    {
-      title: t.restaurant,
-      businessId: 'melal',
-      collectionId: '',
-      image: '/home/img/restaurant-melal.png',
-      href: '/restaurant',
-    },
-    ...brands,
-  ];
-})(),
+    brands: discountOffers.length
+      ? buildBrandsFromOffers(discountOffers)
+      : normalizedHome.brands,
     offers: mergeOfferLists(normalizedHome.offers, discountOffers),
   };
 };
 
-const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v3';
-const HOME_DATA_LEGACY_CACHE_KEYS = ['keymiay:last-home-data:v2'];
+const HOME_DATA_CACHE_KEY = 'keymiay:last-home-data:v4';
+const HOME_DATA_LEGACY_CACHE_KEYS = ['keymiay:last-home-data:v2', 'keymiay:last-home-data:v3'];
 const HOME_MOBILE_CACHE_KEY = 'keymiyay-home-mobile';
 const PROFILE_STORAGE_KEY = 'keymiyay-user-profile';
 
@@ -1758,17 +1727,12 @@ useEffect(() => {
     let isMounted = true;
     const cachedHomeData = loadCachedHomeData();
 
-    if (cachedHomeData && hasUsableHomeData(cachedHomeData)) {
-      setHomeData(cachedHomeData);
-    }
-
     getDiscountCards().then((discountPayload) => {
       if (!isMounted) {
         return;
       }
 
-      const homePayload = cachedHomeData || emptyHomeData;
-      const nextHomeData = mergeHomeAndDiscountData(homePayload, discountPayload);
+      const nextHomeData = mergeHomeAndDiscountData(emptyHomeData, discountPayload);
 
       setHomeData(nextHomeData);
       saveCachedHomeData(nextHomeData);
@@ -2150,17 +2114,33 @@ useEffect(() => {
     const hasLongDescription = displayedOffer.offerType === 'vip-discount' && offerDescription.length > 80;
     const isDescriptionExpanded = Boolean(expandedOfferIds[offerKey]);
     const collectionHref = getCollectionHref(displayedOffer);
+    const offerImageLabel = displayedOffer.brand || displayedOffer.title || t.brand;
+    const offerImage = displayedOffer.image ? (
+      <>
+        <img
+          src={displayedOffer.image}
+          alt={offerImageLabel}
+          onError={(event) => {
+            event.currentTarget.style.display = 'none';
+            event.currentTarget.nextElementSibling?.classList.remove('d-none');
+          }}
+        />
+        <span className="home-api-image-placeholder d-none" aria-label={offerImageLabel}>
+          <Sparkles aria-hidden="true" />
+        </span>
+      </>
+    ) : renderMediaPlaceholder(offerImageLabel);
 
     return (
       <article className={`home-offer-card home-offer-card--${offerType} ${isInactive ? 'is-inactive' : ''}`} key={offerKey}>
         {displayedOffer.offerType === 'vip-discount' ? <strong className="home-offer-vip-banner">وی‌آی‌پی</strong> : null}
         <div className="home-offer-media">
           {collectionHref ? (
-            <Link className="home-offer-media-link" href={collectionHref} aria-label={displayedOffer.brand || displayedOffer.title}>
-              <img src={displayedOffer.image} alt={displayedOffer.brand} />
+            <Link className="home-offer-media-link" href={collectionHref} aria-label={offerImageLabel}>
+              {offerImage}
             </Link>
           ) : (
-            <img src={displayedOffer.image} alt={displayedOffer.brand} />
+            offerImage
           )}
           <span className="home-offer-percent">{getOfferPercent(displayedOffer)}</span>
           {offerTypeLabel ? <span className="home-offer-kind">{offerTypeLabel}</span> : null}
@@ -2540,19 +2520,7 @@ useEffect(() => {
             <button className="home-text-action" type="button">{t.all}</button>
           </div>
           <div className="home-brand-grid" data-auto-loop="true">
-            {[
-  {
-    title: t.restaurant,
-    businessId: 'melal',
-    image: '/home/img/restaurant-melal.png',
-    href: '/restaurant',
-  },
-  ...homeData.brands.filter(
-    (brand) =>
-      brand.businessId !== 'melal' &&
-      getKnownBusinessKey(brand) !== 'melal'
-  ),
-].map((brand, index) => {
+            {homeData.brands.map((brand, index) => {
   const href = getBrandHref(brand);
 
               return (
@@ -2565,14 +2533,21 @@ useEffect(() => {
                   onPointerUp={(event) => handleBrandPointerUp(event, href)}
                   key={`${brand.title}-${index}`}
                 >
-                  {isRestaurantBrand(brand.title) ? (
-                    <span className="home-brand-melal-logo" aria-label={brand.title}>
-                      <span>{'\u0645\u0644\u0644'}</span>
-                      <small>RESTAURANT</small>
-                    </span>
-                  ) : (
-                    <img src={brand.image} alt={brand.title} />
-                  )}
+                  {brand.image ? (
+                    <>
+                      <img
+                        src={brand.image}
+                        alt={brand.title}
+                        onError={(event) => {
+                          event.currentTarget.style.display = 'none';
+                          event.currentTarget.nextElementSibling?.classList.remove('d-none');
+                        }}
+                      />
+                      <span className="home-api-image-placeholder d-none" aria-label={brand.title}>
+                        <Sparkles aria-hidden="true" />
+                      </span>
+                    </>
+                  ) : renderMediaPlaceholder(brand.title)}
                   <strong>{brand.title}</strong>
                 </Link>
               );

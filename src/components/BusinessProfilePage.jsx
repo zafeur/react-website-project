@@ -14,13 +14,13 @@ import userAvatarImage from '../assets/images/user-avatar.jpg';
 import { getDiscountCards } from '../api/home';
 import { getCollectionDetails, toggleCollectionFollow } from '../api/collections';
 import { getBusinessWallet } from '../api/wallet';
+import { normalizeMediaUrl } from '../helper/mediaUrl';
 import { toPersianDigits } from '../helper/persianDigits';
 import { businessProfiles, stars } from '../data/siteData';
 import BusinessProfileEmptyState from './BusinessProfileEmptyState.jsx';
 
 const getImageSrc = (image) => image?.src || image;
 const DEFAULT_BUSINESS_ID = 'melal';
-const API_MEDIA_BASE_URL = 'https://api.didarads.com/api/v1/';
 const DEFAULT_BUSINESS_IMAGE = '';
 const EMPTY_WALLET_DATA = { wallets: [], transactions: [], totalBalance: 0, source: 'empty' };
 
@@ -67,19 +67,6 @@ const normalizeTextKey = (value = '') => String(value)
   .trim()
   .toLowerCase()
   .replace(/[\s\u200c_\-]+/g, '');
-
-const normalizeMediaUrl = (value, fallback) => {
-  if (!value) return fallback;
-  const text = String(value).trim();
-  const encodedText = text.replace(/\s/g, '%20');
-  if (/^(https?:|data:|blob:)/.test(text)) return encodedText;
-
-  try {
-    return new URL(text, API_MEDIA_BASE_URL).toString();
-  } catch {
-    return fallback;
-  }
-};
 
 const getLocalApiImageMirror = () => '';
 
@@ -186,7 +173,7 @@ const findApiCollection = (payload, businessId) => {
 
   return findCollectionList(payload).find((item) => {
     const values = [
-      firstValue(item, ['id', 'collection_id', 'collectionId']),
+      firstValue(item, ['collection_id', 'collectionId', 'wallet_group_id', 'walletGroupId', 'wallet_group', 'id']),
       firstValue(item, ['prefix', 'slug', 'businessSlug', 'business_slug']),
       firstValue(item, ['name', 'title', 'business_name']),
       firstValue(item, ['images', 'image', 'logo', 'logo_url']),
@@ -241,7 +228,7 @@ const makeEmptyBusinessProfile = (fallbackProfile, collectionId) => ({
 const normalizeApiCollectionProfile = (source, fallbackProfile) => {
   const data = resolveApiData(source) || {};
   const matchedFallbackProfile = findBusinessProfileFromApiData(data, fallbackProfile);
-  const collectionId = firstValue(data, ['collection_id', 'collectionId', 'id']) || matchedFallbackProfile.collectionId;
+  const collectionId = firstValue(data, ['collection_id', 'collectionId', 'wallet_group_id', 'walletGroupId', 'wallet_group', 'id']) || matchedFallbackProfile.collectionId;
   const slug = firstValue(data, ['prefix', 'slug', 'businessSlug', 'business_slug']) || matchedFallbackProfile.slug || matchedFallbackProfile.id;
   const title = firstValue(data, ['title', 'name', 'business_name', 'collection_name']) || '';
   const rawImage = firstValue(data, ['profile_image', 'profileImage', 'image', 'images', 'logo', 'logo_url', 'image_url']);

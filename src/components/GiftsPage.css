@@ -264,10 +264,18 @@
   margin-bottom: 4px;
   padding: 3px 10px;
   border-radius: 999px;
-  background: rgba(16, 185, 129, .1);
-  color: #16815f;
   font-size: 11px;
   font-weight: 900;
+}
+
+.gift-business-status.is-active {
+  background: rgba(16, 185, 129, .1);
+  color: #16815f;
+}
+
+.gift-business-status.is-inactive {
+  background: rgba(148, 163, 184, .16);
+  color: #64748b;
 }
 
 .gift-business-head h2 {
@@ -490,10 +498,16 @@
   background: rgba(255, 255, 255, .06);
 }
 
-.theme-dark .gift-business-head span {
+.theme-dark .gift-business-status.is-active {
   background: rgba(16, 185, 129, .16);
   color: #7df0c4;
   box-shadow: inset 0 0 0 1px rgba(125, 240, 196, .18);
+}
+
+.theme-dark .gift-business-status.is-inactive {
+  background: rgba(148, 163, 184, .16);
+  color: #cbd5e1;
+  box-shadow: inset 0 0 0 1px rgba(203, 213, 225, .14);
 }
 
 .theme-dark .gift-business-head strong {

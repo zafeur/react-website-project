@@ -13,7 +13,7 @@ import { AUTH_SESSION_EXPIRED_EVENT, resetAuthSessionExpiryNotice, SESSION_EXPIR
 
 const PAGE_STORAGE_KEY = "keymiyay-current-page";
 const PROFILE_STORAGE_KEY = "keymiyay-user-profile";
-const HOME_DATA_LEGACY_CACHE_KEYS = ["keymiay:last-home-data:v2"];
+const HOME_DATA_LEGACY_CACHE_KEYS = ["keymiay:last-home-data:v2", "keymiay:last-home-data:v3"];
 const CLIENT_CACHE_MIGRATION_KEY = "keymiay:client-cache-migration:v1";
 
 const canUseStorage = () => typeof window !== "undefined" && window.localStorage;
@@ -482,7 +482,6 @@ function App({ initialPage = "business", initialDashboardSection = null, isDarkM
 }
 
 export default App;
-
 
 
 

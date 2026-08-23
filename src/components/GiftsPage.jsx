@@ -6,12 +6,13 @@ import { sendOtp, verifyOtp } from '../api/auth';
 import { toPersianDigits } from '../helper/persianDigits';
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
 import { AUTH_SESSION_EXPIRED_EVENT, resetAuthSessionExpiryNotice } from '../helper/authSession';
+import { normalizeMediaUrl } from '../helper/mediaUrl';
 import Header from './Header';
 import LoginModal from './LoginModal';
 import MobileBottomNav from './MobileBottomNav';
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.VITE_API_BASE_URL || '';
 const PROFILE_STORAGE_KEY = 'keymiyay-user-profile';
+const EMPTY_VALUE_LABEL = '-';
 
 const isPrimitiveValue = (value) => ['string', 'number', 'boolean'].includes(typeof value);
 
@@ -36,35 +37,27 @@ const firstArray = (...values) => {
   return [];
 };
 
-const cleanText = (value = '') => String(value)
-  .replace(/\r?\n/g, ' ')
-  .replace(/\\+"/g, '')
-  .replace(/["'`“”]+/g, '')
-  .replace(/:\s*"?\[\]"?/g, '')
-  .replace(/"?\[\]"?/g, '')
-  .replace(/^[:\s"']+|[:\s"']+$/g, '')
-  .replace(/\s+/g, ' ')
-  .trim();
-
-const normalizeComparable = (value = '') => cleanText(value).toLowerCase().replace(/[\s\u200c_-]+/g, '');
-
-const normalizeMediaUrl = (value = '') => {
-  const raw = Array.isArray(value) ? value[0] : value;
-  const text = String(raw || '').trim().replace(/^\"|\"$/g, '');
-  if (!text || text === '[]') return '';
-  if (/^(https?:|data:|blob:)/.test(text)) return text;
-  if (text.startsWith('/')) return text;
-
-  if (apiBaseUrl) {
-    try {
-      return new URL(text, apiBaseUrl).toString();
-    } catch {
-      return `/${text}`;
-    }
+const cleanText = (value = '') => {
+  if (value === undefined || value === null) {
+    return '';
   }
 
-  return 'https://api.keymiay.com/images/' + encodeURIComponent(text).replace(/%2F/g, '/');
+  const text = String(value)
+    .replace(/\r?\n/g, ' ')
+    .replace(/\\+"/g, '')
+    .replace(/["'`“”]+/g, '')
+    .replace(/:\s*"?\[\]"?/g, '')
+    .replace(/"?\[\]"?/g, '')
+    .replace(/^[:\s"']+|[:\s"']+$/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return ['null', 'undefined', 'nan'].includes(text.toLowerCase()) ? '' : text;
 };
+
+const displayText = (value) => cleanText(value) || EMPTY_VALUE_LABEL;
+
+const normalizeComparable = (value = '') => cleanText(value).toLowerCase().replace(/[\s\u200c_-]+/g, '');
 
 const parseMaybeJson = (value) => {
   if (Array.isArray(value)) return value;
@@ -120,6 +113,7 @@ const getPayloadCollections = (payload) => {
 };
 
 const getCollectionGifts = (collection) => {
+  const hasExplicitGiftsField = Object.prototype.hasOwnProperty.call(collection || {}, 'gifts');
   const directGifts = firstArray(
     collection?.active_gifts,
     collection?.activeGifts,
@@ -136,7 +130,7 @@ const getCollectionGifts = (collection) => {
       if (isPrimitiveValue(gift)) {
         return {
           id: `${collection?.id || collection?.name || 'gift'}-${index}`,
-          title: cleanText(gift),
+          title: displayText(gift),
           description: '',
         };
       }
@@ -146,19 +140,31 @@ const getCollectionGifts = (collection) => {
 
       return {
         id: firstValue(gift, ['id', 'gift_id', 'giftId']) || `${collection?.id || collection?.name || 'gift'}-${index}`,
-        title: title || getGiftTitleFromDescription(description) || description || 'هدیه فعال',
+        title: title || getGiftTitleFromDescription(description) || description || EMPTY_VALUE_LABEL,
         description,
       };
     }).filter((gift) => gift.title);
   }
 
-  const descriptionGift = getGiftTitleFromDescription(collection?.description);
+  if (hasExplicitGiftsField) {
+    const explicitGiftText = cleanText(collection?.gifts);
 
-  return descriptionGift ? [{
-    id: `${collection?.id || collection?.name || 'collection'}-description`,
-    title: descriptionGift,
-    description: cleanText(collection?.description),
-  }] : [];
+    return [{
+      id: `${collection?.id || collection?.name || 'collection'}-gift`,
+      title: explicitGiftText || EMPTY_VALUE_LABEL,
+      description: '',
+    }];
+  }
+
+  // Disabled: do not infer gifts from the business description.
+  // const descriptionGift = getGiftTitleFromDescription(collection?.description);
+  // return descriptionGift ? [{
+  //   id: `${collection?.id || collection?.name || 'collection'}-description`,
+  //   title: descriptionGift,
+  //   description: cleanText(collection?.description),
+  // }] : [];
+
+  return [];
 };
 
 const normalizeCollection = (collection, index) => {
@@ -176,7 +182,7 @@ const normalizeCollection = (collection, index) => {
   }
 
   const title = cleanText(firstValue(collection, ['name', 'title', 'collection_name', 'collectionName', 'business_name', 'businessName', 'brand_name', 'brandName']));
-  const id = firstValue(collection, ['id', 'collection_id', 'collectionId', 'business_id', 'businessId', 'prefix', 'slug']) || `${title}-${index}`;
+  const id = firstValue(collection, ['collection_id', 'collectionId', 'wallet_group_id', 'walletGroupId', 'wallet_group', 'id', 'business_id', 'businessId', 'prefix', 'slug']) || `${title}-${index}`;
   const image = normalizeMediaUrl(firstValue(collection, ['images', 'image', 'logo', 'logo_url', 'profile_image', 'profileImage', 'banner_image', 'bannerImage']));
   const isActiveGift = firstValue(collection, ['gift_active', 'giftActive', 'active_gift', 'activeGift']);
 
@@ -192,8 +198,7 @@ const normalizeCollection = (collection, index) => {
 };
 
 const normalizeGiftCatalog = (payload) => getPayloadCollections(payload)
-  .map(normalizeCollection)
-  .filter((collection) => collection.gifts.length);
+  .map(normalizeCollection);
 
 function GiftsPage({ isDarkMode = false, onToggleTheme }) {
   const [collections, setCollections] = useState([]);
@@ -446,7 +451,9 @@ function GiftsPage({ isDarkMode = false, onToggleTheme }) {
                 <div className="gift-business-body">
                   <div className="gift-business-head">
                     <div>
-                      <span>{collection.isActive ? 'فعال' : 'غیرفعال'}</span>
+                      <span className={`gift-business-status ${collection.isActive ? 'is-active' : 'is-inactive'}`}>
+                        {collection.isActive ? 'فعال' : 'غیرفعال'}
+                      </span>
                       <h2>{collection.title}</h2>
                     </div>
                     <strong>{toPersianDigits(collection.gifts.length)} هدیه</strong>

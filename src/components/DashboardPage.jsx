@@ -5,19 +5,9 @@ import { extractActiveDiscountCodesFromReport, extractActiveGiftsFromReport, ext
 import { defaultProfileAvatar } from '../data/brandAssets';
 import { businessProfiles, dashboardActions, mobileProfileLinks } from '../data/siteData';
 import { toPersianDigits } from '../helper/persianDigits';
+import { normalizeMediaUrl } from '../helper/mediaUrl';
 
 const getImageSrc = (image) => image?.src || image;
-
-const normalizeMediaUrl = (value = '') => {
-  if (!value) return '';
-  const raw = Array.isArray(value) ? value[0] : value;
-  const text = String(raw).trim().replace(/^\"|\"$/g, '');
-  if (!text || text === '[]') return '';
-  if (/^(https?:|data:|blob:)/.test(text)) return text;
-  if (text.startsWith('/')) return text;
-
-  return 'https://api.keymiay.com/images/' + encodeURIComponent(text).replace(/%2F/g, '/');
-};
 
 const handleGiftImageError = (event, fallback) => {
   if (fallback && event.currentTarget.src !== fallback) {

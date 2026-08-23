@@ -1,6 +1,7 @@
 import { ChevronDown, LayoutDashboard, LogOut, Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
 import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
+import { normalizeMediaUrl } from '../helper/mediaUrl';
 
 const HOME_LABEL = '\u0635\u0641\u062d\u0647 \u0627\u0635\u0644\u06cc';
 const BRAND_LABEL = '\u06a9\u06cc \u0645\u06cc\u0627\u06cc';
@@ -37,13 +38,6 @@ const getProfileName = (profile) => {
   return [firstName, lastName].filter(Boolean).join(' ') || fullName || DEFAULT_USER_NAME;
 };
 
-const normalizeMediaUrl = (value = '') => {
-  const text = String(value || '').trim().replace(/^\"|\"$/g, '');
-  if (!text || text === '[]') return '';
-  if (/^(https?:|data:|blob:)/.test(text)) return text;
-  if (text.startsWith('/')) return text;
-  return 'https://api.keymiay.com/images/' + encodeURIComponent(text).replace(/%2F/g, '/');
-};
 const getProfileAvatar = (profile) => normalizeMediaUrl(firstValue(profile, [
   'avatarPreview',
   'avatar_preview',
