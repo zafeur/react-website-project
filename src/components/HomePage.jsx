@@ -1609,6 +1609,28 @@ useEffect(() => {
 
     let timer;
     let paused = false;
+    let isDragging = false;
+    let didDrag = false;
+    let dragStartX = 0;
+    let dragStartScrollLeft = 0;
+    const dragClickThreshold = 10;
+
+    const getCardScrollDistance = (card, cardIndex) => {
+      const rowRect = row.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+
+      if (cardIndex === 0) {
+        const edgeDistance = cardRect.right - rowRect.right;
+        return Math.sign(edgeDistance || 1) * row.scrollWidth;
+      }
+
+      if (cardIndex === cards.length - 1) {
+        const edgeDistance = cardRect.left - rowRect.left;
+        return Math.sign(edgeDistance || 1) * row.scrollWidth;
+      }
+
+      return cardRect.left + cardRect.width / 2 - (rowRect.left + rowRect.width / 2);
+    };
 
     const getCurrentIndex = () => {
       const rowRect = row.getBoundingClientRect();
@@ -1639,19 +1661,11 @@ useEffect(() => {
       const currentIndex = getCurrentIndex();
       const nextIndex = (currentIndex + 1) % cards.length;
 
-     const rowRect = row.getBoundingClientRect();
-const cardRect = cards[nextIndex].getBoundingClientRect();
-
-const horizontalDistance =
-  cardRect.left +
-  cardRect.width / 2 -
-  (rowRect.left + rowRect.width / 2);
-
-row.scrollBy({
-  left: horizontalDistance,
-  top: 0,
-  behavior: 'smooth',
-});
+      row.scrollBy({
+        left: getCardScrollDistance(cards[nextIndex], nextIndex),
+        top: 0,
+        behavior: 'smooth',
+      });
     };
 
     const start = () => {
@@ -1671,22 +1685,76 @@ row.scrollBy({
       start();
     };
 
-    row.addEventListener('pointerdown', pause);
-    row.addEventListener('pointerup', resume);
-    row.addEventListener('pointercancel', resume);
+    const startDrag = (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) {
+        return;
+      }
+
+      pause();
+      isDragging = true;
+      didDrag = false;
+      dragStartX = event.clientX;
+      dragStartScrollLeft = row.scrollLeft;
+    };
+
+    const moveDrag = (event) => {
+      if (!isDragging) {
+        return;
+      }
+
+      const deltaX = event.clientX - dragStartX;
+
+      if (Math.abs(deltaX) <= dragClickThreshold) {
+        return;
+      }
+
+      didDrag = true;
+      event.preventDefault();
+      row.classList.add('is-dragging');
+      row.setPointerCapture?.(event.pointerId);
+      row.scrollLeft = dragStartScrollLeft - deltaX;
+    };
+
+    const endDrag = (event) => {
+      if (isDragging && row.hasPointerCapture?.(event.pointerId)) {
+        row.releasePointerCapture?.(event.pointerId);
+      }
+
+      isDragging = false;
+      row.classList.remove('is-dragging');
+      resume();
+    };
+
+    const suppressDraggedClick = (event) => {
+      if (!didDrag) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      didDrag = false;
+    };
+
+    row.addEventListener('pointerdown', startDrag);
+    row.addEventListener('pointermove', moveDrag);
+    row.addEventListener('pointerup', endDrag);
+    row.addEventListener('pointercancel', endDrag);
     row.addEventListener('touchstart', pause, { passive: true });
     row.addEventListener('touchend', resume);
+    row.addEventListener('click', suppressDraggedClick, true);
 
     start();
 
     cleanups.push(() => {
       window.clearInterval(timer);
 
-      row.removeEventListener('pointerdown', pause);
-      row.removeEventListener('pointerup', resume);
-      row.removeEventListener('pointercancel', resume);
+      row.removeEventListener('pointerdown', startDrag);
+      row.removeEventListener('pointermove', moveDrag);
+      row.removeEventListener('pointerup', endDrag);
+      row.removeEventListener('pointercancel', endDrag);
       row.removeEventListener('touchstart', pause);
       row.removeEventListener('touchend', resume);
+      row.removeEventListener('click', suppressDraggedClick, true);
     });
   });
 
