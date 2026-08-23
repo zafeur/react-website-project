@@ -1196,6 +1196,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const [isRequestingDiscount, setIsRequestingDiscount] = useState(false);
   const [requestingOfferId, setRequestingOfferId] = useState(null);
   const [expandedOfferIds, setExpandedOfferIds] = useState({});
+  const [overflowingOfferIds, setOverflowingOfferIds] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const hasBlockingPopup = Boolean(discountPopup || activeStoryIndex !== null);
   const bannerItems = mergeExtraBanners(homeData.banners).filter((banner) => isApiBannerImage(banner?.image));
@@ -1240,6 +1241,59 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const primaryCollectionHref = homeData.brands.find((brand) => brand.href && brand.href.startsWith('/collections/'))?.href ||
     getCollectionHref(homeData.offers[0]) ||
     '/#brands';
+
+  useIsomorphicLayoutEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const measureOfferDescriptions = () => {
+      const nextOverflowingOfferIds = {};
+
+      document.querySelectorAll('.home-offer-description[data-offer-key]').forEach((element) => {
+        const offerKey = element.getAttribute('data-offer-key');
+        const card = element.closest('.home-offer-card');
+
+        if (!offerKey || !card?.classList.contains('home-offer-card--vip-discount')) {
+          return;
+        }
+
+        if (expandedOfferIds[offerKey]) {
+          return;
+        }
+
+        if (element.scrollHeight > element.clientHeight + 1 || element.scrollWidth > element.clientWidth + 1) {
+          nextOverflowingOfferIds[offerKey] = true;
+        }
+      });
+
+      setOverflowingOfferIds((current) => {
+        Object.keys(expandedOfferIds).forEach((offerKey) => {
+          if (current[offerKey]) {
+            nextOverflowingOfferIds[offerKey] = true;
+          }
+        });
+
+        const currentKeys = Object.keys(current);
+        const nextKeys = Object.keys(nextOverflowingOfferIds);
+        const isSame =
+          currentKeys.length === nextKeys.length &&
+          nextKeys.every((offerKey) => current[offerKey] === nextOverflowingOfferIds[offerKey]);
+
+        return isSame ? current : nextOverflowingOfferIds;
+      });
+    };
+
+    const frameId = window.requestAnimationFrame(measureOfferDescriptions);
+    const timeoutId = window.setTimeout(measureOfferDescriptions, 250);
+    window.addEventListener('resize', measureOfferDescriptions);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(timeoutId);
+      window.removeEventListener('resize', measureOfferDescriptions);
+    };
+  }, [expandedOfferIds, homeData.offers, filteredOffers.length]);
 
   useIsomorphicLayoutEffect(() => {
     if (typeof window === 'undefined' || !hasBlockingPopup) {
@@ -2111,7 +2165,7 @@ useEffect(() => {
     const offerTypeLabel = getOfferTypeLabel(displayedOffer);
     const offerKey = String(displayedOffer.id || displayedOffer.title || `offer-${index}`);
     const offerDescription = getOfferDescription(displayedOffer);
-    const hasLongDescription = displayedOffer.offerType === 'vip-discount' && offerDescription.length > 80;
+    const hasLongDescription = displayedOffer.offerType === 'vip-discount' && Boolean(overflowingOfferIds[offerKey]);
     const isDescriptionExpanded = Boolean(expandedOfferIds[offerKey]);
     const collectionHref = getCollectionHref(displayedOffer);
     const offerImageLabel = displayedOffer.brand || displayedOffer.title || t.brand;
@@ -2154,7 +2208,7 @@ useEffect(() => {
               <b key={benefit}>{benefit}</b>
             ))}
           </div>
-          <p className={`home-offer-description ${isDescriptionExpanded ? 'is-expanded' : ''}`}>{offerDescription}</p>
+          <p className={`home-offer-description ${isDescriptionExpanded ? 'is-expanded' : ''}`} data-offer-key={offerKey}>{offerDescription}</p>
           {hasLongDescription ? (
             <button
               className="home-offer-read-more"

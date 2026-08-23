@@ -1959,3 +1959,179 @@ html.theme-dark .page-shell .dashboard-page .mobile-wallet-card .dashboard-empty
     padding-inline: 10px !important;
   }
 }
+
+/* User profile gifts: keep business logos inside the fixed media frame. */
+.dashboard-page .active-gift-card > img,
+.dashboard-page .active-gift-card > .active-gift-media-link > img,
+.dashboard-page .mobile-active-gift > img,
+.dashboard-page .mobile-active-gift > .active-gift-media-link > img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  background: #fff !important;
+}
+
+.dashboard-page .active-gift-card > .active-gift-media-link,
+.dashboard-page .mobile-active-gift > .active-gift-media-link {
+  display: grid !important;
+  place-items: center !important;
+  background: #fff !important;
+}
+
+/* Strong frame rule for profile user gifts: uploaded business art must not overflow. */
+.dashboard-page .active-gift-card > .active-gift-media-link {
+  box-sizing: border-box !important;
+  padding: 0 !important;
+}
+
+.dashboard-page .active-gift-card > .active-gift-media-link > img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+}
+
+@media (max-width: 768px) {
+  .dashboard-page .mobile-active-gift > .active-gift-media-link {
+    box-sizing: border-box !important;
+    padding: 8px !important;
+    aspect-ratio: 16 / 8.5 !important;
+    height: auto !important;
+    max-height: 180px !important;
+    min-height: 0 !important;
+    border-radius: 14px !important;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .96), rgba(255, 255, 255, 0) 42%),
+      linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(250, 232, 245, .94)) !important;
+  }
+
+  .dashboard-page .mobile-active-gift > .active-gift-media-link > img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .dashboard-page .mobile-active-gift > .active-gift-media-link > .active-gift-fallback {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    border-radius: 12px !important;
+    background:
+      radial-gradient(circle at 28% 22%, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0) 42%),
+      linear-gradient(135deg, rgba(247, 232, 248, .98), rgba(245, 214, 237, .96)) !important;
+    color: #7b35b3 !important;
+  }
+}
+
+.dashboard-page .active-gift-status-badge.is-active,
+.dashboard-page .mobile-active-gift .active-gift-status-badge.is-active,
+html.theme-dark .page-shell .dashboard-page .active-gift-status-badge.is-active,
+.page-shell.theme-dark .dashboard-page .active-gift-status-badge.is-active,
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift .active-gift-status-badge.is-active,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift .active-gift-status-badge.is-active {
+  background: rgba(16, 185, 129, .18) !important;
+  color: #10b981 !important;
+}
+
+.dashboard-page .mobile-active-gift .active-gift-status-badge {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 54px !important;
+  max-width: max-content !important;
+  min-height: 28px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 4px 12px !important;
+  text-align: center !important;
+  line-height: 1 !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection,
+.page-shell.theme-dark .dashboard-page .dashboard-gift-subsection,
+html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection--codes,
+.page-shell.theme-dark .dashboard-page .dashboard-gift-subsection--codes {
+  border-color: rgba(235, 7, 138, .26) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(235, 7, 138, .12), transparent 34%),
+    linear-gradient(180deg, rgba(35, 15, 46, .98), rgba(24, 12, 32, .98)) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection-head h3,
+.page-shell.theme-dark .dashboard-page .dashboard-gift-subsection-head h3 {
+  color: #ffffff !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection-head svg,
+.page-shell.theme-dark .dashboard-page .dashboard-gift-subsection-head svg {
+  color: #a855f7 !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection-head > span,
+.page-shell.theme-dark .dashboard-page .dashboard-gift-subsection-head > span {
+  background: rgba(116, 51, 163, .20) !important;
+  color: #f0d9ff !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection .dashboard-empty-state,
+.page-shell.theme-dark .dashboard-page .dashboard-gift-subsection .dashboard-empty-state {
+  border-color: rgba(235, 7, 138, .24) !important;
+  background:
+    radial-gradient(circle at 82% 0%, rgba(168, 85, 247, .16), transparent 34%),
+    linear-gradient(135deg, rgba(38, 18, 52, .96), rgba(27, 16, 35, .98)) !important;
+  color: rgba(247, 241, 251, .86) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .active-gift-list li,
+.page-shell.theme-dark .dashboard-page .active-gift-list li {
+  border-color: rgba(235, 7, 138, .18) !important;
+  background: rgba(255, 255, 255, .035) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .active-gift-list strong,
+.page-shell.theme-dark .dashboard-page .active-gift-list strong {
+  color: #ffffff !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .active-gift-list small,
+.page-shell.theme-dark .dashboard-page .active-gift-list small {
+  color: rgba(247, 241, 251, .72) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift > .active-gift-media-link,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift > .active-gift-media-link {
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255, 255, 255, .18), rgba(255, 255, 255, 0) 42%),
+    linear-gradient(135deg, rgba(116, 51, 163, .28), rgba(235, 7, 138, .14)) !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift > .active-gift-media-link > .active-gift-fallback,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift > .active-gift-media-link > .active-gift-fallback {
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255, 255, 255, .22), rgba(255, 255, 255, 0) 42%),
+    linear-gradient(135deg, rgba(244, 217, 255, .22), rgba(235, 7, 138, .12)) !important;
+  color: #c084fc !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift > .active-gift-media-link > .active-gift-fallback svg,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift > .active-gift-media-link > .active-gift-fallback svg {
+  color: #c084fc !important;
+  stroke-width: 2.1 !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .mobile-dashboard .dashboard-empty-state,
+.page-shell.theme-dark .dashboard-page .mobile-dashboard .dashboard-empty-state,
+html.theme-dark .dashboard-shell .mobile-dashboard .dashboard-empty-state,
+.page-shell.dashboard-shell.theme-dark .mobile-dashboard .dashboard-empty-state {
+  border-color: rgba(235, 7, 138, .24) !important;
+  background:
+    radial-gradient(circle at 72% 0%, rgba(168, 85, 247, .16), transparent 34%),
+    linear-gradient(135deg, rgba(38, 18, 52, .96), rgba(27, 16, 35, .98)) !important;
+  color: rgba(247, 241, 251, .86) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04) !important;
+}
