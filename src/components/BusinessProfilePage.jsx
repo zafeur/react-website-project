@@ -189,13 +189,21 @@ const findBusinessProfileFromApiData = (data, fallbackProfile) => {
 
 const findApiCollection = (payload, businessId) => {
   const normalizedBusinessId = normalizeTextKey(businessId || DEFAULT_BUSINESS_ID);
+  const isNumericCollection = /^\d+$/.test(String(businessId || '').trim());
 
   return findCollectionList(payload).find((item) => {
-    const values = [
+    const idValues = [
       firstValue(item, ['id', 'collection_id', 'collectionId']),
+    ].map(normalizeTextKey);
+
+    if (isNumericCollection) {
+      return idValues.some((value) => value === normalizedBusinessId);
+    }
+
+    const values = [
+      ...idValues,
       firstValue(item, ['prefix', 'slug', 'businessSlug', 'business_slug']),
       firstValue(item, ['name', 'title', 'business_name']),
-      firstValue(item, ['images', 'image', 'logo', 'logo_url']),
     ].map(normalizeTextKey);
 
     return values.some((value) => value && (value === normalizedBusinessId || value.includes(normalizedBusinessId) || normalizedBusinessId.includes(value)));
@@ -378,12 +386,17 @@ const findBusinessWallet = (wallets, profile) => (
 );
 
 const getBusinessFromQuery = (queryValue) => Array.isArray(queryValue) ? queryValue[0] : queryValue;
+const isRoutePlaceholder = (value) => /^\[[^\]]+\]$/.test(String(value || ''));
 const getCollectionFromQuery = (router) => {
-  const queryValue = getBusinessFromQuery(router.query.collection || router.query.id || router.query.collectionId);
-  if (queryValue) return queryValue;
-
   const pathMatch = typeof router.asPath === 'string' ? router.asPath.match(/\/collections\/([^/?#]+)/) : null;
-  return pathMatch ? decodeURIComponent(pathMatch[1]) : undefined;
+  if (pathMatch && !isRoutePlaceholder(pathMatch[1])) {
+    return decodeURIComponent(pathMatch[1]);
+  }
+
+  const queryValue = getBusinessFromQuery(router.query.collection || router.query.id || router.query.collectionId);
+  if (queryValue && !isRoutePlaceholder(queryValue)) return queryValue;
+
+  return undefined;
 };
 function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) {
   const router = useRouter();
@@ -454,12 +467,6 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
               setApiBusinessProfile(fromDiscountList);
               setIsFollowing(Boolean(fromDiscountList.isFollowed));
               setIsProfileLoading(false);
-              if (
-                fromDiscountList.collectionId &&
-                fromDiscountList.collectionId !== selectedCollectionId
-              ) {
-                router.replace(`/collections/${fromDiscountList.collectionId}`, undefined, { shallow: true });
-              }
               return;
             }
           } catch (fallbackError) {
