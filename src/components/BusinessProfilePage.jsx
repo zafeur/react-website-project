@@ -15,7 +15,7 @@ import { getDiscountCards } from '../api/home';
 import { getCollectionDetails, toggleCollectionFollow } from '../api/collections';
 import { getBusinessWallet } from '../api/wallet';
 import { normalizeMediaUrl } from '../helper/mediaUrl';
-import { toPersianDigits } from '../helper/persianDigits';
+import { toEnglishDigits, toPersianDigits } from '../helper/persianDigits';
 import { businessProfiles, stars } from '../data/siteData';
 import BusinessProfileEmptyState from './BusinessProfileEmptyState.jsx';
 
@@ -82,6 +82,8 @@ const normalizePhoneHref = (phone = '') => String(phone)
   .replace(/[\u0660-\u0669]/g, (digit) => String(digit.charCodeAt(0) - 1632))
   .replace(/[^0-9+]/g, '');
 
+const normalizeDiscountCodeText = (value = '') => toEnglishDigits(String(value ?? '').trim());
+
 const replaceBrokenImage = (event, fallback) => {
   if (!fallback) {
     event.currentTarget.closest('.business-logo-circle, .business-hero-banner')?.classList.add('has-broken-image');
@@ -110,6 +112,23 @@ const findCollectionList = (source) => {
 
     if (value && typeof value === 'object') {
       const nested = findCollectionList(value);
+      if (nested.length) return nested;
+    }
+  }
+
+  return [];
+};
+
+const findStoryList = (source) => {
+  if (Array.isArray(source)) return source;
+  if (!source || typeof source !== 'object') return [];
+
+  for (const key of ['stories', 'story', 'story_items', 'storyItems', 'data', 'items', 'records', 'result']) {
+    const value = source[key];
+    if (Array.isArray(value)) return value;
+
+    if (value && typeof value === 'object') {
+      const nested = findStoryList(value);
       if (nested.length) return nested;
     }
   }
@@ -173,7 +192,7 @@ const findApiCollection = (payload, businessId) => {
 
   return findCollectionList(payload).find((item) => {
     const values = [
-      firstValue(item, ['collection_id', 'collectionId', 'wallet_group_id', 'walletGroupId', 'wallet_group', 'id']),
+      firstValue(item, ['id', 'collection_id', 'collectionId']),
       firstValue(item, ['prefix', 'slug', 'businessSlug', 'business_slug']),
       firstValue(item, ['name', 'title', 'business_name']),
       firstValue(item, ['images', 'image', 'logo', 'logo_url']),
@@ -181,6 +200,81 @@ const findApiCollection = (payload, businessId) => {
 
     return values.some((value) => value && (value === normalizedBusinessId || value.includes(normalizedBusinessId) || normalizedBusinessId.includes(value)));
   });
+};
+
+const apiImageKeys = [
+  'profile_image',
+  'profileImage',
+  'image',
+  'images',
+  'logo',
+  'logo_url',
+  'image_url',
+];
+
+const findApiStoryForProfile = (payload, profile, collection) => {
+  const aliases = Array.isArray(profile?.aliases) ? profile.aliases : [];
+  const candidates = [
+    profile?.id,
+    profile?.slug,
+    profile?.title,
+    profile?.shortTitle,
+    collection?.prefix,
+    collection?.slug,
+    collection?.name,
+    collection?.title,
+    ...aliases,
+  ]
+    .filter(Boolean)
+    .map(normalizeTextKey);
+
+  if (!candidates.length) return null;
+
+  return findStoryList(payload).find((story) => {
+    const values = [
+      firstValue(story, ['prefix', 'slug', 'businessSlug', 'business_slug']),
+      firstValue(story, ['name', 'title', 'business_name', 'collection_name']),
+      firstValue(story, apiImageKeys),
+    ].filter(Boolean).map(normalizeTextKey);
+
+    return values.some((value) => candidates.some((candidate) =>
+      value && candidate && (value === candidate || value.includes(candidate) || candidate.includes(value))
+    ));
+  }) || null;
+};
+
+const withStoryImageFallback = (collection, payload, profile) => {
+  if (firstValue(collection, apiImageKeys)) {
+    return collection;
+  }
+
+  const story = findApiStoryForProfile(payload, profile, collection);
+  const storyImage = firstValue(story, apiImageKeys);
+
+  return storyImage ? { ...(collection || {}), story_image: storyImage } : collection;
+};
+
+const findApiCollectionForProfile = (payload, profile, collectionId) => {
+  const aliases = Array.isArray(profile?.aliases) ? profile.aliases : [];
+  const candidates = [
+    collectionId,
+    profile?.collectionId,
+    profile?.id,
+    profile?.slug,
+    profile?.title,
+    profile?.shortTitle,
+    ...aliases,
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    const collection = findApiCollection(payload, candidate);
+
+    if (collection) {
+      return withStoryImageFallback(collection, payload, profile);
+    }
+  }
+
+  return null;
 };
 
 const mergeCollectionData = (details, listItem) => {
@@ -228,10 +322,10 @@ const makeEmptyBusinessProfile = (fallbackProfile, collectionId) => ({
 const normalizeApiCollectionProfile = (source, fallbackProfile) => {
   const data = resolveApiData(source) || {};
   const matchedFallbackProfile = findBusinessProfileFromApiData(data, fallbackProfile);
-  const collectionId = firstValue(data, ['collection_id', 'collectionId', 'wallet_group_id', 'walletGroupId', 'wallet_group', 'id']) || matchedFallbackProfile.collectionId;
+  const collectionId = firstValue(data, ['id', 'collection_id', 'collectionId']) || matchedFallbackProfile.collectionId;
   const slug = firstValue(data, ['prefix', 'slug', 'businessSlug', 'business_slug']) || matchedFallbackProfile.slug || matchedFallbackProfile.id;
   const title = firstValue(data, ['title', 'name', 'business_name', 'collection_name']) || '';
-  const rawImage = firstValue(data, ['profile_image', 'profileImage', 'image', 'images', 'logo', 'logo_url', 'image_url']);
+  const rawImage = firstValue(data, [...apiImageKeys, 'story_image', 'storyImage']);
   const rawBannerImage = firstValue(data, ['banner_image', 'bannerImage', 'banner', 'cover_image', 'coverImage']);
   const imageFallback = getLocalApiImageMirror(rawImage) || getCollectionImageMirror(collectionId, slug) || DEFAULT_BUSINESS_IMAGE;
   const bannerFallbackImage = getLocalApiImageMirror(rawBannerImage) || DEFAULT_BUSINESS_IMAGE;
@@ -324,7 +418,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
           try {
             const listPayload = await getDiscountCards();
             if (!isMounted) return;
-            listCollection = findApiCollection(listPayload, selectedCollectionId);
+            listCollection = findApiCollectionForProfile(listPayload, fallbackBusinessProfile, selectedCollectionId);
           } catch (error) {
             console.warn(
               `Discount list request failed while enriching /collections/${selectedCollectionId}.`,
@@ -350,7 +444,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
           try {
             const listPayload = await getDiscountCards();
             if (!isMounted) return;
-            const listCollection = findApiCollection(listPayload, selectedCollectionId);
+            const listCollection = findApiCollectionForProfile(listPayload, fallbackBusinessProfile, selectedCollectionId);
 
             if (listCollection) {
               const fromDiscountList = normalizeApiCollectionProfile(listCollection, {
@@ -360,6 +454,12 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
               setApiBusinessProfile(fromDiscountList);
               setIsFollowing(Boolean(fromDiscountList.isFollowed));
               setIsProfileLoading(false);
+              if (
+                fromDiscountList.collectionId &&
+                fromDiscountList.collectionId !== selectedCollectionId
+              ) {
+                router.replace(`/collections/${fromDiscountList.collectionId}`, undefined, { shallow: true });
+              }
               return;
             }
           } catch (fallbackError) {
@@ -380,7 +480,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
         const payload = await getDiscountCards();
         if (!isMounted) return;
 
-        apiCollection = findApiCollection(payload, selectedCollectionId || selectedBusinessId);
+        apiCollection = findApiCollectionForProfile(payload, fallbackBusinessProfile, selectedCollectionId || selectedBusinessId);
         if (!apiCollection) {
           setApiBusinessProfile(makeEmptyBusinessProfile(fallbackBusinessProfile, selectedCollectionId));
           setIsProfileLoading(false);
@@ -491,7 +591,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
     ? businessWallet?.status || businessProfile.walletStatus || ''
     : uiText.walletLoginText;
   const walletPoints = toPersianDigits(isLoggedIn ? businessWallet?.points || businessProfile.points : '');
-  const walletDiscountCode = isLoggedIn ? businessWallet?.discountCode || businessProfile.discountCode : '';
+  const walletDiscountCode = isLoggedIn ? normalizeDiscountCodeText(businessWallet?.discountCode || businessProfile.discountCode) : '';
   const walletCashback = toPersianDigits(isLoggedIn ? businessWallet?.cashbackLabel || businessProfile.cashbackLabel : '');
   const bannerImage = businessProfile.bannerImage || DEFAULT_BUSINESS_IMAGE;
   const bannerMode = businessProfile.bannerMode || 'photo';
@@ -596,7 +696,7 @@ function BusinessProfilePage({ isVisible, isLoggedIn = false, onRequireLogin }) 
             <strong>{walletAmount}</strong>
             <p>{walletStatus}</p>
             {walletPoints && <p>{uiText.points}: {walletPoints}</p>}
-            {walletDiscountCode && <p>{uiText.activeDiscountCode}: {walletDiscountCode}</p>}
+            {walletDiscountCode && <p>{uiText.activeDiscountCode}: <code dir="ltr" data-skip-persian-digits="true" data-discount-code="true">{walletDiscountCode}</code></p>}
             {walletCashback && <p>{uiText.cashback}: {walletCashback}</p>}
           </section>
 

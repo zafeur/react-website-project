@@ -4,7 +4,7 @@ import { CalendarDays, Crown, Gift, LogOut, Mail, PencilLine, Phone, RefreshCw, 
 import { extractActiveDiscountCodesFromReport, extractActiveGiftsFromReport, extractUserProfileFromReport, getDiscountReport } from '../api/user';
 import { defaultProfileAvatar } from '../data/brandAssets';
 import { businessProfiles, dashboardActions, mobileProfileLinks } from '../data/siteData';
-import { toPersianDigits } from '../helper/persianDigits';
+import { toEnglishDigits, toPersianDigits } from '../helper/persianDigits';
 import { normalizeMediaUrl } from '../helper/mediaUrl';
 
 const getImageSrc = (image) => image?.src || image;
@@ -328,6 +328,8 @@ const isValidDiscountCode = (value = '') => {
   const normalized = cleanReportText(value);
   return /^[A-Za-z0-9_-]{4,}$/.test(normalized) && !hasPersianLetters(normalized);
 };
+
+const normalizeDiscountCodeText = (value = '') => toEnglishDigits(cleanReportText(value));
 
 const genericGiftLabels = new Set([
   'کد تخفیف',
@@ -727,7 +729,8 @@ const normalizeGift = (gift, index, { includeCode = false, collectionFallback = 
   const collectionName = primitiveGift?.collectionName || fallbackName || getGiftCollectionName(gift, initialMatchedProfile);
   const matchedProfile = initialMatchedProfile || findBusinessProfileByText(collectionName);
   const rawCode = primitiveCode || (primitiveGift ? '' : getDeepValue(gift, ['code', 'discount_code', 'discountCode', 'coupon_code', 'couponCode', 'user_code', 'userCode', 'generated_code', 'generatedCode', 'token', 'discount_token', 'discountToken']));
-  const code = includeCode && isValidDiscountCode(rawCode) ? cleanReportText(rawCode) : '';
+  const normalizedCode = normalizeDiscountCodeText(rawCode);
+  const code = includeCode && isValidDiscountCode(normalizedCode) ? normalizedCode : '';
   const fallbackDescription = collectionFallback && typeof collectionFallback === 'object'
     ? cleanReportText(firstValue(collectionFallback, ['description', 'gift_description', 'giftDescription', 'text', 'content', 'body']))
     : '';
@@ -1035,7 +1038,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
                     </div>
                     {showCodes ? (
                       <div className="active-gift-code-cell">
-                        <span dir="ltr">{gift.code}</span>
+                        <code dir="ltr" data-skip-persian-digits="true" data-discount-code="true">{gift.code}</code>
                         {gift.isUsed ? <span className="active-gift-used-badge">استفاده شده</span> : null}
                       </div>
                     ) : null}

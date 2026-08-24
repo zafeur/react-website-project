@@ -281,7 +281,8 @@
   align-items: center;
 }
 
-.active-gift-card .active-gift-code-cell > span {
+.active-gift-card .active-gift-code-cell > span,
+.active-gift-card .active-gift-code-cell > code {
   display: inline-flex;
   width: fit-content;
   max-width: 100%;

@@ -1,11 +1,18 @@
 export const toPersianDigits = (value) => String(value ?? '').replace(/[0-9]/g, (digit) => String.fromCharCode(0x06f0 + Number(digit)));
 
+export const toEnglishDigits = (value) => String(value ?? '')
+  .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 0x06f0))
+  .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 0x0660));
+
 const SKIP_TEXT_TAGS = new Set(['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'CODE', 'PRE']);
 
 const shouldSkipNode = (node) => {
   const parent = node.parentElement;
   if (!parent) return true;
-  return SKIP_TEXT_TAGS.has(parent.tagName) || parent.closest('[data-skip-persian-digits]');
+  return (
+    SKIP_TEXT_TAGS.has(parent.tagName) ||
+    parent.closest('[data-skip-persian-digits], [data-discount-code], .home-discount-code, .active-gift-code-cell')
+  );
 };
 
 const convertTextNode = (node) => {
