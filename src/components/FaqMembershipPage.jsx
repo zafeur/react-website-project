@@ -396,9 +396,7 @@ function FaqMembershipPage({
       return;
     }
 
-    window.location.href = isLoggedIn
-      ? '/dashboard'
-      : '/collections/melal';
+    window.location.href = '/dashboard';
   };
 
 
