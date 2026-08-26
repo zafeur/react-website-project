@@ -1,1 +1,92 @@
-if(!self.define){let e,a={};const s=(s,n)=>(s=new URL(s+".js",n).href,a[s]||new Promise(a=>{if("document"in self){const e=document.createElement("script");e.src=s,e.onload=a,document.head.appendChild(e)}else e=s,importScripts(s),a()}).then(()=>{let e=a[s];if(!e)throw new Error(`Module ${s} didn’t register its module`);return e}));self.define=(n,i)=>{const r=e||("document"in self?document.currentScript.src:"")||location.href;if(a[r])return;let c={};const b=e=>s(e,r),t={module:{uri:r},exports:c,require:b};a[r]=Promise.all(n.map(e=>t[e]||b(e))).then(e=>(i(...e),c))}}define(["./workbox-f1770938"],function(e){"use strict";importScripts(),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"/_next/dynamic-css-manifest.json",revision:"d751713988987e9331980363e24189ce"},{url:"/_next/static/chunks/295-52056e8f002b1536.js",revision:"52056e8f002b1536"},{url:"/_next/static/chunks/494.0bfdf534d4777fad.js",revision:"0bfdf534d4777fad"},{url:"/_next/static/chunks/679-c724b21b14ad18e7.js",revision:"c724b21b14ad18e7"},{url:"/_next/static/chunks/734-fa23fe9226bca4d1.js",revision:"fa23fe9226bca4d1"},{url:"/_next/static/chunks/763.361bd0be0cf1ba1f.js",revision:"361bd0be0cf1ba1f"},{url:"/_next/static/chunks/932-aac01ea05f15846b.js",revision:"aac01ea05f15846b"},{url:"/_next/static/chunks/940-d072d1252281c3fa.js",revision:"d072d1252281c3fa"},{url:"/_next/static/chunks/framework-41d0970e633f2306.js",revision:"41d0970e633f2306"},{url:"/_next/static/chunks/main-c086c76b46d3e1c3.js",revision:"c086c76b46d3e1c3"},{url:"/_next/static/chunks/pages/_app-5e6dd45be8693a90.js",revision:"5e6dd45be8693a90"},{url:"/_next/static/chunks/pages/_error-bfe0117fe7341874.js",revision:"bfe0117fe7341874"},{url:"/_next/static/chunks/pages/collections/%5Bid%5D-7417a0d0b070a3df.js",revision:"7417a0d0b070a3df"},{url:"/_next/static/chunks/pages/contact-bed30d18edd0e314.js",revision:"bed30d18edd0e314"},{url:"/_next/static/chunks/pages/dashboard-402dd8ecb0b98641.js",revision:"402dd8ecb0b98641"},{url:"/_next/static/chunks/pages/dashboard/wallet-b7a29b0bef996294.js",revision:"b7a29b0bef996294"},{url:"/_next/static/chunks/pages/faq-0ba1a1c14805e43d.js",revision:"0ba1a1c14805e43d"},{url:"/_next/static/chunks/pages/gifts-da2a4493f24af4a4.js",revision:"da2a4493f24af4a4"},{url:"/_next/static/chunks/pages/index-220b07ddd3e7bb89.js",revision:"220b07ddd3e7bb89"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/webpack-8036921f64d3f30a.js",revision:"8036921f64d3f30a"},{url:"/_next/static/css/263d152f608bbb3a.css",revision:"263d152f608bbb3a"},{url:"/_next/static/css/72543f2b83a7a9f3.css",revision:"72543f2b83a7a9f3"},{url:"/_next/static/media/coffee-beans.05e41083.jpg",revision:"b3c0af0196913a550c04fc378c3293f8"},{url:"/_next/static/media/daily-dessert.df6c81f0.jpg",revision:"9549a72f72eeac1e2f4ee38376749ecf"},{url:"/_next/static/media/gallery-dining.ca32c9a2.jpg",revision:"c527c98e6e38918f237cd2fe46e7a0a5"},{url:"/_next/static/media/gallery-restaurant.4cbc2eda.jpg",revision:"1027064bd1bccd60a7cf6f6aa370d760"},{url:"/_next/static/media/gallery-salad.ff0c6f8e.jpg",revision:"486761b0d8e7d222e09659fb7b10c245"},{url:"/_next/static/media/gallery-table.de9d327f.jpg",revision:"7b1ede3e204ab4e673054d6235921ea8"},{url:"/_next/static/media/iced-americano.45c38dfd.jpg",revision:"803860cd38a7bf66693d8929eda7ed60"},{url:"/_next/static/media/restaurant-menu.c1551aac.jpg",revision:"2898534fa1ee290b0688f003331f6dce"},{url:"/_next/static/media/skin-care.96dcb84d.jpg",revision:"7cbf68227e533b7cfa05dab989631bca"},{url:"/_next/static/media/sunglasses.718dba1c.jpg",revision:"fc32b1455c54b0a301316e463c1f6381"},{url:"/_next/static/media/user-avatar.e5ca5832.jpg",revision:"18fc6f5c378400809681cf494188c5d0"},{url:"/_next/static/media/vr-game.16bd88be.jpg",revision:"8d37ea4c043b6c2f938485eb39aa4178"},{url:"/_next/static/o3F_7T5Wbqlwb8ZlQ7H4U/_buildManifest.js",revision:"3900ec3f6f0b34131245adb044e28181"},{url:"/_next/static/o3F_7T5Wbqlwb8ZlQ7H4U/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/brand/female-profile.svg",revision:"030b91c9b78d3ff3c9944b42e5266ecd"},{url:"/brand/icon-192.png",revision:"5e58559a1111d3b9f9abb0425abb5704"},{url:"/brand/icon-512.png",revision:"a79c11994e7fc669ea65179507414bf1"},{url:"/brand/keymiay-logo-type.svg",revision:"997fa121e0c292f2129a6a29ac980c8e"},{url:"/brand/keymiay-main-logo.svg",revision:"dcc156531bfe968b593af0d039a0302b"},{url:"/brand/male-profile.svg",revision:"3dd20d149beeab8e4e7f2212c819b8f4"},{url:"/home/fonts/Vazirmatn-FD-Bold.woff2",revision:"49790e8b277d12d50e2009ea78a59ba0"},{url:"/home/fonts/Vazirmatn-FD-Regular.woff2",revision:"e0e713cd90d9acfe1dcf16302617728b"},{url:"/home/img/bakhshi.jpg",revision:"c513147457a1ac066deaa249b50e0455"},{url:"/home/img/banner/bannerweb bakhshi.e2078af9 (1).jpg",revision:"3804cfac3cec852fc3a2a0ca37601cb4"},{url:"/home/img/banner/bannerweb barial.15abe337.jpg",revision:"971444a6fd6be579b1d2415a7fded275"},{url:"/home/img/banner/bannerweb bastani.6ff0aa72.jpg",revision:"4b8917f85892f2c8b8411bd3006b8a3b"},{url:"/home/img/banner/bannerweb dorato.08954607.jpg",revision:"69d7cde9d8463c683e76898cf63a0232"},{url:"/home/img/banner/bannerweb dorato.telegram.jpg",revision:"d871cc97ec7b917505920aa2bc4a9812"},{url:"/home/img/banner/bannerweb ibamo.telegram.jpg",revision:"6b5c3165e0101152a7c9f496a670b3d7"},{url:"/home/img/banner/bannerweb mojalal.f45a45c6.jpg",revision:"744085a4ab818f69439591b307b08699"},{url:"/home/img/banner/bannerweb mojalal.telegram.jpg",revision:"493f6e11ef41dde8f31dd7e3a4b9b1c0"},{url:"/home/img/barial.jpg",revision:"29a87c933e39eaded76546524b3fd5b9"},{url:"/home/img/business-banners/bakhshi-banner.png",revision:"7563dcfe2d611250e31889a48fe1f8b3"},{url:"/home/img/business-banners/bakhshi-hero.png",revision:"f771de4a80de63ac6c5f77406b6338ed"},{url:"/home/img/business-banners/barial-banner.png",revision:"c40c0b88c7f67a46dc5043e41b7ca9b1"},{url:"/home/img/business-banners/barial-hero.png",revision:"987de89611609c19f762726dbdd50b97"},{url:"/home/img/business-banners/bastani-banner.png",revision:"a9a8e757b89339b4b9f94251942741bf"},{url:"/home/img/business-banners/bastani-hero.png",revision:"831ff572bd7436b0b0a936837ddd9319"},{url:"/home/img/business-banners/bastani-logo-enhanced.png",revision:"703f7634cdb60f03e2155f835ba80da9"},{url:"/home/img/business-banners/dorato-banner.png",revision:"d18203f35b626b3fcf276862bfcd9e60"},{url:"/home/img/business-banners/dorato-hero.png",revision:"5f139f8941bf8ac9819654155447afe1"},{url:"/home/img/business-banners/ibamo-banner.png",revision:"f9c3cef87f99b4254364ad2a85c43e39"},{url:"/home/img/business-banners/ibamo-hero.png",revision:"517f231fc52ee66e0a49149be45f54e1"},{url:"/home/img/business-banners/mojalal-banner.png",revision:"f34a8e8b7e60fe60f25a3f8074fcd12a"},{url:"/home/img/business-banners/mojalal-hero.png",revision:"a6446073f0a71bcca9069af79b9c0be8"},{url:"/home/img/logo bastani.jpg",revision:"520e35a8115c59e4932f7f8ab0687eb1"},{url:"/home/img/logo dorato.jpg",revision:"94866257846373bb1f72d20c9b4dbfae"},{url:"/home/img/logo ibamo.jpg",revision:"98345a5d5b90d9568cb9aa5845fcf331"},{url:"/home/img/logo-6.b6f80db0.png",revision:"a4ec98175036068238c9dbb64476f7e4"},{url:"/home/img/mojalal.jpg",revision:"7a944f6c68ab667d68e8e87ae633caff"},{url:"/home/img/restaurant-melal.png",revision:"260a79c0631d4c10982d9b769d8690f8"},{url:"/home/videos/bakhshi.mp4",revision:"ee83725632748639c1d0a48ab6a0fc18"},{url:"/home/videos/barial.mp4",revision:"659e10ea46b9e80bb55a93db656214be"},{url:"/home/videos/bastani.mp4",revision:"238eb25bafc3bf818f0efc4434223512"},{url:"/home/videos/dorato.mp4",revision:"f22bf84b4c6ebccd315e91d27ad27a58"},{url:"/home/videos/ibamo.mp4",revision:"c4db0c106758ab1a0c1893df1aef79eb"},{url:"/home/videos/mojalal.mp4",revision:"cd9d2f3f8db79709a52933a6cd9ed72c"},{url:"/manifest.json",revision:"8b99450b267f6ab1c73e3fb9f9d3b0ec"}],{ignoreURLParametersMatching:[/^utm_/,/^fbclid$/]}),e.cleanupOutdatedCaches(),e.registerRoute("/",new e.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({response:e})=>e&&"opaqueredirect"===e.type?new Response(e.body,{status:200,statusText:"OK",headers:e.headers}):e}]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,new e.CacheFirst({cacheName:"google-fonts-webfonts",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:31536e3})]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:googleapis)\.com\/.*/i,new e.StaleWhileRevalidate({cacheName:"google-fonts-stylesheets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,new e.StaleWhileRevalidate({cacheName:"static-font-assets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,new e.StaleWhileRevalidate({cacheName:"static-image-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:2592e3})]}),"GET"),e.registerRoute(/\/_next\/static.+\.js$/i,new e.CacheFirst({cacheName:"next-static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/image\?url=.+$/i,new e.StaleWhileRevalidate({cacheName:"next-image",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp3|wav|ogg)$/i,new e.CacheFirst({cacheName:"static-audio-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp4|webm)$/i,new e.CacheFirst({cacheName:"static-video-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:js)$/i,new e.StaleWhileRevalidate({cacheName:"static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:48,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:css|less)$/i,new e.StaleWhileRevalidate({cacheName:"static-style-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/data\/.+\/.+\.json$/i,new e.StaleWhileRevalidate({cacheName:"next-data",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:json|xml|csv)$/i,new e.NetworkFirst({cacheName:"static-data-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({sameOrigin:e,url:{pathname:a}})=>!(!e||a.startsWith("/api/auth/callback")||!a.startsWith("/api/")),new e.NetworkFirst({cacheName:"apis",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:16,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({request:e,url:{pathname:a},sameOrigin:s})=>"1"===e.headers.get("RSC")&&"1"===e.headers.get("Next-Router-Prefetch")&&s&&!a.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages-rsc-prefetch",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({request:e,url:{pathname:a},sameOrigin:s})=>"1"===e.headers.get("RSC")&&s&&!a.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages-rsc",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:{pathname:e},sameOrigin:a})=>a&&!e.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({sameOrigin:e})=>!e,new e.NetworkFirst({cacheName:"cross-origin",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:3600})]}),"GET")});
+/**
+ * Copyright 2018 Google Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// If the loader is already loaded, just stop.
+if (!self.define) {
+  let registry = {};
+
+  // Used for `eval` and `importScripts` where we can't get script URL by other means.
+  // In both cases, it's safe to use a global var because those functions are synchronous.
+  let nextDefineUri;
+
+  const singleRequire = (uri, parentUri) => {
+    uri = new URL(uri + ".js", parentUri).href;
+    return registry[uri] || (
+      
+        new Promise(resolve => {
+          if ("document" in self) {
+            const script = document.createElement("script");
+            script.src = uri;
+            script.onload = resolve;
+            document.head.appendChild(script);
+          } else {
+            nextDefineUri = uri;
+            importScripts(uri);
+            resolve();
+          }
+        })
+      
+      .then(() => {
+        let promise = registry[uri];
+        if (!promise) {
+          throw new Error(`Module ${uri} didn’t register its module`);
+        }
+        return promise;
+      })
+    );
+  };
+
+  self.define = (depsNames, factory) => {
+    const uri = nextDefineUri || ("document" in self ? document.currentScript.src : "") || location.href;
+    if (registry[uri]) {
+      // Module is already loading or loaded.
+      return;
+    }
+    let exports = {};
+    const require = depUri => singleRequire(depUri, uri);
+    const specialDeps = {
+      module: { uri },
+      exports,
+      require
+    };
+    registry[uri] = Promise.all(depsNames.map(
+      depName => specialDeps[depName] || require(depName)
+    )).then(deps => {
+      factory(...deps);
+      return exports;
+    });
+  };
+}
+define(['./workbox-7144475a'], (function (workbox) { 'use strict';
+
+  importScripts();
+  self.skipWaiting();
+  workbox.clientsClaim();
+  workbox.registerRoute("/", new workbox.NetworkFirst({
+    "cacheName": "start-url",
+    plugins: [{
+      cacheWillUpdate: async ({
+        response: e
+      }) => e && "opaqueredirect" === e.type ? new Response(e.body, {
+        status: 200,
+        statusText: "OK",
+        headers: e.headers
+      }) : e
+    }]
+  }), 'GET');
+  workbox.registerRoute(/.*/i, new workbox.NetworkOnly({
+    "cacheName": "dev",
+    plugins: []
+  }), 'GET');
+
+}));
