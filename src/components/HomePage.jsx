@@ -1,20 +1,16 @@
-﻿import { faqs } from '../data/faqData';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import {
+﻿import {
+  Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
-  Check,
   Copy,
   Gift,
+  Info,
   LayoutDashboard,
   LogIn,
   LogOut,
   Moon,
   MousePointerClick,
-  Info,
   PhoneCall,
   Search,
   ShoppingBag,
@@ -25,16 +21,19 @@ import {
   TicketPercent,
   Trophy,
 } from 'lucide-react';
-import LoginModal from './LoginModal';
-import MobileBottomNav from './MobileBottomNav';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { sendOtp, verifyOtp } from '../api/auth';
 import { getDiscountCards, requestDiscountCode } from '../api/home';
+import InstallAppButton from '../components/InstallAppButton';
+import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
 import { AUTH_SESSION_EXPIRED_EVENT, isAuthExpiredError, resetAuthSessionExpiryNotice, SESSION_EXPIRED_MESSAGE } from '../helper/authSession';
 import { normalizeMediaUrl } from '../helper/mediaUrl';
 import { toEnglishDigits } from '../helper/persianDigits';
-import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
-import InstallAppButton from '../components/InstallAppButton';
+import LoginModal from './LoginModal';
+import MobileBottomNav from './MobileBottomNav';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
@@ -139,12 +138,12 @@ const defaultHomeData = {
   brands: [],
 
   categories: [
-  { title: t.gifts, icon: 'Gift' },
-  { title: t.restaurant, icon: 'Store' },
-  { title: t.shop, icon: 'ShoppingBag' },
-  { title: t.club, icon: 'Star' },
-  { title: t.special, icon: 'Sparkles' },
-],
+    { title: t.gifts, icon: 'Gift' },
+    { title: t.restaurant, icon: 'Store' },
+    { title: t.shop, icon: 'ShoppingBag' },
+    { title: t.club, icon: 'Star' },
+    { title: t.special, icon: 'Sparkles' },
+  ],
 
   offers: [],
 };
@@ -793,7 +792,7 @@ const mergeHomeAndDiscountData = (homePayload, discountPayload) => {
 
   return {
     ...normalizedHome,
-    banners: normalizedDiscount.banners.length ? normalizedDiscount.banners:normalizedHome.banners,
+    banners: normalizedDiscount.banners.length ? normalizedDiscount.banners : normalizedHome.banners,
     stories: discountStories.length ? discountStories : homeStories.length ? homeStories : offerStories,
     brands: discountOffers.length
       ? buildBrandsFromOffers(discountOffers)
@@ -910,6 +909,10 @@ const getProfileAvatar = (profile = {}) =>
 const hasUsableHomeData = (data) => Boolean(data?.stories?.length || data?.offers?.length || data?.brands?.length);
 const normalizeHomeData = (payload) => {
   const data = resolveHomeData(payload);
+  const banners = normalizeCards(
+    normalizeList(data?.banners || data?.banner || data?.sliders || data?.slides, []),
+    []
+  );
   const brands = normalizeCards(
     normalizeList(data?.brands || data?.businesses || data?.stores, []),
     []
@@ -917,7 +920,7 @@ const normalizeHomeData = (payload) => {
 
   return {
     stories: normalizeApiStories(data),
-    banners: [],
+    banners,
     brands,
     categories: normalizeCategories(data?.categories),
     offers: normalizeOffers(normalizeList(data?.offers || data?.gifts || data?.discounts, [])),
@@ -1299,25 +1302,25 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
   const normalizedSearchQuery = normalizeSearchText(searchQuery);
   const filteredOffers = normalizedSearchQuery
     ? homeData.offers.filter((offer) => {
-        const haystack = normalizeSearchText([
-          offer.brand,
-          offer.title,
-          offer.description,
-          offer.tag,
-          offer.code,
-          offer.prefix,
-          offer.businessId,
-        ].join(' '));
+      const haystack = normalizeSearchText([
+        offer.brand,
+        offer.title,
+        offer.description,
+        offer.tag,
+        offer.code,
+        offer.prefix,
+        offer.businessId,
+      ].join(' '));
 
-        return haystack.includes(normalizedSearchQuery);
-      })
+      return haystack.includes(normalizedSearchQuery);
+    })
     : [];
   const filteredBrands = normalizedSearchQuery && filteredOffers.length === 0
     ? homeData.brands.filter((brand) => normalizeSearchText([
-        brand.title,
-        brand.businessId,
-        brand.collectionId,
-      ].join(' ')).includes(normalizedSearchQuery))
+      brand.title,
+      brand.businessId,
+      brand.collectionId,
+    ].join(' ')).includes(normalizedSearchQuery))
     : [];
   const searchResultCount = filteredOffers.length || filteredBrands.length;
   const primaryCollectionHref = homeData.brands.find((brand) => brand.href && brand.href.startsWith('/collections/'))?.href ||
@@ -1422,9 +1425,9 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       return undefined;
     }
 
- const rows = Array.from(document.querySelectorAll(
-  '.home-shell .home-stories, .home-shell .home-brand-grid'
-));
+    const rows = Array.from(document.querySelectorAll(
+      '.home-shell .home-stories, .home-shell .home-brand-grid'
+    ));
     const cleanup = [];
 
     rows.forEach((row) => {
@@ -1552,11 +1555,11 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         const brandHref = brandCard?.dataset?.brandHref || brandCard?.getAttribute?.('href');
         brandTapCandidate = brandCard && row.contains(brandCard) && brandHref && brandHref !== '#brands'
           ? {
-              href: brandHref,
-              pointerId: event.pointerId,
-              x: event.clientX,
-              y: event.clientY,
-            }
+            href: brandHref,
+            pointerId: event.pointerId,
+            x: event.clientX,
+            y: event.clientY,
+          }
           : null;
       };
       const moveDrag = (event) => {
@@ -1665,187 +1668,187 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
 
     return () => cleanup.forEach((dispose) => dispose());
   }, [homeData.stories, homeData.brands, homeData.offers, vipOffers.length, visibleGiftDiscountOffers.length, discountOnlyOffers.length, router]);
-useEffect(() => {
-  if (typeof window === 'undefined') {
-    return undefined;
-  }
-
-  const rows = Array.from(
-    document.querySelectorAll(
-      '#vip-gifts .home-offer-grid, ' +
-      '#gifts .home-offer-grid, ' +
-      '#discount-only .home-offer-grid'
-    )
-  );
-
-  const cleanups = [];
-
-  rows.forEach((row) => {
-    const cards = Array.from(
-      row.querySelectorAll('.home-offer-card')
-    );
-
-    if (cards.length <= 1) {
-      return;
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
     }
 
-    let timer;
-    let paused = false;
-    let isDragging = false;
-    let didDrag = false;
-    let dragStartX = 0;
-    let dragStartScrollLeft = 0;
-    const dragClickThreshold = 10;
+    const rows = Array.from(
+      document.querySelectorAll(
+        '#vip-gifts .home-offer-grid, ' +
+        '#gifts .home-offer-grid, ' +
+        '#discount-only .home-offer-grid'
+      )
+    );
 
-    const getCardScrollDistance = (card, cardIndex) => {
-      const rowRect = row.getBoundingClientRect();
-      const cardRect = card.getBoundingClientRect();
+    const cleanups = [];
 
-      if (cardIndex === 0) {
-        const edgeDistance = cardRect.right - rowRect.right;
-        return Math.sign(edgeDistance || 1) * row.scrollWidth;
+    rows.forEach((row) => {
+      const cards = Array.from(
+        row.querySelectorAll('.home-offer-card')
+      );
+
+      if (cards.length <= 1) {
+        return;
       }
 
-      if (cardIndex === cards.length - 1) {
-        const edgeDistance = cardRect.left - rowRect.left;
-        return Math.sign(edgeDistance || 1) * row.scrollWidth;
-      }
+      let timer;
+      let paused = false;
+      let isDragging = false;
+      let didDrag = false;
+      let dragStartX = 0;
+      let dragStartScrollLeft = 0;
+      const dragClickThreshold = 10;
 
-      return cardRect.left + cardRect.width / 2 - (rowRect.left + rowRect.width / 2);
-    };
+      const getCardScrollDistance = (card, cardIndex) => {
+        const rowRect = row.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
 
-    const getCurrentIndex = () => {
-      const rowRect = row.getBoundingClientRect();
-      const center = rowRect.left + rowRect.width / 2;
-
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
-        const distance = Math.abs(cardCenter - center);
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
+        if (cardIndex === 0) {
+          const edgeDistance = cardRect.right - rowRect.right;
+          return Math.sign(edgeDistance || 1) * row.scrollWidth;
         }
-      });
 
-      return closestIndex;
-    };
+        if (cardIndex === cards.length - 1) {
+          const edgeDistance = cardRect.left - rowRect.left;
+          return Math.sign(edgeDistance || 1) * row.scrollWidth;
+        }
 
-    const goToNextCard = () => {
-      if (paused || document.hidden) {
-        return;
-      }
+        return cardRect.left + cardRect.width / 2 - (rowRect.left + rowRect.width / 2);
+      };
 
-      const currentIndex = getCurrentIndex();
-      const nextIndex = (currentIndex + 1) % cards.length;
+      const getCurrentIndex = () => {
+        const rowRect = row.getBoundingClientRect();
+        const center = rowRect.left + rowRect.width / 2;
 
-      row.scrollBy({
-        left: getCardScrollDistance(cards[nextIndex], nextIndex),
-        top: 0,
-        behavior: 'smooth',
-      });
-    };
+        let closestIndex = 0;
+        let closestDistance = Infinity;
 
-    const start = () => {
-      window.clearInterval(timer);
+        cards.forEach((card, index) => {
+          const rect = card.getBoundingClientRect();
+          const cardCenter = rect.left + rect.width / 2;
+          const distance = Math.abs(cardCenter - center);
 
-      timer = window.setInterval(() => {
-        goToNextCard();
-      }, 3500);
-    };
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = index;
+          }
+        });
 
-    const pause = () => {
-      paused = true;
-    };
+        return closestIndex;
+      };
 
-    const resume = () => {
-      paused = false;
+      const goToNextCard = () => {
+        if (paused || document.hidden) {
+          return;
+        }
+
+        const currentIndex = getCurrentIndex();
+        const nextIndex = (currentIndex + 1) % cards.length;
+
+        row.scrollBy({
+          left: getCardScrollDistance(cards[nextIndex], nextIndex),
+          top: 0,
+          behavior: 'smooth',
+        });
+      };
+
+      const start = () => {
+        window.clearInterval(timer);
+
+        timer = window.setInterval(() => {
+          goToNextCard();
+        }, 3500);
+      };
+
+      const pause = () => {
+        paused = true;
+      };
+
+      const resume = () => {
+        paused = false;
+        start();
+      };
+
+      const startDrag = (event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) {
+          return;
+        }
+
+        pause();
+        isDragging = true;
+        didDrag = false;
+        dragStartX = event.clientX;
+        dragStartScrollLeft = row.scrollLeft;
+      };
+
+      const moveDrag = (event) => {
+        if (!isDragging) {
+          return;
+        }
+
+        const deltaX = event.clientX - dragStartX;
+
+        if (Math.abs(deltaX) <= dragClickThreshold) {
+          return;
+        }
+
+        didDrag = true;
+        event.preventDefault();
+        row.classList.add('is-dragging');
+        row.setPointerCapture?.(event.pointerId);
+        row.scrollLeft = dragStartScrollLeft - deltaX;
+      };
+
+      const endDrag = (event) => {
+        if (isDragging && row.hasPointerCapture?.(event.pointerId)) {
+          row.releasePointerCapture?.(event.pointerId);
+        }
+
+        isDragging = false;
+        row.classList.remove('is-dragging');
+        resume();
+      };
+
+      const suppressDraggedClick = (event) => {
+        if (!didDrag) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        didDrag = false;
+      };
+
+      row.addEventListener('pointerdown', startDrag);
+      row.addEventListener('pointermove', moveDrag);
+      row.addEventListener('pointerup', endDrag);
+      row.addEventListener('pointercancel', endDrag);
+      row.addEventListener('touchstart', pause, { passive: true });
+      row.addEventListener('touchend', resume);
+      row.addEventListener('click', suppressDraggedClick, true);
+
       start();
-    };
 
-    const startDrag = (event) => {
-      if (event.pointerType === 'mouse' && event.button !== 0) {
-        return;
-      }
+      cleanups.push(() => {
+        window.clearInterval(timer);
 
-      pause();
-      isDragging = true;
-      didDrag = false;
-      dragStartX = event.clientX;
-      dragStartScrollLeft = row.scrollLeft;
-    };
-
-    const moveDrag = (event) => {
-      if (!isDragging) {
-        return;
-      }
-
-      const deltaX = event.clientX - dragStartX;
-
-      if (Math.abs(deltaX) <= dragClickThreshold) {
-        return;
-      }
-
-      didDrag = true;
-      event.preventDefault();
-      row.classList.add('is-dragging');
-      row.setPointerCapture?.(event.pointerId);
-      row.scrollLeft = dragStartScrollLeft - deltaX;
-    };
-
-    const endDrag = (event) => {
-      if (isDragging && row.hasPointerCapture?.(event.pointerId)) {
-        row.releasePointerCapture?.(event.pointerId);
-      }
-
-      isDragging = false;
-      row.classList.remove('is-dragging');
-      resume();
-    };
-
-    const suppressDraggedClick = (event) => {
-      if (!didDrag) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-      didDrag = false;
-    };
-
-    row.addEventListener('pointerdown', startDrag);
-    row.addEventListener('pointermove', moveDrag);
-    row.addEventListener('pointerup', endDrag);
-    row.addEventListener('pointercancel', endDrag);
-    row.addEventListener('touchstart', pause, { passive: true });
-    row.addEventListener('touchend', resume);
-    row.addEventListener('click', suppressDraggedClick, true);
-
-    start();
-
-    cleanups.push(() => {
-      window.clearInterval(timer);
-
-      row.removeEventListener('pointerdown', startDrag);
-      row.removeEventListener('pointermove', moveDrag);
-      row.removeEventListener('pointerup', endDrag);
-      row.removeEventListener('pointercancel', endDrag);
-      row.removeEventListener('touchstart', pause);
-      row.removeEventListener('touchend', resume);
-      row.removeEventListener('click', suppressDraggedClick, true);
+        row.removeEventListener('pointerdown', startDrag);
+        row.removeEventListener('pointermove', moveDrag);
+        row.removeEventListener('pointerup', endDrag);
+        row.removeEventListener('pointercancel', endDrag);
+        row.removeEventListener('touchstart', pause);
+        row.removeEventListener('touchend', resume);
+        row.removeEventListener('click', suppressDraggedClick, true);
+      });
     });
-  });
 
-  return () => cleanups.forEach((cleanup) => cleanup());
-}, [
-  vipOffers.length,
-  visibleGiftDiscountOffers.length,
-  discountOnlyOffers.length,
-]);
+    return () => cleanups.forEach((cleanup) => cleanup());
+  }, [
+    vipOffers.length,
+    visibleGiftDiscountOffers.length,
+    discountOnlyOffers.length,
+  ]);
   useEffect(() => {
     if (typeof window === 'undefined') {
       return undefined;
@@ -1891,41 +1894,41 @@ useEffect(() => {
       row.removeEventListener('touchstart', pauseBriefly);
     };
   }, [homeData.brands.length]);
-useEffect(() => {
-  const checkAuth = () => {
-    const loggedIn = hasAuthToken();
-    setIsLoggedIn(loggedIn);
-    setUserProfile(loggedIn ? getCachedHomeProfile() : null);
-  };
+  useEffect(() => {
+    const checkAuth = () => {
+      const loggedIn = hasAuthToken();
+      setIsLoggedIn(loggedIn);
+      setUserProfile(loggedIn ? getCachedHomeProfile() : null);
+    };
 
-  checkAuth();
+    checkAuth();
 
-  window.addEventListener("focus", checkAuth);
+    window.addEventListener("focus", checkAuth);
 
-  return () => {
-    window.removeEventListener("focus", checkAuth);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("focus", checkAuth);
+    };
+  }, []);
 
-useEffect(() => {
-  const handleSessionExpired = (event) => {
-    setIsLoggedIn(false);
-    setIsUserMenuOpen(false);
-    setUserProfile(null);
-    setIsRequestingDiscount(false);
-    setRequestingOfferId(null);
-    setDiscountPopup(null);
-    setIsDiscountCodeCopied(false);
-    setLoginError(event?.detail?.message || SESSION_EXPIRED_MESSAGE);
-    setIsLoginOpen(true);
-  };
+  useEffect(() => {
+    const handleSessionExpired = (event) => {
+      setIsLoggedIn(false);
+      setIsUserMenuOpen(false);
+      setUserProfile(null);
+      setIsRequestingDiscount(false);
+      setRequestingOfferId(null);
+      setDiscountPopup(null);
+      setIsDiscountCodeCopied(false);
+      setLoginError(event?.detail?.message || SESSION_EXPIRED_MESSAGE);
+      setIsLoginOpen(true);
+    };
 
-  window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
 
-  return () => {
-    window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
-  };
-}, []);
+    return () => {
+      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+    };
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -2189,20 +2192,20 @@ useEffect(() => {
       setLoginError(t.sendFailed);
       return false;
     } catch (error) {
-  const message =
-    error.response?.data?.message ||
-    error.message ||
-    "";
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "";
 
-  if (/mobile.*invalid|mobile.*format/i.test(message)) {
-    setLoginError("شماره موبایل واردشده معتبر نیست.");
-  } else if (/mobile.*required/i.test(message)) {
-    setLoginError("لطفاً شماره موبایل خود را وارد کنید.");
-  } else {
-    setLoginError("خطایی رخ داده است. لطفاً دوباره تلاش کنید.");
-  }
+      if (/mobile.*invalid|mobile.*format/i.test(message)) {
+        setLoginError("شماره موبایل واردشده معتبر نیست.");
+      } else if (/mobile.*required/i.test(message)) {
+        setLoginError("لطفاً شماره موبایل خود را وارد کنید.");
+      } else {
+        setLoginError("خطایی رخ داده است. لطفاً دوباره تلاش کنید.");
+      }
 
-  return false;
+      return false;
     } finally {
       setIsLoading(false);
     }
@@ -2240,68 +2243,68 @@ useEffect(() => {
       setIsLoading(false);
     }
   };
- const handleReceiveOffer = async (offer, skipAuthCheck = false) => {
-  // کارت غیرفعال
-  if (offer.isActive === false) {
-    setDiscountPopup({
-      offer,
-      code: '',
-      message: 'این تخفیف در حال حاضر غیرفعال است.',
-    });
-    setIsDiscountCodeCopied(false);
-    return;
-  }
-
-  // بررسی لاگین
-  if (!skipAuthCheck && !hasAuthToken()) {
-    setIsLoggedIn(false);
-    setPendingOffer(offer);
-    openLogin();
-    return;
-  }
-
-  try {
-    setRequestingOfferId(offer.id);
-    setIsRequestingDiscount(true);
-
-    // درخواست کد از بک‌اند
-    const data = await requestDiscountCode(offer, {
-      mobile: loadCachedHomeMobile(),
-    });
-
-    // فقط کدی که واقعاً از API آمده نمایش داده شود
-    const receivedCode = getDiscountCode(data, offer) || '';
-
-    setDiscountPopup({
-      offer,
-      code: receivedCode,
-      message: receivedCode
-        ? getPublicApiMessage(getDiscountMessage(data), 'کد تخفیف با موفقیت دریافت شد.')
-        : getPublicApiMessage(getDiscountMessage(data), 'برای این تخفیف در حال حاضر کدی ثبت نشده است.'),
-    });
-    setIsDiscountCodeCopied(false);
-
-  } catch (error) {
-    if (isAuthExpiredError(error)) {
-      setIsLoggedIn(false);
-      setPendingOffer(offer);
-      setDiscountPopup(null);
-      setLoginError(SESSION_EXPIRED_MESSAGE);
-      setIsLoginOpen(true);
+  const handleReceiveOffer = async (offer, skipAuthCheck = false) => {
+    // کارت غیرفعال
+    if (offer.isActive === false) {
+      setDiscountPopup({
+        offer,
+        code: '',
+        message: 'این تخفیف در حال حاضر غیرفعال است.',
+      });
+      setIsDiscountCodeCopied(false);
       return;
     }
 
-    setDiscountPopup({
-      offer,
-      code: '',
-      message: getPublicErrorMessage(error, 'امکان دریافت کد تخفیف وجود ندارد. لطفاً دوباره تلاش کنید.'),
-    });
-    setIsDiscountCodeCopied(false);
-  } finally {
-    setIsRequestingDiscount(false);
-    setRequestingOfferId(null);
-  }
-};
+    // بررسی لاگین
+    if (!skipAuthCheck && !hasAuthToken()) {
+      setIsLoggedIn(false);
+      setPendingOffer(offer);
+      openLogin();
+      return;
+    }
+
+    try {
+      setRequestingOfferId(offer.id);
+      setIsRequestingDiscount(true);
+
+      // درخواست کد از بک‌اند
+      const data = await requestDiscountCode(offer, {
+        mobile: loadCachedHomeMobile(),
+      });
+
+      // فقط کدی که واقعاً از API آمده نمایش داده شود
+      const receivedCode = getDiscountCode(data, offer) || '';
+
+      setDiscountPopup({
+        offer,
+        code: receivedCode,
+        message: receivedCode
+          ? getPublicApiMessage(getDiscountMessage(data), 'کد تخفیف با موفقیت دریافت شد.')
+          : getPublicApiMessage(getDiscountMessage(data), 'برای این تخفیف در حال حاضر کدی ثبت نشده است.'),
+      });
+      setIsDiscountCodeCopied(false);
+
+    } catch (error) {
+      if (isAuthExpiredError(error)) {
+        setIsLoggedIn(false);
+        setPendingOffer(offer);
+        setDiscountPopup(null);
+        setLoginError(SESSION_EXPIRED_MESSAGE);
+        setIsLoginOpen(true);
+        return;
+      }
+
+      setDiscountPopup({
+        offer,
+        code: '',
+        message: getPublicErrorMessage(error, 'امکان دریافت کد تخفیف وجود ندارد. لطفاً دوباره تلاش کنید.'),
+      });
+      setIsDiscountCodeCopied(false);
+    } finally {
+      setIsRequestingDiscount(false);
+      setRequestingOfferId(null);
+    }
+  };
 
   const renderOfferCard = (offer, index) => {
     const isDebugVip = shouldPreviewVipOffer(offer, debugVipValue);
@@ -2346,12 +2349,18 @@ useEffect(() => {
           ) : (
             offerImage
           )}
-          <span className="home-offer-percent">{getOfferPercent(displayedOffer)}</span>
+          <span
+            className="home-offer-percent"
+            style={{ width: 'auto' }}
+          >
+           {getOfferPercent(displayedOffer)}  بعد از خرید اول 
+          </span>
+
           {offerTypeLabel ? <span className="home-offer-kind">{offerTypeLabel}</span> : null}
           <span className={`home-offer-status ${isInactive ? 'is-inactive' : ''}`}>{offerStatus}</span>
         </div>
         <div className="home-offer-copy">
-          
+
           <h3>{displayedOffer.title}</h3>
           <div className="home-offer-benefits" aria-label="offer benefits">
             {offerBenefits.map((benefit) => (
@@ -2468,7 +2477,7 @@ useEffect(() => {
               <ul className="nav-list d-flex align-items-center">
                 <li><Link href="/">{t.home}</Link></li>
                 <li><Link href="/gifts">{t.gifts}</Link></li>
-                
+
                 <li><a href="#brands">{t.shop}</a></li>
                 <li><Link href="/faq">{t.faq}</Link></li>
                 <li><button type="button" onClick={openAccount}>{t.club}</button></li>
@@ -2476,68 +2485,68 @@ useEffect(() => {
               </ul>
             </nav>
           </div>
-  <div className="home-header-actions">
+          <div className="home-header-actions">
 
-  <button
-    className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
-    type="button"
-    onClick={onToggleTheme}
-    aria-label={isDarkMode ? t.lightMode : t.darkMode}
-    title={isDarkMode ? t.lightMode : t.darkMode}
-  >
-    <span className="home-theme-toggle-icon home-theme-toggle-sun">
-      <Sun />
-    </span>
+            <button
+              className={`home-theme-toggle ${isDarkMode ? 'is-dark' : ''}`}
+              type="button"
+              onClick={onToggleTheme}
+              aria-label={isDarkMode ? t.lightMode : t.darkMode}
+              title={isDarkMode ? t.lightMode : t.darkMode}
+            >
+              <span className="home-theme-toggle-icon home-theme-toggle-sun">
+                <Sun />
+              </span>
 
-    <span className="home-theme-toggle-thumb" />
+              <span className="home-theme-toggle-thumb" />
 
-    <span className="home-theme-toggle-icon home-theme-toggle-moon">
-      <Moon />
-    </span>
-  </button>
+              <span className="home-theme-toggle-icon home-theme-toggle-moon">
+                <Moon />
+              </span>
+            </button>
 
- {isLoggedIn ? (
-  <div className="user-menu-wrap">
-    <button
-      className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`}
-      type="button"
-      onClick={() => setIsUserMenuOpen((current) => !current)}
-    >
-      <span className="user-mini-avatar">
-        <img src={getProfileAvatar(userProfile)} alt={getProfileDisplayName(userProfile)} />
-      </span>
-      <span className="user-menu-name" dir="rtl">{getProfileDisplayName(userProfile)}</span>
-      <ChevronDown />
-    </button>
-    {isUserMenuOpen && (
-      <div className="user-dropdown">
-        <button type="button" onClick={openAccount}>
-          <LayoutDashboard />
-          پروفایل داشبورد
-        </button>
-        <button type="button" onClick={handleHomeLogout}>
-          <LogOut />
-          خروج
-        </button>
-      </div>
-    )}
-  </div>
-) : (
-  <button
-    className="login-btn home-login-btn"
-    type="button"
-    onClick={openAccount}
-  >
-    {t.login}
-  </button>
-)}
+            {isLoggedIn ? (
+              <div className="user-menu-wrap">
+                <button
+                  className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`}
+                  type="button"
+                  onClick={() => setIsUserMenuOpen((current) => !current)}
+                >
+                  <span className="user-mini-avatar">
+                    <img src={getProfileAvatar(userProfile)} alt={getProfileDisplayName(userProfile)} />
+                  </span>
+                  <span className="user-menu-name" dir="rtl">{getProfileDisplayName(userProfile)}</span>
+                  <ChevronDown />
+                </button>
+                {isUserMenuOpen && (
+                  <div className="user-dropdown">
+                    <button type="button" onClick={openAccount}>
+                      <LayoutDashboard />
+                      پروفایل داشبورد
+                    </button>
+                    <button type="button" onClick={handleHomeLogout}>
+                      <LogOut />
+                      خروج
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                className="login-btn home-login-btn"
+                type="button"
+                onClick={openAccount}
+              >
+                {t.login}
+              </button>
+            )}
 
-{/* دکمه نصب اپ */}
-<div className="home-install-app-wrapper">
-  <InstallAppButton />
-</div>
+            {/* دکمه نصب اپ */}
+            <div className="home-install-app-wrapper">
+              <InstallAppButton />
+            </div>
 
-</div>
+          </div>
         </header>
 
         <section className="home-search-row">
@@ -2630,7 +2639,7 @@ useEffect(() => {
         </section>
 
 
-        
+
         <section className="home-hero-grid">
           <div className="home-banner-slider" aria-label={t.bannerAlt}>
             <div
@@ -2693,27 +2702,27 @@ useEffect(() => {
         </section>
 
         {vipOffers.length ? (
-  <section className="home-section home-offer-section home-vip-section" id="vip-gifts">
-    <div className="home-section-head">
-      <div>
-        <span>پیشنهادهای ویژه</span>
+          <section className="home-section home-offer-section home-vip-section" id="vip-gifts">
+            <div className="home-section-head">
+              <div>
+                <span>پیشنهادهای ویژه</span>
 
-      </div>
+              </div>
 
-      <button
-        className="home-text-action"
-        type="button"
-        onClick={scrollToOtherCards}
-      >
-        مشاهده بقیه کارت‌ها
-      </button>
-    </div>
+              <button
+                className="home-text-action"
+                type="button"
+                onClick={scrollToOtherCards}
+              >
+                مشاهده بقیه کارت‌ها
+              </button>
+            </div>
 
-    <div className="home-offer-grid home-vip-offer-grid">
-      {vipOffers.map(renderOfferCard)}
-    </div>
-  </section>
-     ) : null}
+            <div className="home-offer-grid home-vip-offer-grid">
+              {vipOffers.map(renderOfferCard)}
+            </div>
+          </section>
+        ) : null}
 
         <section className="home-section" id="brands">
           <div className="home-section-head">
@@ -2725,7 +2734,7 @@ useEffect(() => {
           </div>
           <div className="home-brand-grid" data-auto-loop="true">
             {homeData.brands.map((brand, index) => {
-  const href = getBrandHref(brand);
+              const href = getBrandHref(brand);
 
               return (
                 <Link
@@ -2918,80 +2927,79 @@ useEffect(() => {
       )}
 
       {discountPopup && (
-  <div
-    className="home-popup-backdrop"
-    onClick={() => {
-      setDiscountPopup(null);
-      setIsDiscountCodeCopied(false);
-    }}
-  >
-    <section
-      className="home-discount-popup"
-      onClick={(event) => event.stopPropagation()}
-    >
-      <button
-        type="button"
-        className="home-popup-close"
-        onClick={() => {
-          setDiscountPopup(null);
-          setIsDiscountCodeCopied(false);
-        }}
-      >
-        {t.close}
-      </button>
-
-      <span className="home-eyebrow">
-        {discountPopup.offer?.brand}
-      </span>
-
-      <h2>
-        {discountPopup.code
-          ? t.discountCode
-          : discountPopup.offer?.title}
-      </h2>
-
-      <div className={`home-discount-code-wrap ${discountPopup.code ? 'has-code' : 'is-empty'}`}>
-        <code
-          className={`home-discount-code ${
-            discountPopup.code ? '' : 'is-empty'
-          }`}
-          dir={discountPopup.code ? 'ltr' : 'rtl'}
-          data-skip-persian-digits={discountPopup.code ? 'true' : undefined}
-          data-discount-code={discountPopup.code ? 'true' : undefined}
+        <div
+          className="home-popup-backdrop"
+          onClick={() => {
+            setDiscountPopup(null);
+            setIsDiscountCodeCopied(false);
+          }}
         >
-          {discountPopup.code || 'کدی دریافت نشد'}
-        </code>
-
-        {discountPopup.code ? (
-          <button
-            type="button"
-            className={`home-discount-copy ${isDiscountCodeCopied ? 'is-copied' : ''}`}
-            onClick={async () => {
-              try {
-                await navigator.clipboard.writeText(discountPopup.code);
-              } catch (error) {
-                const textArea = document.createElement('textarea');
-                textArea.value = discountPopup.code;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-              }
-
-              setIsDiscountCodeCopied(true);
-              window.setTimeout(() => setIsDiscountCodeCopied(false), 1600);
-            }}
+          <section
+            className="home-discount-popup"
+            onClick={(event) => event.stopPropagation()}
           >
-            {isDiscountCodeCopied ? <Check /> : <Copy />}
-            <span>{isDiscountCodeCopied ? 'کپی شد' : 'کپی کد'}</span>
-          </button>
-        ) : null}
-      </div>
+            <button
+              type="button"
+              className="home-popup-close"
+              onClick={() => {
+                setDiscountPopup(null);
+                setIsDiscountCodeCopied(false);
+              }}
+            >
+              {t.close}
+            </button>
 
-      <p>{discountPopup.message}</p>
-    </section>
-  </div>
-)}
+            <span className="home-eyebrow">
+              {discountPopup.offer?.brand}
+            </span>
+
+            <h2>
+              {discountPopup.code
+                ? t.discountCode
+                : discountPopup.offer?.title}
+            </h2>
+
+            <div className={`home-discount-code-wrap ${discountPopup.code ? 'has-code' : 'is-empty'}`}>
+              <code
+                className={`home-discount-code ${discountPopup.code ? '' : 'is-empty'
+                  }`}
+                dir={discountPopup.code ? 'ltr' : 'rtl'}
+                data-skip-persian-digits={discountPopup.code ? 'true' : undefined}
+                data-discount-code={discountPopup.code ? 'true' : undefined}
+              >
+                {discountPopup.code || 'کدی دریافت نشد'}
+              </code>
+
+              {discountPopup.code ? (
+                <button
+                  type="button"
+                  className={`home-discount-copy ${isDiscountCodeCopied ? 'is-copied' : ''}`}
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(discountPopup.code);
+                    } catch (error) {
+                      const textArea = document.createElement('textarea');
+                      textArea.value = discountPopup.code;
+                      document.body.appendChild(textArea);
+                      textArea.select();
+                      document.execCommand('copy');
+                      document.body.removeChild(textArea);
+                    }
+
+                    setIsDiscountCodeCopied(true);
+                    window.setTimeout(() => setIsDiscountCodeCopied(false), 1600);
+                  }}
+                >
+                  {isDiscountCodeCopied ? <Check /> : <Copy />}
+                  <span>{isDiscountCodeCopied ? 'کپی شد' : 'کپی کد'}</span>
+                </button>
+              ) : null}
+            </div>
+
+            <p>{discountPopup.message}</p>
+          </section>
+        </div>
+      )}
     </main>
   );
 }

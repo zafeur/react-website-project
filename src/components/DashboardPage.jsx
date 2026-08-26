@@ -1,7 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { CalendarDays, Crown, Gift, LogOut, Mail, PencilLine, Phone, RefreshCw, TicketPercent, UserRound, Wallet } from 'lucide-react';
-import { extractActiveDiscountCodesFromReport, extractActiveGiftsFromReport, extractUserProfileFromReport, getDiscountReport } from '../api/user';
+import { extractUserProfileFromReport, getDiscountReport } from '../api/user';
 import { defaultProfileAvatar } from '../data/brandAssets';
 import { businessProfiles, dashboardActions, mobileProfileLinks } from '../data/siteData';
 import { toEnglishDigits, toPersianDigits } from '../helper/persianDigits';
@@ -476,6 +476,11 @@ const isUsedGiftCode = (gift) => {
 };
 
 const isTruthyStatusFlag = (value) => value === 1 || value === true || value === '1';
+const isActiveCodeFlag = (value) => value === 1 || value === true || value === '1';
+const isDisplayableDiscountCode = (code) => !isPrimitiveValue(code) && (
+  isActiveCodeFlag(code?.active ?? code?.is_active ?? code?.isActive) ||
+  isUsedGiftCode(code)
+);
 
 const getGiftActiveValue = (gift, collectionFallback) => {
   if (isPrimitiveValue(gift)) return collectionFallback?.gift_active ?? collectionFallback?.giftActive;
@@ -658,12 +663,12 @@ const getCollectionLookupKeys = (collection = {}) => [
   firstValue(collection, ['prefix', 'slug']),
 ].filter(Boolean).map((value) => normalizeComparable(value));
 
-const buildReportCollectionLookup = (payload) => {
-  const lookup = new Map();
+const getReportDiscountCodeItems = (payload) => {
   const data = payload?.data || payload;
   const report = data?.report || data?.discount_report || data?.discountReport;
   const user = data?.user || report?.user || payload?.user;
-  const allDiscountCodeItems = firstArray(
+
+  return firstArray(
     user?.discount_codes,
     user?.discountCodes,
     report?.user?.discount_codes,
@@ -679,6 +684,11 @@ const buildReportCollectionLookup = (payload) => {
     report?.discount_codes,
     report?.discountCodes
   );
+};
+
+const buildReportCollectionLookup = (payload) => {
+  const lookup = new Map();
+  const allDiscountCodeItems = getReportDiscountCodeItems(payload);
 
   expandGiftCollections(allDiscountCodeItems).forEach((item) => {
     if (isPrimitiveValue(item)) return;
@@ -815,7 +825,16 @@ const expandGiftCollections = (items) => items.flatMap((item) => {
 });
 
 const normalizeGiftListFromPayload = (payload) => {
-  const reportItems = expandGiftCollections(extractActiveGiftsFromReport(payload));
+  const reportItems = getReportDiscountCodeItems(payload)
+    .filter((item) => {
+      if (isPrimitiveValue(item)) return false;
+
+      const collection = item?.collection || item?.business || item?.brand || item?.code?.collection;
+      const activeValue = getGiftActiveValue(item, collection);
+      const giftText = cleanReportText(firstValue(collection || {}, ['gifts', 'gift', 'gift_title', 'giftTitle']));
+
+      return isTruthyStatusFlag(activeValue) && Boolean(giftText);
+    });
   const collectionLookup = buildReportCollectionLookup(payload);
   return reportItems.map((gift, index) => {
     const collectionFallback = findCollectionInLookup(collectionLookup, gift);
@@ -828,7 +847,7 @@ const normalizeGiftListFromPayload = (payload) => {
 };
 
 const normalizeDiscountCodeListFromPayload = (payload) =>
-  expandGiftCollections(extractActiveDiscountCodesFromReport(payload))
+  expandGiftCollections(getReportDiscountCodeItems(payload).filter(isDisplayableDiscountCode))
     .map((gift, index) => normalizeGift(gift, index, { includeCode: true }))
     .filter((gift) => gift.code);
 
