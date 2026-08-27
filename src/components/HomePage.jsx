@@ -1489,7 +1489,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         const elapsedSeconds = Math.min((frameTime - previousFrameTime) / 1000, 0.06);
         previousFrameTime = frameTime;
 
-        if (!isBrandRow && !reduceMotion && !shouldHoldAutoScroll()) {
+        if (!isBrandRow && !isStoryRow && !reduceMotion && !shouldHoldAutoScroll()) {
           if (row.scrollLeft >= maxScroll - 1) {
             scrollDirection = -1;
           } else if (row.scrollLeft <= 1) {
@@ -1854,46 +1854,54 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
       return undefined;
     }
 
-    const row = document.querySelector('#brands .home-brand-grid[data-auto-loop="true"]');
+    const rows = Array.from(document.querySelectorAll(
+      '.home-shell .home-stories, #brands .home-brand-grid[data-auto-loop="true"]'
+    ));
 
-    if (!row) {
+    if (!rows.length) {
       return undefined;
     }
 
-    let direction = 1;
-    let pauseUntil = 0;
-    const speedPerTick = 1.15;
-    const pauseBriefly = () => {
-      pauseUntil = window.performance.now() + 900;
-    };
-    const tick = () => {
-      const maxScroll = row.scrollWidth - row.clientWidth;
+    const cleanups = rows.map((row) => {
+      let direction = 1;
+      let pauseUntil = 0;
+      const speedPerTick = 1.15;
+      const pauseBriefly = () => {
+        pauseUntil = window.performance.now() + 900;
+      };
+      const tick = () => {
+        const maxScroll = row.scrollWidth - row.clientWidth;
 
-      if (maxScroll <= 8 || row.matches(':hover') || row.classList.contains('is-dragging') || window.performance.now() < pauseUntil) {
-        return;
-      }
+        if (maxScroll <= 8 || row.matches(':hover') || row.classList.contains('is-dragging') || window.performance.now() < pauseUntil) {
+          return;
+        }
 
-      if (row.scrollLeft >= maxScroll - 1) {
-        direction = -1;
-      } else if (row.scrollLeft <= 1) {
-        direction = 1;
-      }
+        if (row.scrollLeft >= maxScroll - 1) {
+          direction = -1;
+        } else if (row.scrollLeft <= 1) {
+          direction = 1;
+        }
 
-      row.scrollLeft = Math.max(0, Math.min(maxScroll, row.scrollLeft + speedPerTick * direction));
-    };
-    const timer = window.setInterval(tick, 24);
+        row.scrollLeft = Math.max(0, Math.min(maxScroll, row.scrollLeft + speedPerTick * direction));
+      };
+      const timer = window.setInterval(tick, 24);
 
-    row.addEventListener('pointerdown', pauseBriefly);
-    row.addEventListener('wheel', pauseBriefly, { passive: true });
-    row.addEventListener('touchstart', pauseBriefly, { passive: true });
+      row.addEventListener('pointerdown', pauseBriefly);
+      row.addEventListener('wheel', pauseBriefly, { passive: true });
+      row.addEventListener('touchstart', pauseBriefly, { passive: true });
+
+      return () => {
+        window.clearInterval(timer);
+        row.removeEventListener('pointerdown', pauseBriefly);
+        row.removeEventListener('wheel', pauseBriefly);
+        row.removeEventListener('touchstart', pauseBriefly);
+      };
+    });
 
     return () => {
-      window.clearInterval(timer);
-      row.removeEventListener('pointerdown', pauseBriefly);
-      row.removeEventListener('wheel', pauseBriefly);
-      row.removeEventListener('touchstart', pauseBriefly);
+      cleanups.forEach((cleanup) => cleanup());
     };
-  }, [homeData.brands.length]);
+  }, [homeData.brands.length, homeData.stories.length]);
   useEffect(() => {
     const checkAuth = () => {
       const loggedIn = hasAuthToken();

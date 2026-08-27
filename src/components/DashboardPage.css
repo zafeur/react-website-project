@@ -114,6 +114,23 @@
   font-weight: 900;
 }
 
+.dashboard-gift-category-stack {
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-gift-category {
+  display: grid;
+  gap: 10px;
+}
+
+.dashboard-gift-category h4 {
+  margin: 0;
+  color: #2d2434;
+  font-size: 16px;
+  font-weight: 900;
+}
+
 .active-gifts-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: stretch; }
 .active-gift-card { overflow: hidden; min-height: 0; display: grid; grid-template-columns: 128px minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 8px 18px rgba(0,0,0,.025); }
 .active-gift-card:hover { transform: translateY(-5px); box-shadow: 0 16px 30px rgba(0,0,0,.09); }
@@ -271,6 +288,11 @@
 .active-gift-status-badge.is-inactive {
   background: rgba(239, 68, 68, .10);
   color: #dc2626;
+}
+
+.active-gift-status-badge.is-used {
+  background: rgba(116, 51, 163, .12);
+  color: var(--green, #7433a3);
 }
 
 .active-gift-code-cell {
@@ -2039,6 +2061,16 @@ html.theme-dark .page-shell .dashboard-page .mobile-active-gift .active-gift-sta
   color: #10b981 !important;
 }
 
+.dashboard-page .active-gift-status-badge.is-used,
+.dashboard-page .mobile-active-gift .active-gift-status-badge.is-used,
+html.theme-dark .page-shell .dashboard-page .active-gift-status-badge.is-used,
+.page-shell.theme-dark .dashboard-page .active-gift-status-badge.is-used,
+html.theme-dark .page-shell .dashboard-page .mobile-active-gift .active-gift-status-badge.is-used,
+.page-shell.theme-dark .dashboard-page .mobile-active-gift .active-gift-status-badge.is-used {
+  background: rgba(116, 51, 163, .20) !important;
+  color: #c084fc !important;
+}
+
 .dashboard-page .mobile-active-gift .active-gift-status-badge {
   display: inline-flex !important;
   width: auto !important;
@@ -2065,6 +2097,11 @@ html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection--codes,
 html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection-head h3,
 .page-shell.theme-dark .dashboard-page .dashboard-gift-subsection-head h3 {
   color: #ffffff !important;
+}
+
+html.theme-dark .page-shell .dashboard-page .dashboard-gift-category h4,
+.page-shell.theme-dark .dashboard-page .dashboard-gift-category h4 {
+  color: #f7f1fb !important;
 }
 
 html.theme-dark .page-shell .dashboard-page .dashboard-gift-subsection-head svg,

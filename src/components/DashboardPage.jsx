@@ -137,6 +137,21 @@ const firstArray = (...values) => {
   return [];
 };
 
+const firstDefinedValue = (source, keys) => {
+  if (!source || typeof source !== 'object') return undefined;
+
+  for (const key of keys) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      const value = source[key];
+      if (value !== undefined && value !== null && value !== '') {
+        return value;
+      }
+    }
+  }
+
+  return undefined;
+};
+
 const normalizeComparable = (value = '') => String(value).trim().toLowerCase().replace(/[\s\u200c_-]+/g, '');
 const EMPTY_VALUE_LABEL = '-';
 
@@ -477,10 +492,13 @@ const isUsedGiftCode = (gift) => {
 
 const isTruthyStatusFlag = (value) => value === 1 || value === true || value === '1';
 const isActiveCodeFlag = (value) => value === 1 || value === true || value === '1';
-const isDisplayableDiscountCode = (code) => !isPrimitiveValue(code) && (
-  isActiveCodeFlag(code?.active ?? code?.is_active ?? code?.isActive) ||
-  isUsedGiftCode(code)
-);
+const isUsedDiscountCode = (code) => !isPrimitiveValue(code) && isTruthyStatusFlag(firstDefinedValue(code, ['is_used', 'isUsed']));
+const isGiftConsumed = (gift, matchedRecord) => {
+  if (isPrimitiveValue(gift)) return false;
+
+  return isTruthyStatusFlag(firstDefinedValue(gift, ['gift_used', 'giftUsed'])) ||
+    isTruthyStatusFlag(firstDefinedValue(matchedRecord, ['gift_used', 'giftUsed']));
+};
 
 const getGiftActiveValue = (gift, collectionFallback) => {
   if (isPrimitiveValue(gift)) return collectionFallback?.gift_active ?? collectionFallback?.giftActive;
@@ -686,6 +704,36 @@ const getReportDiscountCodeItems = (payload) => {
   );
 };
 
+const getReportUserGiftItems = (payload) => {
+  const data = payload?.data || payload;
+  const report = data?.report || data?.discount_report || data?.discountReport;
+  const user = data?.user || report?.user || payload?.user;
+
+  return firstArray(
+    user?.user_gifts,
+    user?.userGifts,
+    user?.gifts,
+    report?.user?.user_gifts,
+    report?.user?.userGifts,
+    report?.user?.gifts,
+    payload?.user?.user_gifts,
+    payload?.user?.userGifts,
+    payload?.user?.gifts,
+    payload?.data?.user?.user_gifts,
+    payload?.data?.user?.userGifts,
+    payload?.data?.user?.gifts,
+    payload?.user_gifts,
+    payload?.userGifts,
+    payload?.gifts,
+    payload?.data?.user_gifts,
+    payload?.data?.userGifts,
+    payload?.data?.gifts,
+    report?.user_gifts,
+    report?.userGifts,
+    report?.gifts
+  );
+};
+
 const buildReportCollectionLookup = (payload) => {
   const lookup = new Map();
   const allDiscountCodeItems = getReportDiscountCodeItems(payload);
@@ -727,6 +775,67 @@ const findCollectionInLookup = (lookup, gift) => {
   return null;
 };
 
+const getCollectionMatchKeys = (item, matchedProfile = null) => {
+  if (isPrimitiveValue(item)) {
+    return [];
+  }
+
+  const collection = item?.collection || item?.business || item?.brand || item?.code?.collection;
+  const idValues = [
+    firstDefinedValue(item, ['collection_id', 'collectionId', 'business_id', 'businessId']),
+    collection && typeof collection === 'object' ? firstDefinedValue(collection, ['collection_id', 'collectionId', 'id', 'business_id', 'businessId']) : '',
+    matchedProfile?.collectionId,
+  ];
+  const stableValues = [
+    typeof collection === 'string' ? collection : '',
+    collection && typeof collection === 'object' ? firstValue(collection, ['prefix', 'slug', 'name', 'title', 'business_name', 'businessName', 'collection_name', 'collectionName']) : '',
+    firstValue(item, ['prefix', 'slug', 'collection_name', 'collectionName', 'business_name', 'businessName', 'brand_name', 'brandName']),
+    matchedProfile?.slug,
+    matchedProfile?.id,
+    matchedProfile?.title,
+  ];
+
+  return [...idValues, ...stableValues].filter(Boolean).map((value) => normalizeComparable(value));
+};
+
+const findMatchingCollectionRecord = (lookup, gift, matchedProfile = null) => {
+  if (!lookup?.size || isPrimitiveValue(gift)) return null;
+
+  const candidates = getCollectionMatchKeys(gift, matchedProfile);
+
+  for (const candidate of candidates) {
+    if (lookup.has(candidate)) return lookup.get(candidate);
+  }
+
+  for (const candidate of candidates) {
+    for (const [key, record] of lookup.entries()) {
+      if (candidate && key && (candidate.includes(key) || key.includes(candidate))) {
+        return record;
+      }
+    }
+  }
+
+  return null;
+};
+
+const buildUserCollectionRecordLookup = (payload) => {
+  const lookup = new Map();
+
+  getReportDiscountCodeItems(payload).forEach((item) => {
+    if (isPrimitiveValue(item)) return;
+
+    const matchedProfile = findBusinessProfileForGift(item);
+    getCollectionMatchKeys(item, matchedProfile).forEach((key) => {
+      const existing = lookup.get(key);
+      if (!existing || isTruthyStatusFlag(firstDefinedValue(item, ['gift_used', 'giftUsed']))) {
+        lookup.set(key, item);
+      }
+    });
+  });
+
+  return lookup;
+};
+
 const normalizeGift = (gift, index, { includeCode = false, collectionFallback = null } = {}) => {
   const primitiveGift = isPrimitiveValue(gift) ? parsePrimitiveGiftText(gift) : null;
   const primitiveCode = includeCode && isPrimitiveValue(gift) ? String(gift) : '';
@@ -751,7 +860,7 @@ const normalizeGift = (gift, index, { includeCode = false, collectionFallback = 
   const rawTitle = primitiveGift ? '' : cleanReportText(getDeepValue(gift, ['title', 'gift_name', 'giftName', 'gift_title', 'giftTitle', 'discount_title', 'discountTitle', 'code_title', 'codeTitle']));
   const explicitGiftText = getReportGiftFieldText(gift, collectionFallback);
   const title = rawTitle || collectionName || '\u0647\u062f\u06cc\u0647 \u0641\u0639\u0627\u0644';
-  const giftText = explicitGiftText || EMPTY_VALUE_LABEL;
+  const giftText = explicitGiftText || rawTitle || description || EMPTY_VALUE_LABEL;
   const time = normalizeGiftStatus(getGiftTimeValue(gift), title, collectionName);
 
   const fallbackGift = collectionFallback ? { collection: collectionFallback } : null;
@@ -825,31 +934,98 @@ const expandGiftCollections = (items) => items.flatMap((item) => {
 });
 
 const normalizeGiftListFromPayload = (payload) => {
-  const reportItems = getReportDiscountCodeItems(payload)
-    .filter((item) => {
-      if (isPrimitiveValue(item)) return false;
-
-      const collection = item?.collection || item?.business || item?.brand || item?.code?.collection;
-      const activeValue = getGiftActiveValue(item, collection);
-      const giftText = cleanReportText(firstValue(collection || {}, ['gifts', 'gift', 'gift_title', 'giftTitle']));
-
-      return isTruthyStatusFlag(activeValue) && Boolean(giftText);
-    });
+  const userGiftItems = getReportUserGiftItems(payload);
   const collectionLookup = buildReportCollectionLookup(payload);
-  return reportItems.map((gift, index) => {
+  const collectionRecordLookup = buildUserCollectionRecordLookup(payload);
+
+  return userGiftItems.map((gift, index) => {
     const collectionFallback = findCollectionInLookup(collectionLookup, gift);
     const source = isPrimitiveValue(gift) && collectionFallback
       ? { collection: collectionFallback }
       : gift;
+    const normalized = normalizeGift(source, index, { collectionFallback });
+    const matchedRecord = findMatchingCollectionRecord(collectionRecordLookup, source, findBusinessProfileByText(normalized.place));
 
-    return normalizeGift(source, index, { collectionFallback });
+    return {
+      ...normalized,
+      isUsed: isGiftConsumed(gift, matchedRecord),
+      isActive: true,
+      statusLabel: isGiftConsumed(gift, matchedRecord) ? 'استفاده شده' : 'فعال',
+    };
   });
 };
 
-const normalizeDiscountCodeListFromPayload = (payload) =>
-  expandGiftCollections(getReportDiscountCodeItems(payload).filter(isDisplayableDiscountCode))
-    .map((gift, index) => normalizeGift(gift, index, { includeCode: true }))
-    .filter((gift) => gift.code);
+const normalizeDiscountCodeGroupsFromPayload = (payload) => {
+  const discountByCode = new Map();
+
+  expandGiftCollections(getReportDiscountCodeItems(payload)).forEach((item, index) => {
+    if (isPrimitiveValue(item)) return;
+
+    const normalized = normalizeGift(item, index, { includeCode: true });
+    if (!normalized.code) return;
+
+    const key = normalized.code.toLowerCase();
+    const isUsed = isUsedDiscountCode(item);
+    const isActive = isActiveCodeFlag(firstDefinedValue(item, ['active', 'is_active', 'isActive']));
+
+    if (isUsed) {
+      discountByCode.set(key, {
+        ...normalized,
+        isUsed: true,
+        isActive: false,
+        statusLabel: 'استفاده شده',
+      });
+      return;
+    }
+
+    if (isActive && !discountByCode.has(key)) {
+      discountByCode.set(key, {
+        ...normalized,
+        isUsed: false,
+        isActive: true,
+        statusLabel: 'فعال',
+      });
+    }
+  });
+
+  const items = Array.from(discountByCode.values());
+
+  return {
+    activeDiscountItems: items.filter((item) => !item.isUsed),
+    usedDiscountItems: items.filter((item) => item.isUsed),
+  };
+};
+
+const hasUnlockedUserGifts = (payload) =>
+  getReportDiscountCodeItems(payload).some((item) => isUsedDiscountCode(item));
+
+const normalizeGiftGroupsFromPayload = (payload) => {
+  if (!hasUnlockedUserGifts(payload)) {
+    return {
+      availableGiftItems: [],
+      usedGiftItems: [],
+    };
+  }
+
+  const giftByKey = new Map();
+
+  normalizeGiftListFromPayload(payload).forEach((gift) => {
+    const key = normalizeComparable(`${gift.collectionId}-${gift.giftText}-${gift.title}`) || normalizeComparable(gift.id);
+    if (!key) return;
+
+    const existing = giftByKey.get(key);
+    if (!existing || gift.isUsed) {
+      giftByKey.set(key, gift);
+    }
+  });
+
+  const items = Array.from(giftByKey.values());
+
+  return {
+    availableGiftItems: items.filter((item) => !item.isUsed),
+    usedGiftItems: items.filter((item) => item.isUsed),
+  };
+};
 
 const groupGiftItems = (items, { compactRows = false } = {}) => {
   const groups = new Map();
@@ -889,8 +1065,10 @@ const groupGiftItems = (items, { compactRows = false } = {}) => {
 
 function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, onLogout, onProfileFromReport }) {
   const [activeSection, setActiveSection] = useState('gifts');
-  const [activeGiftItems, setActiveGiftItems] = useState([]);
-  const [activeDiscountCodeItems, setActiveDiscountCodeItems] = useState([]);
+  const [activeDiscountItems, setActiveDiscountItems] = useState([]);
+  const [usedDiscountItems, setUsedDiscountItems] = useState([]);
+  const [availableGiftItems, setAvailableGiftItems] = useState([]);
+  const [usedGiftItems, setUsedGiftItems] = useState([]);
   const [walletSummary, setWalletSummary] = useState(() => buildWalletSummary(null, userProfile));
   const [isReportLoading, setIsReportLoading] = useState(false);
   const [reportError, setReportError] = useState('');
@@ -907,7 +1085,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
   const profileLevel = profileIsComplete ? 'اطلاعات تکمیل شده' : 'تکمیل نشده';
   const profileScore = `${toPersianDigits(profilePoints)} امتیاز`;
   const profileAvatar = getProfileAvatar(userProfile) || defaultProfileAvatar;
-  const activeGiftTotal = activeGiftItems.length + activeDiscountCodeItems.length;
+  const activeGiftTotal = activeDiscountItems.length + usedDiscountItems.length + availableGiftItems.length + usedGiftItems.length;
 
   const loadActiveGifts = async () => {
     try {
@@ -920,11 +1098,17 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
         onProfileFromReport?.(reportProfile);
       }
       setWalletSummary(buildWalletSummary(data, reportProfile || userProfile));
-      setActiveGiftItems(normalizeGiftListFromPayload(data));
-      setActiveDiscountCodeItems(normalizeDiscountCodeListFromPayload(data));
+      const discountGroups = normalizeDiscountCodeGroupsFromPayload(data);
+      const giftGroups = normalizeGiftGroupsFromPayload(data);
+      setActiveDiscountItems(discountGroups.activeDiscountItems);
+      setUsedDiscountItems(discountGroups.usedDiscountItems);
+      setAvailableGiftItems(giftGroups.availableGiftItems);
+      setUsedGiftItems(giftGroups.usedGiftItems);
     } catch (error) {
-      setActiveGiftItems([]);
-      setActiveDiscountCodeItems([]);
+      setActiveDiscountItems([]);
+      setUsedDiscountItems([]);
+      setAvailableGiftItems([]);
+      setUsedGiftItems([]);
       setWalletSummary(buildWalletSummary(null, userProfile));
       setReportError('دریافت هدیه‌ها انجام نشد.');
     } finally {
@@ -1051,7 +1235,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
                         <small>{gift.time}</small>
                       ) : (
                         <small className="active-gift-meta-line">
-                          <span className={`active-gift-status-badge ${gift.isActive ? 'is-active' : 'is-inactive'}`}>{gift.statusLabel}</span>
+                          <span className={`active-gift-status-badge ${gift.isUsed ? 'is-used' : gift.isActive ? 'is-active' : 'is-inactive'}`}>{gift.statusLabel}</span>
                         </small>
                       )}
                     </div>
@@ -1080,39 +1264,67 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
       return <p className="dashboard-empty-state">{reportError}</p>;
     }
 
-    if (!activeGiftItems.length && !activeDiscountCodeItems.length) {
+    if (!activeDiscountItems.length && !usedDiscountItems.length && !availableGiftItems.length && !usedGiftItems.length) {
       return <p className="dashboard-empty-state">هدیه‌ای برای این حساب ثبت نشده است.</p>;
     }
 
     return (
       <div className="dashboard-gifts-sections">
+        <section className="dashboard-gift-subsection dashboard-gift-subsection--codes">
+          <div className="dashboard-gift-subsection-head">
+            <div>
+              <TicketPercent />
+              <h3>تخفیف‌ها</h3>
+            </div>
+            <span>{toPersianDigits(activeDiscountItems.length + usedDiscountItems.length)} کد</span>
+          </div>
+          <div className="dashboard-gift-category-stack">
+            <div className="dashboard-gift-category">
+              <h4>تخفیف‌های فعال</h4>
+              {renderGiftList(activeDiscountItems, {
+                mobile,
+                showCodes: true,
+                emptyMessage: 'تخفیف فعالی برای این حساب ثبت نشده است.',
+              })}
+            </div>
+            <div className="dashboard-gift-category">
+              <h4>تخفیف‌های استفاده شده</h4>
+              {renderGiftList(usedDiscountItems, {
+                mobile,
+                showCodes: true,
+                emptyMessage: 'تخفیف استفاده‌شده‌ای برای این حساب ثبت نشده است.',
+              })}
+            </div>
+          </div>
+        </section>
+
         <section className="dashboard-gift-subsection">
           <div className="dashboard-gift-subsection-head">
             <div>
               <Gift />
-              <h3>هدیه ها</h3>
+              <h3>هدایا</h3>
             </div>
-            <span>{toPersianDigits(activeGiftItems.length)} هدیه</span>
+            <span>{toPersianDigits(availableGiftItems.length)} هدیه</span>
           </div>
-          {renderGiftList(activeGiftItems, {
+          {renderGiftList(availableGiftItems, {
             mobile,
             showCodes: false,
             emptyMessage: 'هدیه‌ای برای این حساب ثبت نشده است.',
           })}
         </section>
 
-        <section className="dashboard-gift-subsection dashboard-gift-subsection--codes">
+        <section className="dashboard-gift-subsection">
           <div className="dashboard-gift-subsection-head">
             <div>
-              <TicketPercent />
-              <h3>کد های فعال</h3>
+              <Gift />
+              <h3>هدایای استفاده شده</h3>
             </div>
-            <span>{toPersianDigits(activeDiscountCodeItems.length)} کد</span>
+            <span>{toPersianDigits(usedGiftItems.length)} هدیه</span>
           </div>
-          {renderGiftList(activeDiscountCodeItems, {
+          {renderGiftList(usedGiftItems, {
             mobile,
-            showCodes: true,
-            emptyMessage: 'کد تخفیف فعالی برای این حساب ثبت نشده است.',
+            showCodes: false,
+            emptyMessage: 'هدیه استفاده‌شده‌ای برای این حساب ثبت نشده است.',
           })}
         </section>
       </div>

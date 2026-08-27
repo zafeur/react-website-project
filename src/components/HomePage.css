@@ -10461,8 +10461,10 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
 .home-stories {
   direction: ltr !important;
   justify-content: flex-start !important;
-  padding-inline: 16px !important;
-  scroll-padding-inline: 16px !important;
+  align-items: flex-start !important;
+  gap: clamp(24px, 4.4vw, 56px) !important;
+  padding: 8px 18px 18px !important;
+  scroll-padding-inline: 18px !important;
   overscroll-behavior-inline: contain !important;
   touch-action: pan-x pan-y !important;
   cursor: grab !important;
@@ -10474,22 +10476,53 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
 
 .home-stories .home-story {
   direction: rtl !important;
-  flex: 0 0 106px !important;
+  flex: 0 0 clamp(92px, 8vw, 116px) !important;
+  width: clamp(92px, 8vw, 116px) !important;
+  min-width: 0 !important;
+  gap: 12px !important;
+  align-content: start !important;
+  scroll-snap-align: none !important;
+}
+
+.home-stories .home-story-ring {
+  width: clamp(82px, 7.1vw, 104px) !important;
+  height: clamp(82px, 7.1vw, 104px) !important;
+  border-color: var(--brand-purple, #7433a3) !important;
+}
+
+.home-stories .home-story > span:last-child {
+  width: 100% !important;
+  min-height: 40px !important;
+  line-height: 1.55 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
 }
 
 @media (max-width: 640px) {
   .home-stories {
-    padding-inline: 14px !important;
+    gap: 18px !important;
+    margin-inline: -14px !important;
+    padding: 8px 14px 18px !important;
+    scroll-padding-inline: 14px !important;
   }
 
   .home-stories .home-story {
-    flex-basis: 88px !important;
+    flex-basis: 86px !important;
+    width: 86px !important;
+    gap: 10px !important;
   }
-}
 
-@media (max-width: 640px) {
-  .home-stories {
-    justify-content: flex-start !important;
+  .home-stories .home-story-ring {
+    width: 76px !important;
+    height: 76px !important;
+  }
+
+  .home-stories .home-story > span:last-child {
+    min-height: 36px !important;
+    font-size: 12.5px !important;
   }
 }
 
@@ -10506,7 +10539,7 @@ html.theme-dark .home-shell .home-section#discount-only > .home-offer-grid .home
 }
 
 .home-stories {
-  justify-content: safe center !important;
+  justify-content: flex-start !important;
 }
 
 @media (max-width: 640px) {
