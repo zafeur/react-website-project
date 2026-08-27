@@ -1270,6 +1270,34 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
 
     return (
       <div className="dashboard-gifts-sections">
+        <section className="dashboard-gift-subsection">
+          <div className="dashboard-gift-subsection-head">
+            <div>
+              <Gift />
+              <h3>هدایا</h3>
+            </div>
+            <span>{toPersianDigits(availableGiftItems.length + usedGiftItems.length)} هدیه</span>
+          </div>
+          <div className="dashboard-gift-category-stack">
+            <div className="dashboard-gift-category">
+              <h4>هدایای استفاده شده</h4>
+              {renderGiftList(usedGiftItems, {
+                mobile,
+                showCodes: false,
+                emptyMessage: 'هدیه استفاده‌شده‌ای برای این حساب ثبت نشده است.',
+              })}
+            </div>
+            <div className="dashboard-gift-category">
+              <h4>هدیه‌های من</h4>
+              {renderGiftList(availableGiftItems, {
+                mobile,
+                showCodes: false,
+                emptyMessage: 'هدیه‌ای برای این حساب ثبت نشده است.',
+              })}
+            </div>
+          </div>
+        </section>
+
         <section className="dashboard-gift-subsection dashboard-gift-subsection--codes">
           <div className="dashboard-gift-subsection-head">
             <div>
@@ -1280,14 +1308,6 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
           </div>
           <div className="dashboard-gift-category-stack">
             <div className="dashboard-gift-category">
-              <h4>تخفیف‌های فعال</h4>
-              {renderGiftList(activeDiscountItems, {
-                mobile,
-                showCodes: true,
-                emptyMessage: 'تخفیف فعالی برای این حساب ثبت نشده است.',
-              })}
-            </div>
-            <div className="dashboard-gift-category">
               <h4>تخفیف‌های استفاده شده</h4>
               {renderGiftList(usedDiscountItems, {
                 mobile,
@@ -1295,37 +1315,15 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
                 emptyMessage: 'تخفیف استفاده‌شده‌ای برای این حساب ثبت نشده است.',
               })}
             </div>
-          </div>
-        </section>
-
-        <section className="dashboard-gift-subsection">
-          <div className="dashboard-gift-subsection-head">
-            <div>
-              <Gift />
-              <h3>هدایا</h3>
+            <div className="dashboard-gift-category">
+              <h4>تخفیف‌های فعال</h4>
+              {renderGiftList(activeDiscountItems, {
+                mobile,
+                showCodes: true,
+                emptyMessage: 'تخفیف فعالی برای این حساب ثبت نشده است.',
+              })}
             </div>
-            <span>{toPersianDigits(availableGiftItems.length)} هدیه</span>
           </div>
-          {renderGiftList(availableGiftItems, {
-            mobile,
-            showCodes: false,
-            emptyMessage: 'هدیه‌ای برای این حساب ثبت نشده است.',
-          })}
-        </section>
-
-        <section className="dashboard-gift-subsection">
-          <div className="dashboard-gift-subsection-head">
-            <div>
-              <Gift />
-              <h3>هدایای استفاده شده</h3>
-            </div>
-            <span>{toPersianDigits(usedGiftItems.length)} هدیه</span>
-          </div>
-          {renderGiftList(usedGiftItems, {
-            mobile,
-            showCodes: false,
-            emptyMessage: 'هدیه استفاده‌شده‌ای برای این حساب ثبت نشده است.',
-          })}
         </section>
       </div>
     );
@@ -1429,7 +1427,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
           {activeSection === 'gifts' && (
             <section className="mobile-section-card">
               <div className="mobile-section-head">
-                <h2>هدیه‌های من</h2>
+                <h2>هدایا و تخفیف‌ها</h2>
                 <span>{toPersianDigits(activeGiftTotal)} مورد</span>
               </div>
               {renderActiveGifts(true)}
@@ -1544,7 +1542,7 @@ function DashboardPage({ isVisible, sectionRequest, userProfile, onEditProfile, 
         {activeSection === 'gifts' && (
           <section className="panel active-gifts-panel" id="all-active-gifts">
             <div className="panel-head-row">
-              <h2>هدیه‌های من</h2>
+              <h2>هدایا و تخفیف‌ها</h2>
               <button type="button" className="dashboard-inline-action" onClick={loadActiveGifts}>بروزرسانی</button>
             </div>
             {renderActiveGifts(false)}
