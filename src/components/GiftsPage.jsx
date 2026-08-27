@@ -7,6 +7,7 @@ import { toPersianDigits } from '../helper/persianDigits';
 import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
 import { AUTH_SESSION_EXPIRED_EVENT, resetAuthSessionExpiryNotice } from '../helper/authSession';
 import { normalizeMediaUrl } from '../helper/mediaUrl';
+import { businessProfiles } from '../data/siteData';
 import Header from './Header';
 import LoginModal from './LoginModal';
 import MobileBottomNav from './MobileBottomNav';
@@ -58,6 +59,31 @@ const cleanText = (value = '') => {
 const displayText = (value) => cleanText(value) || EMPTY_VALUE_LABEL;
 
 const normalizeComparable = (value = '') => cleanText(value).toLowerCase().replace(/[\s\u200c_-]+/g, '');
+
+const getKnownCollectionRouteId = (collection) => {
+  const values = [
+    firstValue(collection, ['name', 'title', 'collection_name', 'collectionName', 'business_name', 'businessName', 'brand_name', 'brandName']),
+    firstValue(collection, ['prefix', 'slug', 'businessSlug', 'business_slug']),
+    firstValue(collection, ['image', 'images', 'logo', 'logo_url', 'profile_image', 'profileImage']),
+  ].filter(Boolean).map(normalizeComparable);
+
+  if (!values.length) return '';
+
+  const profile = businessProfiles.find((item) => {
+    const aliases = Array.isArray(item.aliases) ? item.aliases : [];
+    const profileValues = [item.id, item.slug, item.title, item.shortTitle, ...aliases]
+      .filter(Boolean)
+      .map(normalizeComparable);
+
+    return values.some((value) =>
+      profileValues.some((profileValue) =>
+        value && profileValue && (value === profileValue || value.includes(profileValue) || profileValue.includes(value))
+      )
+    );
+  });
+
+  return profile?.collectionId || '';
+};
 
 const parseMaybeJson = (value) => {
   if (Array.isArray(value)) return value;
@@ -167,11 +193,47 @@ const getCollectionGifts = (collection) => {
   return [];
 };
 
+const getNestedCollectionRouteId = (collection) => {
+  const sources = [collection?.collection, collection?.business, collection?.brand]
+    .filter((source) => source && typeof source === 'object');
+
+  for (const source of sources) {
+    const value = firstValue(source, [
+      'collection_route_id',
+      'collectionRouteId',
+      'collection_id',
+      'collectionId',
+      'collectionID',
+      'id',
+      'business_id',
+      'businessId',
+    ]);
+
+    if (value) return value;
+  }
+
+  return '';
+};
+
+const getCollectionRouteId = (collection) => (
+  firstValue(collection, [
+    'collection_route_id',
+    'collectionRouteId',
+    'collection_id',
+    'collectionId',
+    'collectionID',
+  ]) ||
+  getNestedCollectionRouteId(collection) ||
+  getKnownCollectionRouteId(collection) ||
+  firstValue(collection, ['business_id', 'businessId'])
+);
+
 const normalizeCollection = (collection, index) => {
   if (isPrimitiveValue(collection)) {
     const title = cleanText(collection);
     return {
       id: `${title}-${index}`,
+      routeId: '',
       title,
       description: '',
       image: '',
@@ -182,7 +244,8 @@ const normalizeCollection = (collection, index) => {
   }
 
   const title = cleanText(firstValue(collection, ['name', 'title', 'collection_name', 'collectionName', 'business_name', 'businessName', 'brand_name', 'brandName']));
-  const id = firstValue(collection, ['collection_id', 'collectionId', 'wallet_group_id', 'walletGroupId', 'wallet_group', 'id', 'business_id', 'businessId', 'prefix', 'slug']) || `${title}-${index}`;
+  const routeId = getCollectionRouteId(collection);
+  const id = routeId || firstValue(collection, ['wallet_group_id', 'walletGroupId', 'wallet_group', 'prefix', 'slug']) || `${title}-${index}`;
   const image = normalizeMediaUrl(firstValue(collection, ['images', 'image', 'logo', 'logo_url', 'profile_image', 'profileImage', 'banner_image', 'bannerImage']));
   const isActiveGift = firstValue(collection, ['gift_active', 'giftActive', 'active_gift', 'activeGift']);
 
@@ -191,7 +254,8 @@ const normalizeCollection = (collection, index) => {
     title: title || 'مجموعه کی میای',
     description: cleanText(firstValue(collection, ['description', 'about', 'bio'])),
     image,
-    href: id ? `/collections/${id}` : '',
+    routeId,
+    href: routeId ? `/collections/${routeId}` : '',
     isActive: isActiveGift === '' ? true : isActiveGift === true || isActiveGift === 1 || isActiveGift === '1',
     gifts: getCollectionGifts(collection),
   };

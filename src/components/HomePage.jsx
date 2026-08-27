@@ -2287,7 +2287,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
         offer,
         code: receivedCode,
         message: receivedCode
-          ? getPublicApiMessage(getDiscountMessage(data), 'کد تخفیف با موفقیت دریافت شد.')
+          ? ''
           : getPublicApiMessage(getDiscountMessage(data), 'برای این تخفیف در حال حاضر کدی ثبت نشده است.'),
       });
       setIsDiscountCodeCopied(false);
@@ -3004,7 +3004,7 @@ function HomePage({ isDarkMode = false, onToggleTheme }) {
               ) : null}
             </div>
 
-            <p>{discountPopup.message}</p>
+            {discountPopup.message ? <p>{discountPopup.message}</p> : null}
           </section>
         </div>
       )}
