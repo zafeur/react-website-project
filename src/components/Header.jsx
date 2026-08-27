@@ -13,7 +13,6 @@ const DEFAULT_USER_NAME = '\u06a9\u0627\u0631\u0628\u0631 \u06a9\u06cc \u0645\u0
 const navItems = [
   { label: '\u0635\u0641\u062d\u0647 \u0627\u0635\u0644\u06cc', href: '/' },
   { label: '\u0647\u062f\u0627\u06cc\u0627', href: '/gifts' },
-  { label: '\u06a9\u0633\u0628\u200c\u0648\u06a9\u0627\u0631\u0647\u0627', href: '/#brands' },
   { label: '\u0641\u0631\u0648\u0634\u06af\u0627\u0647\u06cc', href: '/#brands' },
   { label: '\u0633\u0648\u0627\u0644\u0627\u062a \u0645\u062a\u062f\u0627\u0648\u0644', href: '/faq' },
   { label: '\u0628\u0627\u0634\u06af\u0627\u0647 \u0645\u0634\u062a\u0631\u06cc\u0627\u0646', action: 'account' },

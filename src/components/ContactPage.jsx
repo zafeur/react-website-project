@@ -1,5 +1,9 @@
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
+  ChevronDown,
+  LayoutDashboard,
+  LogOut,
   PhoneCall,
   Sun,
   Moon,
@@ -8,7 +12,12 @@ import {
 } from 'lucide-react';
 
 import MobileBottomNav from './MobileBottomNav';
-import { brandAssets } from '../data/brandAssets';
+import { sendOtp, verifyOtp } from '../api/auth';
+import { brandAssets, defaultProfileAvatar } from '../data/brandAssets';
+import { clearAuthToken, getTokenFromAuthResponse, getUserTypeFromAuthResponse, hasAuthToken, setAuthToken } from '../helper/authCookie';
+import { AUTH_SESSION_EXPIRED_EVENT, resetAuthSessionExpiryNotice } from '../helper/authSession';
+import { normalizeMediaUrl } from '../helper/mediaUrl';
+import LoginModal from './LoginModal';
 
 const InstagramGlyph = () => (
   <svg
@@ -40,17 +49,89 @@ const nav = {
   brand: 'کی میای',
   home: 'صفحه اصلی',
   gifts: 'هدایا',
-  businesses: 'کسب‌وکارها',
   shop: 'فروشگاهی',
   faq: 'سوالات متداول',
   club: 'باشگاه مشتریان',
   contact: 'تماس با ما',
+  login: 'ورود / ثبت نام',
+  dashboard: 'پروفایل داشبورد',
+  logout: 'خروج',
+  defaultUser: 'کاربر کی میای',
 };
+
+const PROFILE_STORAGE_KEY = 'keymiyay-user-profile';
+
+const firstValue = (source, keys) => {
+  for (const key of keys) {
+    const value = source?.[key];
+    if (value !== undefined && value !== null && value !== '') return value;
+  }
+
+  return '';
+};
+
+const getProfileName = (profile) => {
+  const firstName = firstValue(profile, ['firstName', 'first_name', 'name']);
+  const lastName = firstValue(profile, ['lastName', 'last_name', 'family', 'family_name']);
+  const fullName = firstValue(profile, ['fullName', 'full_name', 'display_name', 'displayName', 'username']);
+  return [firstName, lastName].filter(Boolean).join(' ') || fullName || nav.defaultUser;
+};
+
+const getProfileAvatar = (profile) => normalizeMediaUrl(firstValue(profile, [
+  'avatarPreview',
+  'avatar_preview',
+  'avatar',
+  'avatar_url',
+  'avatarUrl',
+  'profile_image',
+  'profileImage',
+  'profile_photo',
+  'profilePhoto',
+  'image',
+  'photo',
+]));
 
 function ContactPage({
   isDarkMode = false,
   onToggleTheme,
 }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const userName = getProfileName(userProfile);
+  const userAvatar = getProfileAvatar(userProfile) || defaultProfileAvatar;
+
+  useEffect(() => {
+    const loggedIn = hasAuthToken();
+    setIsLoggedIn(loggedIn);
+
+    if (!loggedIn || typeof window === 'undefined') return;
+
+    try {
+      const savedProfile = window.localStorage.getItem(PROFILE_STORAGE_KEY);
+      if (savedProfile) setUserProfile(JSON.parse(savedProfile));
+    } catch {
+      window.localStorage.removeItem(PROFILE_STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      setIsLoggedIn(false);
+      setIsUserMenuOpen(false);
+      setUserProfile(null);
+    };
+
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+
+    return () => {
+      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+    };
+  }, []);
+
   const handleMobileNav = (id) => {
     if (id === 'home') {
       window.location.href = '/';
@@ -73,6 +154,70 @@ function ContactPage({
     }
 
     window.location.href = '/dashboard';
+  };
+
+  const openLogin = () => {
+    setLoginError('');
+    setIsLoginOpen(true);
+  };
+
+  const closeLogin = () => {
+    setLoginError('');
+    setIsLoginOpen(false);
+  };
+
+  const handleSendOtp = async (mobile) => {
+    try {
+      setIsAuthLoading(true);
+      setLoginError('');
+      const data = await sendOtp(mobile);
+
+      if (data.status === 'otp_sent') return true;
+
+      setLoginError('ارسال کد انجام نشد.');
+      return false;
+    } catch {
+      setLoginError('خطایی رخ داده است. لطفاً دوباره تلاش کنید.');
+      return false;
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (mobile, otp) => {
+    try {
+      setIsAuthLoading(true);
+      setLoginError('');
+      const data = await verifyOtp({ mobile, otp });
+      const token = getTokenFromAuthResponse(data);
+      const tokenSaved = setAuthToken(token, getUserTypeFromAuthResponse(data));
+
+      if (!tokenSaved) {
+        setLoginError('توکن ورود در کوکی ذخیره نشد.');
+        return;
+      }
+
+      resetAuthSessionExpiryNotice();
+      setIsLoggedIn(true);
+      setIsLoginOpen(false);
+      window.location.href = '/dashboard';
+    } catch (error) {
+      setLoginError(error?.response?.data?.message || 'ورود انجام نشد. لطفاً دوباره تلاش کنید.');
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    clearAuthToken();
+    setIsLoggedIn(false);
+    setIsUserMenuOpen(false);
+    setUserProfile(null);
+
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(PROFILE_STORAGE_KEY);
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -113,12 +258,6 @@ function ContactPage({
                 <li>
                   <Link href="/gifts">
                     {nav.gifts}
-                  </Link>
-                </li>
-
-                <li>
-                  <Link href="/#brands">
-                    {nav.businesses}
                   </Link>
                 </li>
 
@@ -182,6 +321,46 @@ function ContactPage({
                 <Moon />
               </span>
             </button>
+
+            {isLoggedIn ? (
+              <div className="user-menu-wrap">
+                <button
+                  className={`user-menu-btn ${isUserMenuOpen ? 'is-open' : ''}`}
+                  type="button"
+                  onClick={() => setIsUserMenuOpen((current) => !current)}
+                >
+                  <span className="user-mini-avatar">
+                    <img src={userAvatar} alt={userName} />
+                  </span>
+                  <span className="user-menu-name" dir="rtl">
+                    {userName}
+                  </span>
+                  <ChevronDown />
+                </button>
+
+                {isUserMenuOpen && (
+                  <div className="user-dropdown">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        window.location.href = '/dashboard';
+                      }}
+                    >
+                      <LayoutDashboard />
+                      {nav.dashboard}
+                    </button>
+                    <button type="button" onClick={handleLogout}>
+                      <LogOut />
+                      {nav.logout}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button className="login-btn" type="button" onClick={openLogin}>
+                {nav.login}
+              </button>
+            )}
 
           </div>
         </header>
@@ -295,9 +474,19 @@ function ContactPage({
 
       <MobileBottomNav
         currentPage="contact"
-        isLoggedIn={false}
+        isLoggedIn={isLoggedIn}
         onNavigate={handleMobileNav}
       />
+
+      {isLoginOpen && (
+        <LoginModal
+          loginError={loginError}
+          isLoading={isAuthLoading}
+          onClose={closeLogin}
+          onSendOtp={handleSendOtp}
+          onVerifyOtp={handleVerifyOtp}
+        />
+      )}
 
     </main>
   );

@@ -23,23 +23,77 @@ const labels = {
 const toPersianDigits = (value) => String(value ?? "").replace(/[0-9]/g, (digit) => String.fromCharCode(0x06f0 + Number(digit)));
 const toEnglishDigits = (value) => String(value ?? "").replace(/[\u06f0-\u06f9]/g, (digit) => String(digit.charCodeAt(0) - 0x06f0));
 const pad2 = (value) => String(value).padStart(2, "0");
-const CALENDAR_MODE = "gregorian";
-const gregorianYears = Array.from({ length: 91 }, (_, index) => new Date().getFullYear() - index);
+const CALENDAR_MODE = "jalali";
 const months = Array.from({ length: 12 }, (_, index) => index + 1);
-const days = Array.from({ length: 31 }, (_, index) => index + 1);
 
-const getDefaultDateParts = () => ({ year: 2000, month: 1, day: 1 });
+const getCurrentJalaliYear = () => {
+  try {
+    return Number(toEnglishDigits(new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric" }).format(new Date())));
+  } catch {
+    return 1403;
+  }
+};
 
-const parseDateParts = (value = "") => {
+const jalaliYears = Array.from({ length: 91 }, (_, index) => getCurrentJalaliYear() - index);
+const getDefaultDateParts = () => ({ year: 1380, month: 1, day: 1 });
+const getJalaliMonthDays = (year, month) => {
+  if (month <= 6) return 31;
+  if (month <= 11) return 30;
+
+  return ((year + 38) * 31) % 128 < 31 ? 30 : 29;
+};
+
+const normalizeDateParts = (parts) => {
+  const fallback = getDefaultDateParts();
+  const year = Number(parts.year) || fallback.year;
+  const month = Math.min(Math.max(Number(parts.month) || fallback.month, 1), 12);
+  const day = Math.min(Math.max(Number(parts.day) || fallback.day, 1), getJalaliMonthDays(year, month));
+
+  return { year, month, day };
+};
+
+const gregorianToJalaliParts = ({ year, month, day }) => {
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
+
+  if (Number.isNaN(date.getTime())) {
+    return getDefaultDateParts();
+  }
+
+  try {
+    const parts = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    }).formatToParts(date);
+
+    return normalizeDateParts({
+      year: toEnglishDigits(parts.find((part) => part.type === "year")?.value || ""),
+      month: toEnglishDigits(parts.find((part) => part.type === "month")?.value || ""),
+      day: toEnglishDigits(parts.find((part) => part.type === "day")?.value || ""),
+    });
+  } catch {
+    return getDefaultDateParts();
+  }
+};
+
+const parseDateParts = (value = "", calendar = CALENDAR_MODE) => {
   const normalized = toEnglishDigits(value);
   const match = normalized.match(/(\d{4})[/-](\d{1,2})[/-](\d{1,2})/);
-  const fallback = getDefaultDateParts();
-
-  return {
-    year: Number(match?.[1]) || fallback.year,
-    month: Number(match?.[2]) || fallback.month,
-    day: Number(match?.[3]) || fallback.day,
+  const parts = {
+    year: Number(match?.[1]),
+    month: Number(match?.[2]),
+    day: Number(match?.[3]),
   };
+
+  if (!match) {
+    return getDefaultDateParts();
+  }
+
+  if (calendar !== CALENDAR_MODE || parts.year > getCurrentJalaliYear() + 1) {
+    return gregorianToJalaliParts(parts);
+  }
+
+  return normalizeDateParts(parts);
 };
 
 const formatDate = ({ year, month, day }) => String(year) + "/" + pad2(month) + "/" + pad2(day);
@@ -47,16 +101,18 @@ const displayDate = (value) => toPersianDigits(value);
 
 function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoading = false, error = "", onClose, onSubmit }) {
   const initialBirthDate = initialProfile.birthDate || initialProfile.birth_date || initialProfile.date || "";
+  const initialBirthDateCalendar = initialProfile.birthDateCalendar || initialProfile.birth_date_calendar || initialProfile.calendar_type || CALENDAR_MODE;
+  const initialBirthDateParts = parseDateParts(initialBirthDate, initialBirthDateCalendar);
   const [form, setForm] = useState({
     firstName: initialProfile.firstName || initialProfile.first_name || "",
     lastName: initialProfile.lastName || initialProfile.last_name || "",
     email: initialProfile.email || "",
-    birthDate: initialBirthDate,
+    birthDate: initialBirthDate ? formatDate(initialBirthDateParts) : "",
     birthDateCalendar: CALENDAR_MODE,
     avatarPreview: initialProfile.avatarPreview || initialProfile.avatar_preview || initialProfile.avatar || initialProfile.profile_image || defaultProfileAvatar,
   });
   const [isBirthDatePickerOpen, setIsBirthDatePickerOpen] = useState(false);
-  const [birthDateParts, setBirthDateParts] = useState(() => parseDateParts(initialBirthDate));
+  const [birthDateParts, setBirthDateParts] = useState(initialBirthDateParts);
 
   useEffect(() => {
     document.documentElement.classList.add("keymiyay-modal-open");
@@ -73,7 +129,7 @@ function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoa
   };
 
   const updateBirthDatePart = (field, value) => {
-    const nextParts = { ...birthDateParts, [field]: Number(value) };
+    const nextParts = normalizeDateParts({ ...birthDateParts, [field]: Number(value) });
     setBirthDateParts(nextParts);
     updateField("birthDate", formatDate(nextParts));
   };
@@ -83,7 +139,8 @@ function ProfileCompletionModal({ initialMobile = "", initialProfile = {}, isLoa
     await onSubmit({ ...form, birthDateCalendar: CALENDAR_MODE, mobile: initialMobile });
   };
 
-  const yearOptions = gregorianYears;
+  const yearOptions = jalaliYears;
+  const days = Array.from({ length: getJalaliMonthDays(birthDateParts.year, birthDateParts.month) }, (_, index) => index + 1);
 
   return (
     <div className="login-backdrop profile-completion-backdrop" onClick={onClose}>

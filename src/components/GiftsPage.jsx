@@ -225,7 +225,7 @@ const getCollectionRouteId = (collection) => (
   ]) ||
   getNestedCollectionRouteId(collection) ||
   getKnownCollectionRouteId(collection) ||
-  firstValue(collection, ['business_id', 'businessId'])
+  firstValue(collection, ['business_id', 'businessId', 'id'])
 );
 
 const normalizeCollection = (collection, index) => {

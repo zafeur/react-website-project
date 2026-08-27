@@ -5080,14 +5080,14 @@ html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount .
 @media (min-width: 769px) {
   .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
     flex-direction: row-reverse !important;
-    margin-inline-start: clamp(18px, 1.8vw, 32px) !important;
-    padding-inline-start: clamp(14px, 1.4vw, 22px) !important;
-    border-inline-start: 1px solid rgba(116, 51, 163, .2) !important;
+    margin-inline-end: clamp(18px, 1.8vw, 32px) !important;
+    padding-inline-end: clamp(14px, 1.4vw, 22px) !important;
+    border-inline-end: 1px solid rgba(116, 51, 163, .2) !important;
   }
 
   .page-shell.theme-dark:not(.home-shell):not(.faq-shell) .home-header-actions,
   html.theme-dark .page-shell:not(.home-shell):not(.faq-shell) .home-header-actions {
-    border-inline-start-color: rgba(255, 255, 255, .14) !important;
+    border-inline-end-color: rgba(255, 255, 255, .14) !important;
   }
 }
 
@@ -5215,9 +5215,9 @@ html.theme-dark .home-shell .home-section#gifts .home-offer-card--vip-discount {
     flex-direction: row-reverse !important;
     flex: 0 0 auto !important;
     gap: 12px !important;
-    margin-inline-start: clamp(18px, 1.8vw, 32px) !important;
-    padding-inline-start: clamp(14px, 1.4vw, 22px) !important;
-    border-inline-start: 1px solid rgba(116, 51, 163, .2) !important;
+    margin-inline-end: clamp(18px, 1.8vw, 32px) !important;
+    padding-inline-end: clamp(14px, 1.4vw, 22px) !important;
+    border-inline-end: 1px solid rgba(116, 51, 163, .2) !important;
     direction: ltr !important;
   }
 }
